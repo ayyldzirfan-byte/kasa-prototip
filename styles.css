@@ -772,6 +772,29 @@ body[data-view="add"] .phone-shell {
   color: #332400;
 }
 
+.update-stamp {
+  position: fixed;
+  right: max(18px, calc((100vw - 430px) / 2 + 18px));
+  bottom: max(78px, calc(78px + env(safe-area-inset-bottom)));
+  z-index: 8;
+  max-width: 180px;
+  padding: 5px 8px;
+  border: 1px solid rgba(82, 66, 38, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 250, 241, 0.72);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 850;
+  line-height: 1.1;
+  pointer-events: none;
+  text-align: right;
+  backdrop-filter: blur(14px);
+}
+
+body[data-view="add"] .update-stamp {
+  bottom: max(12px, env(safe-area-inset-bottom));
+}
+
 .toast {
   position: fixed;
   right: 18px;

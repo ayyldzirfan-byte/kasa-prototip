@@ -1,4 +1,4 @@
-const CACHE_NAME = "kasa-prototype-v4";
+const CACHE_NAME = "kasa-prototype-v5";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon.svg", "./apple-touch-icon.png"];
 
 self.addEventListener("install", (event) => {
