@@ -1,10 +1,20 @@
 function renderHome() {
   const project = activeProject();
+  const user = currentUser();
   const totals = calculateTotals(projectEntries());
   const recent = actualEntries().slice(0, 4);
   const upcoming = pendingEntries().slice(0, 3);
 
   return `
+    <section class="account-strip">
+      <div>
+        <span class="field-label">Aktif kullanıcı</span>
+        <strong>${shortName(user?.name || "Kullanıcı")}</strong>
+        <p>Yeni profil oluşturmak için çıkış yap.</p>
+      </div>
+      <button class="tiny-button" data-action="logout" type="button">Çıkış yap</button>
+    </section>
+
     <section class="hero">
       <div class="hero-row">
         <div>
@@ -280,6 +290,7 @@ function renderGroup() {
   const transactions = simplifyDebts(balances);
   const canManageUsers = isProjectOwner(project);
   const owner = projectOwner(project);
+  const user = currentUser();
 
   return `
     <section class="card">
@@ -310,6 +321,30 @@ function renderGroup() {
         </datalist>
         <button class="primary-button" type="submit">Proje ekle</button>
       </form>
+    </section>
+
+    <section class="card">
+      <h2>Projeye kişi ekle</h2>
+      <p>${
+        canManageUsers
+          ? `Önce diğer profili oluştur. Sonra adını buraya yazıp ${project.name} kasasına ekle.`
+          : `Şu an ${shortName(user?.name || "bu kullanıcı")} hesabındasın. Kullanıcı eklemek için ${shortName(owner?.name || "kasa sahibi")} hesabıyla giriş yap.`
+      }</p>
+      ${
+        canManageUsers
+          ? `
+            <form class="inline-form featured-form" id="projectUserForm">
+              <input class="text-input" name="userName" placeholder="Örn. Havva veya Derya" autocomplete="off" />
+              <button class="primary-button" type="submit">Kasaya ekle</button>
+            </form>
+          `
+          : `
+            <div class="inline-form featured-form">
+              <button class="secondary-button" data-action="logout" type="button">Çıkış yap</button>
+              <span class="field-help">Sonra kasa sahibi profiliyle tekrar giriş yap.</span>
+            </div>
+          `
+      }
     </section>
 
     <section class="card">

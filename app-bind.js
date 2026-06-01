@@ -317,8 +317,7 @@ function bindScreen() {
     });
   }
 
-  const userForm = app.querySelector("#userForm");
-  if (userForm) {
+  app.querySelectorAll("#userForm, #projectUserForm").forEach((userForm) => {
     userForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(userForm);
@@ -332,7 +331,7 @@ function bindScreen() {
       render();
       toast(`${shortName(result.user.name)} kasaya eklendi.`);
     });
-  }
+  });
 
   const projectForm = app.querySelector("#projectForm");
   if (projectForm) {
