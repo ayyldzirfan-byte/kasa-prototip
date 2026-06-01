@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "01.06.2026 22:48";
+const APP_UPDATED_AT = "01.06.2026 22:58";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -41,6 +41,7 @@ const seedState = {
   activeProjectId: "",
   activeUserId: "",
   signedInUserId: "",
+  authMode: "login",
   users: defaultUsers,
   projects: [],
   headings: [],
@@ -93,7 +94,7 @@ function makeDraft() {
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saved?.users?.length || saved?.projects?.length) return saved;
+    if (saved && (saved.users?.length || saved.projects?.length || saved.authMode)) return saved;
   } catch {
     // Broken local state should not block the prototype.
   }
@@ -137,6 +138,7 @@ function normalizeState(saved) {
     activeProjectId,
     activeUserId,
     signedInUserId,
+    authMode: source.authMode === "signup" ? "signup" : "login",
     users,
     projects,
     headings: Array.isArray(source.headings) ? source.headings : [],
@@ -149,23 +151,16 @@ function saveState() {
 }
 
 function render() {
-  const needsAccount = state.users.length === 0;
-  const needsLogin = !needsAccount && !currentUser();
-  const needsProject = !needsAccount && !needsLogin && !activeProject();
+  const needsAuth = !currentUser();
+  const needsProject = !needsAuth && !activeProject();
 
-  document.body.dataset.view = needsAccount || needsLogin || needsProject ? "onboarding" : state.activeView;
+  document.body.dataset.view = needsAuth || needsProject ? "onboarding" : state.activeView;
   const updateStamp = document.querySelector(".update-stamp");
   if (updateStamp) updateStamp.textContent = `Güncellendi ${APP_UPDATED_AT}`;
   tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.view === state.activeView));
 
-  if (needsAccount) {
-    app.innerHTML = renderWelcome();
-    bindScreen();
-    return;
-  }
-
-  if (needsLogin) {
-    app.innerHTML = renderLogin();
+  if (needsAuth) {
+    app.innerHTML = renderAuth();
     bindScreen();
     return;
   }
@@ -201,56 +196,64 @@ function backHeader() {
   `;
 }
 
-function renderWelcome() {
+function renderAuth() {
+  const isSignup = state.authMode === "signup";
+
   return `
-    <section class="form-card form-grid onboarding-card">
-      <div>
-        <p class="eyebrow">İlk kurulum</p>
-        <h2>Kasa hesabını oluştur</h2>
-        <p class="hero-note">Önce hesabı oluştur. Sonraki ekranda şifrenle giriş yapacaksın.</p>
+    <section class="auth-card form-grid onboarding-card">
+      <div class="brand-lockup">
+        <img src="./icon.svg" alt="" />
+        <p class="eyebrow">Geçici isim</p>
+        <h2>Kasa</h2>
+        <p>Ev, iş ve ortak harcamaları tek kasada takip et.</p>
       </div>
 
-      <form class="form-grid" id="accountForm">
-        <label>
-          <span class="field-label">Ad soyad</span>
-          <input class="text-input" name="userName" placeholder="Örn. İrfan Ayyıldız" autocomplete="name" />
-        </label>
-        <label>
-          <span class="field-label">Telefon / e-posta</span>
-          <input class="text-input" name="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
-        </label>
-        <label>
-          <span class="field-label">Şifre</span>
-          <input class="text-input" name="password" type="password" placeholder="En az 4 karakter" autocomplete="new-password" />
-        </label>
-        <button class="primary-button" type="submit">Hesap oluştur</button>
-      </form>
-    </section>
-  `;
-}
-
-function renderLogin() {
-  return `
-    <section class="form-card form-grid onboarding-card">
-      <div>
-        <p class="eyebrow">Giriş</p>
-        <h2>Şifrenle giriş yap</h2>
-        <p class="hero-note">Giriş başarılı olunca kasa/proje oluşturma adımına geçeceğiz.</p>
+      <div class="auth-switch">
+        <button class="${!isSignup ? "active" : ""}" data-action="auth-mode" data-mode="login" type="button">Giriş yap</button>
+        <button class="${isSignup ? "active" : ""}" data-action="auth-mode" data-mode="signup" type="button">Yeni kullanıcı</button>
       </div>
 
-      <form class="form-grid" id="loginForm">
-        <label>
-          <span class="field-label">Kullanıcı</span>
-          <select class="select-input" name="loginUserId">
-            ${state.users.map((user) => `<option value="${user.id}">${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
-          </select>
-        </label>
-        <label>
-          <span class="field-label">Şifre</span>
-          <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" />
-        </label>
-        <button class="primary-button" type="submit">Giriş yap</button>
-      </form>
+      ${
+        isSignup
+          ? `
+            <form class="form-grid" id="accountForm">
+              <label>
+                <span class="field-label">Ad soyad</span>
+                <input class="text-input" name="userName" placeholder="Örn. İrfan Ayyıldız" autocomplete="name" />
+              </label>
+              <label>
+                <span class="field-label">Telefon / e-posta</span>
+                <input class="text-input" name="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
+              </label>
+              <label>
+                <span class="field-label">Şifre</span>
+                <input class="text-input" name="password" type="password" placeholder="En az 4 karakter" autocomplete="new-password" />
+              </label>
+              <button class="primary-button" type="submit">Kullanıcı oluştur</button>
+            </form>
+          `
+          : `
+            <form class="form-grid" id="loginForm">
+              ${
+                state.users.length
+                  ? `
+                    <label>
+                      <span class="field-label">Kullanıcı</span>
+                      <select class="select-input" name="loginUserId">
+                        ${state.users.map((user) => `<option value="${user.id}">${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
+                      </select>
+                    </label>
+                  `
+                  : `<div class="empty-state">Henüz kullanıcı yok. Yeni kullanıcı oluşturarak başla.</div>`
+              }
+              <label>
+                <span class="field-label">Şifre</span>
+                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" ${state.users.length ? "" : "disabled"} />
+              </label>
+              <button class="primary-button" type="submit" ${state.users.length ? "" : "disabled"}>Giriş yap</button>
+            </form>
+          `
+      }
     </section>
   `;
 }
@@ -285,44 +288,11 @@ function renderProjectSetup() {
 
 function renderHome() {
   const project = activeProject();
-  const activeUser = currentUser();
   const totals = calculateTotals(projectEntries());
   const recent = actualEntries().slice(0, 4);
   const upcoming = pendingEntries().slice(0, 3);
 
   return `
-    <section class="home-gate card">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Ana sayfa</p>
-          <h2>${shortName(activeUser.name)} giriş yaptı</h2>
-          <p>Bu deneme sürümünde profilleri sen oluşturacaksın. Hareket eklerken kimin adına kayıt girileceğini seçeceğiz.</p>
-        </div>
-        <button class="tiny-button" data-action="logout" type="button">Çıkış</button>
-      </div>
-
-      <div class="profile-create-box">
-        <div>
-          <span class="field-label">Yeni profil</span>
-          <p>Deneme profillerini buradan tek tek ekle.</p>
-        </div>
-        <form class="inline-form profile-form" id="quickUserForm">
-          <input class="text-input" name="userName" placeholder="Profil adı" autocomplete="name" />
-          <input class="text-input" name="password" type="password" placeholder="Şifre" autocomplete="new-password" />
-          <button class="primary-button" type="submit">Profil oluştur</button>
-        </form>
-      </div>
-
-      <div class="invite-box">
-        <div>
-          <span class="field-label">Sonraki aşama kodu</span>
-          <strong>${projectCode(project)}</strong>
-          <p>Bu kod gerçek çoklu telefon sürümünde kullanılacak. Şimdilik aynı cihazdaki deneme profilleriyle çalışıyoruz.</p>
-        </div>
-        <button class="mini-action" data-action="copy-project-link" type="button">Link</button>
-      </div>
-    </section>
-
     <section class="hero">
       <div class="hero-row">
         <div>
@@ -799,11 +769,20 @@ function bindScreen() {
     button.addEventListener("click", () => copyProjectInvite());
   });
 
+  app.querySelectorAll("[data-action='auth-mode']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.authMode = button.dataset.mode === "signup" ? "signup" : "login";
+      saveState();
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-action='logout']").forEach((button) => {
     button.addEventListener("click", () => {
       state.signedInUserId = "";
       state.activeUserId = "";
       state.activeView = "home";
+      state.authMode = "login";
       draft = makeDraft();
       saveState();
       render();
@@ -875,6 +854,7 @@ function bindScreen() {
       createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
       state.signedInUserId = "";
       state.activeUserId = "";
+      state.authMode = "login";
       saveState();
       render();
       toast("Hesap oluşturuldu. Şimdi giriş yap.");
@@ -901,6 +881,7 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(loginForm);
       const user = state.users.find((item) => item.id === String(data.get("loginUserId")));
+      if (!state.users.length) return toast("Önce kullanıcı oluştur.");
       if (!user) return toast("Kullanıcı bulunamadı.");
       const password = String(data.get("loginPassword") || "");
       if (user.password && user.password !== password) return toast("Şifre yanlış.");

@@ -227,6 +227,68 @@ button {
   margin-top: 10px;
 }
 
+.auth-card {
+  min-height: calc(100dvh - 72px);
+  align-content: center;
+  padding: 22px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.brand-lockup {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.brand-lockup img {
+  width: 74px;
+  height: 74px;
+  border-radius: 22px;
+  box-shadow: 0 14px 32px rgba(75, 56, 25, 0.1);
+}
+
+.brand-lockup h2 {
+  margin: 2px 0 0;
+  font-size: 42px;
+  line-height: 1;
+}
+
+.brand-lockup p {
+  max-width: 280px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.auth-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.auth-switch button {
+  min-height: 42px;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.auth-switch button.active {
+  background: var(--ink);
+  color: #fff;
+}
+
 .inline-form {
   display: grid;
   gap: 10px;
@@ -823,6 +885,10 @@ body[data-view="add"] .tabbar {
 body[data-view="add"] .phone-shell,
 body[data-view="onboarding"] .phone-shell {
   padding-bottom: max(18px, env(safe-area-inset-bottom));
+}
+
+body[data-view="onboarding"] .topbar {
+  display: none;
 }
 
 body[data-view="onboarding"] .tabbar {
