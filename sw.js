@@ -1,5 +1,19 @@
-const CACHE_NAME = "kasa-prototype-v9";
-const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon.svg", "./apple-touch-icon.png"];
+const CACHE_NAME = "kasa-prototype-v10";
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./styles.css",
+  "./kasa-extra.css",
+  "./app-state.js",
+  "./app-core.js",
+  "./app-views.js",
+  "./app-bind.js",
+  "./app-model.js",
+  "./app-init.js",
+  "./manifest.webmanifest",
+  "./icon.svg",
+  "./apple-touch-icon.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
