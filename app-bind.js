@@ -15,6 +15,14 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-action='open-notifications']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.activeView = "notifications";
+      saveState();
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-action='go-add'], [data-action='go-add-expense']").forEach((button) => {
     button.addEventListener("click", () => {
       draft.type = "expense";
@@ -70,6 +78,22 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-action='show-pending-detail']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.pendingDetail = button.dataset.detail;
+      saveState();
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-action='hide-pending-detail']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.pendingDetail = "";
+      saveState();
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-action='activate-project']").forEach((button) => {
     button.addEventListener("click", () => {
       state.activeProjectId = button.dataset.id;
@@ -116,6 +140,16 @@ function bindScreen() {
     button.addEventListener("click", shareReceipt);
   });
 
+  app.querySelectorAll("[data-action='guess-notification']").forEach((button) => {
+    button.addEventListener("click", () => {
+      const result = guessNotification(button.dataset.id, button.dataset.guess);
+      if (result.status === "already") return toast("Bu sürprizi zaten tahmin ettin.");
+      saveState();
+      render();
+      toast(result.guess?.correct ? "Doğru tahmin." : "Yanlış tahmin.");
+    });
+  });
+
   app.querySelectorAll("[data-action='settle-pending']").forEach((button) => {
     button.addEventListener("click", () => settlePending(button.dataset.id));
   });
@@ -138,6 +172,10 @@ function bindScreen() {
         draft.userId = currentUser()?.id || String(form.elements.userId?.value || draft.userId || "");
         draft.date = String(form.elements.date?.value || draft.date || todayKey());
         draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
+        draft.notificationMode = String(form.elements.notificationMode?.value || draft.notificationMode || "open");
+        draft.notificationEmoji = String(form.elements.notificationEmoji?.value || draft.notificationEmoji || "🎲");
+        draft.successReaction = String(form.elements.successReaction?.value || draft.successReaction || "✅");
+        draft.failReaction = String(form.elements.failReaction?.value || draft.failReaction || "🙃");
       }
       draft.type = button.dataset.entryType;
       draft.emoji = emojiOptionsFor(draft.type)[0] || entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
@@ -290,6 +328,15 @@ function bindScreen() {
       });
     }
 
+    entryForm.querySelectorAll("select[name='notificationMode'], input[name='notificationEmoji'], input[name='successReaction'], input[name='failReaction']").forEach((field) => {
+      field.addEventListener("change", () => {
+        draft.notificationMode = entryForm.elements.notificationMode?.value || draft.notificationMode;
+        draft.notificationEmoji = entryForm.elements.notificationEmoji?.value || draft.notificationEmoji;
+        draft.successReaction = entryForm.elements.successReaction?.value || draft.successReaction;
+        draft.failReaction = entryForm.elements.failReaction?.value || draft.failReaction;
+      });
+    });
+
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
@@ -319,7 +366,7 @@ function bindScreen() {
       draft.exchangeRate = exchangeRate;
       draft.amountInput = formatAmountInput(data.get("amount"));
 
-      state.entries.unshift({
+      const entry = {
         id: makeId(),
         projectId: state.activeProjectId,
         type: draft.type,
@@ -338,6 +385,17 @@ function bindScreen() {
         settlement,
         status: ["receivable", "payable"].includes(draft.type) ? "pending" : "done",
         createdAt: new Date().toISOString(),
+      };
+
+      state.entries.unshift(entry);
+      createEntryNotification(entry, {
+        mode: String(data.get("notificationMode") || "silent"),
+        emoji: String(data.get("notificationEmoji") || "").trim() || "🎲",
+        photoName: data.get("notificationPhoto")?.name || "",
+        successReaction: String(data.get("successReaction") || "").trim() || "✅",
+        successPhotoName: data.get("successPhoto")?.name || "",
+        failReaction: String(data.get("failReaction") || "").trim() || "🙃",
+        failPhotoName: data.get("failPhoto")?.name || "",
       });
 
       saveState();

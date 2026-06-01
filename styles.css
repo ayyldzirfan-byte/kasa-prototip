@@ -151,6 +151,12 @@ button {
   flex: 0 0 auto;
 }
 
+.account-actions {
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+}
+
 .back-row {
   margin: -2px 0 2px;
 }
@@ -252,6 +258,10 @@ button {
 
 .quick-actions.compact {
   margin-top: 14px;
+}
+
+.stat-card[data-action] {
+  cursor: pointer;
 }
 
 .home-gate {
@@ -583,6 +593,53 @@ button {
 .member-card .expense-row {
   padding: 2px;
   background: transparent;
+}
+
+.notification-card {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(248, 243, 234, 0.78);
+}
+
+.notification-hero {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #fff;
+  font-size: 24px;
+  text-align: center;
+  word-break: break-word;
+}
+
+.guess-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.reaction-result {
+  margin-top: 10px;
+  padding: 9px 10px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.reaction-result.correct {
+  background: var(--green-soft);
+  color: #11643c;
+}
+
+.reaction-result.wrong {
+  background: var(--coral-soft);
+  color: #9a2f21;
 }
 
 .alias-form {

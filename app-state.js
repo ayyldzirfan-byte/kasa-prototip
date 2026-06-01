@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 01:05";
+const APP_UPDATED_AT = "02.06.2026 01:34";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -74,6 +74,7 @@ const seedState = {
   activeView: "home",
   reportPeriod: "month",
   settlementVisible: false,
+  pendingDetail: "",
   activeProjectId: "",
   activeUserId: "",
   signedInUserId: "",
@@ -83,6 +84,7 @@ const seedState = {
   projects: [],
   headings: [],
   entries: [],
+  notifications: [],
 };
 
 let state;

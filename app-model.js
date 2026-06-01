@@ -139,6 +139,69 @@ function pendingEntries() {
   return projectEntries().filter((entry) => entry.status === "pending").sort(byDateAsc);
 }
 
+function pendingEntriesByType(type) {
+  return pendingEntries().filter((entry) => entry.type === type);
+}
+
+function notificationEntries() {
+  const user = currentUser();
+  if (!user) return [];
+  return (state.notifications || [])
+    .filter((item) => item.projectId === activeProject()?.id && item.recipients?.includes(user.id))
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+
+function createEntryNotification(entry, options = {}) {
+  const project = activeProject();
+  const actor = currentUser();
+  if (!project || !actor || options.mode === "silent") return;
+  const recipients = project.memberIds.filter((id) => id !== actor.id);
+  if (!recipients.length) return;
+
+  state.notifications = state.notifications || [];
+  state.notifications.unshift({
+    id: makeId(),
+    projectId: project.id,
+    entryId: entry.id,
+    actorId: actor.id,
+    recipients,
+    mode: options.mode || "open",
+    actualType: entry.type,
+    title: entry.shortName || entry.headingName,
+    amount: entry.amount,
+    emoji: options.emoji || "🎲",
+    photoName: options.photoName || "",
+    successReaction: options.successReaction || "✅",
+    successPhotoName: options.successPhotoName || "",
+    failReaction: options.failReaction || "🙃",
+    failPhotoName: options.failPhotoName || "",
+    guesses: [],
+    createdAt: new Date().toISOString(),
+  });
+}
+
+function guessNotification(id, guess) {
+  const notification = (state.notifications || []).find((item) => item.id === id);
+  const user = currentUser();
+  if (!notification || !user) return { status: "missing" };
+  notification.guesses = Array.isArray(notification.guesses) ? notification.guesses : [];
+  const existing = notification.guesses.find((item) => item.userId === user.id);
+  if (existing) return { status: "already", guess: existing };
+
+  const result = {
+    userId: user.id,
+    guess,
+    correct: guess === notification.actualType,
+    at: new Date().toISOString(),
+  };
+  notification.guesses.push(result);
+  return { status: "saved", guess: result };
+}
+
+function notificationGuessFor(notification, userId = currentUser()?.id) {
+  return notification.guesses?.find((guess) => guess.userId === userId);
+}
+
 function ensureHeading(name, shortName, emoji) {
   const normalized = normalize(name);
   const existing = projectHeadings().find((heading) => normalize(heading.name) === normalized);
@@ -231,6 +294,28 @@ function headingPreview() {
   return `<div class="chips" style="margin-top: 12px;">${projectHeadings().slice(0, 6).map((heading) => `<span class="chip static-chip">${heading.emoji} ${heading.shortName}</span>`).join("")}</div>`;
 }
 
+function pendingDetailRows(type) {
+  const entries = pendingEntriesByType(type);
+  const label = type === "receivable" ? "gelecek" : "gidecek";
+  if (!entries.length) return `<div class="empty-state">Şimdilik ${label} bir kayıt yok.</div>`;
+  return entries
+    .map((entry) => {
+      const user = state.users.find((item) => item.id === entry.userId);
+      return `
+        <div class="expense-row">
+          <span class="emoji-dot">${entry.emoji || (type === "receivable" ? "🤝" : "⏰")}</span>
+          <div class="expense-main">
+            <p class="expense-title">${entry.shortName || entry.headingName}</p>
+            <p class="expense-meta">${projectUserLabel(user)} · ${formatShortDate(entry.date)} · ${type === "receivable" ? "Şu gelecek" : "Bu gidecek"}</p>
+            ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
+          </div>
+          <strong class="expense-price">${money(entry.amount)}</strong>
+        </div>
+      `;
+    })
+    .join("");
+}
+
 function projectRow(project) {
   return `
     <div class="expense-row">
@@ -240,6 +325,46 @@ function projectRow(project) {
         <p class="expense-meta">${project.purpose} · ${project.memberIds.length} üye · ${projectCode(project)}</p>
       </div>
       <button class="mini-action" data-action="activate-project" data-id="${project.id}" type="button">${project.id === state.activeProjectId ? "Aktif" : "Seç"}</button>
+    </div>
+  `;
+}
+
+function notificationRow(notification) {
+  const actor = state.users.find((user) => user.id === notification.actorId);
+  const guess = notificationGuessFor(notification);
+  const isSurprise = notification.mode === "surprise";
+  const typeLabel = notification.actualType === "income" ? "gelir" : "gider";
+  const media = notification.photoName ? `📎 ${notification.photoName}` : notification.emoji || "🎲";
+
+  if (!isSurprise) {
+    return `
+      <div class="notification-card">
+        <div class="notification-hero">${media}</div>
+        <div class="expense-main">
+          <p class="expense-title">${projectUserLabel(actor)} ${typeLabel} ekledi</p>
+          <p class="expense-meta">${notification.title} · ${money(notification.amount)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="notification-card">
+      <div class="notification-hero">${media}</div>
+      <div class="expense-main">
+        <p class="expense-title">${projectUserLabel(actor)} sürpriz hareket gönderdi</p>
+        <p class="expense-meta">${guess ? `Tahminin: ${guess.guess === "income" ? "Gelir" : "Gider"}` : "Gelir mi gider mi? Tahmin et."}</p>
+        ${
+          guess
+            ? `<div class="reaction-result ${guess.correct ? "correct" : "wrong"}">${guess.correct ? notification.successReaction : notification.failReaction} ${guess.correct ? "Doğru bildin." : "Yanlış tahmin."}${guess.correct && notification.successPhotoName ? ` · ${notification.successPhotoName}` : ""}${!guess.correct && notification.failPhotoName ? ` · ${notification.failPhotoName}` : ""}</div>`
+            : `
+              <div class="guess-actions">
+                <button class="mini-action" data-action="guess-notification" data-id="${notification.id}" data-guess="income" type="button">Gelir</button>
+                <button class="mini-action" data-action="guess-notification" data-id="${notification.id}" data-guess="expense" type="button">Gider</button>
+              </div>
+            `
+        }
+      </div>
     </div>
   `;
 }

@@ -12,6 +12,10 @@ function makeDraft() {
     currency: "TRY",
     exchangeRate: 1,
     date: todayKey(),
+    notificationMode: "open",
+    notificationEmoji: "🎲",
+    successReaction: "✅",
+    failReaction: "🙃",
   };
 }
 
@@ -75,6 +79,7 @@ function normalizeState(saved) {
     projects,
     headings: Array.isArray(source.headings) ? source.headings : [],
     entries: Array.isArray(source.entries) ? source.entries : [],
+    notifications: Array.isArray(source.notifications) ? source.notifications : [],
   };
 }
 
@@ -110,6 +115,7 @@ function render() {
     report: renderReport,
     group: renderGroup,
     headings: renderHeadings,
+    notifications: renderNotifications,
   };
 
   const current = screens[state.activeView] ? state.activeView : "home";

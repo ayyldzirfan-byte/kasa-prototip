@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 01:05";
+const APP_UPDATED_AT = "02.06.2026 01:34";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -74,6 +74,7 @@ const seedState = {
   activeView: "home",
   reportPeriod: "month",
   settlementVisible: false,
+  pendingDetail: "",
   activeProjectId: "",
   activeUserId: "",
   signedInUserId: "",
@@ -83,6 +84,7 @@ const seedState = {
   projects: [],
   headings: [],
   entries: [],
+  notifications: [],
 };
 
 let state;
@@ -139,6 +141,10 @@ function makeDraft() {
     currency: "TRY",
     exchangeRate: 1,
     date: todayKey(),
+    notificationMode: "open",
+    notificationEmoji: "🎲",
+    successReaction: "✅",
+    failReaction: "🙃",
   };
 }
 
@@ -202,6 +208,7 @@ function normalizeState(saved) {
     projects,
     headings: Array.isArray(source.headings) ? source.headings : [],
     entries: Array.isArray(source.entries) ? source.entries : [],
+    notifications: Array.isArray(source.notifications) ? source.notifications : [],
   };
 }
 
@@ -237,6 +244,7 @@ function render() {
     report: renderReport,
     group: renderGroup,
     headings: renderHeadings,
+    notifications: renderNotifications,
   };
 
   const current = screens[state.activeView] ? state.activeView : "home";
@@ -354,15 +362,18 @@ function renderHome() {
   const totals = calculateTotals(projectEntries());
   const recent = actualEntries().slice(0, 4);
   const upcoming = pendingEntries().slice(0, 3);
+  const notificationCount = notificationEntries().length;
 
   return `
     <section class="account-strip">
       <div>
         <span class="field-label">Aktif kullanıcı</span>
         <strong>${projectUserLabel(user)}</strong>
-        <p>Yeni profil oluşturmak için çıkış yap.</p>
       </div>
-      <button class="tiny-button" data-action="logout" type="button">Çıkış yap</button>
+      <div class="account-actions">
+        <button class="tiny-button" data-action="open-notifications" type="button">Bildirimler${notificationCount ? ` (${notificationCount})` : ""}</button>
+        <button class="tiny-button" data-action="logout" type="button">Çıkış</button>
+      </div>
     </section>
 
     <section class="hero">
@@ -412,15 +423,32 @@ function renderHome() {
         <p class="stat-label">Çıkan</p>
         <p class="stat-value warning">${money(totals.expense)}</p>
       </article>
-      <article class="stat-card">
+      <article class="stat-card" data-action="show-pending-detail" data-detail="receivable">
         <p class="stat-label">Beklenen</p>
         <p class="stat-value">${money(totals.receivable)}</p>
       </article>
-      <article class="stat-card">
+      <article class="stat-card" data-action="show-pending-detail" data-detail="payable">
         <p class="stat-label">Yaklaşan</p>
         <p class="stat-value">${money(totals.payable)}</p>
       </article>
     </section>
+
+    ${
+      state.pendingDetail
+        ? `
+          <section class="card">
+            <div class="section-head">
+              <div>
+                <h2>${state.pendingDetail === "receivable" ? "Beklenen gelirler" : "Yaklaşan ödemeler"}</h2>
+                <p>${state.pendingDetail === "receivable" ? "Şu gelecek." : "Bu gidecek."}</p>
+              </div>
+              <button class="tiny-button" data-action="hide-pending-detail" type="button">Kapat</button>
+            </div>
+            <div class="expense-list">${pendingDetailRows(state.pendingDetail)}</div>
+          </section>
+        `
+        : ""
+    }
 
     <section class="card">
       <div class="section-head">
@@ -564,6 +592,56 @@ function renderAdd() {
         </div>
       </div>
 
+      ${
+        ["income", "expense"].includes(type.id)
+          ? `
+            <details class="soft-details">
+              <summary>Bildirim oyunu</summary>
+              <div class="form-grid notification-options">
+                <label>
+                  <span class="field-label">Bildirim modu</span>
+                  <select class="select-input" name="notificationMode">
+                    <option value="open" ${draft.notificationMode === "open" ? "selected" : ""}>Açık bildir</option>
+                    <option value="surprise" ${draft.notificationMode === "surprise" ? "selected" : ""}>Sürpriz tahmin</option>
+                    <option value="silent" ${draft.notificationMode === "silent" ? "selected" : ""}>Sessiz kaydet</option>
+                  </select>
+                </label>
+                <div class="grid-2">
+                  <label>
+                    <span class="field-label">Bildirim emoji</span>
+                    <input class="text-input" name="notificationEmoji" maxlength="4" value="${draft.notificationEmoji || "🎲"}" autocomplete="off" />
+                  </label>
+                  <label>
+                    <span class="field-label">Bildirim foto</span>
+                    <input class="text-input" name="notificationPhoto" type="file" accept="image/*" />
+                  </label>
+                </div>
+                <div class="grid-2">
+                  <label>
+                    <span class="field-label">Doğru tepki</span>
+                    <input class="text-input" name="successReaction" value="${draft.successReaction || "✅"}" autocomplete="off" />
+                  </label>
+                  <label>
+                    <span class="field-label">Yanlış tepki</span>
+                    <input class="text-input" name="failReaction" value="${draft.failReaction || "🙃"}" autocomplete="off" />
+                  </label>
+                </div>
+                <div class="grid-2">
+                  <label>
+                    <span class="field-label">Doğru foto/sticker</span>
+                    <input class="text-input" name="successPhoto" type="file" accept="image/*" />
+                  </label>
+                  <label>
+                    <span class="field-label">Yanlış foto/sticker</span>
+                    <input class="text-input" name="failPhoto" type="file" accept="image/*" />
+                  </label>
+                </div>
+              </div>
+            </details>
+          `
+          : `<input type="hidden" name="notificationMode" value="silent" />`
+      }
+
       <label>
         <span class="field-label">Not (opsiyonel)</span>
         <input class="text-input" name="note" placeholder="${notePlaceholder}" autocomplete="off" />
@@ -603,6 +681,24 @@ function renderCalendar() {
       <h2>Son tarihli kayıtlar</h2>
       <div class="expense-list">
         ${actual.length ? actual.map(entryRow).join("") : `<div class="empty-state">Gerçekleşmiş kayıt yok.</div>`}
+      </div>
+    </section>
+  `;
+}
+
+function renderNotifications() {
+  const notifications = notificationEntries();
+  return `
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Bildirimler</h2>
+          <p>Bu ekranda sadece bu profile gelen proje bildirimleri görünür.</p>
+        </div>
+        <span class="quick-pill">${notifications.length}</span>
+      </div>
+      <div class="expense-list">
+        ${notifications.length ? notifications.map(notificationRow).join("") : `<div class="empty-state">Şu an bu profile gelen bildirim yok.</div>`}
       </div>
     </section>
   `;
@@ -836,6 +932,14 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-action='open-notifications']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.activeView = "notifications";
+      saveState();
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-action='go-add'], [data-action='go-add-expense']").forEach((button) => {
     button.addEventListener("click", () => {
       draft.type = "expense";
@@ -891,6 +995,22 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-action='show-pending-detail']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.pendingDetail = button.dataset.detail;
+      saveState();
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-action='hide-pending-detail']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.pendingDetail = "";
+      saveState();
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-action='activate-project']").forEach((button) => {
     button.addEventListener("click", () => {
       state.activeProjectId = button.dataset.id;
@@ -937,6 +1057,16 @@ function bindScreen() {
     button.addEventListener("click", shareReceipt);
   });
 
+  app.querySelectorAll("[data-action='guess-notification']").forEach((button) => {
+    button.addEventListener("click", () => {
+      const result = guessNotification(button.dataset.id, button.dataset.guess);
+      if (result.status === "already") return toast("Bu sürprizi zaten tahmin ettin.");
+      saveState();
+      render();
+      toast(result.guess?.correct ? "Doğru tahmin." : "Yanlış tahmin.");
+    });
+  });
+
   app.querySelectorAll("[data-action='settle-pending']").forEach((button) => {
     button.addEventListener("click", () => settlePending(button.dataset.id));
   });
@@ -959,6 +1089,10 @@ function bindScreen() {
         draft.userId = currentUser()?.id || String(form.elements.userId?.value || draft.userId || "");
         draft.date = String(form.elements.date?.value || draft.date || todayKey());
         draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
+        draft.notificationMode = String(form.elements.notificationMode?.value || draft.notificationMode || "open");
+        draft.notificationEmoji = String(form.elements.notificationEmoji?.value || draft.notificationEmoji || "🎲");
+        draft.successReaction = String(form.elements.successReaction?.value || draft.successReaction || "✅");
+        draft.failReaction = String(form.elements.failReaction?.value || draft.failReaction || "🙃");
       }
       draft.type = button.dataset.entryType;
       draft.emoji = emojiOptionsFor(draft.type)[0] || entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
@@ -1111,6 +1245,15 @@ function bindScreen() {
       });
     }
 
+    entryForm.querySelectorAll("select[name='notificationMode'], input[name='notificationEmoji'], input[name='successReaction'], input[name='failReaction']").forEach((field) => {
+      field.addEventListener("change", () => {
+        draft.notificationMode = entryForm.elements.notificationMode?.value || draft.notificationMode;
+        draft.notificationEmoji = entryForm.elements.notificationEmoji?.value || draft.notificationEmoji;
+        draft.successReaction = entryForm.elements.successReaction?.value || draft.successReaction;
+        draft.failReaction = entryForm.elements.failReaction?.value || draft.failReaction;
+      });
+    });
+
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
@@ -1140,7 +1283,7 @@ function bindScreen() {
       draft.exchangeRate = exchangeRate;
       draft.amountInput = formatAmountInput(data.get("amount"));
 
-      state.entries.unshift({
+      const entry = {
         id: makeId(),
         projectId: state.activeProjectId,
         type: draft.type,
@@ -1159,6 +1302,17 @@ function bindScreen() {
         settlement,
         status: ["receivable", "payable"].includes(draft.type) ? "pending" : "done",
         createdAt: new Date().toISOString(),
+      };
+
+      state.entries.unshift(entry);
+      createEntryNotification(entry, {
+        mode: String(data.get("notificationMode") || "silent"),
+        emoji: String(data.get("notificationEmoji") || "").trim() || "🎲",
+        photoName: data.get("notificationPhoto")?.name || "",
+        successReaction: String(data.get("successReaction") || "").trim() || "✅",
+        successPhotoName: data.get("successPhoto")?.name || "",
+        failReaction: String(data.get("failReaction") || "").trim() || "🙃",
+        failPhotoName: data.get("failPhoto")?.name || "",
       });
 
       saveState();
@@ -1368,6 +1522,69 @@ function pendingEntries() {
   return projectEntries().filter((entry) => entry.status === "pending").sort(byDateAsc);
 }
 
+function pendingEntriesByType(type) {
+  return pendingEntries().filter((entry) => entry.type === type);
+}
+
+function notificationEntries() {
+  const user = currentUser();
+  if (!user) return [];
+  return (state.notifications || [])
+    .filter((item) => item.projectId === activeProject()?.id && item.recipients?.includes(user.id))
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+
+function createEntryNotification(entry, options = {}) {
+  const project = activeProject();
+  const actor = currentUser();
+  if (!project || !actor || options.mode === "silent") return;
+  const recipients = project.memberIds.filter((id) => id !== actor.id);
+  if (!recipients.length) return;
+
+  state.notifications = state.notifications || [];
+  state.notifications.unshift({
+    id: makeId(),
+    projectId: project.id,
+    entryId: entry.id,
+    actorId: actor.id,
+    recipients,
+    mode: options.mode || "open",
+    actualType: entry.type,
+    title: entry.shortName || entry.headingName,
+    amount: entry.amount,
+    emoji: options.emoji || "🎲",
+    photoName: options.photoName || "",
+    successReaction: options.successReaction || "✅",
+    successPhotoName: options.successPhotoName || "",
+    failReaction: options.failReaction || "🙃",
+    failPhotoName: options.failPhotoName || "",
+    guesses: [],
+    createdAt: new Date().toISOString(),
+  });
+}
+
+function guessNotification(id, guess) {
+  const notification = (state.notifications || []).find((item) => item.id === id);
+  const user = currentUser();
+  if (!notification || !user) return { status: "missing" };
+  notification.guesses = Array.isArray(notification.guesses) ? notification.guesses : [];
+  const existing = notification.guesses.find((item) => item.userId === user.id);
+  if (existing) return { status: "already", guess: existing };
+
+  const result = {
+    userId: user.id,
+    guess,
+    correct: guess === notification.actualType,
+    at: new Date().toISOString(),
+  };
+  notification.guesses.push(result);
+  return { status: "saved", guess: result };
+}
+
+function notificationGuessFor(notification, userId = currentUser()?.id) {
+  return notification.guesses?.find((guess) => guess.userId === userId);
+}
+
 function ensureHeading(name, shortName, emoji) {
   const normalized = normalize(name);
   const existing = projectHeadings().find((heading) => normalize(heading.name) === normalized);
@@ -1460,6 +1677,28 @@ function headingPreview() {
   return `<div class="chips" style="margin-top: 12px;">${projectHeadings().slice(0, 6).map((heading) => `<span class="chip static-chip">${heading.emoji} ${heading.shortName}</span>`).join("")}</div>`;
 }
 
+function pendingDetailRows(type) {
+  const entries = pendingEntriesByType(type);
+  const label = type === "receivable" ? "gelecek" : "gidecek";
+  if (!entries.length) return `<div class="empty-state">Şimdilik ${label} bir kayıt yok.</div>`;
+  return entries
+    .map((entry) => {
+      const user = state.users.find((item) => item.id === entry.userId);
+      return `
+        <div class="expense-row">
+          <span class="emoji-dot">${entry.emoji || (type === "receivable" ? "🤝" : "⏰")}</span>
+          <div class="expense-main">
+            <p class="expense-title">${entry.shortName || entry.headingName}</p>
+            <p class="expense-meta">${projectUserLabel(user)} · ${formatShortDate(entry.date)} · ${type === "receivable" ? "Şu gelecek" : "Bu gidecek"}</p>
+            ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
+          </div>
+          <strong class="expense-price">${money(entry.amount)}</strong>
+        </div>
+      `;
+    })
+    .join("");
+}
+
 function projectRow(project) {
   return `
     <div class="expense-row">
@@ -1469,6 +1708,46 @@ function projectRow(project) {
         <p class="expense-meta">${project.purpose} · ${project.memberIds.length} üye · ${projectCode(project)}</p>
       </div>
       <button class="mini-action" data-action="activate-project" data-id="${project.id}" type="button">${project.id === state.activeProjectId ? "Aktif" : "Seç"}</button>
+    </div>
+  `;
+}
+
+function notificationRow(notification) {
+  const actor = state.users.find((user) => user.id === notification.actorId);
+  const guess = notificationGuessFor(notification);
+  const isSurprise = notification.mode === "surprise";
+  const typeLabel = notification.actualType === "income" ? "gelir" : "gider";
+  const media = notification.photoName ? `📎 ${notification.photoName}` : notification.emoji || "🎲";
+
+  if (!isSurprise) {
+    return `
+      <div class="notification-card">
+        <div class="notification-hero">${media}</div>
+        <div class="expense-main">
+          <p class="expense-title">${projectUserLabel(actor)} ${typeLabel} ekledi</p>
+          <p class="expense-meta">${notification.title} · ${money(notification.amount)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="notification-card">
+      <div class="notification-hero">${media}</div>
+      <div class="expense-main">
+        <p class="expense-title">${projectUserLabel(actor)} sürpriz hareket gönderdi</p>
+        <p class="expense-meta">${guess ? `Tahminin: ${guess.guess === "income" ? "Gelir" : "Gider"}` : "Gelir mi gider mi? Tahmin et."}</p>
+        ${
+          guess
+            ? `<div class="reaction-result ${guess.correct ? "correct" : "wrong"}">${guess.correct ? notification.successReaction : notification.failReaction} ${guess.correct ? "Doğru bildin." : "Yanlış tahmin."}${guess.correct && notification.successPhotoName ? ` · ${notification.successPhotoName}` : ""}${!guess.correct && notification.failPhotoName ? ` · ${notification.failPhotoName}` : ""}</div>`
+            : `
+              <div class="guess-actions">
+                <button class="mini-action" data-action="guess-notification" data-id="${notification.id}" data-guess="income" type="button">Gelir</button>
+                <button class="mini-action" data-action="guess-notification" data-id="${notification.id}" data-guess="expense" type="button">Gider</button>
+              </div>
+            `
+        }
+      </div>
     </div>
   `;
 }

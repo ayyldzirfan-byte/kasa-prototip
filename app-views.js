@@ -4,15 +4,18 @@ function renderHome() {
   const totals = calculateTotals(projectEntries());
   const recent = actualEntries().slice(0, 4);
   const upcoming = pendingEntries().slice(0, 3);
+  const notificationCount = notificationEntries().length;
 
   return `
     <section class="account-strip">
       <div>
         <span class="field-label">Aktif kullanıcı</span>
         <strong>${projectUserLabel(user)}</strong>
-        <p>Yeni profil oluşturmak için çıkış yap.</p>
       </div>
-      <button class="tiny-button" data-action="logout" type="button">Çıkış yap</button>
+      <div class="account-actions">
+        <button class="tiny-button" data-action="open-notifications" type="button">Bildirimler${notificationCount ? ` (${notificationCount})` : ""}</button>
+        <button class="tiny-button" data-action="logout" type="button">Çıkış</button>
+      </div>
     </section>
 
     <section class="hero">
@@ -62,15 +65,32 @@ function renderHome() {
         <p class="stat-label">Çıkan</p>
         <p class="stat-value warning">${money(totals.expense)}</p>
       </article>
-      <article class="stat-card">
+      <article class="stat-card" data-action="show-pending-detail" data-detail="receivable">
         <p class="stat-label">Beklenen</p>
         <p class="stat-value">${money(totals.receivable)}</p>
       </article>
-      <article class="stat-card">
+      <article class="stat-card" data-action="show-pending-detail" data-detail="payable">
         <p class="stat-label">Yaklaşan</p>
         <p class="stat-value">${money(totals.payable)}</p>
       </article>
     </section>
+
+    ${
+      state.pendingDetail
+        ? `
+          <section class="card">
+            <div class="section-head">
+              <div>
+                <h2>${state.pendingDetail === "receivable" ? "Beklenen gelirler" : "Yaklaşan ödemeler"}</h2>
+                <p>${state.pendingDetail === "receivable" ? "Şu gelecek." : "Bu gidecek."}</p>
+              </div>
+              <button class="tiny-button" data-action="hide-pending-detail" type="button">Kapat</button>
+            </div>
+            <div class="expense-list">${pendingDetailRows(state.pendingDetail)}</div>
+          </section>
+        `
+        : ""
+    }
 
     <section class="card">
       <div class="section-head">
@@ -214,6 +234,56 @@ function renderAdd() {
         </div>
       </div>
 
+      ${
+        ["income", "expense"].includes(type.id)
+          ? `
+            <details class="soft-details">
+              <summary>Bildirim oyunu</summary>
+              <div class="form-grid notification-options">
+                <label>
+                  <span class="field-label">Bildirim modu</span>
+                  <select class="select-input" name="notificationMode">
+                    <option value="open" ${draft.notificationMode === "open" ? "selected" : ""}>Açık bildir</option>
+                    <option value="surprise" ${draft.notificationMode === "surprise" ? "selected" : ""}>Sürpriz tahmin</option>
+                    <option value="silent" ${draft.notificationMode === "silent" ? "selected" : ""}>Sessiz kaydet</option>
+                  </select>
+                </label>
+                <div class="grid-2">
+                  <label>
+                    <span class="field-label">Bildirim emoji</span>
+                    <input class="text-input" name="notificationEmoji" maxlength="4" value="${draft.notificationEmoji || "🎲"}" autocomplete="off" />
+                  </label>
+                  <label>
+                    <span class="field-label">Bildirim foto</span>
+                    <input class="text-input" name="notificationPhoto" type="file" accept="image/*" />
+                  </label>
+                </div>
+                <div class="grid-2">
+                  <label>
+                    <span class="field-label">Doğru tepki</span>
+                    <input class="text-input" name="successReaction" value="${draft.successReaction || "✅"}" autocomplete="off" />
+                  </label>
+                  <label>
+                    <span class="field-label">Yanlış tepki</span>
+                    <input class="text-input" name="failReaction" value="${draft.failReaction || "🙃"}" autocomplete="off" />
+                  </label>
+                </div>
+                <div class="grid-2">
+                  <label>
+                    <span class="field-label">Doğru foto/sticker</span>
+                    <input class="text-input" name="successPhoto" type="file" accept="image/*" />
+                  </label>
+                  <label>
+                    <span class="field-label">Yanlış foto/sticker</span>
+                    <input class="text-input" name="failPhoto" type="file" accept="image/*" />
+                  </label>
+                </div>
+              </div>
+            </details>
+          `
+          : `<input type="hidden" name="notificationMode" value="silent" />`
+      }
+
       <label>
         <span class="field-label">Not (opsiyonel)</span>
         <input class="text-input" name="note" placeholder="${notePlaceholder}" autocomplete="off" />
@@ -253,6 +323,24 @@ function renderCalendar() {
       <h2>Son tarihli kayıtlar</h2>
       <div class="expense-list">
         ${actual.length ? actual.map(entryRow).join("") : `<div class="empty-state">Gerçekleşmiş kayıt yok.</div>`}
+      </div>
+    </section>
+  `;
+}
+
+function renderNotifications() {
+  const notifications = notificationEntries();
+  return `
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Bildirimler</h2>
+          <p>Bu ekranda sadece bu profile gelen proje bildirimleri görünür.</p>
+        </div>
+        <span class="quick-pill">${notifications.length}</span>
+      </div>
+      <div class="expense-list">
+        ${notifications.length ? notifications.map(notificationRow).join("") : `<div class="empty-state">Şu an bu profile gelen bildirim yok.</div>`}
       </div>
     </section>
   `;
