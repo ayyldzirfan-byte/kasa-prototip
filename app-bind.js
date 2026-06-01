@@ -164,12 +164,13 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(accountForm);
       const name = String(data.get("userName") || "").trim();
-      const password = String(data.get("password") || "");
+      const password = normalizePassword(data.get("password"));
       if (!name) return toast("Ad soyad yazalım.");
       if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
-      createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
+      const user = createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
       state.signedInUserId = "";
       state.activeUserId = "";
+      state.pendingLoginUserId = user.id;
       state.authMode = "login";
       saveState();
       render();
@@ -199,12 +200,13 @@ function bindScreen() {
       const user = state.users.find((item) => item.id === String(data.get("loginUserId")));
       if (!state.users.length) return toast("Önce kullanıcı oluştur.");
       if (!user) return toast("Kullanıcı bulunamadı.");
-      const password = String(data.get("loginPassword") || "");
-      if (user.password && user.password !== password) return toast("Şifre yanlış.");
+      const password = normalizePassword(data.get("loginPassword"));
+      if (user.password && normalizePassword(user.password) !== password) return toast("Şifre yanlış.");
       if (!user.password && password) return toast("Bu profil şifresiz.");
       if (!user.password && !password) return toast("Bu profil için şifre yok. Deneme profillerini hareket içinde seçebilirsin.");
       state.signedInUserId = user.id;
       state.activeUserId = user.id;
+      state.pendingLoginUserId = "";
       draft = makeDraft();
       saveState();
       render();
@@ -333,4 +335,3 @@ function bindScreen() {
     });
   }
 }
-

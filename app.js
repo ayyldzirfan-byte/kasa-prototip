@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "01.06.2026 22:58";
+const APP_UPDATED_AT = "01.06.2026 23:54";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -41,6 +41,7 @@ const seedState = {
   activeProjectId: "",
   activeUserId: "",
   signedInUserId: "",
+  pendingLoginUserId: "",
   authMode: "login",
   users: defaultUsers,
   projects: [],
@@ -101,13 +102,17 @@ function loadState() {
   return structuredClone(seedState);
 }
 
+function normalizePassword(value) {
+  return String(value || "").trim();
+}
+
 function normalizeState(saved) {
   const source = saved && typeof saved === "object" ? saved : {};
   const users = (Array.isArray(source.users) && source.users.length ? source.users : seedState.users).map((user) => ({
     id: user.id || makeId(),
     name: user.name || "Kullanıcı",
     email: user.email || "",
-    password: user.password || "",
+    password: normalizePassword(user.password),
     createdAt: user.createdAt || new Date().toISOString(),
     createdBy: user.createdBy || "",
   }));
@@ -130,6 +135,7 @@ function normalizeState(saved) {
   const activeProjectId = projects.some((project) => project.id === source.activeProjectId) ? source.activeProjectId : projects[0]?.id || "";
   const signedInUserId = users.some((user) => user.id === source.signedInUserId) ? source.signedInUserId : "";
   const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : signedInUserId;
+  const pendingLoginUserId = users.some((user) => user.id === source.pendingLoginUserId) ? source.pendingLoginUserId : activeUserId || users[users.length - 1]?.id || "";
 
   return {
     ...seedState,
@@ -138,6 +144,7 @@ function normalizeState(saved) {
     activeProjectId,
     activeUserId,
     signedInUserId,
+    pendingLoginUserId,
     authMode: source.authMode === "signup" ? "signup" : "login",
     users,
     projects,
@@ -198,6 +205,9 @@ function backHeader() {
 
 function renderAuth() {
   const isSignup = state.authMode === "signup";
+  const selectedLoginUserId = state.users.some((user) => user.id === state.pendingLoginUserId)
+    ? state.pendingLoginUserId
+    : state.users[state.users.length - 1]?.id || "";
 
   return `
     <section class="auth-card form-grid onboarding-card">
@@ -232,27 +242,23 @@ function renderAuth() {
               <button class="primary-button" type="submit">Kullanıcı oluştur</button>
             </form>
           `
-          : `
+          : state.users.length
+            ? `
             <form class="form-grid" id="loginForm">
-              ${
-                state.users.length
-                  ? `
-                    <label>
-                      <span class="field-label">Kullanıcı</span>
-                      <select class="select-input" name="loginUserId">
-                        ${state.users.map((user) => `<option value="${user.id}">${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
-                      </select>
-                    </label>
-                  `
-                  : `<div class="empty-state">Henüz kullanıcı yok. Yeni kullanıcı oluşturarak başla.</div>`
-              }
+              <label>
+                <span class="field-label">Kullanıcı</span>
+                <select class="select-input" name="loginUserId">
+                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
+                </select>
+              </label>
               <label>
                 <span class="field-label">Şifre</span>
-                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" ${state.users.length ? "" : "disabled"} />
+                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" />
               </label>
-              <button class="primary-button" type="submit" ${state.users.length ? "" : "disabled"}>Giriş yap</button>
+              <button class="primary-button" type="submit">Giriş yap</button>
             </form>
           `
+            : ""
       }
     </section>
   `;
@@ -848,12 +854,13 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(accountForm);
       const name = String(data.get("userName") || "").trim();
-      const password = String(data.get("password") || "");
+      const password = normalizePassword(data.get("password"));
       if (!name) return toast("Ad soyad yazalım.");
       if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
-      createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
+      const user = createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
       state.signedInUserId = "";
       state.activeUserId = "";
+      state.pendingLoginUserId = user.id;
       state.authMode = "login";
       saveState();
       render();
@@ -883,12 +890,13 @@ function bindScreen() {
       const user = state.users.find((item) => item.id === String(data.get("loginUserId")));
       if (!state.users.length) return toast("Önce kullanıcı oluştur.");
       if (!user) return toast("Kullanıcı bulunamadı.");
-      const password = String(data.get("loginPassword") || "");
-      if (user.password && user.password !== password) return toast("Şifre yanlış.");
+      const password = normalizePassword(data.get("loginPassword"));
+      if (user.password && normalizePassword(user.password) !== password) return toast("Şifre yanlış.");
       if (!user.password && password) return toast("Bu profil şifresiz.");
       if (!user.password && !password) return toast("Bu profil için şifre yok. Deneme profillerini hareket içinde seçebilirsin.");
       state.signedInUserId = user.id;
       state.activeUserId = user.id;
+      state.pendingLoginUserId = "";
       draft = makeDraft();
       saveState();
       render();
@@ -1043,7 +1051,7 @@ function createUser(name, password = "", options = {}) {
     id: makeId(),
     name,
     email: options.email || "",
-    password,
+    password: normalizePassword(password),
     createdAt: new Date().toISOString(),
     createdBy: currentUser()?.id || "",
   };

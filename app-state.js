@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "01.06.2026 22:58";
+const APP_UPDATED_AT = "01.06.2026 23:54";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -41,6 +41,7 @@ const seedState = {
   activeProjectId: "",
   activeUserId: "",
   signedInUserId: "",
+  pendingLoginUserId: "",
   authMode: "login",
   users: defaultUsers,
   projects: [],

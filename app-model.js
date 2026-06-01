@@ -23,7 +23,7 @@ function createUser(name, password = "", options = {}) {
     id: makeId(),
     name,
     email: options.email || "",
-    password,
+    password: normalizePassword(password),
     createdAt: new Date().toISOString(),
     createdBy: currentUser()?.id || "",
   };

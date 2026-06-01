@@ -21,13 +21,17 @@ function loadState() {
   return structuredClone(seedState);
 }
 
+function normalizePassword(value) {
+  return String(value || "").trim();
+}
+
 function normalizeState(saved) {
   const source = saved && typeof saved === "object" ? saved : {};
   const users = (Array.isArray(source.users) && source.users.length ? source.users : seedState.users).map((user) => ({
     id: user.id || makeId(),
     name: user.name || "Kullanıcı",
     email: user.email || "",
-    password: user.password || "",
+    password: normalizePassword(user.password),
     createdAt: user.createdAt || new Date().toISOString(),
     createdBy: user.createdBy || "",
   }));
@@ -50,6 +54,7 @@ function normalizeState(saved) {
   const activeProjectId = projects.some((project) => project.id === source.activeProjectId) ? source.activeProjectId : projects[0]?.id || "";
   const signedInUserId = users.some((user) => user.id === source.signedInUserId) ? source.signedInUserId : "";
   const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : signedInUserId;
+  const pendingLoginUserId = users.some((user) => user.id === source.pendingLoginUserId) ? source.pendingLoginUserId : activeUserId || users[users.length - 1]?.id || "";
 
   return {
     ...seedState,
@@ -58,6 +63,7 @@ function normalizeState(saved) {
     activeProjectId,
     activeUserId,
     signedInUserId,
+    pendingLoginUserId,
     authMode: source.authMode === "signup" ? "signup" : "login",
     users,
     projects,
@@ -118,6 +124,9 @@ function backHeader() {
 
 function renderAuth() {
   const isSignup = state.authMode === "signup";
+  const selectedLoginUserId = state.users.some((user) => user.id === state.pendingLoginUserId)
+    ? state.pendingLoginUserId
+    : state.users[state.users.length - 1]?.id || "";
 
   return `
     <section class="auth-card form-grid onboarding-card">
@@ -152,27 +161,23 @@ function renderAuth() {
               <button class="primary-button" type="submit">Kullanıcı oluştur</button>
             </form>
           `
-          : `
+          : state.users.length
+            ? `
             <form class="form-grid" id="loginForm">
-              ${
-                state.users.length
-                  ? `
-                    <label>
-                      <span class="field-label">Kullanıcı</span>
-                      <select class="select-input" name="loginUserId">
-                        ${state.users.map((user) => `<option value="${user.id}">${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
-                      </select>
-                    </label>
-                  `
-                  : `<div class="empty-state">Henüz kullanıcı yok. Yeni kullanıcı oluşturarak başla.</div>`
-              }
+              <label>
+                <span class="field-label">Kullanıcı</span>
+                <select class="select-input" name="loginUserId">
+                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
+                </select>
+              </label>
               <label>
                 <span class="field-label">Şifre</span>
-                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" ${state.users.length ? "" : "disabled"} />
+                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" />
               </label>
-              <button class="primary-button" type="submit" ${state.users.length ? "" : "disabled"}>Giriş yap</button>
+              <button class="primary-button" type="submit">Giriş yap</button>
             </form>
           `
+            : ""
       }
     </section>
   `;
@@ -205,4 +210,3 @@ function renderProjectSetup() {
     </section>
   `;
 }
-
