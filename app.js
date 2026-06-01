@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 00:47";
+const APP_UPDATED_AT = "02.06.2026 01:00";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -108,6 +108,11 @@ function initApp() {
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       state.activeView = tab.dataset.view;
+      if (state.activeView === "add") {
+        draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id || "";
+        draft.date = todayKey();
+        draft.amountInput = "";
+      }
       saveState();
       render();
     });
@@ -461,17 +466,23 @@ function renderAdd() {
   const suggestions = headingSuggestionsFor(type.id);
   const emojiOptions = emojiOptionsFor(type.id);
   const amountValue = draft.amountInput || "";
-  const dateLabel = ["receivable", "payable"].includes(type.id) ? "Beklenen tarih" : "Tarih";
+  const entryUser = members.find((user) => user.id === currentUser()?.id) || members[0];
+  const dateLabel = {
+    expense: "Gider tarihi",
+    income: "Gelir tarihi",
+    receivable: "Beklenen gelir tarihi",
+    payable: "Beklenen ödeme tarihi",
+  }[type.id];
+  const typeGuidance = {
+    expense: "Para çıktıysa gider. İleri tarihli ödemeyi Takvim için Ödeme olarak gir.",
+    income: "Para yattıysa gelir. Maaş yatacaksa Alacak seçip beklenen tarihi yaz.",
+    receivable: "Henüz yatmamış gelir. Takvimde beklenen para olarak görünür.",
+    payable: "Henüz ödenmemiş gider. Takvimde yaklaşan ödeme olarak görünür.",
+  }[type.id];
   const headingLabel = type.id === "income" || type.id === "receivable" ? "Gelir başlığı" : "Gider başlığı";
   const headingPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Maaş, ek iş, satış" : "Örn. Kira, HGS, market";
   const shortPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. maaş günü, yan gelir, tahsilat" : "Örn. haraç, yol yedi, ayın tokadı";
-  const memberLabel = {
-    expense: "Kim ödedi?",
-    income: "Kim aldı?",
-    receivable: "Kim bekliyor?",
-    payable: "Kim ödeyecek?",
-  }[type.id];
-
+  const notePlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Haziran maaşı, prim dahil" : "Örn. kasada farklı çıktı, ortak ödeme";
   return `
     <form class="form-card form-grid" id="entryForm">
       <div class="section-head">
@@ -484,23 +495,46 @@ function renderAdd() {
       <div class="type-grid">
         ${entryTypes.map((item) => `<button class="type-chip ${draft.type === item.id ? "selected" : ""}" data-entry-type="${item.id}" type="button"><span>${item.emoji}</span>${item.label}</button>`).join("")}
       </div>
+      <p class="field-help">${typeGuidance}</p>
+      <input type="hidden" name="userId" value="${entryUser?.id || ""}" />
 
       <div>
         <label class="field-label" for="amount">Tutar</label>
         <input class="amount-input" id="amount" name="amount" inputmode="numeric" placeholder="1.000" value="${amountValue}" autocomplete="off" />
       </div>
 
-      <div class="grid-2">
+      <div class="grid-2 currency-grid ${draft.currency === "TRY" ? "single" : ""}">
         <label>
           <span class="field-label">Para birimi</span>
           <select class="select-input" name="currency">
             ${currencyOptions.map((item) => `<option value="${item.code}" ${draft.currency === item.code ? "selected" : ""}>${item.label}</option>`).join("")}
           </select>
         </label>
-        <label>
+        <label class="fx-rate-field ${draft.currency === "TRY" ? "is-hidden" : ""}">
           <span class="field-label">Kur</span>
-          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="TL ise 1" value="${draft.exchangeRate || 1}" autocomplete="off" />
+          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="Örn. 32,5" value="${draft.exchangeRate || 1}" autocomplete="off" />
         </label>
+      </div>
+
+      <div class="grid-2 timing-grid ${type.id === "expense" ? "" : "single"}">
+        <label>
+          <span class="field-label">${dateLabel}</span>
+          <input class="select-input" name="date" type="date" value="${draft.date || todayKey()}" />
+          <span class="field-help">Maaş her ayın 1'inde yatıyorsa o günü seç.</span>
+        </label>
+        ${
+          type.id === "expense"
+            ? `
+              <label>
+                <span class="field-label">Hesaplaşma</span>
+                <select class="select-input" name="settlement">
+                  <option value="in" ${draft.settlement === "in" ? "selected" : ""}>Dahil</option>
+                  <option value="out" ${draft.settlement === "out" ? "selected" : ""}>Dahil değil</option>
+                </select>
+              </label>
+            `
+            : `<input type="hidden" name="settlement" value="out" />`
+        }
       </div>
 
       <div>
@@ -530,29 +564,9 @@ function renderAdd() {
       </div>
 
       <label>
-        <span class="field-label">${memberLabel}</span>
-        <select class="select-input" name="userId">
-          ${members.map((user) => `<option value="${user.id}" ${draft.userId === user.id ? "selected" : ""}>${projectUserLabel(user)}</option>`).join("")}
-        </select>
-      </label>
-
-      <div class="grid-2">
-        <label>
-          <span class="field-label">${dateLabel}</span>
-          <input class="select-input" name="date" type="date" value="${draft.date || todayKey()}" />
-        </label>
-        <label>
-          <span class="field-label">Hesaplaşma</span>
-          <select class="select-input" name="settlement">
-            <option value="in" ${draft.settlement === "in" ? "selected" : ""}>Dahil</option>
-            <option value="out" ${draft.settlement === "out" ? "selected" : ""}>Dahil değil</option>
-          </select>
-        </label>
-      </div>
-
-      <label>
-        <span class="field-label">Not</span>
-        <input class="text-input" name="note" placeholder="Örn. bugün şuradan 1200 TL aldım" autocomplete="off" />
+        <span class="field-label">Not (opsiyonel)</span>
+        <input class="text-input" name="note" placeholder="${notePlaceholder}" autocomplete="off" />
+        <span class="field-help">Hesaba katılmaz; sadece hareketin açıklaması olarak saklanır.</span>
       </label>
 
       <label class="photo-pick">
@@ -825,7 +839,9 @@ function bindScreen() {
     button.addEventListener("click", () => {
       draft.type = "expense";
       draft.emoji = "💸";
-      draft.userId = activeMembers()[0]?.id || state.users[0]?.id;
+      draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
+      draft.date = todayKey();
+      draft.amountInput = "";
       state.activeView = "add";
       saveState();
       render();
@@ -836,7 +852,9 @@ function bindScreen() {
     button.addEventListener("click", () => {
       draft.type = "income";
       draft.emoji = "💰";
-      draft.userId = activeMembers()[0]?.id || state.users[0]?.id;
+      draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
+      draft.date = todayKey();
+      draft.amountInput = "";
       state.activeView = "add";
       saveState();
       render();
@@ -847,7 +865,9 @@ function bindScreen() {
     button.addEventListener("click", () => {
       draft.type = "payable";
       draft.emoji = "⏰";
-      draft.userId = activeMembers()[0]?.id || state.users[0]?.id;
+      draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
+      draft.date = todayKey();
+      draft.amountInput = "";
       state.activeView = "add";
       saveState();
       render();
@@ -958,8 +978,6 @@ function bindScreen() {
       if (!form) return;
       form.elements.headingName.value = button.dataset.suggestion;
       form.elements.shortName.value = button.dataset.short;
-      draft.emoji = button.dataset.emoji;
-      app.querySelectorAll(".emoji-chip").forEach((chip) => chip.classList.toggle("selected", chip.dataset.value === draft.emoji));
     });
   });
 
@@ -1075,6 +1093,23 @@ function bindScreen() {
       });
     }
 
+    const currencySelect = entryForm.querySelector("select[name='currency']");
+    const rateField = entryForm.querySelector(".fx-rate-field");
+    const currencyGrid = entryForm.querySelector(".currency-grid");
+    const rateInput = entryForm.querySelector("input[name='exchangeRate']");
+    if (currencySelect && rateField) {
+      currencySelect.addEventListener("change", () => {
+        const isTry = currencySelect.value === "TRY";
+        rateField.classList.toggle("is-hidden", isTry);
+        currencyGrid?.classList.toggle("single", isTry);
+        draft.currency = currencySelect.value;
+        if (isTry && rateInput) {
+          rateInput.value = "1";
+          draft.exchangeRate = 1;
+        }
+      });
+    }
+
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
@@ -1127,6 +1162,7 @@ function bindScreen() {
       saveState();
       state.activeView = "home";
       draft.amountInput = "";
+      draft.date = todayKey();
       render();
       toast("Hareket kasaya girdi.");
     });
@@ -1495,6 +1531,7 @@ function entryRow(entry) {
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
         <p class="expense-meta">${projectUserLabel(user)} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
       </div>
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
         ${entry.type === "income" ? "+" : entry.type === "expense" ? "-" : ""}${money(entry.amount)}
@@ -1512,6 +1549,7 @@ function pendingRow(entry) {
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
         <p class="expense-meta">${isReceivable ? "Beklenen alacak" : "Yaklaşan ödeme"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
       </div>
       <div style="display:grid; gap:6px; justify-items:end;">
         <strong class="expense-price">${money(entry.amount)}</strong>

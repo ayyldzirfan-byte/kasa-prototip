@@ -19,7 +19,9 @@ function bindScreen() {
     button.addEventListener("click", () => {
       draft.type = "expense";
       draft.emoji = "💸";
-      draft.userId = activeMembers()[0]?.id || state.users[0]?.id;
+      draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
+      draft.date = todayKey();
+      draft.amountInput = "";
       state.activeView = "add";
       saveState();
       render();
@@ -30,7 +32,9 @@ function bindScreen() {
     button.addEventListener("click", () => {
       draft.type = "income";
       draft.emoji = "💰";
-      draft.userId = activeMembers()[0]?.id || state.users[0]?.id;
+      draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
+      draft.date = todayKey();
+      draft.amountInput = "";
       state.activeView = "add";
       saveState();
       render();
@@ -41,7 +45,9 @@ function bindScreen() {
     button.addEventListener("click", () => {
       draft.type = "payable";
       draft.emoji = "⏰";
-      draft.userId = activeMembers()[0]?.id || state.users[0]?.id;
+      draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
+      draft.date = todayKey();
+      draft.amountInput = "";
       state.activeView = "add";
       saveState();
       render();
@@ -152,8 +158,6 @@ function bindScreen() {
       if (!form) return;
       form.elements.headingName.value = button.dataset.suggestion;
       form.elements.shortName.value = button.dataset.short;
-      draft.emoji = button.dataset.emoji;
-      app.querySelectorAll(".emoji-chip").forEach((chip) => chip.classList.toggle("selected", chip.dataset.value === draft.emoji));
     });
   });
 
@@ -269,6 +273,23 @@ function bindScreen() {
       });
     }
 
+    const currencySelect = entryForm.querySelector("select[name='currency']");
+    const rateField = entryForm.querySelector(".fx-rate-field");
+    const currencyGrid = entryForm.querySelector(".currency-grid");
+    const rateInput = entryForm.querySelector("input[name='exchangeRate']");
+    if (currencySelect && rateField) {
+      currencySelect.addEventListener("change", () => {
+        const isTry = currencySelect.value === "TRY";
+        rateField.classList.toggle("is-hidden", isTry);
+        currencyGrid?.classList.toggle("single", isTry);
+        draft.currency = currencySelect.value;
+        if (isTry && rateInput) {
+          rateInput.value = "1";
+          draft.exchangeRate = 1;
+        }
+      });
+    }
+
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
@@ -321,6 +342,7 @@ function bindScreen() {
       saveState();
       state.activeView = "home";
       draft.amountInput = "";
+      draft.date = todayKey();
       render();
       toast("Hareket kasaya girdi.");
     });

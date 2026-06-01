@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 00:47";
+const APP_UPDATED_AT = "02.06.2026 01:00";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -108,6 +108,11 @@ function initApp() {
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       state.activeView = tab.dataset.view;
+      if (state.activeView === "add") {
+        draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id || "";
+        draft.date = todayKey();
+        draft.amountInput = "";
+      }
       saveState();
       render();
     });

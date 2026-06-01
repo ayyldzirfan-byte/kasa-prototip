@@ -304,6 +304,7 @@ function entryRow(entry) {
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
         <p class="expense-meta">${projectUserLabel(user)} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
       </div>
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
         ${entry.type === "income" ? "+" : entry.type === "expense" ? "-" : ""}${money(entry.amount)}
@@ -321,6 +322,7 @@ function pendingRow(entry) {
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
         <p class="expense-meta">${isReceivable ? "Beklenen alacak" : "Yaklaşan ödeme"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
       </div>
       <div style="display:grid; gap:6px; justify-items:end;">
         <strong class="expense-price">${money(entry.amount)}</strong>

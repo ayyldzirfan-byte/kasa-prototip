@@ -236,6 +236,14 @@ button {
   gap: 10px;
 }
 
+.grid-2.single {
+  grid-template-columns: 1fr;
+}
+
+.is-hidden {
+  display: none;
+}
+
 .quick-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -627,6 +635,13 @@ button {
   margin: 3px 0 0;
   color: var(--muted);
   font-size: 12px;
+}
+
+.expense-note {
+  margin: 6px 0 0;
+  color: #4f493f;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .expense-price {

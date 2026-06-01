@@ -117,17 +117,23 @@ function renderAdd() {
   const suggestions = headingSuggestionsFor(type.id);
   const emojiOptions = emojiOptionsFor(type.id);
   const amountValue = draft.amountInput || "";
-  const dateLabel = ["receivable", "payable"].includes(type.id) ? "Beklenen tarih" : "Tarih";
+  const entryUser = members.find((user) => user.id === currentUser()?.id) || members[0];
+  const dateLabel = {
+    expense: "Gider tarihi",
+    income: "Gelir tarihi",
+    receivable: "Beklenen gelir tarihi",
+    payable: "Beklenen ödeme tarihi",
+  }[type.id];
+  const typeGuidance = {
+    expense: "Para çıktıysa gider. İleri tarihli ödemeyi Takvim için Ödeme olarak gir.",
+    income: "Para yattıysa gelir. Maaş yatacaksa Alacak seçip beklenen tarihi yaz.",
+    receivable: "Henüz yatmamış gelir. Takvimde beklenen para olarak görünür.",
+    payable: "Henüz ödenmemiş gider. Takvimde yaklaşan ödeme olarak görünür.",
+  }[type.id];
   const headingLabel = type.id === "income" || type.id === "receivable" ? "Gelir başlığı" : "Gider başlığı";
   const headingPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Maaş, ek iş, satış" : "Örn. Kira, HGS, market";
   const shortPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. maaş günü, yan gelir, tahsilat" : "Örn. haraç, yol yedi, ayın tokadı";
-  const memberLabel = {
-    expense: "Kim ödedi?",
-    income: "Kim aldı?",
-    receivable: "Kim bekliyor?",
-    payable: "Kim ödeyecek?",
-  }[type.id];
-
+  const notePlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Haziran maaşı, prim dahil" : "Örn. kasada farklı çıktı, ortak ödeme";
   return `
     <form class="form-card form-grid" id="entryForm">
       <div class="section-head">
@@ -140,23 +146,46 @@ function renderAdd() {
       <div class="type-grid">
         ${entryTypes.map((item) => `<button class="type-chip ${draft.type === item.id ? "selected" : ""}" data-entry-type="${item.id}" type="button"><span>${item.emoji}</span>${item.label}</button>`).join("")}
       </div>
+      <p class="field-help">${typeGuidance}</p>
+      <input type="hidden" name="userId" value="${entryUser?.id || ""}" />
 
       <div>
         <label class="field-label" for="amount">Tutar</label>
         <input class="amount-input" id="amount" name="amount" inputmode="numeric" placeholder="1.000" value="${amountValue}" autocomplete="off" />
       </div>
 
-      <div class="grid-2">
+      <div class="grid-2 currency-grid ${draft.currency === "TRY" ? "single" : ""}">
         <label>
           <span class="field-label">Para birimi</span>
           <select class="select-input" name="currency">
             ${currencyOptions.map((item) => `<option value="${item.code}" ${draft.currency === item.code ? "selected" : ""}>${item.label}</option>`).join("")}
           </select>
         </label>
-        <label>
+        <label class="fx-rate-field ${draft.currency === "TRY" ? "is-hidden" : ""}">
           <span class="field-label">Kur</span>
-          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="TL ise 1" value="${draft.exchangeRate || 1}" autocomplete="off" />
+          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="Örn. 32,5" value="${draft.exchangeRate || 1}" autocomplete="off" />
         </label>
+      </div>
+
+      <div class="grid-2 timing-grid ${type.id === "expense" ? "" : "single"}">
+        <label>
+          <span class="field-label">${dateLabel}</span>
+          <input class="select-input" name="date" type="date" value="${draft.date || todayKey()}" />
+          <span class="field-help">Maaş her ayın 1'inde yatıyorsa o günü seç.</span>
+        </label>
+        ${
+          type.id === "expense"
+            ? `
+              <label>
+                <span class="field-label">Hesaplaşma</span>
+                <select class="select-input" name="settlement">
+                  <option value="in" ${draft.settlement === "in" ? "selected" : ""}>Dahil</option>
+                  <option value="out" ${draft.settlement === "out" ? "selected" : ""}>Dahil değil</option>
+                </select>
+              </label>
+            `
+            : `<input type="hidden" name="settlement" value="out" />`
+        }
       </div>
 
       <div>
@@ -186,29 +215,9 @@ function renderAdd() {
       </div>
 
       <label>
-        <span class="field-label">${memberLabel}</span>
-        <select class="select-input" name="userId">
-          ${members.map((user) => `<option value="${user.id}" ${draft.userId === user.id ? "selected" : ""}>${projectUserLabel(user)}</option>`).join("")}
-        </select>
-      </label>
-
-      <div class="grid-2">
-        <label>
-          <span class="field-label">${dateLabel}</span>
-          <input class="select-input" name="date" type="date" value="${draft.date || todayKey()}" />
-        </label>
-        <label>
-          <span class="field-label">Hesaplaşma</span>
-          <select class="select-input" name="settlement">
-            <option value="in" ${draft.settlement === "in" ? "selected" : ""}>Dahil</option>
-            <option value="out" ${draft.settlement === "out" ? "selected" : ""}>Dahil değil</option>
-          </select>
-        </label>
-      </div>
-
-      <label>
-        <span class="field-label">Not</span>
-        <input class="text-input" name="note" placeholder="Örn. bugün şuradan 1200 TL aldım" autocomplete="off" />
+        <span class="field-label">Not (opsiyonel)</span>
+        <input class="text-input" name="note" placeholder="${notePlaceholder}" autocomplete="off" />
+        <span class="field-help">Hesaba katılmaz; sadece hareketin açıklaması olarak saklanır.</span>
       </label>
 
       <label class="photo-pick">
