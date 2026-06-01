@@ -218,6 +218,84 @@ button {
   margin-top: 14px;
 }
 
+.home-gate {
+  display: grid;
+  gap: 14px;
+}
+
+.onboarding-card {
+  margin-top: 10px;
+}
+
+.inline-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.profile-form {
+  grid-template-columns: 1fr;
+}
+
+.profile-create-box {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.profile-create-box p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.soft-details {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.soft-details summary {
+  min-height: 48px;
+  padding: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 950;
+}
+
+.soft-details .inline-form {
+  margin: 0;
+  padding: 0 14px 14px;
+}
+
+.invite-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(248, 243, 234, 0.78);
+}
+
+.invite-box strong {
+  display: block;
+  margin: 3px 0;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.invite-box p {
+  max-width: 280px;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .action-button {
   display: grid;
   min-height: 92px;
@@ -742,8 +820,13 @@ body[data-view="add"] .tabbar {
   display: none;
 }
 
-body[data-view="add"] .phone-shell {
+body[data-view="add"] .phone-shell,
+body[data-view="onboarding"] .phone-shell {
   padding-bottom: max(18px, env(safe-area-inset-bottom));
+}
+
+body[data-view="onboarding"] .tabbar {
+  display: none;
 }
 
 .tab {

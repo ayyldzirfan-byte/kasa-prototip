@@ -1,4 +1,5 @@
-const STORAGE_KEY = "kasa-prototype-state-v4";
+const STORAGE_KEY = "kasa-prototype-state-v5";
+const APP_UPDATED_AT = "01.06.2026 22:26";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -31,31 +32,22 @@ const purposeOptions = [
   "Kendi bütçem",
 ];
 
-const defaultUsers = [
-  { id: "user-havva", name: "Havva Nur Ayyıldız" },
-  { id: "user-irfan", name: "İrfan Ayyıldız" },
-  { id: "user-derya", name: "Derya Ayyıldız" },
-];
+const defaultUsers = [];
 
 const seedState = {
   activeView: "home",
   reportPeriod: "month",
   settlementVisible: false,
-  activeProjectId: "project-home",
+  activeProjectId: "",
+  activeUserId: "",
   users: defaultUsers,
-  projects: [
-    {
-      id: "project-home",
-      name: "Ortak Kasa",
-      purpose: "Ev / aile",
-      memberIds: defaultUsers.map((user) => user.id),
-    },
-  ],
+  projects: [],
   headings: [],
   entries: [],
 };
 
-let state = loadState();
+let state = normalizeState(loadState());
+state.activeView = "home";
 let draft = makeDraft();
 
 const app = document.querySelector("#app");
@@ -85,11 +77,14 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 }
 
 function makeDraft() {
+  const members = activeMembers();
+  const activeUserInProject = members.find((user) => user.id === state?.activeUserId);
+
   return {
     type: "expense",
     emoji: "💸",
     settlement: "in",
-    userId: activeMembers()[0]?.id || state?.users?.[0]?.id || defaultUsers[0].id,
+    userId: activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
     date: todayKey(),
   };
 }
@@ -97,11 +92,53 @@ function makeDraft() {
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saved?.projects?.length && saved?.users?.length) return saved;
+    if (saved?.users?.length || saved?.projects?.length) return saved;
   } catch {
     // Broken local state should not block the prototype.
   }
   return structuredClone(seedState);
+}
+
+function normalizeState(saved) {
+  const source = saved && typeof saved === "object" ? saved : {};
+  const users = (Array.isArray(source.users) && source.users.length ? source.users : seedState.users).map((user) => ({
+    id: user.id || makeId(),
+    name: user.name || "Kullanıcı",
+    email: user.email || "",
+    password: user.password || "",
+    createdAt: user.createdAt || new Date().toISOString(),
+    createdBy: user.createdBy || "",
+  }));
+
+  const userIds = users.map((user) => user.id);
+  const projects = (Array.isArray(source.projects) && source.projects.length ? source.projects : seedState.projects).map((project) => ({
+    id: project.id || makeId(),
+    name: project.name || "Ortak Kasa",
+    purpose: project.purpose || "Genel kasa",
+    code: project.code || generateProjectCode(project.name || project.id || "kasa"),
+    createdAt: project.createdAt || new Date().toISOString(),
+    createdBy: project.createdBy || source.activeUserId || "",
+    memberIds: Array.isArray(project.memberIds) && project.memberIds.length ? project.memberIds.filter((id) => userIds.includes(id)) : userIds,
+  }));
+
+  projects.forEach((project) => {
+    if (!project.memberIds.length && users[0]) project.memberIds.push(users[0].id);
+  });
+
+  const activeProjectId = projects.some((project) => project.id === source.activeProjectId) ? source.activeProjectId : projects[0]?.id || "";
+  const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : users[0]?.id || "";
+
+  return {
+    ...seedState,
+    ...source,
+    activeView: source.activeView || "home",
+    activeProjectId,
+    activeUserId,
+    users,
+    projects,
+    headings: Array.isArray(source.headings) ? source.headings : [],
+    entries: Array.isArray(source.entries) ? source.entries : [],
+  };
 }
 
 function saveState() {
@@ -109,8 +146,25 @@ function saveState() {
 }
 
 function render() {
-  document.body.dataset.view = state.activeView;
+  const needsAccount = !currentUser();
+  const needsProject = !needsAccount && !activeProject();
+
+  document.body.dataset.view = needsAccount || needsProject ? "onboarding" : state.activeView;
+  const updateStamp = document.querySelector(".update-stamp");
+  if (updateStamp) updateStamp.textContent = `Güncellendi ${APP_UPDATED_AT}`;
   tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.view === state.activeView));
+
+  if (needsAccount) {
+    app.innerHTML = renderWelcome();
+    bindScreen();
+    return;
+  }
+
+  if (needsProject) {
+    app.innerHTML = renderProjectSetup();
+    bindScreen();
+    return;
+  }
 
   const screens = {
     home: renderHome,
@@ -137,13 +191,116 @@ function backHeader() {
   `;
 }
 
+function renderWelcome() {
+  return `
+    <section class="form-card form-grid onboarding-card">
+      <div>
+        <p class="eyebrow">İlk kurulum</p>
+        <h2>Kasa hesabını oluştur</h2>
+        <p class="hero-note">Uygulamayı sıfırdan indiren herkes önce kendi hesabını açar. Sonra kasa kurar veya davet koduyla mevcut kasaya katılır.</p>
+      </div>
+
+      <form class="form-grid" id="accountForm">
+        <label>
+          <span class="field-label">Ad soyad</span>
+          <input class="text-input" name="userName" placeholder="Örn. İrfan Ayyıldız" autocomplete="name" />
+        </label>
+        <label>
+          <span class="field-label">Telefon / e-posta</span>
+          <input class="text-input" name="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
+        </label>
+        <label>
+          <span class="field-label">Şifre</span>
+          <input class="text-input" name="password" type="password" placeholder="En az 4 karakter" autocomplete="new-password" />
+        </label>
+        <button class="primary-button" type="submit">Hesap oluştur</button>
+      </form>
+    </section>
+  `;
+}
+
+function renderProjectSetup() {
+  const user = currentUser();
+  return `
+    <section class="form-card form-grid onboarding-card">
+      <div>
+        <p class="eyebrow">Kasa kurulumu</p>
+        <h2>${shortName(user.name)}, şimdi kasa seç</h2>
+        <p class="hero-note">Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz.</p>
+      </div>
+
+      <form class="form-grid" id="firstProjectForm">
+        <label>
+          <span class="field-label">Kasa / proje adı</span>
+          <input class="text-input" name="projectName" placeholder="Örn. Ev Kasası" autocomplete="off" />
+        </label>
+        <label>
+          <span class="field-label">Amaç</span>
+          <input class="text-input" name="purpose" list="purposeList" placeholder="Ev, iş, ev arkadaşlığı..." autocomplete="off" />
+        </label>
+        <datalist id="purposeList">
+          ${purposeOptions.map((purpose) => `<option value="${purpose}"></option>`).join("")}
+        </datalist>
+        <button class="primary-button" type="submit">Kasa oluştur</button>
+      </form>
+    </section>
+  `;
+}
+
 function renderHome() {
   const project = activeProject();
+  const activeUser = currentUser();
   const totals = calculateTotals(projectEntries());
   const recent = actualEntries().slice(0, 4);
   const upcoming = pendingEntries().slice(0, 3);
 
   return `
+    <section class="home-gate card">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Ana sayfa</p>
+          <h2>Kimin kasasındayız?</h2>
+          <p>Bu deneme sürümünde profilleri sen oluşturacaksın. Aktif profili seçip aynı kasaya hareket gireceğiz.</p>
+        </div>
+        <span class="quick-pill">${activeUser ? shortName(activeUser.name) : "Seç"}</span>
+      </div>
+
+      <form class="inline-form profile-form" id="loginForm">
+        <label>
+          <span class="field-label">Aktif kullanıcı</span>
+          <select class="select-input" name="loginUserId">
+            ${state.users.map((user) => `<option value="${user.id}" ${user.id === state.activeUserId ? "selected" : ""}>${shortName(user.name)}${user.password ? " · şifreli" : ""}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          <span class="field-label">Şifre</span>
+          <input class="text-input" name="loginPassword" type="password" placeholder="Şifre varsa yaz" autocomplete="current-password" />
+        </label>
+        <button class="secondary-button" type="submit">Giriş yap</button>
+      </form>
+
+      <div class="profile-create-box">
+        <div>
+          <span class="field-label">Yeni profil</span>
+          <p>Deneme profillerini buradan tek tek ekle.</p>
+        </div>
+        <form class="inline-form profile-form" id="quickUserForm">
+          <input class="text-input" name="userName" placeholder="Profil adı" autocomplete="name" />
+          <input class="text-input" name="password" type="password" placeholder="Şifre" autocomplete="new-password" />
+          <button class="primary-button" type="submit">Profil oluştur</button>
+        </form>
+      </div>
+
+      <div class="invite-box">
+        <div>
+          <span class="field-label">Sonraki aşama kodu</span>
+          <strong>${projectCode(project)}</strong>
+          <p>Bu kod gerçek çoklu telefon sürümünde kullanılacak. Şimdilik aynı cihazdaki deneme profilleriyle çalışıyoruz.</p>
+        </div>
+        <button class="mini-action" data-action="copy-project-link" type="button">Link</button>
+      </div>
+    </section>
+
     <section class="hero">
       <div class="hero-row">
         <div>
@@ -436,13 +593,31 @@ function renderGroup() {
     </section>
 
     <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Sonraki aşama: proje erişimi</h2>
+          <p>Bu denemede katılımı manuel profil ekleyerek yapıyoruz. Kod/link modeli gerçek çoklu telefon sürümüne kalacak.</p>
+        </div>
+      </div>
+      <div class="invite-box">
+        <div>
+          <span class="field-label">Kod</span>
+          <strong>${projectCode(project)}</strong>
+          <p>${inviteLink(project)}</p>
+        </div>
+        <button class="mini-action" data-action="copy-project-link" type="button">Kopyala</button>
+      </div>
+    </section>
+
+    <section class="card">
       <h2>Kullanıcılar</h2>
       <p>Önce profil oluştur, sonra bu projeye bağla veya çıkar.</p>
       <div class="expense-list" style="margin-top:12px;">
         ${state.users.map(userLinkRow).join("")}
       </div>
       <form class="inline-form" id="userForm">
-        <input class="text-input" name="userName" placeholder="Profil adı: Havva, İrfan..." autocomplete="off" />
+        <input class="text-input" name="userName" placeholder="Profil adı" autocomplete="off" />
+        <input class="text-input" name="password" type="password" placeholder="Şifre" autocomplete="new-password" />
         <button class="primary-button" type="submit">Profil oluştur</button>
       </form>
     </section>
@@ -598,6 +773,10 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-action='copy-project-link']").forEach((button) => {
+    button.addEventListener("click", () => copyProjectInvite());
+  });
+
   app.querySelectorAll("[data-action='share-receipt']").forEach((button) => {
     button.addEventListener("click", shareReceipt);
   });
@@ -647,6 +826,85 @@ function bindScreen() {
       draft = makeDraft();
       saveState();
       render();
+    });
+  }
+
+  const accountForm = app.querySelector("#accountForm");
+  if (accountForm) {
+    accountForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(accountForm);
+      const name = String(data.get("userName") || "").trim();
+      const password = String(data.get("password") || "");
+      if (!name) return toast("Ad soyad yazalım.");
+      if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
+      createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
+      saveState();
+      render();
+      toast("Hesap oluşturuldu.");
+    });
+  }
+
+  const firstProjectForm = app.querySelector("#firstProjectForm");
+  if (firstProjectForm) {
+    firstProjectForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(firstProjectForm);
+      const name = String(data.get("projectName") || "").trim();
+      if (!name) return toast("Kasa adını yazalım.");
+      createProject(name, String(data.get("purpose") || "").trim() || "Genel kasa");
+      saveState();
+      render();
+      toast("Kasa oluşturuldu.");
+    });
+  }
+
+  const loginForm = app.querySelector("#loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(loginForm);
+      const user = state.users.find((item) => item.id === String(data.get("loginUserId")));
+      if (!user) return toast("Kullanıcı bulunamadı.");
+      const password = String(data.get("loginPassword") || "");
+      if (user.password && user.password !== password) return toast("Şifre yanlış.");
+      state.activeUserId = user.id;
+      draft = makeDraft();
+      saveState();
+      render();
+      toast(`${shortName(user.name)} aktif.`);
+    });
+  }
+
+  const quickUserForm = app.querySelector("#quickUserForm");
+  if (quickUserForm) {
+    quickUserForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(quickUserForm);
+      const name = String(data.get("userName") || "").trim();
+      if (!name) return toast("Kullanıcı adını yazalım.");
+      createUser(name, String(data.get("password") || ""), { makeActive: false });
+      saveState();
+      render();
+      toast("Kullanıcı oluşturuldu ve projeye bağlandı.");
+    });
+  }
+
+  const joinProjectForm = app.querySelector("#joinProjectForm");
+  if (joinProjectForm) {
+    joinProjectForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const code = normalizeCode(new FormData(joinProjectForm).get("projectCode"));
+      if (!code) return toast("Proje kodunu yazalım.");
+      const project = state.projects.find((item) => normalizeCode(projectCode(item)) === code);
+      if (!project) return toast("Bu kod bu cihazda yok. Gerçekte bulut veritabanından açılacak.");
+      const userId = state.activeUserId || state.users[0]?.id;
+      if (userId && !project.memberIds.includes(userId)) project.memberIds.push(userId);
+      state.activeProjectId = project.id;
+      draft = makeDraft();
+      saveState();
+      render();
+      toast("Projeye katıldın.");
     });
   }
 
@@ -715,11 +973,10 @@ function bindScreen() {
   if (userForm) {
     userForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      const name = String(new FormData(userForm).get("userName") || "").trim();
+      const data = new FormData(userForm);
+      const name = String(data.get("userName") || "").trim();
       if (!name) return toast("Kullanıcı adını yazalım.");
-      const user = { id: makeId(), name };
-      state.users.push(user);
-      activeProject().memberIds.push(user.id);
+      createUser(name, String(data.get("password") || ""), { makeActive: false });
       saveState();
       render();
       toast("Kullanıcı eklendi ve projeye bağlandı.");
@@ -733,15 +990,7 @@ function bindScreen() {
       const data = new FormData(projectForm);
       const name = String(data.get("projectName") || "").trim();
       if (!name) return toast("Proje adını yazalım.");
-      const project = {
-        id: makeId(),
-        name,
-        purpose: String(data.get("purpose") || "").trim() || "Genel kasa",
-        memberIds: state.users.map((user) => user.id),
-      };
-      state.projects.push(project);
-      state.activeProjectId = project.id;
-      draft = makeDraft();
+      createProject(name, String(data.get("purpose") || "").trim() || "Genel kasa");
       saveState();
       render();
       toast("Proje eklendi.");
@@ -757,6 +1006,70 @@ function activeMembers() {
   const project = activeProject();
   if (!project) return [];
   return state.users.filter((user) => project.memberIds.includes(user.id));
+}
+
+function currentUser() {
+  return state.users.find((user) => user.id === state.activeUserId) || state.users[0];
+}
+
+function createdByLabel(user) {
+  if (!user.createdBy) return "İlk hesap";
+  const creator = state.users.find((item) => item.id === user.createdBy);
+  return creator ? `${shortName(creator.name)} oluşturdu` : "Oluşturan bilinmiyor";
+}
+
+function createUser(name, password = "", options = {}) {
+  const user = {
+    id: makeId(),
+    name,
+    email: options.email || "",
+    password,
+    createdAt: new Date().toISOString(),
+    createdBy: state.activeUserId || "",
+  };
+  state.users.push(user);
+  const makeActive = options.makeActive !== false;
+  if (makeActive) state.activeUserId = user.id;
+  const project = options.linkToProject === false ? null : activeProject();
+  if (project && !project.memberIds.includes(user.id)) project.memberIds.push(user.id);
+  if (makeActive) draft.userId = user.id;
+  return user;
+}
+
+function createProject(name, purpose = "Genel kasa") {
+  const project = {
+    id: makeId(),
+    name,
+    purpose,
+    code: generateProjectCode(name),
+    createdAt: new Date().toISOString(),
+    createdBy: state.activeUserId,
+    memberIds: state.activeUserId ? [state.activeUserId] : [],
+  };
+  state.projects.push(project);
+  state.activeProjectId = project.id;
+  draft = makeDraft();
+  return project;
+}
+
+function projectCode(project) {
+  if (!project.code) project.code = generateProjectCode(project.name || project.id || "kasa");
+  return project.code;
+}
+
+function generateProjectCode(seed = "") {
+  const clean = normalize(seed).replace(/[^a-z0-9ğüşöçıİ]/gi, "").slice(0, 3).toLocaleUpperCase("tr-TR") || "KSA";
+  const random = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `KASA-${clean}-${random}`;
+}
+
+function normalizeCode(value) {
+  return String(value || "").trim().toLocaleUpperCase("tr-TR").replace(/\s+/g, "");
+}
+
+function inviteLink(project = activeProject()) {
+  const base = location.origin === "null" ? "https://kasa-prototip.netlify.app" : `${location.origin}${location.pathname}`;
+  return `${base}?project=${encodeURIComponent(projectCode(project))}`;
 }
 
 function projectEntries() {
@@ -838,7 +1151,7 @@ function projectRow(project) {
       <span class="emoji-dot">📁</span>
       <div class="expense-main">
         <p class="expense-title">${project.name}</p>
-        <p class="expense-meta">${project.purpose} · ${project.memberIds.length} üye</p>
+        <p class="expense-meta">${project.purpose} · ${project.memberIds.length} üye · ${projectCode(project)}</p>
       </div>
       <button class="mini-action" data-action="activate-project" data-id="${project.id}" type="button">${project.id === state.activeProjectId ? "Aktif" : "Seç"}</button>
     </div>
@@ -852,7 +1165,7 @@ function userLinkRow(user) {
       <span class="emoji-dot">👤</span>
       <div class="expense-main">
         <p class="expense-title">${shortName(user.name)}</p>
-        <p class="expense-meta">${linked ? "Bu projeye bağlı" : "Bu projede yok"}</p>
+        <p class="expense-meta">${linked ? "Bu projeye bağlı" : "Bu projede yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
       </div>
       <button class="mini-action ${linked ? "linked" : ""}" data-action="toggle-user-project" data-id="${user.id}" type="button">${linked ? "Çıkar" : "Bağla"}</button>
     </div>
@@ -1023,6 +1336,17 @@ function sum(entries) {
 
 function parseAmount(value) {
   return Number(String(value || "").replace(/[^\d,.-]/g, "").replace(",", "."));
+}
+
+async function copyProjectInvite() {
+  const project = activeProject();
+  const text = `${project.name}\nKod: ${projectCode(project)}\nLink: ${inviteLink(project)}\n\nNot: Bu sürüm prototip. Gerçek ortak kullanım için bulut kayıt bağlanacak.`;
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Proje kodu kopyalandı.");
+  } catch {
+    toast(`Kod: ${projectCode(project)}`);
+  }
 }
 
 async function shareReceipt() {
