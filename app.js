@@ -1,5 +1,5 @@
-const STORAGE_KEY = "kasa-prototype-state-v5";
-const APP_UPDATED_AT = "01.06.2026 22:26";
+const STORAGE_KEY = "kasa-prototype-state-v6";
+const APP_UPDATED_AT = "01.06.2026 22:48";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -40,6 +40,7 @@ const seedState = {
   settlementVisible: false,
   activeProjectId: "",
   activeUserId: "",
+  signedInUserId: "",
   users: defaultUsers,
   projects: [],
   headings: [],
@@ -126,7 +127,8 @@ function normalizeState(saved) {
   });
 
   const activeProjectId = projects.some((project) => project.id === source.activeProjectId) ? source.activeProjectId : projects[0]?.id || "";
-  const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : users[0]?.id || "";
+  const signedInUserId = users.some((user) => user.id === source.signedInUserId) ? source.signedInUserId : "";
+  const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : signedInUserId;
 
   return {
     ...seedState,
@@ -134,6 +136,7 @@ function normalizeState(saved) {
     activeView: source.activeView || "home",
     activeProjectId,
     activeUserId,
+    signedInUserId,
     users,
     projects,
     headings: Array.isArray(source.headings) ? source.headings : [],
@@ -146,16 +149,23 @@ function saveState() {
 }
 
 function render() {
-  const needsAccount = !currentUser();
-  const needsProject = !needsAccount && !activeProject();
+  const needsAccount = state.users.length === 0;
+  const needsLogin = !needsAccount && !currentUser();
+  const needsProject = !needsAccount && !needsLogin && !activeProject();
 
-  document.body.dataset.view = needsAccount || needsProject ? "onboarding" : state.activeView;
+  document.body.dataset.view = needsAccount || needsLogin || needsProject ? "onboarding" : state.activeView;
   const updateStamp = document.querySelector(".update-stamp");
   if (updateStamp) updateStamp.textContent = `Güncellendi ${APP_UPDATED_AT}`;
   tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.view === state.activeView));
 
   if (needsAccount) {
     app.innerHTML = renderWelcome();
+    bindScreen();
+    return;
+  }
+
+  if (needsLogin) {
+    app.innerHTML = renderLogin();
     bindScreen();
     return;
   }
@@ -197,7 +207,7 @@ function renderWelcome() {
       <div>
         <p class="eyebrow">İlk kurulum</p>
         <h2>Kasa hesabını oluştur</h2>
-        <p class="hero-note">Uygulamayı sıfırdan indiren herkes önce kendi hesabını açar. Sonra kasa kurar veya davet koduyla mevcut kasaya katılır.</p>
+        <p class="hero-note">Önce hesabı oluştur. Sonraki ekranda şifrenle giriş yapacaksın.</p>
       </div>
 
       <form class="form-grid" id="accountForm">
@@ -214,6 +224,32 @@ function renderWelcome() {
           <input class="text-input" name="password" type="password" placeholder="En az 4 karakter" autocomplete="new-password" />
         </label>
         <button class="primary-button" type="submit">Hesap oluştur</button>
+      </form>
+    </section>
+  `;
+}
+
+function renderLogin() {
+  return `
+    <section class="form-card form-grid onboarding-card">
+      <div>
+        <p class="eyebrow">Giriş</p>
+        <h2>Şifrenle giriş yap</h2>
+        <p class="hero-note">Giriş başarılı olunca kasa/proje oluşturma adımına geçeceğiz.</p>
+      </div>
+
+      <form class="form-grid" id="loginForm">
+        <label>
+          <span class="field-label">Kullanıcı</span>
+          <select class="select-input" name="loginUserId">
+            ${state.users.map((user) => `<option value="${user.id}">${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          <span class="field-label">Şifre</span>
+          <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" />
+        </label>
+        <button class="primary-button" type="submit">Giriş yap</button>
       </form>
     </section>
   `;
@@ -259,25 +295,11 @@ function renderHome() {
       <div class="section-head">
         <div>
           <p class="eyebrow">Ana sayfa</p>
-          <h2>Kimin kasasındayız?</h2>
-          <p>Bu deneme sürümünde profilleri sen oluşturacaksın. Aktif profili seçip aynı kasaya hareket gireceğiz.</p>
+          <h2>${shortName(activeUser.name)} giriş yaptı</h2>
+          <p>Bu deneme sürümünde profilleri sen oluşturacaksın. Hareket eklerken kimin adına kayıt girileceğini seçeceğiz.</p>
         </div>
-        <span class="quick-pill">${activeUser ? shortName(activeUser.name) : "Seç"}</span>
+        <button class="tiny-button" data-action="logout" type="button">Çıkış</button>
       </div>
-
-      <form class="inline-form profile-form" id="loginForm">
-        <label>
-          <span class="field-label">Aktif kullanıcı</span>
-          <select class="select-input" name="loginUserId">
-            ${state.users.map((user) => `<option value="${user.id}" ${user.id === state.activeUserId ? "selected" : ""}>${shortName(user.name)}${user.password ? " · şifreli" : ""}</option>`).join("")}
-          </select>
-        </label>
-        <label>
-          <span class="field-label">Şifre</span>
-          <input class="text-input" name="loginPassword" type="password" placeholder="Şifre varsa yaz" autocomplete="current-password" />
-        </label>
-        <button class="secondary-button" type="submit">Giriş yap</button>
-      </form>
 
       <div class="profile-create-box">
         <div>
@@ -777,6 +799,18 @@ function bindScreen() {
     button.addEventListener("click", () => copyProjectInvite());
   });
 
+  app.querySelectorAll("[data-action='logout']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.signedInUserId = "";
+      state.activeUserId = "";
+      state.activeView = "home";
+      draft = makeDraft();
+      saveState();
+      render();
+      toast("Çıkış yapıldı.");
+    });
+  });
+
   app.querySelectorAll("[data-action='share-receipt']").forEach((button) => {
     button.addEventListener("click", shareReceipt);
   });
@@ -839,9 +873,11 @@ function bindScreen() {
       if (!name) return toast("Ad soyad yazalım.");
       if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
       createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
+      state.signedInUserId = "";
+      state.activeUserId = "";
       saveState();
       render();
-      toast("Hesap oluşturuldu.");
+      toast("Hesap oluşturuldu. Şimdi giriş yap.");
     });
   }
 
@@ -868,11 +904,14 @@ function bindScreen() {
       if (!user) return toast("Kullanıcı bulunamadı.");
       const password = String(data.get("loginPassword") || "");
       if (user.password && user.password !== password) return toast("Şifre yanlış.");
+      if (!user.password && password) return toast("Bu profil şifresiz.");
+      if (!user.password && !password) return toast("Bu profil için şifre yok. Deneme profillerini hareket içinde seçebilirsin.");
+      state.signedInUserId = user.id;
       state.activeUserId = user.id;
       draft = makeDraft();
       saveState();
       render();
-      toast(`${shortName(user.name)} aktif.`);
+      toast(`${shortName(user.name)} giriş yaptı.`);
     });
   }
 
@@ -1009,7 +1048,7 @@ function activeMembers() {
 }
 
 function currentUser() {
-  return state.users.find((user) => user.id === state.activeUserId) || state.users[0];
+  return state.users.find((user) => user.id === state.signedInUserId);
 }
 
 function createdByLabel(user) {
@@ -1025,7 +1064,7 @@ function createUser(name, password = "", options = {}) {
     email: options.email || "",
     password,
     createdAt: new Date().toISOString(),
-    createdBy: state.activeUserId || "",
+    createdBy: currentUser()?.id || "",
   };
   state.users.push(user);
   const makeActive = options.makeActive !== false;
@@ -1043,8 +1082,8 @@ function createProject(name, purpose = "Genel kasa") {
     purpose,
     code: generateProjectCode(name),
     createdAt: new Date().toISOString(),
-    createdBy: state.activeUserId,
-    memberIds: state.activeUserId ? [state.activeUserId] : [],
+    createdBy: currentUser()?.id || "",
+    memberIds: currentUser()?.id ? [currentUser().id] : [],
   };
   state.projects.push(project);
   state.activeProjectId = project.id;
