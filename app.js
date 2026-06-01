@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "01.06.2026 23:54";
+const APP_UPDATED_AT = "02.06.2026 00:16";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -32,6 +32,13 @@ const purposeOptions = [
   "Kendi bütçem",
 ];
 
+const currencyOptions = [
+  { code: "TRY", label: "TL" },
+  { code: "USD", label: "USD" },
+  { code: "EUR", label: "EUR" },
+  { code: "GBP", label: "GBP" },
+];
+
 const defaultUsers = [];
 
 const seedState = {
@@ -49,34 +56,39 @@ const seedState = {
   entries: [],
 };
 
-let state = normalizeState(loadState());
-state.activeView = "home";
-let draft = makeDraft();
+let state;
+let draft;
 
 const app = document.querySelector("#app");
 const tabs = [...document.querySelectorAll(".tab")];
 
-document.querySelector("#demoReset").addEventListener("click", () => {
-  localStorage.removeItem(STORAGE_KEY);
-  state = structuredClone(seedState);
+function initApp() {
+  state = normalizeState(loadState());
+  state.activeView = "home";
   draft = makeDraft();
-  saveState();
-  render();
-  toast("Kasa temizlendi.");
-});
 
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    state.activeView = tab.dataset.view;
+  document.querySelector("#demoReset").addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    state = structuredClone(seedState);
+    draft = makeDraft();
     saveState();
     render();
+    toast("Kasa temizlendi.");
   });
-});
 
-render();
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      state.activeView = tab.dataset.view;
+      saveState();
+      render();
+    });
+  });
 
-if ("serviceWorker" in navigator && location.protocol !== "file:") {
-  navigator.serviceWorker.register("./sw.js").catch(() => {});
+  render();
+
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
 }
 
 function makeDraft() {
@@ -88,6 +100,8 @@ function makeDraft() {
     emoji: "💸",
     settlement: "in",
     userId: activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
+    currency: "TRY",
+    exchangeRate: 1,
     date: todayKey(),
   };
 }
@@ -421,7 +435,20 @@ function renderAdd() {
 
       <div>
         <label class="field-label" for="amount">Tutar</label>
-        <input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="₺0" autocomplete="off" />
+        <input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="0" autocomplete="off" />
+      </div>
+
+      <div class="grid-2">
+        <label>
+          <span class="field-label">Para birimi</span>
+          <select class="select-input" name="currency">
+            ${currencyOptions.map((item) => `<option value="${item.code}" ${draft.currency === item.code ? "selected" : ""}>${item.label}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          <span class="field-label">Kur</span>
+          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="TL ise 1" value="${draft.exchangeRate || 1}" autocomplete="off" />
+        </label>
       </div>
 
       <div>
@@ -547,6 +574,7 @@ function renderReport() {
       <div class="receipt-line"><span>${label} giren</span><strong>${money(totals.income)}</strong></div>
       <div class="receipt-line"><span>${label} çıkan</span><strong>${money(totals.expense)}</strong></div>
       <div class="receipt-line"><span>Net</span><strong>${money(totals.actual)}</strong></div>
+      ${exchangeReceiptLines(entries)}
       <div class="receipt-line"><span>En hareketli başlık</span><strong>${topHeading(entries)}</strong></div>
       <p class="receipt-comment">${entries.length ? "Kasa konuştu, fiş çıktı." : "Kasa bugün sessiz."}</p>
       <button class="share-button" data-action="share-receipt" type="button">Fişi paylaş</button>
@@ -558,6 +586,8 @@ function renderGroup() {
   const project = activeProject();
   const balances = calculateBalances();
   const transactions = simplifyDebts(balances);
+  const canManageUsers = isProjectOwner(project);
+  const owner = projectOwner(project);
 
   return `
     <section class="card">
@@ -608,16 +638,25 @@ function renderGroup() {
     </section>
 
     <section class="card">
-      <h2>Kullanıcılar</h2>
-      <p>Önce profil oluştur, sonra bu projeye bağla veya çıkar.</p>
+      <h2>Kasa kullanıcıları</h2>
+      <p>${
+        canManageUsers
+          ? `Kasa sahibi ${shortName(owner?.name || "kurucu")}. Kullanıcı adını yazıp bu kasaya ekleyebilir.`
+          : `Bu kasayı ${shortName(owner?.name || "kasa sahibi")} yönetir. Kullanıcı ekleme sadece onda.`
+      }</p>
       <div class="expense-list" style="margin-top:12px;">
         ${state.users.map(userLinkRow).join("")}
       </div>
-      <form class="inline-form" id="userForm">
-        <input class="text-input" name="userName" placeholder="Profil adı" autocomplete="off" />
-        <input class="text-input" name="password" type="password" placeholder="Şifre" autocomplete="new-password" />
-        <button class="primary-button" type="submit">Profil oluştur</button>
-      </form>
+      ${
+        canManageUsers
+          ? `
+            <form class="inline-form" id="userForm">
+              <input class="text-input" name="userName" placeholder="Kullanıcı adı: Havva" autocomplete="off" />
+              <button class="primary-button" type="submit">Kasaya ekle</button>
+            </form>
+          `
+          : `<div class="empty-state" style="margin-top:12px;">Kullanıcı eklemek için kasa sahibi hesabıyla giriş yap.</div>`
+      }
     </section>
 
     <section class="card">
@@ -941,10 +980,15 @@ function bindScreen() {
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
-      const amount = parseAmount(data.get("amount"));
+      const enteredAmount = parseAmount(data.get("amount"));
+      const currency = String(data.get("currency") || "TRY").toUpperCase();
+      const exchangeRate = currency === "TRY" ? 1 : parseAmount(data.get("exchangeRate"));
+      const amount = enteredAmount * exchangeRate;
       const headingName = String(data.get("headingName") || "").trim();
 
-      if (!amount || amount <= 0) return toast("Önce tutarı yazalım.");
+      if (!enteredAmount || enteredAmount <= 0) return toast("Önce tutarı yazalım.");
+      if (!currencyOptions.some((item) => item.code === currency)) return toast("Para birimini seçelim.");
+      if (!exchangeRate || exchangeRate <= 0) return toast("Döviz için kuru yazalım.");
       if (!headingName) return toast("Bir başlık yazalım.");
       if (!activeMembers().length) return toast("Önce projeye kullanıcı bağlayalım.");
 
@@ -957,12 +1001,17 @@ function bindScreen() {
       draft.userId = userId;
       draft.settlement = settlement ? "in" : "out";
       draft.date = date;
+      draft.currency = currency;
+      draft.exchangeRate = exchangeRate;
 
       state.entries.unshift({
         id: makeId(),
         projectId: state.activeProjectId,
         type: draft.type,
         amount,
+        enteredAmount,
+        currency,
+        exchangeRate,
         headingId: heading.id,
         headingName: heading.name,
         shortName: heading.shortName,
@@ -1003,11 +1052,14 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(userForm);
       const name = String(data.get("userName") || "").trim();
-      if (!name) return toast("Kullanıcı adını yazalım.");
-      createUser(name, String(data.get("password") || ""), { makeActive: false });
+      if (!name) return toast("Kasaya eklenecek kullanıcı adını yazalım.");
+      const result = addUserToActiveProjectByName(name);
+      if (result.status === "forbidden") return toast("Kullanıcı eklemeyi sadece kasa sahibi yapar.");
+      if (result.status === "missing-user") return toast("Bu adda kullanıcı yok. Önce profilini oluştur.");
+      if (result.status === "already") return toast(`${shortName(result.user.name)} zaten bu kasada.`);
       saveState();
       render();
-      toast("Kullanıcı eklendi ve projeye bağlandı.");
+      toast(`${shortName(result.user.name)} kasaya eklendi.`);
     });
   }
 
@@ -1038,6 +1090,29 @@ function activeMembers() {
 
 function currentUser() {
   return state.users.find((user) => user.id === state.signedInUserId);
+}
+
+function projectOwnerId(project = activeProject()) {
+  return project?.createdBy || project?.memberIds?.[0] || "";
+}
+
+function projectOwner(project = activeProject()) {
+  return state.users.find((user) => user.id === projectOwnerId(project));
+}
+
+function isProjectOwner(project = activeProject()) {
+  return Boolean(currentUser()?.id && currentUser().id === projectOwnerId(project));
+}
+
+function findUserByName(name) {
+  const wanted = normalize(name);
+  if (!wanted) return null;
+  return state.users.find((user) => {
+    const full = normalize(user.name);
+    const short = normalize(shortName(user.name));
+    const first = normalize(String(user.name || "").split(/\s+/)[0]);
+    return full === wanted || short === wanted || first === wanted || full.startsWith(`${wanted} `) || short.startsWith(`${wanted} `);
+  });
 }
 
 function createdByLabel(user) {
@@ -1138,6 +1213,14 @@ function ensureHeading(name, shortName, emoji) {
 
 function toggleUserInProject(userId) {
   const project = activeProject();
+  if (!isProjectOwner(project)) {
+    toast("Kullanıcıları sadece kasa sahibi düzenler.");
+    return;
+  }
+  if (userId === projectOwnerId(project)) {
+    toast("Kasa sahibini kasadan çıkaramayız.");
+    return;
+  }
   if (!project.memberIds.includes(userId)) {
     project.memberIds.push(userId);
     return;
@@ -1147,6 +1230,19 @@ function toggleUserInProject(userId) {
     return;
   }
   project.memberIds = project.memberIds.filter((id) => id !== userId);
+}
+
+function addUserToActiveProjectByName(name) {
+  const project = activeProject();
+  if (!project) return { status: "missing-project" };
+  if (!isProjectOwner(project)) return { status: "forbidden" };
+
+  const user = findUserByName(name);
+  if (!user) return { status: "missing-user" };
+  if (project.memberIds.includes(user.id)) return { status: "already", user };
+
+  project.memberIds.push(user.id);
+  return { status: "added", user };
 }
 
 function settlePending(id) {
@@ -1187,15 +1283,24 @@ function projectRow(project) {
 }
 
 function userLinkRow(user) {
-  const linked = activeProject().memberIds.includes(user.id);
+  const project = activeProject();
+  const linked = project.memberIds.includes(user.id);
+  const canManage = isProjectOwner(project);
+  const isOwner = user.id === projectOwnerId(project);
+  const action = isOwner
+    ? `<span class="mini-action linked">Sahip</span>`
+    : canManage
+      ? `<button class="mini-action ${linked ? "linked" : ""}" data-action="toggle-user-project" data-id="${user.id}" type="button">${linked ? "Çıkar" : "Bağla"}</button>`
+      : `<span class="neutral-pill">${linked ? "Üye" : "Dışarıda"}</span>`;
+
   return `
     <div class="expense-row">
       <span class="emoji-dot">👤</span>
       <div class="expense-main">
         <p class="expense-title">${shortName(user.name)}</p>
-        <p class="expense-meta">${linked ? "Bu projeye bağlı" : "Bu projede yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
+        <p class="expense-meta">${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
       </div>
-      <button class="mini-action ${linked ? "linked" : ""}" data-action="toggle-user-project" data-id="${user.id}" type="button">${linked ? "Çıkar" : "Bağla"}</button>
+      ${action}
     </div>
   `;
 }
@@ -1216,12 +1321,13 @@ function headingRow(heading) {
 function entryRow(entry) {
   const type = entryTypes.find((item) => item.id === entry.type);
   const user = state.users.find((item) => item.id === entry.userId);
+  const exchange = exchangeText(entry);
   return `
     <div class="expense-row">
       <span class="emoji-dot">${entry.emoji || type?.emoji || "🧾"}</span>
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
-        <p class="expense-meta">${shortName(user?.name || "Kullanıcı")} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}</p>
+        <p class="expense-meta">${shortName(user?.name || "Kullanıcı")} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
       </div>
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
         ${entry.type === "income" ? "+" : entry.type === "expense" ? "-" : ""}${money(entry.amount)}
@@ -1232,12 +1338,13 @@ function entryRow(entry) {
 
 function pendingRow(entry) {
   const isReceivable = entry.type === "receivable";
+  const exchange = exchangeText(entry);
   return `
     <div class="expense-row">
       <span class="emoji-dot">${entry.emoji || (isReceivable ? "🤝" : "⏰")}</span>
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
-        <p class="expense-meta">${isReceivable ? "Beklenen alacak" : "Yaklaşan ödeme"} · ${formatShortDate(entry.date)}</p>
+        <p class="expense-meta">${isReceivable ? "Beklenen alacak" : "Yaklaşan ödeme"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
       </div>
       <div style="display:grid; gap:6px; justify-items:end;">
         <strong class="expense-price">${money(entry.amount)}</strong>
@@ -1363,7 +1470,47 @@ function sum(entries) {
 }
 
 function parseAmount(value) {
-  return Number(String(value || "").replace(/[^\d,.-]/g, "").replace(",", "."));
+  const raw = String(value || "").replace(/[^\d,.-]/g, "").trim();
+  if (!raw) return 0;
+  if (raw.includes(",")) return Number(raw.replace(/\./g, "").replace(",", "."));
+
+  const parts = raw.split(".");
+  if (parts.length > 2 || (parts.length === 2 && parts[1].length === 3)) {
+    return Number(raw.replace(/\./g, ""));
+  }
+
+  return Number(raw);
+}
+
+function formatNumber(value, maximumFractionDigits = 0) {
+  return new Intl.NumberFormat("tr-TR", {
+    maximumFractionDigits,
+  }).format(Number(value || 0));
+}
+
+function formatCurrencyAmount(value, currency = "TRY") {
+  const label = currency === "TRY" ? "TL" : currency;
+  const decimals = currency === "TRY" ? 0 : 2;
+  return `${formatNumber(value, decimals)} ${label}`;
+}
+
+function formatRate(value) {
+  return formatNumber(value, 4);
+}
+
+function exchangeText(entry) {
+  const currency = entry.currency || "TRY";
+  if (currency === "TRY") return "";
+  return `${formatCurrencyAmount(entry.enteredAmount || entry.amount, currency)} × ${formatRate(entry.exchangeRate || 1)} = ${money(entry.amount)}`;
+}
+
+function exchangeReceiptLines(entries) {
+  const foreignEntries = entries.filter((entry) => entry.currency && entry.currency !== "TRY");
+  if (!foreignEntries.length) return "";
+  return foreignEntries
+    .slice(0, 3)
+    .map((entry) => `<div class="receipt-line exchange-line"><span>Kur</span><strong>${exchangeText(entry)}</strong></div>`)
+    .join("");
 }
 
 async function copyProjectInvite() {
@@ -1382,7 +1529,9 @@ async function shareReceipt() {
   const entries = actualEntries().filter((entry) => isInPeriod(entry.date, period));
   const totals = calculateTotals(entries);
   const label = period === "day" ? "Bugün" : period === "week" ? "Bu hafta" : "Bu ay";
-  const text = `KASA FİŞİ\n${activeProject().name}\n${label} giren: ${money(totals.income)}\n${label} çıkan: ${money(totals.expense)}\nNet: ${money(totals.actual)}\nEn hareketli başlık: ${topHeading(entries)}`;
+  const exchangeLines = entries.map(exchangeText).filter(Boolean);
+  const exchangeBlock = exchangeLines.length ? `\nKur hesabı:\n${exchangeLines.join("\n")}` : "";
+  const text = `KASA FİŞİ\n${activeProject().name}\n${label} giren: ${money(totals.income)}\n${label} çıkan: ${money(totals.expense)}\nNet: ${money(totals.actual)}${exchangeBlock}\nEn hareketli başlık: ${topHeading(entries)}`;
 
   try {
     if (navigator.share) {
@@ -1413,11 +1562,7 @@ function normalize(value) {
 }
 
 function money(value) {
-  return new Intl.NumberFormat("tr-TR", {
-    style: "currency",
-    currency: "TRY",
-    maximumFractionDigits: 0,
-  }).format(Math.round(Number(value || 0)));
+  return `${formatNumber(Math.round(Number(value || 0)))} TL`;
 }
 
 function formatShortDate(value) {
@@ -1470,3 +1615,5 @@ function toast(message) {
   document.body.appendChild(element);
   setTimeout(() => element.remove(), 2200);
 }
+
+initApp();

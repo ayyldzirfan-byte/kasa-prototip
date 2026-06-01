@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "01.06.2026 23:54";
+const APP_UPDATED_AT = "02.06.2026 00:16";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -30,6 +30,13 @@ const purposeOptions = [
   "Tatil / proje",
   "Araç giderleri",
   "Kendi bütçem",
+];
+
+const currencyOptions = [
+  { code: "TRY", label: "TL" },
+  { code: "USD", label: "USD" },
+  { code: "EUR", label: "EUR" },
+  { code: "GBP", label: "GBP" },
 ];
 
 const defaultUsers = [];

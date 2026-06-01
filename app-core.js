@@ -7,6 +7,8 @@ function makeDraft() {
     emoji: "💸",
     settlement: "in",
     userId: activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
+    currency: "TRY",
+    exchangeRate: 1,
     date: todayKey(),
   };
 }

@@ -841,6 +841,16 @@ button {
   font-size: 15px;
 }
 
+.exchange-line {
+  align-items: flex-start;
+}
+
+.exchange-line strong {
+  max-width: 210px;
+  text-align: right;
+  white-space: normal;
+}
+
 .receipt-comment {
   margin: 14px 0 0;
   padding: 12px;

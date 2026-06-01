@@ -251,10 +251,15 @@ function bindScreen() {
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
-      const amount = parseAmount(data.get("amount"));
+      const enteredAmount = parseAmount(data.get("amount"));
+      const currency = String(data.get("currency") || "TRY").toUpperCase();
+      const exchangeRate = currency === "TRY" ? 1 : parseAmount(data.get("exchangeRate"));
+      const amount = enteredAmount * exchangeRate;
       const headingName = String(data.get("headingName") || "").trim();
 
-      if (!amount || amount <= 0) return toast("Önce tutarı yazalım.");
+      if (!enteredAmount || enteredAmount <= 0) return toast("Önce tutarı yazalım.");
+      if (!currencyOptions.some((item) => item.code === currency)) return toast("Para birimini seçelim.");
+      if (!exchangeRate || exchangeRate <= 0) return toast("Döviz için kuru yazalım.");
       if (!headingName) return toast("Bir başlık yazalım.");
       if (!activeMembers().length) return toast("Önce projeye kullanıcı bağlayalım.");
 
@@ -267,12 +272,17 @@ function bindScreen() {
       draft.userId = userId;
       draft.settlement = settlement ? "in" : "out";
       draft.date = date;
+      draft.currency = currency;
+      draft.exchangeRate = exchangeRate;
 
       state.entries.unshift({
         id: makeId(),
         projectId: state.activeProjectId,
         type: draft.type,
         amount,
+        enteredAmount,
+        currency,
+        exchangeRate,
         headingId: heading.id,
         headingName: heading.name,
         shortName: heading.shortName,
@@ -313,11 +323,14 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(userForm);
       const name = String(data.get("userName") || "").trim();
-      if (!name) return toast("Kullanıcı adını yazalım.");
-      createUser(name, String(data.get("password") || ""), { makeActive: false });
+      if (!name) return toast("Kasaya eklenecek kullanıcı adını yazalım.");
+      const result = addUserToActiveProjectByName(name);
+      if (result.status === "forbidden") return toast("Kullanıcı eklemeyi sadece kasa sahibi yapar.");
+      if (result.status === "missing-user") return toast("Bu adda kullanıcı yok. Önce profilini oluştur.");
+      if (result.status === "already") return toast(`${shortName(result.user.name)} zaten bu kasada.`);
       saveState();
       render();
-      toast("Kullanıcı eklendi ve projeye bağlandı.");
+      toast(`${shortName(result.user.name)} kasaya eklendi.`);
     });
   }
 

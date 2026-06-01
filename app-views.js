@@ -127,7 +127,20 @@ function renderAdd() {
 
       <div>
         <label class="field-label" for="amount">Tutar</label>
-        <input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="₺0" autocomplete="off" />
+        <input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="0" autocomplete="off" />
+      </div>
+
+      <div class="grid-2">
+        <label>
+          <span class="field-label">Para birimi</span>
+          <select class="select-input" name="currency">
+            ${currencyOptions.map((item) => `<option value="${item.code}" ${draft.currency === item.code ? "selected" : ""}>${item.label}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          <span class="field-label">Kur</span>
+          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="TL ise 1" value="${draft.exchangeRate || 1}" autocomplete="off" />
+        </label>
       </div>
 
       <div>
@@ -253,6 +266,7 @@ function renderReport() {
       <div class="receipt-line"><span>${label} giren</span><strong>${money(totals.income)}</strong></div>
       <div class="receipt-line"><span>${label} çıkan</span><strong>${money(totals.expense)}</strong></div>
       <div class="receipt-line"><span>Net</span><strong>${money(totals.actual)}</strong></div>
+      ${exchangeReceiptLines(entries)}
       <div class="receipt-line"><span>En hareketli başlık</span><strong>${topHeading(entries)}</strong></div>
       <p class="receipt-comment">${entries.length ? "Kasa konuştu, fiş çıktı." : "Kasa bugün sessiz."}</p>
       <button class="share-button" data-action="share-receipt" type="button">Fişi paylaş</button>
@@ -264,6 +278,8 @@ function renderGroup() {
   const project = activeProject();
   const balances = calculateBalances();
   const transactions = simplifyDebts(balances);
+  const canManageUsers = isProjectOwner(project);
+  const owner = projectOwner(project);
 
   return `
     <section class="card">
@@ -314,16 +330,25 @@ function renderGroup() {
     </section>
 
     <section class="card">
-      <h2>Kullanıcılar</h2>
-      <p>Önce profil oluştur, sonra bu projeye bağla veya çıkar.</p>
+      <h2>Kasa kullanıcıları</h2>
+      <p>${
+        canManageUsers
+          ? `Kasa sahibi ${shortName(owner?.name || "kurucu")}. Kullanıcı adını yazıp bu kasaya ekleyebilir.`
+          : `Bu kasayı ${shortName(owner?.name || "kasa sahibi")} yönetir. Kullanıcı ekleme sadece onda.`
+      }</p>
       <div class="expense-list" style="margin-top:12px;">
         ${state.users.map(userLinkRow).join("")}
       </div>
-      <form class="inline-form" id="userForm">
-        <input class="text-input" name="userName" placeholder="Profil adı" autocomplete="off" />
-        <input class="text-input" name="password" type="password" placeholder="Şifre" autocomplete="new-password" />
-        <button class="primary-button" type="submit">Profil oluştur</button>
-      </form>
+      ${
+        canManageUsers
+          ? `
+            <form class="inline-form" id="userForm">
+              <input class="text-input" name="userName" placeholder="Kullanıcı adı: Havva" autocomplete="off" />
+              <button class="primary-button" type="submit">Kasaya ekle</button>
+            </form>
+          `
+          : `<div class="empty-state" style="margin-top:12px;">Kullanıcı eklemek için kasa sahibi hesabıyla giriş yap.</div>`
+      }
     </section>
 
     <section class="card">
@@ -393,4 +418,3 @@ function renderHeadings() {
     </section>
   `;
 }
-
