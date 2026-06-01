@@ -7,6 +7,7 @@ function makeDraft() {
     emoji: "💸",
     settlement: "in",
     userId: activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
+    amountInput: "",
     currency: "TRY",
     exchangeRate: 1,
     date: todayKey(),
@@ -32,6 +33,7 @@ function normalizeState(saved) {
   const users = (Array.isArray(source.users) && source.users.length ? source.users : seedState.users).map((user) => ({
     id: user.id || makeId(),
     name: user.name || "Kullanıcı",
+    nickname: user.nickname || "",
     email: user.email || "",
     password: normalizePassword(user.password),
     createdAt: user.createdAt || new Date().toISOString(),
@@ -47,6 +49,7 @@ function normalizeState(saved) {
     createdAt: project.createdAt || new Date().toISOString(),
     createdBy: project.createdBy || source.activeUserId || "",
     memberIds: Array.isArray(project.memberIds) && project.memberIds.length ? project.memberIds.filter((id) => userIds.includes(id)) : userIds,
+    memberAliases: project.memberAliases && typeof project.memberAliases === "object" ? project.memberAliases : {},
   }));
 
   projects.forEach((project) => {
@@ -153,6 +156,10 @@ function renderAuth() {
                 <input class="text-input" name="userName" placeholder="Örn. İrfan Ayyıldız" autocomplete="name" />
               </label>
               <label>
+                <span class="field-label">Kısa isim / lakap</span>
+                <input class="text-input" name="nickname" placeholder="Örn. İrfan, anne, ortak" autocomplete="off" />
+              </label>
+              <label>
                 <span class="field-label">Telefon / e-posta</span>
                 <input class="text-input" name="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
               </label>
@@ -169,7 +176,7 @@ function renderAuth() {
               <label>
                 <span class="field-label">Kullanıcı</span>
                 <select class="select-input" name="loginUserId">
-                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
+                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${profileLabel(user)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
                 </select>
               </label>
               <label>
@@ -191,7 +198,7 @@ function renderProjectSetup() {
     <section class="form-card form-grid onboarding-card">
       <div>
         <p class="eyebrow">Kasa kurulumu</p>
-        <h2>${shortName(user.name)}, şimdi kasa seç</h2>
+        <h2>${profileLabel(user)}, şimdi kasa seç</h2>
         <p class="hero-note">Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz.</p>
       </div>
 

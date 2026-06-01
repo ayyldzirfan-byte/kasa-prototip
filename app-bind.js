@@ -124,8 +124,17 @@ function bindScreen() {
 
   app.querySelectorAll("[data-entry-type]").forEach((button) => {
     button.addEventListener("click", () => {
+      const form = app.querySelector("#entryForm");
+      if (form) {
+        draft.amountInput = formatAmountInput(form.elements.amount?.value);
+        draft.currency = String(form.elements.currency?.value || draft.currency || "TRY");
+        draft.exchangeRate = parseAmount(form.elements.exchangeRate?.value || draft.exchangeRate || 1);
+        draft.userId = String(form.elements.userId?.value || draft.userId || "");
+        draft.date = String(form.elements.date?.value || draft.date || todayKey());
+        draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
+      }
       draft.type = button.dataset.entryType;
-      draft.emoji = entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
+      draft.emoji = emojiOptionsFor(draft.type)[0] || entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
       render();
     });
   });
@@ -167,7 +176,11 @@ function bindScreen() {
       const password = normalizePassword(data.get("password"));
       if (!name) return toast("Ad soyad yazalım.");
       if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
-      const user = createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
+      const user = createUser(name, password, {
+        email: String(data.get("email") || "").trim(),
+        nickname: String(data.get("nickname") || "").trim(),
+        linkToProject: false,
+      });
       state.signedInUserId = "";
       state.activeUserId = "";
       state.pendingLoginUserId = user.id;
@@ -210,7 +223,7 @@ function bindScreen() {
       draft = makeDraft();
       saveState();
       render();
-      toast(`${shortName(user.name)} giriş yaptı.`);
+      toast(`${profileLabel(user)} giriş yaptı.`);
     });
   }
 
@@ -221,7 +234,7 @@ function bindScreen() {
       const data = new FormData(quickUserForm);
       const name = String(data.get("userName") || "").trim();
       if (!name) return toast("Kullanıcı adını yazalım.");
-      createUser(name, String(data.get("password") || ""), { makeActive: false });
+      createUser(name, String(data.get("password") || ""), { nickname: String(data.get("nickname") || "").trim(), makeActive: false });
       saveState();
       render();
       toast("Kullanıcı oluşturuldu ve projeye bağlandı.");
@@ -248,6 +261,14 @@ function bindScreen() {
 
   const entryForm = app.querySelector("#entryForm");
   if (entryForm) {
+    const amountInput = entryForm.querySelector("#amount");
+    if (amountInput) {
+      amountInput.addEventListener("input", () => {
+        amountInput.value = formatAmountInput(amountInput.value);
+        draft.amountInput = amountInput.value;
+      });
+    }
+
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
@@ -274,6 +295,7 @@ function bindScreen() {
       draft.date = date;
       draft.currency = currency;
       draft.exchangeRate = exchangeRate;
+      draft.amountInput = formatAmountInput(data.get("amount"));
 
       state.entries.unshift({
         id: makeId(),
@@ -298,6 +320,7 @@ function bindScreen() {
 
       saveState();
       state.activeView = "home";
+      draft.amountInput = "";
       render();
       toast("Hareket kasaya girdi.");
     });
@@ -330,6 +353,18 @@ function bindScreen() {
       saveState();
       render();
       toast(`${shortName(result.user.name)} kasaya eklendi.`);
+    });
+  });
+
+  app.querySelectorAll("[data-alias-form]").forEach((aliasForm) => {
+    aliasForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const result = setProjectMemberAlias(aliasForm.dataset.id, new FormData(aliasForm).get("alias"));
+      if (result.status === "forbidden") return toast("Lakap vermeyi sadece kasa sahibi yapar.");
+      if (result.status === "missing-user") return toast("Bu kullanıcı bu kasada yok.");
+      saveState();
+      render();
+      toast("Kasa içi lakap kaydedildi.");
     });
   });
 

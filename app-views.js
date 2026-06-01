@@ -9,7 +9,7 @@ function renderHome() {
     <section class="account-strip">
       <div>
         <span class="field-label">Aktif kullanıcı</span>
-        <strong>${shortName(user?.name || "Kullanıcı")}</strong>
+        <strong>${projectUserLabel(user)}</strong>
         <p>Yeni profil oluşturmak için çıkış yap.</p>
       </div>
       <button class="tiny-button" data-action="logout" type="button">Çıkış yap</button>
@@ -30,7 +30,7 @@ function renderHome() {
       <div class="section-head">
         <div>
           <h2>${project.name}</h2>
-          <p>${activeMembers().map((user) => shortName(user.name)).join(", ") || "Henüz üye yok"}</p>
+          <p>${activeMembers().map((user) => projectUserLabel(user)).join(", ") || "Henüz üye yok"}</p>
         </div>
         <button class="tiny-button" data-action="open-group" type="button">Yönet</button>
       </div>
@@ -114,7 +114,13 @@ function renderHome() {
 function renderAdd() {
   const type = entryTypes.find((item) => item.id === draft.type) || entryTypes[0];
   const members = activeMembers();
+  const suggestions = headingSuggestionsFor(type.id);
+  const emojiOptions = emojiOptionsFor(type.id);
+  const amountValue = draft.amountInput || "";
   const dateLabel = ["receivable", "payable"].includes(type.id) ? "Beklenen tarih" : "Tarih";
+  const headingLabel = type.id === "income" || type.id === "receivable" ? "Gelir başlığı" : "Gider başlığı";
+  const headingPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Maaş, ek iş, satış" : "Örn. Kira, HGS, market";
+  const shortPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. maaş günü, yan gelir, tahsilat" : "Örn. haraç, yol yedi, ayın tokadı";
   const memberLabel = {
     expense: "Kim ödedi?",
     income: "Kim aldı?",
@@ -126,7 +132,7 @@ function renderAdd() {
     <form class="form-card form-grid" id="entryForm">
       <div class="section-head">
         <div>
-          <h2>Hareket ekle</h2>
+          <h2>${type.label} hareketi ekle</h2>
           <p>${activeProject().name} içine kayıt düşer.</p>
         </div>
       </div>
@@ -137,7 +143,7 @@ function renderAdd() {
 
       <div>
         <label class="field-label" for="amount">Tutar</label>
-        <input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="0" autocomplete="off" />
+        <input class="amount-input" id="amount" name="amount" inputmode="numeric" placeholder="1.000" value="${amountValue}" autocomplete="off" />
       </div>
 
       <div class="grid-2">
@@ -154,26 +160,26 @@ function renderAdd() {
       </div>
 
       <div>
-        <label class="field-label" for="headingName">Başlık</label>
-        <input class="text-input" id="headingName" name="headingName" placeholder="Örn. Kira, HGS, Altın" autocomplete="off" />
+        <label class="field-label" for="headingName">${headingLabel}</label>
+        <input class="text-input" id="headingName" name="headingName" placeholder="${headingPlaceholder}" autocomplete="off" />
       </div>
 
       <div>
         <label class="field-label" for="shortName">Kısa isim / lakap</label>
-        <input class="text-input" id="shortName" name="shortName" placeholder="Örn. haraç, yol yedi, ayın tokadı" autocomplete="off" />
+        <input class="text-input" id="shortName" name="shortName" placeholder="${shortPlaceholder}" autocomplete="off" />
       </div>
 
       <div>
         <span class="field-label">Öneriler</span>
         <div class="chips">
-          ${headingSuggestions.map((item) => `<button class="chip" data-suggestion="${item.name}" data-short="${item.shortName}" data-emoji="${item.emoji}" type="button">${item.emoji} ${item.name}</button>`).join("")}
+          ${suggestions.map((item) => `<button class="chip" data-suggestion="${item.name}" data-short="${item.shortName}" data-emoji="${item.emoji}" type="button">${item.emoji} ${item.name}</button>`).join("")}
         </div>
       </div>
 
       <div>
         <span class="field-label">Emoji</span>
         <div class="chips">
-          ${["💸", "💰", "🤝", "⏰", "🛒", "🏠", "⛽", "🚗", "💡", "🪙", "🍼", "🏖️", "💼", "🧾"]
+          ${emojiOptions
             .map((emoji) => `<button class="emoji-chip ${draft.emoji === emoji ? "selected" : ""}" data-chip="emoji" data-value="${emoji}" type="button">${emoji}</button>`)
             .join("")}
         </div>
@@ -182,7 +188,7 @@ function renderAdd() {
       <label>
         <span class="field-label">${memberLabel}</span>
         <select class="select-input" name="userId">
-          ${members.map((user) => `<option value="${user.id}" ${draft.userId === user.id ? "selected" : ""}>${user.name}</option>`).join("")}
+          ${members.map((user) => `<option value="${user.id}" ${draft.userId === user.id ? "selected" : ""}>${projectUserLabel(user)}</option>`).join("")}
         </select>
       </label>
 
@@ -328,7 +334,7 @@ function renderGroup() {
       <p>${
         canManageUsers
           ? `Önce diğer profili oluştur. Sonra adını buraya yazıp ${project.name} kasasına ekle.`
-          : `Şu an ${shortName(user?.name || "bu kullanıcı")} hesabındasın. Kullanıcı eklemek için ${shortName(owner?.name || "kasa sahibi")} hesabıyla giriş yap.`
+          : `Şu an ${projectUserLabel(user)} hesabındasın. Kullanıcı eklemek için ${projectUserLabel(owner)} hesabıyla giriş yap.`
       }</p>
       ${
         canManageUsers
@@ -368,8 +374,8 @@ function renderGroup() {
       <h2>Kasa kullanıcıları</h2>
       <p>${
         canManageUsers
-          ? `Kasa sahibi ${shortName(owner?.name || "kurucu")}. Kullanıcı adını yazıp bu kasaya ekleyebilir.`
-          : `Bu kasayı ${shortName(owner?.name || "kasa sahibi")} yönetir. Kullanıcı ekleme sadece onda.`
+          ? `Kasa sahibi ${projectUserLabel(owner)}. Kullanıcı adını yazıp bu kasaya ekleyebilir.`
+          : `Bu kasayı ${projectUserLabel(owner)} yönetir. Kullanıcı ekleme sadece onda.`
       }</p>
       <div class="expense-list" style="margin-top:12px;">
         ${state.users.map(userLinkRow).join("")}
@@ -403,7 +409,7 @@ function renderGroup() {
             <div style="margin-top: 12px;">
               ${
                 transactions.length
-                  ? transactions.map((tx) => `<div class="split-row"><strong>${shortName(tx.from)} → ${shortName(tx.to)}</strong><span>${money(tx.amount)}</span></div>`).join("")
+                  ? transactions.map((tx) => `<div class="split-row"><strong>${tx.from} → ${tx.to}</strong><span>${money(tx.amount)}</span></div>`).join("")
                   : `<div class="empty-state">Şimdilik hesap kapanmış görünüyor.</div>`
               }
             </div>

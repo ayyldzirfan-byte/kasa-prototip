@@ -564,6 +564,34 @@ button {
   margin-top: 12px;
 }
 
+.member-card {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 20px;
+  background: rgba(248, 243, 234, 0.6);
+}
+
+.member-card .expense-row {
+  padding: 2px;
+  background: transparent;
+}
+
+.alias-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.alias-form .text-input {
+  min-height: 42px;
+  border-radius: 14px;
+}
+
+.alias-form .mini-action {
+  min-height: 42px;
+}
+
 .expense-row {
   padding: 12px;
   border-radius: 18px;

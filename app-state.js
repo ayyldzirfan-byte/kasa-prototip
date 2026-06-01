@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 00:33";
+const APP_UPDATED_AT = "02.06.2026 00:47";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -8,20 +8,49 @@ const entryTypes = [
   { id: "payable", label: "Ödeme", emoji: "⏰" },
 ];
 
-const headingSuggestions = [
-  { name: "Market", shortName: "Market", emoji: "🛒" },
-  { name: "Kira", shortName: "Kira", emoji: "🏠" },
-  { name: "Benzin", shortName: "Yakıt", emoji: "⛽" },
-  { name: "Araç HGS", shortName: "HGS", emoji: "🚗" },
-  { name: "Araç MTV", shortName: "MTV", emoji: "🧾" },
-  { name: "Araç Kira", shortName: "Araç", emoji: "🔑" },
-  { name: "Fatura", shortName: "Fatura", emoji: "💡" },
-  { name: "Altın", shortName: "Haraç", emoji: "🪙" },
-  { name: "Çocuk", shortName: "Mini", emoji: "🍼" },
-  { name: "Tatil", shortName: "Kaçış", emoji: "🏖️" },
-  { name: "İş", shortName: "İş", emoji: "💼" },
-  { name: "Diğer", shortName: "Diğer", emoji: "🧾" },
-];
+const headingSuggestionGroups = {
+  expense: [
+    { name: "Market", shortName: "Market", emoji: "🛒" },
+    { name: "Kira", shortName: "Kira", emoji: "🏠" },
+    { name: "Benzin", shortName: "Yakıt", emoji: "⛽" },
+    { name: "Araç HGS", shortName: "HGS", emoji: "🚗" },
+    { name: "Araç MTV", shortName: "MTV", emoji: "🧾" },
+    { name: "Fatura", shortName: "Fatura", emoji: "💡" },
+    { name: "Altın", shortName: "Haraç", emoji: "🪙" },
+    { name: "Çocuk", shortName: "Mini", emoji: "🍼" },
+    { name: "Tatil", shortName: "Kaçış", emoji: "🏖️" },
+    { name: "Diğer gider", shortName: "Diğer", emoji: "🧾" },
+  ],
+  income: [
+    { name: "Maaş", shortName: "Maaş", emoji: "💼" },
+    { name: "Ek iş", shortName: "Ek gelir", emoji: "⚡" },
+    { name: "Satış", shortName: "Satış", emoji: "🏷️" },
+    { name: "Alacak tahsilatı", shortName: "Tahsilat", emoji: "🤝" },
+    { name: "Kira geliri", shortName: "Kira +", emoji: "🏠" },
+    { name: "Hediye", shortName: "Hediye", emoji: "🎁" },
+    { name: "Tatil katkısı", shortName: "Katkı", emoji: "🏖️" },
+    { name: "Diğer gelir", shortName: "Diğer +", emoji: "💰" },
+  ],
+  receivable: [
+    { name: "Borç verdim", shortName: "Alacak", emoji: "🤝" },
+    { name: "Beklenen ödeme", shortName: "Beklenen", emoji: "📌" },
+    { name: "Tatil katkısı", shortName: "Katkı", emoji: "🏖️" },
+    { name: "İade bekliyor", shortName: "İade", emoji: "↩️" },
+  ],
+  payable: [
+    { name: "Kredi kartı", shortName: "Kart", emoji: "💳" },
+    { name: "Kira günü", shortName: "Kira", emoji: "🏠" },
+    { name: "Fatura günü", shortName: "Fatura", emoji: "💡" },
+    { name: "Taksit", shortName: "Taksit", emoji: "🧾" },
+  ],
+};
+
+const emojiOptionsByType = {
+  expense: ["💸", "🛒", "🏠", "⛽", "🚗", "💡", "🪙", "🍼", "🏖️", "🧾"],
+  income: ["💰", "💼", "⚡", "🏷️", "🤝", "🏠", "🎁", "🏖️", "📈", "🧾"],
+  receivable: ["🤝", "📌", "↩️", "🏖️", "💬", "🧾"],
+  payable: ["⏰", "💳", "🏠", "💡", "🧾", "📌"],
+};
 
 const purposeOptions = [
   "Ev / aile",

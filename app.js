@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 00:33";
+const APP_UPDATED_AT = "02.06.2026 00:47";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -8,20 +8,49 @@ const entryTypes = [
   { id: "payable", label: "Ödeme", emoji: "⏰" },
 ];
 
-const headingSuggestions = [
-  { name: "Market", shortName: "Market", emoji: "🛒" },
-  { name: "Kira", shortName: "Kira", emoji: "🏠" },
-  { name: "Benzin", shortName: "Yakıt", emoji: "⛽" },
-  { name: "Araç HGS", shortName: "HGS", emoji: "🚗" },
-  { name: "Araç MTV", shortName: "MTV", emoji: "🧾" },
-  { name: "Araç Kira", shortName: "Araç", emoji: "🔑" },
-  { name: "Fatura", shortName: "Fatura", emoji: "💡" },
-  { name: "Altın", shortName: "Haraç", emoji: "🪙" },
-  { name: "Çocuk", shortName: "Mini", emoji: "🍼" },
-  { name: "Tatil", shortName: "Kaçış", emoji: "🏖️" },
-  { name: "İş", shortName: "İş", emoji: "💼" },
-  { name: "Diğer", shortName: "Diğer", emoji: "🧾" },
-];
+const headingSuggestionGroups = {
+  expense: [
+    { name: "Market", shortName: "Market", emoji: "🛒" },
+    { name: "Kira", shortName: "Kira", emoji: "🏠" },
+    { name: "Benzin", shortName: "Yakıt", emoji: "⛽" },
+    { name: "Araç HGS", shortName: "HGS", emoji: "🚗" },
+    { name: "Araç MTV", shortName: "MTV", emoji: "🧾" },
+    { name: "Fatura", shortName: "Fatura", emoji: "💡" },
+    { name: "Altın", shortName: "Haraç", emoji: "🪙" },
+    { name: "Çocuk", shortName: "Mini", emoji: "🍼" },
+    { name: "Tatil", shortName: "Kaçış", emoji: "🏖️" },
+    { name: "Diğer gider", shortName: "Diğer", emoji: "🧾" },
+  ],
+  income: [
+    { name: "Maaş", shortName: "Maaş", emoji: "💼" },
+    { name: "Ek iş", shortName: "Ek gelir", emoji: "⚡" },
+    { name: "Satış", shortName: "Satış", emoji: "🏷️" },
+    { name: "Alacak tahsilatı", shortName: "Tahsilat", emoji: "🤝" },
+    { name: "Kira geliri", shortName: "Kira +", emoji: "🏠" },
+    { name: "Hediye", shortName: "Hediye", emoji: "🎁" },
+    { name: "Tatil katkısı", shortName: "Katkı", emoji: "🏖️" },
+    { name: "Diğer gelir", shortName: "Diğer +", emoji: "💰" },
+  ],
+  receivable: [
+    { name: "Borç verdim", shortName: "Alacak", emoji: "🤝" },
+    { name: "Beklenen ödeme", shortName: "Beklenen", emoji: "📌" },
+    { name: "Tatil katkısı", shortName: "Katkı", emoji: "🏖️" },
+    { name: "İade bekliyor", shortName: "İade", emoji: "↩️" },
+  ],
+  payable: [
+    { name: "Kredi kartı", shortName: "Kart", emoji: "💳" },
+    { name: "Kira günü", shortName: "Kira", emoji: "🏠" },
+    { name: "Fatura günü", shortName: "Fatura", emoji: "💡" },
+    { name: "Taksit", shortName: "Taksit", emoji: "🧾" },
+  ],
+};
+
+const emojiOptionsByType = {
+  expense: ["💸", "🛒", "🏠", "⛽", "🚗", "💡", "🪙", "🍼", "🏖️", "🧾"],
+  income: ["💰", "💼", "⚡", "🏷️", "🤝", "🏠", "🎁", "🏖️", "📈", "🧾"],
+  receivable: ["🤝", "📌", "↩️", "🏖️", "💬", "🧾"],
+  payable: ["⏰", "💳", "🏠", "💡", "🧾", "📌"],
+};
 
 const purposeOptions = [
   "Ev / aile",
@@ -100,6 +129,7 @@ function makeDraft() {
     emoji: "💸",
     settlement: "in",
     userId: activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
+    amountInput: "",
     currency: "TRY",
     exchangeRate: 1,
     date: todayKey(),
@@ -125,6 +155,7 @@ function normalizeState(saved) {
   const users = (Array.isArray(source.users) && source.users.length ? source.users : seedState.users).map((user) => ({
     id: user.id || makeId(),
     name: user.name || "Kullanıcı",
+    nickname: user.nickname || "",
     email: user.email || "",
     password: normalizePassword(user.password),
     createdAt: user.createdAt || new Date().toISOString(),
@@ -140,6 +171,7 @@ function normalizeState(saved) {
     createdAt: project.createdAt || new Date().toISOString(),
     createdBy: project.createdBy || source.activeUserId || "",
     memberIds: Array.isArray(project.memberIds) && project.memberIds.length ? project.memberIds.filter((id) => userIds.includes(id)) : userIds,
+    memberAliases: project.memberAliases && typeof project.memberAliases === "object" ? project.memberAliases : {},
   }));
 
   projects.forEach((project) => {
@@ -246,6 +278,10 @@ function renderAuth() {
                 <input class="text-input" name="userName" placeholder="Örn. İrfan Ayyıldız" autocomplete="name" />
               </label>
               <label>
+                <span class="field-label">Kısa isim / lakap</span>
+                <input class="text-input" name="nickname" placeholder="Örn. İrfan, anne, ortak" autocomplete="off" />
+              </label>
+              <label>
                 <span class="field-label">Telefon / e-posta</span>
                 <input class="text-input" name="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
               </label>
@@ -262,7 +298,7 @@ function renderAuth() {
               <label>
                 <span class="field-label">Kullanıcı</span>
                 <select class="select-input" name="loginUserId">
-                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${shortName(user.name)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
+                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${profileLabel(user)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
                 </select>
               </label>
               <label>
@@ -284,7 +320,7 @@ function renderProjectSetup() {
     <section class="form-card form-grid onboarding-card">
       <div>
         <p class="eyebrow">Kasa kurulumu</p>
-        <h2>${shortName(user.name)}, şimdi kasa seç</h2>
+        <h2>${profileLabel(user)}, şimdi kasa seç</h2>
         <p class="hero-note">Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz.</p>
       </div>
 
@@ -317,7 +353,7 @@ function renderHome() {
     <section class="account-strip">
       <div>
         <span class="field-label">Aktif kullanıcı</span>
-        <strong>${shortName(user?.name || "Kullanıcı")}</strong>
+        <strong>${projectUserLabel(user)}</strong>
         <p>Yeni profil oluşturmak için çıkış yap.</p>
       </div>
       <button class="tiny-button" data-action="logout" type="button">Çıkış yap</button>
@@ -338,7 +374,7 @@ function renderHome() {
       <div class="section-head">
         <div>
           <h2>${project.name}</h2>
-          <p>${activeMembers().map((user) => shortName(user.name)).join(", ") || "Henüz üye yok"}</p>
+          <p>${activeMembers().map((user) => projectUserLabel(user)).join(", ") || "Henüz üye yok"}</p>
         </div>
         <button class="tiny-button" data-action="open-group" type="button">Yönet</button>
       </div>
@@ -422,7 +458,13 @@ function renderHome() {
 function renderAdd() {
   const type = entryTypes.find((item) => item.id === draft.type) || entryTypes[0];
   const members = activeMembers();
+  const suggestions = headingSuggestionsFor(type.id);
+  const emojiOptions = emojiOptionsFor(type.id);
+  const amountValue = draft.amountInput || "";
   const dateLabel = ["receivable", "payable"].includes(type.id) ? "Beklenen tarih" : "Tarih";
+  const headingLabel = type.id === "income" || type.id === "receivable" ? "Gelir başlığı" : "Gider başlığı";
+  const headingPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Maaş, ek iş, satış" : "Örn. Kira, HGS, market";
+  const shortPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. maaş günü, yan gelir, tahsilat" : "Örn. haraç, yol yedi, ayın tokadı";
   const memberLabel = {
     expense: "Kim ödedi?",
     income: "Kim aldı?",
@@ -434,7 +476,7 @@ function renderAdd() {
     <form class="form-card form-grid" id="entryForm">
       <div class="section-head">
         <div>
-          <h2>Hareket ekle</h2>
+          <h2>${type.label} hareketi ekle</h2>
           <p>${activeProject().name} içine kayıt düşer.</p>
         </div>
       </div>
@@ -445,7 +487,7 @@ function renderAdd() {
 
       <div>
         <label class="field-label" for="amount">Tutar</label>
-        <input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="0" autocomplete="off" />
+        <input class="amount-input" id="amount" name="amount" inputmode="numeric" placeholder="1.000" value="${amountValue}" autocomplete="off" />
       </div>
 
       <div class="grid-2">
@@ -462,26 +504,26 @@ function renderAdd() {
       </div>
 
       <div>
-        <label class="field-label" for="headingName">Başlık</label>
-        <input class="text-input" id="headingName" name="headingName" placeholder="Örn. Kira, HGS, Altın" autocomplete="off" />
+        <label class="field-label" for="headingName">${headingLabel}</label>
+        <input class="text-input" id="headingName" name="headingName" placeholder="${headingPlaceholder}" autocomplete="off" />
       </div>
 
       <div>
         <label class="field-label" for="shortName">Kısa isim / lakap</label>
-        <input class="text-input" id="shortName" name="shortName" placeholder="Örn. haraç, yol yedi, ayın tokadı" autocomplete="off" />
+        <input class="text-input" id="shortName" name="shortName" placeholder="${shortPlaceholder}" autocomplete="off" />
       </div>
 
       <div>
         <span class="field-label">Öneriler</span>
         <div class="chips">
-          ${headingSuggestions.map((item) => `<button class="chip" data-suggestion="${item.name}" data-short="${item.shortName}" data-emoji="${item.emoji}" type="button">${item.emoji} ${item.name}</button>`).join("")}
+          ${suggestions.map((item) => `<button class="chip" data-suggestion="${item.name}" data-short="${item.shortName}" data-emoji="${item.emoji}" type="button">${item.emoji} ${item.name}</button>`).join("")}
         </div>
       </div>
 
       <div>
         <span class="field-label">Emoji</span>
         <div class="chips">
-          ${["💸", "💰", "🤝", "⏰", "🛒", "🏠", "⛽", "🚗", "💡", "🪙", "🍼", "🏖️", "💼", "🧾"]
+          ${emojiOptions
             .map((emoji) => `<button class="emoji-chip ${draft.emoji === emoji ? "selected" : ""}" data-chip="emoji" data-value="${emoji}" type="button">${emoji}</button>`)
             .join("")}
         </div>
@@ -490,7 +532,7 @@ function renderAdd() {
       <label>
         <span class="field-label">${memberLabel}</span>
         <select class="select-input" name="userId">
-          ${members.map((user) => `<option value="${user.id}" ${draft.userId === user.id ? "selected" : ""}>${user.name}</option>`).join("")}
+          ${members.map((user) => `<option value="${user.id}" ${draft.userId === user.id ? "selected" : ""}>${projectUserLabel(user)}</option>`).join("")}
         </select>
       </label>
 
@@ -636,7 +678,7 @@ function renderGroup() {
       <p>${
         canManageUsers
           ? `Önce diğer profili oluştur. Sonra adını buraya yazıp ${project.name} kasasına ekle.`
-          : `Şu an ${shortName(user?.name || "bu kullanıcı")} hesabındasın. Kullanıcı eklemek için ${shortName(owner?.name || "kasa sahibi")} hesabıyla giriş yap.`
+          : `Şu an ${projectUserLabel(user)} hesabındasın. Kullanıcı eklemek için ${projectUserLabel(owner)} hesabıyla giriş yap.`
       }</p>
       ${
         canManageUsers
@@ -676,8 +718,8 @@ function renderGroup() {
       <h2>Kasa kullanıcıları</h2>
       <p>${
         canManageUsers
-          ? `Kasa sahibi ${shortName(owner?.name || "kurucu")}. Kullanıcı adını yazıp bu kasaya ekleyebilir.`
-          : `Bu kasayı ${shortName(owner?.name || "kasa sahibi")} yönetir. Kullanıcı ekleme sadece onda.`
+          ? `Kasa sahibi ${projectUserLabel(owner)}. Kullanıcı adını yazıp bu kasaya ekleyebilir.`
+          : `Bu kasayı ${projectUserLabel(owner)} yönetir. Kullanıcı ekleme sadece onda.`
       }</p>
       <div class="expense-list" style="margin-top:12px;">
         ${state.users.map(userLinkRow).join("")}
@@ -711,7 +753,7 @@ function renderGroup() {
             <div style="margin-top: 12px;">
               ${
                 transactions.length
-                  ? transactions.map((tx) => `<div class="split-row"><strong>${shortName(tx.from)} → ${shortName(tx.to)}</strong><span>${money(tx.amount)}</span></div>`).join("")
+                  ? transactions.map((tx) => `<div class="split-row"><strong>${tx.from} → ${tx.to}</strong><span>${money(tx.amount)}</span></div>`).join("")
                   : `<div class="empty-state">Şimdilik hesap kapanmış görünüyor.</div>`
               }
             </div>
@@ -888,8 +930,17 @@ function bindScreen() {
 
   app.querySelectorAll("[data-entry-type]").forEach((button) => {
     button.addEventListener("click", () => {
+      const form = app.querySelector("#entryForm");
+      if (form) {
+        draft.amountInput = formatAmountInput(form.elements.amount?.value);
+        draft.currency = String(form.elements.currency?.value || draft.currency || "TRY");
+        draft.exchangeRate = parseAmount(form.elements.exchangeRate?.value || draft.exchangeRate || 1);
+        draft.userId = String(form.elements.userId?.value || draft.userId || "");
+        draft.date = String(form.elements.date?.value || draft.date || todayKey());
+        draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
+      }
       draft.type = button.dataset.entryType;
-      draft.emoji = entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
+      draft.emoji = emojiOptionsFor(draft.type)[0] || entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
       render();
     });
   });
@@ -931,7 +982,11 @@ function bindScreen() {
       const password = normalizePassword(data.get("password"));
       if (!name) return toast("Ad soyad yazalım.");
       if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
-      const user = createUser(name, password, { email: String(data.get("email") || "").trim(), linkToProject: false });
+      const user = createUser(name, password, {
+        email: String(data.get("email") || "").trim(),
+        nickname: String(data.get("nickname") || "").trim(),
+        linkToProject: false,
+      });
       state.signedInUserId = "";
       state.activeUserId = "";
       state.pendingLoginUserId = user.id;
@@ -974,7 +1029,7 @@ function bindScreen() {
       draft = makeDraft();
       saveState();
       render();
-      toast(`${shortName(user.name)} giriş yaptı.`);
+      toast(`${profileLabel(user)} giriş yaptı.`);
     });
   }
 
@@ -985,7 +1040,7 @@ function bindScreen() {
       const data = new FormData(quickUserForm);
       const name = String(data.get("userName") || "").trim();
       if (!name) return toast("Kullanıcı adını yazalım.");
-      createUser(name, String(data.get("password") || ""), { makeActive: false });
+      createUser(name, String(data.get("password") || ""), { nickname: String(data.get("nickname") || "").trim(), makeActive: false });
       saveState();
       render();
       toast("Kullanıcı oluşturuldu ve projeye bağlandı.");
@@ -1012,6 +1067,14 @@ function bindScreen() {
 
   const entryForm = app.querySelector("#entryForm");
   if (entryForm) {
+    const amountInput = entryForm.querySelector("#amount");
+    if (amountInput) {
+      amountInput.addEventListener("input", () => {
+        amountInput.value = formatAmountInput(amountInput.value);
+        draft.amountInput = amountInput.value;
+      });
+    }
+
     entryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
@@ -1038,6 +1101,7 @@ function bindScreen() {
       draft.date = date;
       draft.currency = currency;
       draft.exchangeRate = exchangeRate;
+      draft.amountInput = formatAmountInput(data.get("amount"));
 
       state.entries.unshift({
         id: makeId(),
@@ -1062,6 +1126,7 @@ function bindScreen() {
 
       saveState();
       state.activeView = "home";
+      draft.amountInput = "";
       render();
       toast("Hareket kasaya girdi.");
     });
@@ -1097,6 +1162,18 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-alias-form]").forEach((aliasForm) => {
+    aliasForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const result = setProjectMemberAlias(aliasForm.dataset.id, new FormData(aliasForm).get("alias"));
+      if (result.status === "forbidden") return toast("Lakap vermeyi sadece kasa sahibi yapar.");
+      if (result.status === "missing-user") return toast("Bu kullanıcı bu kasada yok.");
+      saveState();
+      render();
+      toast("Kasa içi lakap kaydedildi.");
+    });
+  });
+
   const projectForm = app.querySelector("#projectForm");
   if (projectForm) {
     projectForm.addEventListener("submit", (event) => {
@@ -1122,6 +1199,23 @@ function activeMembers() {
   return state.users.filter((user) => project.memberIds.includes(user.id));
 }
 
+function profileLabel(user) {
+  return user?.nickname || shortName(user?.name || "");
+}
+
+function projectAliasFor(userId, project = activeProject()) {
+  return project?.memberAliases?.[userId] || "";
+}
+
+function projectUserLabel(user, project = activeProject()) {
+  if (!user) return "Kullanıcı";
+  return projectAliasFor(user.id, project) || profileLabel(user);
+}
+
+function userLabelById(userId, project = activeProject()) {
+  return projectUserLabel(state.users.find((user) => user.id === userId), project);
+}
+
 function currentUser() {
   return state.users.find((user) => user.id === state.signedInUserId);
 }
@@ -1143,22 +1237,24 @@ function findUserByName(name) {
   if (!wanted) return null;
   return state.users.find((user) => {
     const full = normalize(user.name);
+    const nickname = normalize(user.nickname);
     const short = normalize(shortName(user.name));
     const first = normalize(String(user.name || "").split(/\s+/)[0]);
-    return full === wanted || short === wanted || first === wanted || full.startsWith(`${wanted} `) || short.startsWith(`${wanted} `);
+    return full === wanted || nickname === wanted || short === wanted || first === wanted || full.startsWith(`${wanted} `) || short.startsWith(`${wanted} `);
   });
 }
 
 function createdByLabel(user) {
   if (!user.createdBy) return "İlk hesap";
   const creator = state.users.find((item) => item.id === user.createdBy);
-  return creator ? `${shortName(creator.name)} oluşturdu` : "Oluşturan bilinmiyor";
+  return creator ? `${profileLabel(creator)} oluşturdu` : "Oluşturan bilinmiyor";
 }
 
 function createUser(name, password = "", options = {}) {
   const user = {
     id: makeId(),
     name,
+    nickname: String(options.nickname || "").trim(),
     email: options.email || "",
     password: normalizePassword(password),
     createdAt: new Date().toISOString(),
@@ -1182,6 +1278,7 @@ function createProject(name, purpose = "Genel kasa") {
     createdAt: new Date().toISOString(),
     createdBy: currentUser()?.id || "",
     memberIds: currentUser()?.id ? [currentUser().id] : [],
+    memberAliases: {},
   };
   state.projects.push(project);
   state.activeProjectId = project.id;
@@ -1215,6 +1312,14 @@ function projectEntries() {
 
 function projectHeadings() {
   return state.headings.filter((heading) => heading.projectId === activeProject().id);
+}
+
+function headingSuggestionsFor(typeId) {
+  return headingSuggestionGroups[typeId] || headingSuggestionGroups.expense;
+}
+
+function emojiOptionsFor(typeId) {
+  return emojiOptionsByType[typeId] || emojiOptionsByType.expense;
 }
 
 function actualEntries() {
@@ -1264,6 +1369,7 @@ function toggleUserInProject(userId) {
     return;
   }
   project.memberIds = project.memberIds.filter((id) => id !== userId);
+  if (project.memberAliases) delete project.memberAliases[userId];
 }
 
 function addUserToActiveProjectByName(name) {
@@ -1277,6 +1383,19 @@ function addUserToActiveProjectByName(name) {
 
   project.memberIds.push(user.id);
   return { status: "added", user };
+}
+
+function setProjectMemberAlias(userId, alias) {
+  const project = activeProject();
+  if (!project) return { status: "missing-project" };
+  if (!isProjectOwner(project)) return { status: "forbidden" };
+  if (!project.memberIds.includes(userId)) return { status: "missing-user" };
+
+  project.memberAliases = project.memberAliases || {};
+  const value = String(alias || "").trim();
+  if (value) project.memberAliases[userId] = value;
+  else delete project.memberAliases[userId];
+  return { status: "saved" };
 }
 
 function settlePending(id) {
@@ -1321,6 +1440,8 @@ function userLinkRow(user) {
   const linked = project.memberIds.includes(user.id);
   const canManage = isProjectOwner(project);
   const isOwner = user.id === projectOwnerId(project);
+  const alias = projectAliasFor(user.id, project);
+  const label = projectUserLabel(user, project);
   const action = isOwner
     ? `<span class="mini-action linked">Sahip</span>`
     : canManage
@@ -1328,13 +1449,25 @@ function userLinkRow(user) {
       : `<span class="neutral-pill">${linked ? "Üye" : "Dışarıda"}</span>`;
 
   return `
-    <div class="expense-row">
-      <span class="emoji-dot">👤</span>
-      <div class="expense-main">
-        <p class="expense-title">${shortName(user.name)}</p>
-        <p class="expense-meta">${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
+    <div class="member-card">
+      <div class="expense-row">
+        <span class="emoji-dot">👤</span>
+        <div class="expense-main">
+          <p class="expense-title">${label}</p>
+          <p class="expense-meta">${user.name}${alias ? ` · profil lakabı: ${profileLabel(user)}` : ""} · ${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
+        </div>
+        ${action}
       </div>
-      ${action}
+      ${
+        canManage && linked
+          ? `
+            <form class="alias-form" data-alias-form data-id="${user.id}">
+              <input class="text-input" name="alias" value="${alias}" placeholder="Bu kasadaki lakap" autocomplete="off" />
+              <button class="mini-action" type="submit">Lakapla</button>
+            </form>
+          `
+          : ""
+      }
     </div>
   `;
 }
@@ -1361,7 +1494,7 @@ function entryRow(entry) {
       <span class="emoji-dot">${entry.emoji || type?.emoji || "🧾"}</span>
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
-        <p class="expense-meta">${shortName(user?.name || "Kullanıcı")} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        <p class="expense-meta">${projectUserLabel(user)} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
       </div>
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
         ${entry.type === "income" ? "+" : entry.type === "expense" ? "-" : ""}${money(entry.amount)}
@@ -1392,7 +1525,7 @@ function balanceRow(item) {
   return `
     <div class="balance-row">
       <div>
-        <div class="balance-name">${shortName(item.name)}</div>
+        <div class="balance-name">${item.name}</div>
         <div class="balance-state">${item.balance >= 0 ? "Alacaklı" : "Borçlu"}</div>
       </div>
       <span class="${item.balance >= 0 ? "positive-pill" : "negative-pill"}">${money(Math.abs(item.balance))}</span>
@@ -1451,7 +1584,7 @@ function calculateBalances() {
       const paid = sum(shared.filter((entry) => entry.userId === user.id));
       return {
         userId: user.id,
-        name: user.name,
+        name: projectUserLabel(user),
         balance: Math.round(paid - share),
       };
     })
@@ -1520,6 +1653,16 @@ function formatNumber(value, maximumFractionDigits = 0) {
   return new Intl.NumberFormat("tr-TR", {
     maximumFractionDigits,
   }).format(Number(value || 0));
+}
+
+function formatAmountInput(value) {
+  const raw = String(value || "").replace(/[^\d,]/g, "");
+  if (!raw) return "";
+  const [wholeRaw, decimalRaw] = raw.split(",");
+  const whole = wholeRaw.replace(/^0+(?=\d)/, "");
+  const formattedWhole = whole ? formatNumber(Number(whole)) : "0";
+  if (decimalRaw !== undefined) return `${formattedWhole},${decimalRaw.slice(0, 2)}`;
+  return formattedWhole;
 }
 
 function formatCurrencyAmount(value, currency = "TRY") {

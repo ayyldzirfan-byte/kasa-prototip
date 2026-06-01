@@ -8,6 +8,23 @@ function activeMembers() {
   return state.users.filter((user) => project.memberIds.includes(user.id));
 }
 
+function profileLabel(user) {
+  return user?.nickname || shortName(user?.name || "");
+}
+
+function projectAliasFor(userId, project = activeProject()) {
+  return project?.memberAliases?.[userId] || "";
+}
+
+function projectUserLabel(user, project = activeProject()) {
+  if (!user) return "Kullanıcı";
+  return projectAliasFor(user.id, project) || profileLabel(user);
+}
+
+function userLabelById(userId, project = activeProject()) {
+  return projectUserLabel(state.users.find((user) => user.id === userId), project);
+}
+
 function currentUser() {
   return state.users.find((user) => user.id === state.signedInUserId);
 }
@@ -29,22 +46,24 @@ function findUserByName(name) {
   if (!wanted) return null;
   return state.users.find((user) => {
     const full = normalize(user.name);
+    const nickname = normalize(user.nickname);
     const short = normalize(shortName(user.name));
     const first = normalize(String(user.name || "").split(/\s+/)[0]);
-    return full === wanted || short === wanted || first === wanted || full.startsWith(`${wanted} `) || short.startsWith(`${wanted} `);
+    return full === wanted || nickname === wanted || short === wanted || first === wanted || full.startsWith(`${wanted} `) || short.startsWith(`${wanted} `);
   });
 }
 
 function createdByLabel(user) {
   if (!user.createdBy) return "İlk hesap";
   const creator = state.users.find((item) => item.id === user.createdBy);
-  return creator ? `${shortName(creator.name)} oluşturdu` : "Oluşturan bilinmiyor";
+  return creator ? `${profileLabel(creator)} oluşturdu` : "Oluşturan bilinmiyor";
 }
 
 function createUser(name, password = "", options = {}) {
   const user = {
     id: makeId(),
     name,
+    nickname: String(options.nickname || "").trim(),
     email: options.email || "",
     password: normalizePassword(password),
     createdAt: new Date().toISOString(),
@@ -68,6 +87,7 @@ function createProject(name, purpose = "Genel kasa") {
     createdAt: new Date().toISOString(),
     createdBy: currentUser()?.id || "",
     memberIds: currentUser()?.id ? [currentUser().id] : [],
+    memberAliases: {},
   };
   state.projects.push(project);
   state.activeProjectId = project.id;
@@ -101,6 +121,14 @@ function projectEntries() {
 
 function projectHeadings() {
   return state.headings.filter((heading) => heading.projectId === activeProject().id);
+}
+
+function headingSuggestionsFor(typeId) {
+  return headingSuggestionGroups[typeId] || headingSuggestionGroups.expense;
+}
+
+function emojiOptionsFor(typeId) {
+  return emojiOptionsByType[typeId] || emojiOptionsByType.expense;
 }
 
 function actualEntries() {
@@ -150,6 +178,7 @@ function toggleUserInProject(userId) {
     return;
   }
   project.memberIds = project.memberIds.filter((id) => id !== userId);
+  if (project.memberAliases) delete project.memberAliases[userId];
 }
 
 function addUserToActiveProjectByName(name) {
@@ -163,6 +192,19 @@ function addUserToActiveProjectByName(name) {
 
   project.memberIds.push(user.id);
   return { status: "added", user };
+}
+
+function setProjectMemberAlias(userId, alias) {
+  const project = activeProject();
+  if (!project) return { status: "missing-project" };
+  if (!isProjectOwner(project)) return { status: "forbidden" };
+  if (!project.memberIds.includes(userId)) return { status: "missing-user" };
+
+  project.memberAliases = project.memberAliases || {};
+  const value = String(alias || "").trim();
+  if (value) project.memberAliases[userId] = value;
+  else delete project.memberAliases[userId];
+  return { status: "saved" };
 }
 
 function settlePending(id) {
@@ -207,6 +249,8 @@ function userLinkRow(user) {
   const linked = project.memberIds.includes(user.id);
   const canManage = isProjectOwner(project);
   const isOwner = user.id === projectOwnerId(project);
+  const alias = projectAliasFor(user.id, project);
+  const label = projectUserLabel(user, project);
   const action = isOwner
     ? `<span class="mini-action linked">Sahip</span>`
     : canManage
@@ -214,13 +258,25 @@ function userLinkRow(user) {
       : `<span class="neutral-pill">${linked ? "Üye" : "Dışarıda"}</span>`;
 
   return `
-    <div class="expense-row">
-      <span class="emoji-dot">👤</span>
-      <div class="expense-main">
-        <p class="expense-title">${shortName(user.name)}</p>
-        <p class="expense-meta">${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
+    <div class="member-card">
+      <div class="expense-row">
+        <span class="emoji-dot">👤</span>
+        <div class="expense-main">
+          <p class="expense-title">${label}</p>
+          <p class="expense-meta">${user.name}${alias ? ` · profil lakabı: ${profileLabel(user)}` : ""} · ${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
+        </div>
+        ${action}
       </div>
-      ${action}
+      ${
+        canManage && linked
+          ? `
+            <form class="alias-form" data-alias-form data-id="${user.id}">
+              <input class="text-input" name="alias" value="${alias}" placeholder="Bu kasadaki lakap" autocomplete="off" />
+              <button class="mini-action" type="submit">Lakapla</button>
+            </form>
+          `
+          : ""
+      }
     </div>
   `;
 }
@@ -247,7 +303,7 @@ function entryRow(entry) {
       <span class="emoji-dot">${entry.emoji || type?.emoji || "🧾"}</span>
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
-        <p class="expense-meta">${shortName(user?.name || "Kullanıcı")} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        <p class="expense-meta">${projectUserLabel(user)} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
       </div>
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
         ${entry.type === "income" ? "+" : entry.type === "expense" ? "-" : ""}${money(entry.amount)}
@@ -278,7 +334,7 @@ function balanceRow(item) {
   return `
     <div class="balance-row">
       <div>
-        <div class="balance-name">${shortName(item.name)}</div>
+        <div class="balance-name">${item.name}</div>
         <div class="balance-state">${item.balance >= 0 ? "Alacaklı" : "Borçlu"}</div>
       </div>
       <span class="${item.balance >= 0 ? "positive-pill" : "negative-pill"}">${money(Math.abs(item.balance))}</span>
@@ -337,7 +393,7 @@ function calculateBalances() {
       const paid = sum(shared.filter((entry) => entry.userId === user.id));
       return {
         userId: user.id,
-        name: user.name,
+        name: projectUserLabel(user),
         balance: Math.round(paid - share),
       };
     })
@@ -406,6 +462,16 @@ function formatNumber(value, maximumFractionDigits = 0) {
   return new Intl.NumberFormat("tr-TR", {
     maximumFractionDigits,
   }).format(Number(value || 0));
+}
+
+function formatAmountInput(value) {
+  const raw = String(value || "").replace(/[^\d,]/g, "");
+  if (!raw) return "";
+  const [wholeRaw, decimalRaw] = raw.split(",");
+  const whole = wholeRaw.replace(/^0+(?=\d)/, "");
+  const formattedWhole = whole ? formatNumber(Number(whole)) : "0";
+  if (decimalRaw !== undefined) return `${formattedWhole},${decimalRaw.slice(0, 2)}`;
+  return formattedWhole;
 }
 
 function formatCurrencyAmount(value, currency = "TRY") {
