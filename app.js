@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 01:00";
+const APP_UPDATED_AT = "02.06.2026 01:05";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -127,13 +127,14 @@ function initApp() {
 
 function makeDraft() {
   const members = activeMembers();
+  const signedInUser = state?.users?.find((user) => user.id === state?.signedInUserId);
   const activeUserInProject = members.find((user) => user.id === state?.activeUserId);
 
   return {
     type: "expense",
     emoji: "💸",
     settlement: "in",
-    userId: activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
+    userId: signedInUser?.id || activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
     amountInput: "",
     currency: "TRY",
     exchangeRate: 1,
@@ -466,7 +467,7 @@ function renderAdd() {
   const suggestions = headingSuggestionsFor(type.id);
   const emojiOptions = emojiOptionsFor(type.id);
   const amountValue = draft.amountInput || "";
-  const entryUser = members.find((user) => user.id === currentUser()?.id) || members[0];
+  const entryUser = currentUser() || members[0];
   const dateLabel = {
     expense: "Gider tarihi",
     income: "Gelir tarihi",
@@ -955,7 +956,7 @@ function bindScreen() {
         draft.amountInput = formatAmountInput(form.elements.amount?.value);
         draft.currency = String(form.elements.currency?.value || draft.currency || "TRY");
         draft.exchangeRate = parseAmount(form.elements.exchangeRate?.value || draft.exchangeRate || 1);
-        draft.userId = String(form.elements.userId?.value || draft.userId || "");
+        draft.userId = currentUser()?.id || String(form.elements.userId?.value || draft.userId || "");
         draft.date = String(form.elements.date?.value || draft.date || todayKey());
         draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
       }
@@ -1127,10 +1128,11 @@ function bindScreen() {
 
       const short = String(data.get("shortName") || "").trim() || headingName;
       const heading = ensureHeading(headingName, short, draft.emoji);
-      const userId = String(data.get("userId"));
+      const userId = currentUser()?.id || String(data.get("userId"));
       const date = String(data.get("date") || todayKey());
       const settlement = String(data.get("settlement")) === "in";
 
+      if (userId && activeProject() && !activeProject().memberIds.includes(userId)) activeProject().memberIds.push(userId);
       draft.userId = userId;
       draft.settlement = settlement ? "in" : "out";
       draft.date = date;

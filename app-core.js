@@ -1,12 +1,13 @@
 function makeDraft() {
   const members = activeMembers();
+  const signedInUser = state?.users?.find((user) => user.id === state?.signedInUserId);
   const activeUserInProject = members.find((user) => user.id === state?.activeUserId);
 
   return {
     type: "expense",
     emoji: "💸",
     settlement: "in",
-    userId: activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
+    userId: signedInUser?.id || activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
     amountInput: "",
     currency: "TRY",
     exchangeRate: 1,

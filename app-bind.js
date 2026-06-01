@@ -135,7 +135,7 @@ function bindScreen() {
         draft.amountInput = formatAmountInput(form.elements.amount?.value);
         draft.currency = String(form.elements.currency?.value || draft.currency || "TRY");
         draft.exchangeRate = parseAmount(form.elements.exchangeRate?.value || draft.exchangeRate || 1);
-        draft.userId = String(form.elements.userId?.value || draft.userId || "");
+        draft.userId = currentUser()?.id || String(form.elements.userId?.value || draft.userId || "");
         draft.date = String(form.elements.date?.value || draft.date || todayKey());
         draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
       }
@@ -307,10 +307,11 @@ function bindScreen() {
 
       const short = String(data.get("shortName") || "").trim() || headingName;
       const heading = ensureHeading(headingName, short, draft.emoji);
-      const userId = String(data.get("userId"));
+      const userId = currentUser()?.id || String(data.get("userId"));
       const date = String(data.get("date") || todayKey());
       const settlement = String(data.get("settlement")) === "in";
 
+      if (userId && activeProject() && !activeProject().memberIds.includes(userId)) activeProject().memberIds.push(userId);
       draft.userId = userId;
       draft.settlement = settlement ? "in" : "out";
       draft.date = date;

@@ -117,7 +117,7 @@ function renderAdd() {
   const suggestions = headingSuggestionsFor(type.id);
   const emojiOptions = emojiOptionsFor(type.id);
   const amountValue = draft.amountInput || "";
-  const entryUser = members.find((user) => user.id === currentUser()?.id) || members[0];
+  const entryUser = currentUser() || members[0];
   const dateLabel = {
     expense: "Gider tarihi",
     income: "Gelir tarihi",
