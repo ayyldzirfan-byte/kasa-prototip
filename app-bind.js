@@ -124,7 +124,12 @@ function bindScreen() {
   });
 
   app.querySelectorAll("[data-action='logout']").forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
+      try {
+        if (typeof isCloudReady === "function" && isCloudReady()) await cloudSignOut();
+      } catch (error) {
+        toast(friendlyCloudError(error));
+      }
       state.signedInUserId = "";
       state.activeUserId = "";
       state.activeView = "home";
@@ -211,15 +216,32 @@ function bindScreen() {
 
   const accountForm = app.querySelector("#accountForm");
   if (accountForm) {
-    accountForm.addEventListener("submit", (event) => {
+    accountForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(accountForm);
       const name = String(data.get("userName") || "").trim();
+      const email = String(data.get("email") || "").trim().toLowerCase();
       const password = normalizePassword(data.get("password"));
       if (!name) return toast("Ad soyad yazalım.");
+      if (typeof isCloudReady === "function" && isCloudReady()) {
+        if (!email || !email.includes("@")) return toast("Geçerli bir e-posta yazalım.");
+        if (password.length < 6) return toast("Bulut hesabı için şifre en az 6 karakter olsun.");
+        try {
+          const result = await cloudSignUp({
+            name,
+            email,
+            password,
+            nickname: String(data.get("nickname") || "").trim(),
+          });
+          render();
+          return toast(result.session ? "Hesap açıldı ve giriş yapıldı." : "Hesap açıldı. E-postadaki doğrulama linkini kontrol et.");
+        } catch (error) {
+          return toast(friendlyCloudError(error));
+        }
+      }
       if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
       const user = createUser(name, password, {
-        email: String(data.get("email") || "").trim(),
+        email,
         nickname: String(data.get("nickname") || "").trim(),
         linkToProject: false,
       });
@@ -235,23 +257,41 @@ function bindScreen() {
 
   const firstProjectForm = app.querySelector("#firstProjectForm");
   if (firstProjectForm) {
-    firstProjectForm.addEventListener("submit", (event) => {
+    firstProjectForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(firstProjectForm);
       const name = String(data.get("projectName") || "").trim();
       if (!name) return toast("Kasa adını yazalım.");
       createProject(name, String(data.get("purpose") || "").trim() || "Genel kasa");
-      saveState();
-      render();
-      toast("Kasa oluşturuldu.");
+      try {
+        saveState();
+        if (typeof isCloudReady === "function" && isCloudReady()) await cloudPushState();
+        render();
+        toast("Kasa oluşturuldu.");
+      } catch (error) {
+        toast(friendlyCloudError(error));
+      }
     });
   }
 
   const loginForm = app.querySelector("#loginForm");
   if (loginForm) {
-    loginForm.addEventListener("submit", (event) => {
+    loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(loginForm);
+      if (typeof isCloudReady === "function" && isCloudReady()) {
+        const email = String(data.get("loginEmail") || "").trim().toLowerCase();
+        const password = normalizePassword(data.get("loginPassword"));
+        if (!email || !email.includes("@")) return toast("E-postanı yazalım.");
+        if (!password) return toast("Şifreni yazalım.");
+        try {
+          await cloudSignIn({ email, password });
+          render();
+          return toast("Giriş yapıldı.");
+        } catch (error) {
+          return toast(friendlyCloudError(error));
+        }
+      }
       const user = state.users.find((item) => item.id === String(data.get("loginUserId")));
       if (!state.users.length) return toast("Önce kullanıcı oluştur.");
       if (!user) return toast("Kullanıcı bulunamadı.");
@@ -285,10 +325,19 @@ function bindScreen() {
 
   const joinProjectForm = app.querySelector("#joinProjectForm");
   if (joinProjectForm) {
-    joinProjectForm.addEventListener("submit", (event) => {
+    joinProjectForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const code = normalizeCode(new FormData(joinProjectForm).get("projectCode"));
       if (!code) return toast("Proje kodunu yazalım.");
+      if (typeof isCloudReady === "function" && isCloudReady()) {
+        try {
+          await cloudJoinProjectByCode(code);
+          render();
+          return toast("Kasaya katıldın.");
+        } catch (error) {
+          return toast(friendlyCloudError(error));
+        }
+      }
       const project = state.projects.find((item) => normalizeCode(projectCode(item)) === code);
       if (!project) return toast("Bu kod bu cihazda yok. Gerçekte bulut veritabanından açılacak.");
       const userId = state.activeUserId || state.users[0]?.id;
@@ -422,11 +471,20 @@ function bindScreen() {
   }
 
   app.querySelectorAll("#userForm, #projectUserForm").forEach((userForm) => {
-    userForm.addEventListener("submit", (event) => {
+    userForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(userForm);
       const name = String(data.get("userName") || "").trim();
-      if (!name) return toast("Kasaya eklenecek kullanıcı adını yazalım.");
+      if (!name) return toast((typeof isCloudReady === "function" && isCloudReady()) ? "Kasaya eklenecek e-postayı yazalım." : "Kasaya eklenecek kullanıcı adını yazalım.");
+      if (typeof isCloudReady === "function" && isCloudReady()) {
+        try {
+          await cloudAddMemberByEmail(name);
+          render();
+          return toast("Kullanıcı kasaya eklendi.");
+        } catch (error) {
+          return toast(friendlyCloudError(error));
+        }
+      }
       const result = addUserToActiveProjectByName(name);
       if (result.status === "forbidden") return toast("Kullanıcı eklemeyi sadece kasa sahibi yapar.");
       if (result.status === "missing-user") return toast("Bu adda kullanıcı yok. Önce profilini oluştur.");
@@ -451,15 +509,20 @@ function bindScreen() {
 
   const projectForm = app.querySelector("#projectForm");
   if (projectForm) {
-    projectForm.addEventListener("submit", (event) => {
+    projectForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(projectForm);
       const name = String(data.get("projectName") || "").trim();
       if (!name) return toast("Proje adını yazalım.");
       createProject(name, String(data.get("purpose") || "").trim() || "Genel kasa");
-      saveState();
-      render();
-      toast("Proje eklendi.");
+      try {
+        saveState();
+        if (typeof isCloudReady === "function" && isCloudReady()) await cloudPushState();
+        render();
+        toast("Proje eklendi.");
+      } catch (error) {
+        toast(friendlyCloudError(error));
+      }
     });
   }
 }

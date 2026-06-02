@@ -394,6 +394,7 @@ function renderGroup() {
   const canManageUsers = isProjectOwner(project);
   const owner = projectOwner(project);
   const user = currentUser();
+  const cloudReady = typeof isCloudReady === "function" && isCloudReady();
 
   return `
     <section class="card">
@@ -430,14 +431,16 @@ function renderGroup() {
       <h2>Projeye kişi ekle</h2>
       <p>${
         canManageUsers
-          ? `Önce diğer profili oluştur. Sonra adını buraya yazıp ${project.name} kasasına ekle.`
+          ? cloudReady
+            ? `Diğer kişi önce kendi telefonunda e-posta ile hesap açsın. Sonra e-postasını buraya yazıp ${project.name} kasasına ekle.`
+            : `Önce diğer profili oluştur. Sonra adını buraya yazıp ${project.name} kasasına ekle.`
           : `Şu an ${projectUserLabel(user)} hesabındasın. Kullanıcı eklemek için ${projectUserLabel(owner)} hesabıyla giriş yap.`
       }</p>
       ${
         canManageUsers
           ? `
             <form class="inline-form featured-form" id="projectUserForm">
-              <input class="text-input" name="userName" placeholder="Örn. Havva veya Derya" autocomplete="off" />
+              <input class="text-input" name="userName" placeholder="${cloudReady ? "havva@mail.com" : "Örn. Havva veya Derya"}" autocomplete="${cloudReady ? "email" : "off"}" />
               <button class="primary-button" type="submit">Kasaya ekle</button>
             </form>
           `
@@ -454,7 +457,7 @@ function renderGroup() {
       <div class="section-head">
         <div>
           <h2>Sonraki aşama: proje erişimi</h2>
-          <p>Bu denemede katılımı manuel profil ekleyerek yapıyoruz. Kod/link modeli gerçek çoklu telefon sürümüne kalacak.</p>
+          <p>${cloudReady ? "Bu kodu başka telefondaki kullanıcı girerse aynı kasaya katılır." : "Bu denemede katılımı manuel profil ekleyerek yapıyoruz. Kod/link modeli gerçek çoklu telefon sürümüne kalacak."}</p>
         </div>
       </div>
       <div class="invite-box">
@@ -481,7 +484,7 @@ function renderGroup() {
         canManageUsers
           ? `
             <form class="inline-form" id="userForm">
-              <input class="text-input" name="userName" placeholder="Kullanıcı adı: Havva" autocomplete="off" />
+              <input class="text-input" name="userName" placeholder="${cloudReady ? "E-posta: havva@mail.com" : "Kullanıcı adı: Havva"}" autocomplete="${cloudReady ? "email" : "off"}" />
               <button class="primary-button" type="submit">Kasaya ekle</button>
             </form>
           `

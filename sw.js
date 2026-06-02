@@ -1,14 +1,16 @@
-const CACHE_NAME = "kasa-prototype-v18";
+const CACHE_NAME = "kasa-prototype-v19";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./kasa-extra.css",
+  "./cloud-config.js",
   "./app-state.js",
   "./app-core.js",
   "./app-views.js",
   "./app-bind.js",
   "./app-model.js",
+  "./app-cloud.js",
   "./app-init.js",
   "./manifest.webmanifest",
   "./icon.svg",

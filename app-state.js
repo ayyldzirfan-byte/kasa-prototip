@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 01:34";
+const APP_UPDATED_AT = "02.06.2026 20:42";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -79,7 +79,12 @@ const seedState = {
   activeUserId: "",
   signedInUserId: "",
   pendingLoginUserId: "",
+  pendingLoginEmail: "",
   authMode: "login",
+  cloudEnabled: false,
+  cloudStatus: "",
+  cloudUserId: "",
+  cloudSyncAt: "",
   users: defaultUsers,
   projects: [],
   headings: [],
@@ -93,10 +98,18 @@ let draft;
 const app = document.querySelector("#app");
 const tabs = [...document.querySelectorAll(".tab")];
 
-function initApp() {
+async function initApp() {
   state = normalizeState(loadState());
   state.activeView = "home";
   draft = makeDraft();
+  if (typeof initCloudSession === "function") {
+    try {
+      await initCloudSession();
+    } catch (error) {
+      setCloudStatus(typeof friendlyCloudError === "function" ? friendlyCloudError(error) : "Bulut bağlantısı kurulamadı.");
+    }
+    draft = makeDraft();
+  }
 
   document.querySelector("#demoReset").addEventListener("click", () => {
     localStorage.removeItem(STORAGE_KEY);

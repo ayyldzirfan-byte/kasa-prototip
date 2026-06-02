@@ -74,7 +74,12 @@ function normalizeState(saved) {
     activeUserId,
     signedInUserId,
     pendingLoginUserId,
+    pendingLoginEmail: source.pendingLoginEmail || "",
     authMode: source.authMode === "signup" ? "signup" : "login",
+    cloudEnabled: Boolean(source.cloudEnabled),
+    cloudStatus: source.cloudStatus || "",
+    cloudUserId: source.cloudUserId || "",
+    cloudSyncAt: source.cloudSyncAt || "",
     users,
     projects,
     headings: Array.isArray(source.headings) ? source.headings : [],
@@ -85,6 +90,7 @@ function normalizeState(saved) {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (typeof scheduleCloudSync === "function") scheduleCloudSync();
 }
 
 function render() {
@@ -136,6 +142,7 @@ function backHeader() {
 
 function renderAuth() {
   const isSignup = state.authMode === "signup";
+  const cloudReady = typeof isCloudReady === "function" && isCloudReady();
   const selectedLoginUserId = state.users.some((user) => user.id === state.pendingLoginUserId)
     ? state.pendingLoginUserId
     : state.users[state.users.length - 1]?.id || "";
@@ -147,6 +154,8 @@ function renderAuth() {
         <p class="eyebrow">Geçici isim</p>
         <h2>Kasa</h2>
         <p>Ev, iş ve ortak harcamaları tek kasada takip et.</p>
+        <span class="cloud-pill">${typeof cloudLabel === "function" ? cloudLabel() : "Yerel deneme"}</span>
+        ${state.cloudStatus ? `<span class="field-help">${state.cloudStatus}</span>` : ""}
       </div>
 
       <div class="auth-switch">
@@ -167,8 +176,8 @@ function renderAuth() {
                 <input class="text-input" name="nickname" placeholder="Örn. İrfan, anne, ortak" autocomplete="off" />
               </label>
               <label>
-                <span class="field-label">Telefon / e-posta</span>
-                <input class="text-input" name="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
+                <span class="field-label">E-posta</span>
+                <input class="text-input" name="email" type="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
               </label>
               <label>
                 <span class="field-label">Şifre</span>
@@ -177,7 +186,21 @@ function renderAuth() {
               <button class="primary-button" type="submit">Kullanıcı oluştur</button>
             </form>
           `
-          : state.users.length
+          : cloudReady
+            ? `
+            <form class="form-grid" id="loginForm">
+              <label>
+                <span class="field-label">E-posta</span>
+                <input class="text-input" name="loginEmail" type="email" value="${state.pendingLoginEmail || ""}" placeholder="mail@ornek.com" autocomplete="email" />
+              </label>
+              <label>
+                <span class="field-label">Şifre</span>
+                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" />
+              </label>
+              <button class="primary-button" type="submit">Giriş yap</button>
+            </form>
+          `
+            : state.users.length
             ? `
             <form class="form-grid" id="loginForm">
               <label>
@@ -201,12 +224,13 @@ function renderAuth() {
 
 function renderProjectSetup() {
   const user = currentUser();
+  const cloudReady = typeof isCloudReady === "function" && isCloudReady();
   return `
     <section class="form-card form-grid onboarding-card">
       <div>
         <p class="eyebrow">Kasa kurulumu</p>
         <h2>${profileLabel(user)}, şimdi kasa seç</h2>
-        <p class="hero-note">Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz.</p>
+        <p class="hero-note">${cloudReady ? "Yeni kasa kurabilir veya sana verilen kasa koduyla mevcut kasaya katılabilirsin." : "Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz."}</p>
       </div>
 
       <form class="form-grid" id="firstProjectForm">
@@ -223,6 +247,20 @@ function renderProjectSetup() {
         </datalist>
         <button class="primary-button" type="submit">Kasa oluştur</button>
       </form>
+
+      ${
+        cloudReady
+          ? `
+            <form class="form-grid cloud-join-card" id="joinProjectForm">
+              <label>
+                <span class="field-label">Kasa kodu</span>
+                <input class="text-input" name="projectCode" placeholder="KASA-EVK-1234" autocomplete="off" />
+              </label>
+              <button class="secondary-button" type="submit">Kasa koduyla katıl</button>
+            </form>
+          `
+          : ""
+      }
     </section>
   `;
 }

@@ -61,7 +61,7 @@ function createdByLabel(user) {
 
 function createUser(name, password = "", options = {}) {
   const user = {
-    id: makeId(),
+    id: options.id || makeId(),
     name,
     nickname: String(options.nickname || "").trim(),
     email: options.email || "",
