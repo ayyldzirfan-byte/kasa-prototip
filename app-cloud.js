@@ -75,6 +75,7 @@ async function initCloudSession() {
   if (data.session?.user) {
     await applyCloudUser(data.session.user);
     await loadCloudData();
+    await ensureCloudStarterProject();
     setCloudStatus("Bulut bağlı");
   } else {
     setCloudStatus("Bulut hazır");
@@ -142,6 +143,7 @@ async function cloudSignUp({ name, nickname, email, password }) {
   if (data.session?.user) {
     await applyCloudUser(data.session.user, { name, nickname, email: normalizedEmail });
     await loadCloudData();
+    await ensureCloudStarterProject();
     setCloudStatus("Bulut bağlı");
   } else {
     state.authMode = "login";
@@ -161,6 +163,7 @@ async function cloudSignIn({ email, password }) {
   if (error) throw error;
   await applyCloudUser(data.user);
   await loadCloudData();
+  await ensureCloudStarterProject();
   setCloudStatus("Bulut bağlı");
   saveState();
   return data;
@@ -294,6 +297,15 @@ async function loadCloudData() {
   } finally {
     cloudSyncPaused = false;
   }
+}
+
+async function ensureCloudStarterProject() {
+  if (!isCloudReady() || !state.signedInUserId || state.projects.length) return;
+  const user = currentUser();
+  if (!user) return;
+  createProject(`${profileLabel(user)} Kasası`, "Kendi bütçem");
+  await cloudPushState();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function scheduleCloudSync() {

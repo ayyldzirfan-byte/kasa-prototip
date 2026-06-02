@@ -425,6 +425,16 @@ function renderGroup() {
         </datalist>
         <button class="primary-button" type="submit">Proje ekle</button>
       </form>
+      ${
+        cloudReady
+          ? `
+            <form class="inline-form cloud-join-card" id="joinProjectForm">
+              <input class="text-input" name="projectCode" placeholder="Kasa kodu: KASA-EVK-1234" autocomplete="off" />
+              <button class="secondary-button" type="submit">Kodla katıl</button>
+            </form>
+          `
+          : ""
+      }
     </section>
 
     <section class="card">

@@ -230,7 +230,7 @@ function renderProjectSetup() {
       <div>
         <p class="eyebrow">Kasa kurulumu</p>
         <h2>${profileLabel(user)}, şimdi kasa seç</h2>
-        <p class="hero-note">${cloudReady ? "Yeni kasa kurabilir veya sana verilen kasa koduyla mevcut kasaya katılabilirsin." : "Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz."}</p>
+        <p class="hero-note">${cloudReady ? "Hesabın hazır. Uygulamayı kullanmak için ilk kasanı oluştur." : "Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz."}</p>
       </div>
 
       <form class="form-grid" id="firstProjectForm">
@@ -247,20 +247,6 @@ function renderProjectSetup() {
         </datalist>
         <button class="primary-button" type="submit">Kasa oluştur</button>
       </form>
-
-      ${
-        cloudReady
-          ? `
-            <form class="form-grid cloud-join-card" id="joinProjectForm">
-              <label>
-                <span class="field-label">Kasa kodu</span>
-                <input class="text-input" name="projectCode" placeholder="KASA-EVK-1234" autocomplete="off" />
-              </label>
-              <button class="secondary-button" type="submit">Kasa koduyla katıl</button>
-            </form>
-          `
-          : ""
-      }
     </section>
   `;
 }

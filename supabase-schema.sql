@@ -125,6 +125,20 @@ as $$
   );
 $$;
 
+create or replace function public.kasa_is_project_owner(project_uuid uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.kasa_projects project
+    where project.id = project_uuid
+      and project.created_by = auth.uid()
+  );
+$$;
+
 create or replace function public.join_kasa_project(invite_code text)
 returns uuid
 language plpgsql
@@ -199,6 +213,14 @@ $$;
 grant execute on function public.join_kasa_project(text) to authenticated;
 grant execute on function public.add_kasa_member_by_email(uuid, text) to authenticated;
 
+grant usage on schema public to anon, authenticated;
+grant select, insert, update on public.kasa_profiles to authenticated;
+grant select, insert, update on public.kasa_projects to authenticated;
+grant select, insert, update on public.kasa_project_members to authenticated;
+grant select, insert, update on public.kasa_headings to authenticated;
+grant select, insert, update on public.kasa_entries to authenticated;
+grant select, insert, update on public.kasa_notifications to authenticated;
+
 alter table public.kasa_profiles enable row level security;
 alter table public.kasa_projects enable row level security;
 alter table public.kasa_project_members enable row level security;
@@ -229,7 +251,7 @@ drop policy if exists "projects select members" on public.kasa_projects;
 drop policy if exists "projects insert owner" on public.kasa_projects;
 drop policy if exists "projects update owner" on public.kasa_projects;
 create policy "projects select members" on public.kasa_projects
-  for select using (public.kasa_is_project_member(id));
+  for select using (created_by = auth.uid() or public.kasa_is_project_member(id));
 create policy "projects insert owner" on public.kasa_projects
   for insert with check (created_by = auth.uid());
 create policy "projects update owner" on public.kasa_projects
@@ -239,24 +261,19 @@ drop policy if exists "members select project" on public.kasa_project_members;
 drop policy if exists "members insert owner or self" on public.kasa_project_members;
 drop policy if exists "members update owner" on public.kasa_project_members;
 create policy "members select project" on public.kasa_project_members
-  for select using (public.kasa_is_project_member(project_id));
+  for select using (
+    user_id = auth.uid()
+    or public.kasa_is_project_owner(project_id)
+    or public.kasa_is_project_member(project_id)
+  );
 create policy "members insert owner or self" on public.kasa_project_members
   for insert with check (
     user_id = auth.uid()
-    or exists (
-      select 1 from public.kasa_projects project
-      where project.id = project_id
-        and project.created_by = auth.uid()
-    )
+    or public.kasa_is_project_owner(project_id)
   );
 create policy "members update owner" on public.kasa_project_members
-  for update using (
-    exists (
-      select 1 from public.kasa_projects project
-      where project.id = project_id
-        and project.created_by = auth.uid()
-    )
-  );
+  for update using (public.kasa_is_project_owner(project_id))
+  with check (public.kasa_is_project_owner(project_id));
 
 drop policy if exists "headings select members" on public.kasa_headings;
 drop policy if exists "headings write members" on public.kasa_headings;

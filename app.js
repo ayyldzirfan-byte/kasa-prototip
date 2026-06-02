@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 21:18";
+const APP_UPDATED_AT = "02.06.2026 21:28";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -372,7 +372,7 @@ function renderProjectSetup() {
       <div>
         <p class="eyebrow">Kasa kurulumu</p>
         <h2>${profileLabel(user)}, şimdi kasa seç</h2>
-        <p class="hero-note">${cloudReady ? "Yeni kasa kurabilir veya sana verilen kasa koduyla mevcut kasaya katılabilirsin." : "Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz."}</p>
+        <p class="hero-note">${cloudReady ? "Hesabın hazır. Uygulamayı kullanmak için ilk kasanı oluştur." : "Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz."}</p>
       </div>
 
       <form class="form-grid" id="firstProjectForm">
@@ -389,20 +389,6 @@ function renderProjectSetup() {
         </datalist>
         <button class="primary-button" type="submit">Kasa oluştur</button>
       </form>
-
-      ${
-        cloudReady
-          ? `
-            <form class="form-grid cloud-join-card" id="joinProjectForm">
-              <label>
-                <span class="field-label">Kasa kodu</span>
-                <input class="text-input" name="projectCode" placeholder="KASA-EVK-1234" autocomplete="off" />
-              </label>
-              <button class="secondary-button" type="submit">Kasa koduyla katıl</button>
-            </form>
-          `
-          : ""
-      }
     </section>
   `;
 }
@@ -834,6 +820,16 @@ function renderGroup() {
         </datalist>
         <button class="primary-button" type="submit">Proje ekle</button>
       </form>
+      ${
+        cloudReady
+          ? `
+            <form class="inline-form cloud-join-card" id="joinProjectForm">
+              <input class="text-input" name="projectCode" placeholder="Kasa kodu: KASA-EVK-1234" autocomplete="off" />
+              <button class="secondary-button" type="submit">Kodla katıl</button>
+            </form>
+          `
+          : ""
+      }
     </section>
 
     <section class="card">
@@ -2306,6 +2302,7 @@ async function initCloudSession() {
   if (data.session?.user) {
     await applyCloudUser(data.session.user);
     await loadCloudData();
+    await ensureCloudStarterProject();
     setCloudStatus("Bulut bağlı");
   } else {
     setCloudStatus("Bulut hazır");
@@ -2373,6 +2370,7 @@ async function cloudSignUp({ name, nickname, email, password }) {
   if (data.session?.user) {
     await applyCloudUser(data.session.user, { name, nickname, email: normalizedEmail });
     await loadCloudData();
+    await ensureCloudStarterProject();
     setCloudStatus("Bulut bağlı");
   } else {
     state.authMode = "login";
@@ -2392,6 +2390,7 @@ async function cloudSignIn({ email, password }) {
   if (error) throw error;
   await applyCloudUser(data.user);
   await loadCloudData();
+  await ensureCloudStarterProject();
   setCloudStatus("Bulut bağlı");
   saveState();
   return data;
@@ -2525,6 +2524,15 @@ async function loadCloudData() {
   } finally {
     cloudSyncPaused = false;
   }
+}
+
+async function ensureCloudStarterProject() {
+  if (!isCloudReady() || !state.signedInUserId || state.projects.length) return;
+  const user = currentUser();
+  if (!user) return;
+  createProject(`${profileLabel(user)} Kasası`, "Kendi bütçem");
+  await cloudPushState();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function scheduleCloudSync() {
