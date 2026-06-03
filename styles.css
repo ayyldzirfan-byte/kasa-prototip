@@ -512,6 +512,20 @@ button {
   border-radius: 24px;
 }
 
+.compact-stats {
+  margin-top: 14px;
+}
+
+.stat-card.small {
+  min-height: 82px;
+  padding: 13px;
+  border-radius: 20px;
+}
+
+.stat-card.small .stat-value {
+  font-size: 19px;
+}
+
 .stat-label {
   margin: 0 0 8px;
   color: var(--muted);
@@ -634,6 +648,27 @@ button {
   word-break: break-word;
 }
 
+.media-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.media-gif {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: 4px;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+}
+
 .guess-actions {
   display: flex;
   flex-wrap: wrap;
@@ -642,11 +677,44 @@ button {
 }
 
 .reaction-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   margin-top: 10px;
   padding: 9px 10px;
   border-radius: 14px;
   font-size: 13px;
   font-weight: 800;
+}
+
+.reaction-media,
+.movement-media {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.movement-card {
+  display: grid;
+  gap: 8px;
+}
+
+.movement-card .expense-row {
+  margin: 0;
+}
+
+.movement-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 0 12px 4px 66px;
 }
 
 .reaction-result.correct {
@@ -836,6 +904,40 @@ button {
   display: none;
 }
 
+.media-picker {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(120, 99, 64, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.media-grid,
+.reaction-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.reaction-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.reaction-column {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.reaction-column strong {
+  font-size: 13px;
+}
+
+.compact-pick {
+  min-height: 50px;
+  padding: 10px 12px;
+}
+
 .segmented {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -843,6 +945,10 @@ button {
   padding: 5px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.72);
+}
+
+.segmented-four {
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .segment {
@@ -1033,8 +1139,8 @@ button {
   bottom: max(12px, env(safe-area-inset-bottom));
   left: max(14px, calc((100vw - 430px) / 2 + 14px));
   display: grid;
-  grid-template-columns: 1fr 1.08fr 1fr 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
   max-width: 402px;
   margin: 0 auto;
   padding: 10px;
@@ -1069,7 +1175,7 @@ body[data-view="onboarding"] .tabbar {
   border-radius: 18px;
   background: transparent;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 900;
 }
 

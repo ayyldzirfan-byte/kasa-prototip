@@ -54,6 +54,8 @@ create table if not exists public.kasa_entries (
   entry_date date not null,
   note text default '',
   photo_name text default '',
+  photo_data text default '',
+  locked_notification_id uuid,
   settlement boolean not null default false,
   status text not null check (status in ('done', 'pending')),
   created_at timestamptz not null default now()
@@ -71,10 +73,16 @@ create table if not exists public.kasa_notifications (
   amount numeric not null default 0,
   emoji text default '',
   photo_name text default '',
+  photo_data text default '',
+  gif text default '',
   success_reaction text default 'OK',
   success_photo_name text default '',
+  success_photo_data text default '',
+  success_gif text default '',
   fail_reaction text default 'NO',
   fail_photo_name text default '',
+  fail_photo_data text default '',
+  fail_gif text default '',
   guesses jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now()
 );

@@ -1,3 +1,45 @@
+function formFile(data, name) {
+  const file = data.get(name);
+  return file && typeof file === "object" && file.size ? file : null;
+}
+
+function readImageAsDataUrl(file) {
+  if (!file || typeof FileReader === "undefined") return Promise.resolve("");
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const source = String(reader.result || "");
+      if (!source.startsWith("data:image/")) return resolve(source);
+      if (file.type === "image/gif") return resolve(source);
+
+      const image = new Image();
+      image.onload = () => {
+        const maxSide = 900;
+        const scale = Math.min(1, maxSide / Math.max(image.width || maxSide, image.height || maxSide));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round((image.width || maxSide) * scale));
+        canvas.height = Math.max(1, Math.round((image.height || maxSide) * scale));
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.78));
+      };
+      image.onerror = () => resolve(source);
+      image.src = source;
+    };
+    reader.onerror = () => resolve("");
+    reader.readAsDataURL(file);
+  });
+}
+
+async function mediaFromForm(data, fields) {
+  const file = formFile(data, fields.photo);
+  return {
+    emoji: String(data.get(fields.emoji) || "").trim(),
+    gif: String(data.get(fields.gif) || "").trim(),
+    photoName: file?.name || "",
+    photoData: await readImageAsDataUrl(file),
+  };
+}
+
 function bindScreen() {
   app.querySelectorAll("[data-action='go-back']").forEach((button) => {
     button.addEventListener("click", () => {
@@ -18,6 +60,14 @@ function bindScreen() {
   app.querySelectorAll("[data-action='open-notifications']").forEach((button) => {
     button.addEventListener("click", () => {
       state.activeView = "notifications";
+      saveState();
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-action='open-movements']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.activeView = "movements";
       saveState();
       render();
     });
@@ -167,6 +217,14 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-movement-period]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.movementPeriod = button.dataset.movementPeriod;
+      saveState();
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-entry-type]").forEach((button) => {
     button.addEventListener("click", () => {
       const form = app.querySelector("#entryForm");
@@ -179,8 +237,11 @@ function bindScreen() {
         draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
         draft.notificationMode = String(form.elements.notificationMode?.value || draft.notificationMode || "open");
         draft.notificationEmoji = String(form.elements.notificationEmoji?.value || draft.notificationEmoji || "🎲");
+        draft.notificationGif = String(form.elements.notificationGif?.value || draft.notificationGif || "");
         draft.successReaction = String(form.elements.successReaction?.value || draft.successReaction || "✅");
+        draft.successGif = String(form.elements.successGif?.value || draft.successGif || "");
         draft.failReaction = String(form.elements.failReaction?.value || draft.failReaction || "🙃");
+        draft.failGif = String(form.elements.failGif?.value || draft.failGif || "");
       }
       draft.type = button.dataset.entryType;
       draft.emoji = emojiOptionsFor(draft.type)[0] || entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
@@ -191,7 +252,7 @@ function bindScreen() {
   app.querySelectorAll("[data-chip='emoji']").forEach((button) => {
     button.addEventListener("click", () => {
       draft.emoji = button.dataset.value;
-      render();
+      button.closest(".chips")?.querySelectorAll(".emoji-chip").forEach((chip) => chip.classList.toggle("selected", chip === button));
     });
   });
 
@@ -377,16 +438,19 @@ function bindScreen() {
       });
     }
 
-    entryForm.querySelectorAll("select[name='notificationMode'], input[name='notificationEmoji'], input[name='successReaction'], input[name='failReaction']").forEach((field) => {
+    entryForm.querySelectorAll("select[name='notificationMode'], input[name='notificationEmoji'], input[name='notificationGif'], input[name='successReaction'], input[name='successGif'], input[name='failReaction'], input[name='failGif']").forEach((field) => {
       field.addEventListener("change", () => {
         draft.notificationMode = entryForm.elements.notificationMode?.value || draft.notificationMode;
         draft.notificationEmoji = entryForm.elements.notificationEmoji?.value || draft.notificationEmoji;
+        draft.notificationGif = entryForm.elements.notificationGif?.value || draft.notificationGif;
         draft.successReaction = entryForm.elements.successReaction?.value || draft.successReaction;
+        draft.successGif = entryForm.elements.successGif?.value || draft.successGif;
         draft.failReaction = entryForm.elements.failReaction?.value || draft.failReaction;
+        draft.failGif = entryForm.elements.failGif?.value || draft.failGif;
       });
     });
 
-    entryForm.addEventListener("submit", (event) => {
+    entryForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
       const enteredAmount = parseAmount(data.get("amount"));
@@ -414,6 +478,18 @@ function bindScreen() {
       draft.currency = currency;
       draft.exchangeRate = exchangeRate;
       draft.amountInput = formatAmountInput(data.get("amount"));
+      draft.notificationMode = String(data.get("notificationMode") || draft.notificationMode || "silent");
+      draft.notificationEmoji = String(data.get("notificationEmoji") || draft.notificationEmoji || "🎲").trim();
+      draft.notificationGif = String(data.get("notificationGif") || "").trim();
+      draft.successReaction = String(data.get("successReaction") || draft.successReaction || "✅").trim();
+      draft.successGif = String(data.get("successGif") || "").trim();
+      draft.failReaction = String(data.get("failReaction") || draft.failReaction || "🙃").trim();
+      draft.failGif = String(data.get("failGif") || "").trim();
+
+      const entryPhoto = formFile(data, "photo");
+      const notificationMedia = await mediaFromForm(data, { emoji: "notificationEmoji", gif: "notificationGif", photo: "notificationPhoto" });
+      const successMedia = await mediaFromForm(data, { emoji: "successReaction", gif: "successGif", photo: "successPhoto" });
+      const failMedia = await mediaFromForm(data, { emoji: "failReaction", gif: "failGif", photo: "failPhoto" });
 
       const entry = {
         id: makeId(),
@@ -430,22 +506,30 @@ function bindScreen() {
         userId,
         date,
         note: String(data.get("note") || "").trim(),
-        photoName: data.get("photo")?.name || "",
+        photoName: entryPhoto?.name || "",
+        photoData: await readImageAsDataUrl(entryPhoto),
         settlement,
         status: ["receivable", "payable"].includes(draft.type) ? "pending" : "done",
         createdAt: new Date().toISOString(),
       };
 
       state.entries.unshift(entry);
-      createEntryNotification(entry, {
-        mode: String(data.get("notificationMode") || "silent"),
-        emoji: String(data.get("notificationEmoji") || "").trim() || "🎲",
-        photoName: data.get("notificationPhoto")?.name || "",
-        successReaction: String(data.get("successReaction") || "").trim() || "✅",
-        successPhotoName: data.get("successPhoto")?.name || "",
-        failReaction: String(data.get("failReaction") || "").trim() || "🙃",
-        failPhotoName: data.get("failPhoto")?.name || "",
+      const notification = createEntryNotification(entry, {
+        mode: draft.notificationMode,
+        emoji: notificationMedia.emoji || "🎲",
+        gif: notificationMedia.gif,
+        photoName: notificationMedia.photoName,
+        photoData: notificationMedia.photoData,
+        successReaction: successMedia.emoji || "✅",
+        successGif: successMedia.gif,
+        successPhotoName: successMedia.photoName,
+        successPhotoData: successMedia.photoData,
+        failReaction: failMedia.emoji || "🙃",
+        failGif: failMedia.gif,
+        failPhotoName: failMedia.photoName,
+        failPhotoData: failMedia.photoData,
       });
+      if (notification?.mode === "surprise") entry.lockedNotificationId = notification.id;
 
       saveState();
       state.activeView = "home";

@@ -37,6 +37,7 @@ function setCloudStatus(message) {
 
 function friendlyCloudError(error) {
   const message = error?.message || String(error || "");
+  if (message.includes("column") && message.includes("does not exist")) return "Supabase yeni oyun alanları eksik. supabase-game-fields.sql dosyasını SQL Editor'da çalıştır.";
   if (message.includes("relation") || message.includes("does not exist")) return "Supabase tabloları kurulmamış. supabase-schema.sql dosyasını çalıştırmamız gerekiyor.";
   if (message.includes("row-level security")) return "Supabase izin kuralı engelledi. SQL politikalarını kontrol etmemiz gerekiyor.";
   if (message.includes("Invalid login credentials")) return "E-posta veya şifre hatalı.";
@@ -262,6 +263,8 @@ async function loadCloudData() {
       date: entry.entry_date,
       note: entry.note || "",
       photoName: entry.photo_name || "",
+      photoData: entry.photo_data || "",
+      lockedNotificationId: entry.locked_notification_id || "",
       settlement: Boolean(entry.settlement),
       status: entry.status,
       createdAt: entry.created_at,
@@ -279,10 +282,16 @@ async function loadCloudData() {
       amount: Number(notification.amount || 0),
       emoji: notification.emoji,
       photoName: notification.photo_name || "",
+      photoData: notification.photo_data || "",
+      gif: notification.gif || "",
       successReaction: notification.success_reaction || "✅",
       successPhotoName: notification.success_photo_name || "",
+      successPhotoData: notification.success_photo_data || "",
+      successGif: notification.success_gif || "",
       failReaction: notification.fail_reaction || "🙃",
       failPhotoName: notification.fail_photo_name || "",
+      failPhotoData: notification.fail_photo_data || "",
+      failGif: notification.fail_gif || "",
       guesses: Array.isArray(notification.guesses) ? notification.guesses : [],
       createdAt: notification.created_at,
     }));
@@ -402,6 +411,8 @@ async function cloudPushState() {
         entry_date: entry.date,
         note: entry.note || "",
         photo_name: entry.photoName || "",
+        photo_data: entry.photoData || "",
+        locked_notification_id: entry.lockedNotificationId || null,
         settlement: Boolean(entry.settlement),
         status: entry.status,
         created_at: entry.createdAt || new Date().toISOString(),
@@ -425,10 +436,16 @@ async function cloudPushState() {
         amount: notification.amount,
         emoji: notification.emoji,
         photo_name: notification.photoName || "",
+        photo_data: notification.photoData || "",
+        gif: notification.gif || "",
         success_reaction: notification.successReaction || "✅",
         success_photo_name: notification.successPhotoName || "",
+        success_photo_data: notification.successPhotoData || "",
+        success_gif: notification.successGif || "",
         fail_reaction: notification.failReaction || "🙃",
         fail_photo_name: notification.failPhotoName || "",
+        fail_photo_data: notification.failPhotoData || "",
+        fail_gif: notification.failGif || "",
         guesses: notification.guesses || [],
         created_at: notification.createdAt || new Date().toISOString(),
       }));

@@ -1,64 +1,64 @@
-const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "02.06.2026 21:28";
+﻿const STORAGE_KEY = "kasa-prototype-state-v6";
+const APP_UPDATED_AT = "03.06.2026 22:39";
 
 const entryTypes = [
-  { id: "expense", label: "Gider", emoji: "💸" },
-  { id: "income", label: "Gelir", emoji: "💰" },
-  { id: "receivable", label: "Alacak", emoji: "🤝" },
-  { id: "payable", label: "Ödeme", emoji: "⏰" },
+  { id: "expense", label: "Gider", emoji: "ğŸ’¸" },
+  { id: "income", label: "Gelir", emoji: "ğŸ’°" },
+  { id: "receivable", label: "Alacak", emoji: "ğŸ¤" },
+  { id: "payable", label: "Ã–deme", emoji: "â°" },
 ];
 
 const headingSuggestionGroups = {
   expense: [
-    { name: "Market", shortName: "Market", emoji: "🛒" },
-    { name: "Kira", shortName: "Kira", emoji: "🏠" },
-    { name: "Benzin", shortName: "Yakıt", emoji: "⛽" },
-    { name: "Araç HGS", shortName: "HGS", emoji: "🚗" },
-    { name: "Araç MTV", shortName: "MTV", emoji: "🧾" },
-    { name: "Fatura", shortName: "Fatura", emoji: "💡" },
-    { name: "Altın", shortName: "Haraç", emoji: "🪙" },
-    { name: "Çocuk", shortName: "Mini", emoji: "🍼" },
-    { name: "Tatil", shortName: "Kaçış", emoji: "🏖️" },
-    { name: "Diğer gider", shortName: "Diğer", emoji: "🧾" },
+    { name: "Market", shortName: "Market", emoji: "ğŸ›’" },
+    { name: "Kira", shortName: "Kira", emoji: "ğŸ " },
+    { name: "Benzin", shortName: "YakÄ±t", emoji: "â›½" },
+    { name: "AraÃ§ HGS", shortName: "HGS", emoji: "ğŸš—" },
+    { name: "AraÃ§ MTV", shortName: "MTV", emoji: "ğŸ§¾" },
+    { name: "Fatura", shortName: "Fatura", emoji: "ğŸ’¡" },
+    { name: "AltÄ±n", shortName: "HaraÃ§", emoji: "ğŸª™" },
+    { name: "Ã‡ocuk", shortName: "Mini", emoji: "ğŸ¼" },
+    { name: "Tatil", shortName: "KaÃ§Ä±ÅŸ", emoji: "ğŸ–ï¸" },
+    { name: "DiÄŸer gider", shortName: "DiÄŸer", emoji: "ğŸ§¾" },
   ],
   income: [
-    { name: "Maaş", shortName: "Maaş", emoji: "💼" },
-    { name: "Ek iş", shortName: "Ek gelir", emoji: "⚡" },
-    { name: "Satış", shortName: "Satış", emoji: "🏷️" },
-    { name: "Alacak tahsilatı", shortName: "Tahsilat", emoji: "🤝" },
-    { name: "Kira geliri", shortName: "Kira +", emoji: "🏠" },
-    { name: "Hediye", shortName: "Hediye", emoji: "🎁" },
-    { name: "Tatil katkısı", shortName: "Katkı", emoji: "🏖️" },
-    { name: "Diğer gelir", shortName: "Diğer +", emoji: "💰" },
+    { name: "MaaÅŸ", shortName: "MaaÅŸ", emoji: "ğŸ’¼" },
+    { name: "Ek iÅŸ", shortName: "Ek gelir", emoji: "âš¡" },
+    { name: "SatÄ±ÅŸ", shortName: "SatÄ±ÅŸ", emoji: "ğŸ·ï¸" },
+    { name: "Alacak tahsilatÄ±", shortName: "Tahsilat", emoji: "ğŸ¤" },
+    { name: "Kira geliri", shortName: "Kira +", emoji: "ğŸ " },
+    { name: "Hediye", shortName: "Hediye", emoji: "ğŸ" },
+    { name: "Tatil katkÄ±sÄ±", shortName: "KatkÄ±", emoji: "ğŸ–ï¸" },
+    { name: "DiÄŸer gelir", shortName: "DiÄŸer +", emoji: "ğŸ’°" },
   ],
   receivable: [
-    { name: "Borç verdim", shortName: "Alacak", emoji: "🤝" },
-    { name: "Beklenen ödeme", shortName: "Beklenen", emoji: "📌" },
-    { name: "Tatil katkısı", shortName: "Katkı", emoji: "🏖️" },
-    { name: "İade bekliyor", shortName: "İade", emoji: "↩️" },
+    { name: "BorÃ§ verdim", shortName: "Alacak", emoji: "ğŸ¤" },
+    { name: "Beklenen Ã¶deme", shortName: "Beklenen", emoji: "ğŸ“Œ" },
+    { name: "Tatil katkÄ±sÄ±", shortName: "KatkÄ±", emoji: "ğŸ–ï¸" },
+    { name: "Ä°ade bekliyor", shortName: "Ä°ade", emoji: "â†©ï¸" },
   ],
   payable: [
-    { name: "Kredi kartı", shortName: "Kart", emoji: "💳" },
-    { name: "Kira günü", shortName: "Kira", emoji: "🏠" },
-    { name: "Fatura günü", shortName: "Fatura", emoji: "💡" },
-    { name: "Taksit", shortName: "Taksit", emoji: "🧾" },
+    { name: "Kredi kartÄ±", shortName: "Kart", emoji: "ğŸ’³" },
+    { name: "Kira gÃ¼nÃ¼", shortName: "Kira", emoji: "ğŸ " },
+    { name: "Fatura gÃ¼nÃ¼", shortName: "Fatura", emoji: "ğŸ’¡" },
+    { name: "Taksit", shortName: "Taksit", emoji: "ğŸ§¾" },
   ],
 };
 
 const emojiOptionsByType = {
-  expense: ["💸", "🛒", "🏠", "⛽", "🚗", "💡", "🪙", "🍼", "🏖️", "🧾"],
-  income: ["💰", "💼", "⚡", "🏷️", "🤝", "🏠", "🎁", "🏖️", "📈", "🧾"],
-  receivable: ["🤝", "📌", "↩️", "🏖️", "💬", "🧾"],
-  payable: ["⏰", "💳", "🏠", "💡", "🧾", "📌"],
+  expense: ["ğŸ’¸", "ğŸ›’", "ğŸ ", "â›½", "ğŸš—", "ğŸ’¡", "ğŸª™", "ğŸ¼", "ğŸ–ï¸", "ğŸ§¾"],
+  income: ["ğŸ’°", "ğŸ’¼", "âš¡", "ğŸ·ï¸", "ğŸ¤", "ğŸ ", "ğŸ", "ğŸ–ï¸", "ğŸ“ˆ", "ğŸ§¾"],
+  receivable: ["ğŸ¤", "ğŸ“Œ", "â†©ï¸", "ğŸ–ï¸", "ğŸ’¬", "ğŸ§¾"],
+  payable: ["â°", "ğŸ’³", "ğŸ ", "ğŸ’¡", "ğŸ§¾", "ğŸ“Œ"],
 };
 
 const purposeOptions = [
   "Ev / aile",
-  "Ev arkadaşlığı",
-  "İş ortaklığı",
+  "Ev arkadaÅŸlÄ±ÄŸÄ±",
+  "Ä°ÅŸ ortaklÄ±ÄŸÄ±",
   "Tatil / proje",
-  "Araç giderleri",
-  "Kendi bütçem",
+  "AraÃ§ giderleri",
+  "Kendi bÃ¼tÃ§em",
 ];
 
 const currencyOptions = [
@@ -73,6 +73,7 @@ const defaultUsers = [];
 const seedState = {
   activeView: "home",
   reportPeriod: "month",
+  movementPeriod: "month",
   settlementVisible: false,
   pendingDetail: "",
   activeProjectId: "",
@@ -106,7 +107,7 @@ async function initApp() {
     try {
       await initCloudSession();
     } catch (error) {
-      setCloudStatus(typeof friendlyCloudError === "function" ? friendlyCloudError(error) : "Bulut bağlantısı kurulamadı.");
+      setCloudStatus(typeof friendlyCloudError === "function" ? friendlyCloudError(error) : "Bulut baÄŸlantÄ±sÄ± kurulamadÄ±.");
     }
     draft = makeDraft();
   }
@@ -140,6 +141,7 @@ async function initApp() {
   }
 }
 
+
 function makeDraft() {
   const members = activeMembers();
   const signedInUser = state?.users?.find((user) => user.id === state?.signedInUserId);
@@ -147,7 +149,7 @@ function makeDraft() {
 
   return {
     type: "expense",
-    emoji: "💸",
+    emoji: "ğŸ’¸",
     settlement: "in",
     userId: signedInUser?.id || activeUserInProject?.id || members[0]?.id || state?.activeUserId || state?.users?.[0]?.id || "",
     amountInput: "",
@@ -155,9 +157,12 @@ function makeDraft() {
     exchangeRate: 1,
     date: todayKey(),
     notificationMode: "open",
-    notificationEmoji: "🎲",
-    successReaction: "✅",
-    failReaction: "🙃",
+    notificationEmoji: "ğŸ²",
+    notificationGif: "",
+    successReaction: "âœ…",
+    successGif: "",
+    failReaction: "ğŸ™ƒ",
+    failGif: "",
   };
 }
 
@@ -179,7 +184,7 @@ function normalizeState(saved) {
   const source = saved && typeof saved === "object" ? saved : {};
   const users = (Array.isArray(source.users) && source.users.length ? source.users : seedState.users).map((user) => ({
     id: user.id || makeId(),
-    name: user.name || "Kullanıcı",
+    name: user.name || "KullanÄ±cÄ±",
     nickname: user.nickname || "",
     email: user.email || "",
     password: normalizePassword(user.password),
@@ -207,11 +212,34 @@ function normalizeState(saved) {
   const signedInUserId = users.some((user) => user.id === source.signedInUserId) ? source.signedInUserId : "";
   const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : signedInUserId;
   const pendingLoginUserId = users.some((user) => user.id === source.pendingLoginUserId) ? source.pendingLoginUserId : activeUserId || users[users.length - 1]?.id || "";
+  const reportPeriod = ["day", "week", "month"].includes(source.reportPeriod) ? source.reportPeriod : "month";
+  const movementPeriod = ["day", "week", "month", "all"].includes(source.movementPeriod) ? source.movementPeriod : "month";
+  const entries = Array.isArray(source.entries)
+    ? source.entries.map((entry) => ({
+        ...entry,
+        lockedNotificationId: entry.lockedNotificationId || "",
+        photoData: entry.photoData || "",
+      }))
+    : [];
+  const notifications = Array.isArray(source.notifications)
+    ? source.notifications.map((notification) => ({
+        ...notification,
+        photoData: notification.photoData || "",
+        gif: notification.gif || "",
+        successPhotoData: notification.successPhotoData || "",
+        successGif: notification.successGif || "",
+        failPhotoData: notification.failPhotoData || "",
+        failGif: notification.failGif || "",
+        guesses: Array.isArray(notification.guesses) ? notification.guesses : [],
+      }))
+    : [];
 
   return {
     ...seedState,
     ...source,
     activeView: source.activeView || "home",
+    reportPeriod,
+    movementPeriod,
     activeProjectId,
     activeUserId,
     signedInUserId,
@@ -225,8 +253,8 @@ function normalizeState(saved) {
     users,
     projects,
     headings: Array.isArray(source.headings) ? source.headings : [],
-    entries: Array.isArray(source.entries) ? source.entries : [],
-    notifications: Array.isArray(source.notifications) ? source.notifications : [],
+    entries,
+    notifications,
   };
 }
 
@@ -241,7 +269,7 @@ function render() {
 
   document.body.dataset.view = needsAuth || needsProject ? "onboarding" : state.activeView;
   const updateStamp = document.querySelector(".update-stamp");
-  if (updateStamp) updateStamp.textContent = `Güncellendi ${APP_UPDATED_AT}`;
+  if (updateStamp) updateStamp.textContent = `GÃ¼ncellendi ${APP_UPDATED_AT}`;
   tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.view === state.activeView));
 
   if (needsAuth) {
@@ -259,6 +287,7 @@ function render() {
   const screens = {
     home: renderHome,
     add: renderAdd,
+    movements: renderMovements,
     calendar: renderCalendar,
     report: renderReport,
     group: renderGroup,
@@ -274,8 +303,8 @@ function render() {
 function backHeader() {
   return `
     <div class="back-row">
-      <button class="back-button" data-action="go-back" type="button" aria-label="Ana ekrana dön">
-        <span aria-hidden="true">‹</span>
+      <button class="back-button" data-action="go-back" type="button" aria-label="Ana ekrana dÃ¶n">
+        <span aria-hidden="true">â€¹</span>
         Geri
       </button>
     </div>
@@ -293,16 +322,16 @@ function renderAuth() {
     <section class="auth-card form-grid onboarding-card">
       <div class="brand-lockup">
         <img src="./icon.svg" alt="" />
-        <p class="eyebrow">Geçici isim</p>
+        <p class="eyebrow">GeÃ§ici isim</p>
         <h2>Kasa</h2>
-        <p>Ev, iş ve ortak harcamaları tek kasada takip et.</p>
+        <p>Ev, iÅŸ ve ortak harcamalarÄ± tek kasada takip et.</p>
         <span class="cloud-pill">${typeof cloudLabel === "function" ? cloudLabel() : "Yerel deneme"}</span>
         ${state.cloudStatus ? `<span class="field-help">${state.cloudStatus}</span>` : ""}
       </div>
 
       <div class="auth-switch">
-        <button class="${!isSignup ? "active" : ""}" data-action="auth-mode" data-mode="login" type="button">Giriş yap</button>
-        <button class="${isSignup ? "active" : ""}" data-action="auth-mode" data-mode="signup" type="button">Yeni kullanıcı</button>
+        <button class="${!isSignup ? "active" : ""}" data-action="auth-mode" data-mode="login" type="button">GiriÅŸ yap</button>
+        <button class="${isSignup ? "active" : ""}" data-action="auth-mode" data-mode="signup" type="button">Yeni kullanÄ±cÄ±</button>
       </div>
 
       ${
@@ -311,21 +340,21 @@ function renderAuth() {
             <form class="form-grid" id="accountForm">
               <label>
                 <span class="field-label">Ad soyad</span>
-                <input class="text-input" name="userName" placeholder="Örn. İrfan Ayyıldız" autocomplete="name" />
+                <input class="text-input" name="userName" placeholder="Ã–rn. Ä°rfan AyyÄ±ldÄ±z" autocomplete="name" />
               </label>
               <label>
-                <span class="field-label">Kısa isim / lakap</span>
-                <input class="text-input" name="nickname" placeholder="Örn. İrfan, anne, ortak" autocomplete="off" />
+                <span class="field-label">KÄ±sa isim / lakap</span>
+                <input class="text-input" name="nickname" placeholder="Ã–rn. Ä°rfan, anne, ortak" autocomplete="off" />
               </label>
               <label>
                 <span class="field-label">E-posta</span>
-                <input class="text-input" name="email" type="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
+                <input class="text-input" name="email" type="email" placeholder="Ã–rn. irfan@mail.com" autocomplete="email" />
               </label>
               <label>
-                <span class="field-label">Şifre</span>
+                <span class="field-label">Åifre</span>
                 <input class="text-input" name="password" type="password" placeholder="En az 4 karakter" autocomplete="new-password" />
               </label>
-              <button class="primary-button" type="submit">Kullanıcı oluştur</button>
+              <button class="primary-button" type="submit">KullanÄ±cÄ± oluÅŸtur</button>
             </form>
           `
           : cloudReady
@@ -336,26 +365,26 @@ function renderAuth() {
                 <input class="text-input" name="loginEmail" type="email" value="${state.pendingLoginEmail || ""}" placeholder="mail@ornek.com" autocomplete="email" />
               </label>
               <label>
-                <span class="field-label">Şifre</span>
-                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" />
+                <span class="field-label">Åifre</span>
+                <input class="text-input" name="loginPassword" type="password" placeholder="Åifren" autocomplete="current-password" />
               </label>
-              <button class="primary-button" type="submit">Giriş yap</button>
+              <button class="primary-button" type="submit">GiriÅŸ yap</button>
             </form>
           `
             : state.users.length
             ? `
             <form class="form-grid" id="loginForm">
               <label>
-                <span class="field-label">Kullanıcı</span>
+                <span class="field-label">KullanÄ±cÄ±</span>
                 <select class="select-input" name="loginUserId">
-                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${profileLabel(user)}${user.email ? ` · ${user.email}` : ""}</option>`).join("")}
+                  ${state.users.map((user) => `<option value="${user.id}"${user.id === selectedLoginUserId ? " selected" : ""}>${profileLabel(user)}${user.email ? ` Â· ${user.email}` : ""}</option>`).join("")}
                 </select>
               </label>
               <label>
-                <span class="field-label">Şifre</span>
-                <input class="text-input" name="loginPassword" type="password" placeholder="Şifren" autocomplete="current-password" />
+                <span class="field-label">Åifre</span>
+                <input class="text-input" name="loginPassword" type="password" placeholder="Åifren" autocomplete="current-password" />
               </label>
-              <button class="primary-button" type="submit">Giriş yap</button>
+              <button class="primary-button" type="submit">GiriÅŸ yap</button>
             </form>
           `
             : ""
@@ -371,45 +400,46 @@ function renderProjectSetup() {
     <section class="form-card form-grid onboarding-card">
       <div>
         <p class="eyebrow">Kasa kurulumu</p>
-        <h2>${profileLabel(user)}, şimdi kasa seç</h2>
-        <p class="hero-note">${cloudReady ? "Hesabın hazır. Uygulamayı kullanmak için ilk kasanı oluştur." : "Deneme sürümünde önce kendi kasanı kur. Diğer profilleri daha sonra aynı projenin içine manuel ekleyeceğiz."}</p>
+        <h2>${profileLabel(user)}, ÅŸimdi kasa seÃ§</h2>
+        <p class="hero-note">${cloudReady ? "HesabÄ±n hazÄ±r. UygulamayÄ± kullanmak iÃ§in ilk kasanÄ± oluÅŸtur." : "Deneme sÃ¼rÃ¼mÃ¼nde Ã¶nce kendi kasanÄ± kur. DiÄŸer profilleri daha sonra aynÄ± projenin iÃ§ine manuel ekleyeceÄŸiz."}</p>
       </div>
 
       <form class="form-grid" id="firstProjectForm">
         <label>
-          <span class="field-label">Kasa / proje adı</span>
-          <input class="text-input" name="projectName" placeholder="Örn. Ev Kasası" autocomplete="off" />
+          <span class="field-label">Kasa / proje adÄ±</span>
+          <input class="text-input" name="projectName" placeholder="Ã–rn. Ev KasasÄ±" autocomplete="off" />
         </label>
         <label>
-          <span class="field-label">Amaç</span>
-          <input class="text-input" name="purpose" list="purposeList" placeholder="Ev, iş, ev arkadaşlığı..." autocomplete="off" />
+          <span class="field-label">AmaÃ§</span>
+          <input class="text-input" name="purpose" list="purposeList" placeholder="Ev, iÅŸ, ev arkadaÅŸlÄ±ÄŸÄ±..." autocomplete="off" />
         </label>
         <datalist id="purposeList">
           ${purposeOptions.map((purpose) => `<option value="${purpose}"></option>`).join("")}
         </datalist>
-        <button class="primary-button" type="submit">Kasa oluştur</button>
+        <button class="primary-button" type="submit">Kasa oluÅŸtur</button>
       </form>
     </section>
   `;
 }
 
+
 function renderHome() {
   const project = activeProject();
   const user = currentUser();
   const totals = calculateTotals(projectEntries());
-  const recent = actualEntries().slice(0, 4);
-  const upcoming = pendingEntries().slice(0, 3);
+  const recent = actualEntries().slice(0, 3);
+  const upcoming = pendingEntries().slice(0, 2);
   const notificationCount = notificationEntries().length;
 
   return `
     <section class="account-strip">
       <div>
-        <span class="field-label">Aktif kullanıcı</span>
+        <span class="field-label">Aktif kullanÄ±cÄ±</span>
         <strong>${projectUserLabel(user)}</strong>
       </div>
       <div class="account-actions">
         <button class="tiny-button" data-action="open-notifications" type="button">Bildirimler${notificationCount ? ` (${notificationCount})` : ""}</button>
-        <button class="tiny-button" data-action="logout" type="button">Çıkış</button>
+        <button class="tiny-button" data-action="logout" type="button">Ã‡Ä±kÄ±ÅŸ</button>
       </div>
     </section>
 
@@ -418,9 +448,9 @@ function renderHome() {
         <div>
           <p class="hero-title">${project.purpose}</p>
           <p class="hero-money">${money(totals.comfortable)}</p>
-          <p class="hero-note">Rahat kalan: gerçek kasa + beklenenler - yaklaşanlar</p>
+          <p class="hero-note">Rahat kalan: gerÃ§ek kasa + beklenenler - yaklaÅŸanlar</p>
         </div>
-        <span class="quick-pill">${totals.comfortable >= 0 ? "İyi" : "Dikkat"}</span>
+        <span class="quick-pill">${totals.comfortable >= 0 ? "Ä°yi" : "Dikkat"}</span>
       </div>
     </section>
 
@@ -428,9 +458,9 @@ function renderHome() {
       <div class="section-head">
         <div>
           <h2>${project.name}</h2>
-          <p>${activeMembers().map((user) => projectUserLabel(user)).join(", ") || "Henüz üye yok"}</p>
+          <p>${activeMembers().map((user) => projectUserLabel(user)).join(", ") || "HenÃ¼z Ã¼ye yok"}</p>
         </div>
-        <button class="tiny-button" data-action="open-group" type="button">Yönet</button>
+        <button class="tiny-button" data-action="open-group" type="button">YÃ¶net</button>
       </div>
       <label style="display:block; margin-top: 12px;">
         <span class="field-label">Aktif proje</span>
@@ -442,11 +472,11 @@ function renderHome() {
 
     <section class="quick-actions">
       <button class="action-button income" data-action="go-add-income" type="button">
-        <span>💰</span>
+        <span>ğŸ’°</span>
         Gelir ekle
       </button>
       <button class="action-button expense" data-action="go-add-expense" type="button">
-        <span>💸</span>
+        <span>ğŸ’¸</span>
         Gider ekle
       </button>
     </section>
@@ -457,7 +487,7 @@ function renderHome() {
         <p class="stat-value positive">${money(totals.income)}</p>
       </article>
       <article class="stat-card">
-        <p class="stat-label">Çıkan</p>
+        <p class="stat-label">Ã‡Ä±kan</p>
         <p class="stat-value warning">${money(totals.expense)}</p>
       </article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable">
@@ -465,7 +495,7 @@ function renderHome() {
         <p class="stat-value">${money(totals.receivable)}</p>
       </article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="payable">
-        <p class="stat-label">Yaklaşan</p>
+        <p class="stat-label">YaklaÅŸan</p>
         <p class="stat-value">${money(totals.payable)}</p>
       </article>
     </section>
@@ -476,8 +506,8 @@ function renderHome() {
           <section class="card">
             <div class="section-head">
               <div>
-                <h2>${state.pendingDetail === "receivable" ? "Beklenen gelirler" : "Yaklaşan ödemeler"}</h2>
-                <p>${state.pendingDetail === "receivable" ? "Şu gelecek." : "Bu gidecek."}</p>
+                <h2>${state.pendingDetail === "receivable" ? "Beklenen gelirler" : "YaklaÅŸan Ã¶demeler"}</h2>
+                <p>${state.pendingDetail === "receivable" ? "Åu gelecek." : "Bu gidecek."}</p>
               </div>
               <button class="tiny-button" data-action="hide-pending-detail" type="button">Kapat</button>
             </div>
@@ -490,24 +520,13 @@ function renderHome() {
     <section class="card">
       <div class="section-head">
         <div>
-          <h2>Başlıklar</h2>
-          <p>${projectHeadings().length ? `${projectHeadings().length} özel başlık var.` : "Başlıkları kullanıcı belirler. Hazır kalıp yok."}</p>
-        </div>
-        <button class="tiny-button" data-action="open-headings" type="button">Düzenle</button>
-      </div>
-      ${projectHeadings().length ? headingPreview() : `<div class="empty-state" style="margin-top: 12px;">Market, kira, haraç, HGS... Kasanın dilini sen kur.</div>`}
-    </section>
-
-    <section class="card">
-      <div class="section-head">
-        <div>
-          <h2>Yaklaşanlar</h2>
-          <p>Ödeme hatırlatıcıları burada görünür.</p>
+          <h2>YaklaÅŸanlar</h2>
+          <p>Ã–deme hatÄ±rlatÄ±cÄ±larÄ± burada gÃ¶rÃ¼nÃ¼r.</p>
         </div>
         <button class="tiny-button" data-action="go-add-payable" type="button">Ekle</button>
       </div>
       <div class="expense-list">
-        ${upcoming.length ? upcoming.map(pendingRow).join("") : `<div class="empty-state">Henüz beklenen alacak veya yaklaşan ödeme yok.</div>`}
+        ${upcoming.length ? upcoming.map(pendingRow).join("") : `<div class="empty-state">HenÃ¼z beklenen alacak veya yaklaÅŸan Ã¶deme yok.</div>`}
       </div>
     </section>
 
@@ -515,12 +534,12 @@ function renderHome() {
       <div class="section-head">
         <div>
           <h2>Son hareketler</h2>
-          <p>Gerçekleşen gelir ve giderler.</p>
+          <p>Detay ve oyun sonucu iÃ§in tÃ¼mÃ¼nÃ¼ aÃ§.</p>
         </div>
-        <button class="tiny-button" data-action="go-add-expense" type="button">Ekle</button>
+        <button class="tiny-button" data-action="open-movements" type="button">TÃ¼mÃ¼</button>
       </div>
       <div class="expense-list">
-        ${recent.length ? recent.map(entryRow).join("") : `<div class="empty-state">Kasa boş. İlk hareketi ekleyerek başlayalım.</div>`}
+        ${recent.length ? recent.map(entryRow).join("") : `<div class="empty-state">Kasa boÅŸ. Ä°lk hareketi ekleyerek baÅŸlayalÄ±m.</div>`}
       </div>
     </section>
   `;
@@ -537,24 +556,24 @@ function renderAdd() {
     expense: "Gider tarihi",
     income: "Gelir tarihi",
     receivable: "Beklenen gelir tarihi",
-    payable: "Beklenen ödeme tarihi",
+    payable: "Beklenen Ã¶deme tarihi",
   }[type.id];
   const typeGuidance = {
-    expense: "Para çıktıysa gider. İleri tarihli ödemeyi Takvim için Ödeme olarak gir.",
-    income: "Para yattıysa gelir. Maaş yatacaksa Alacak seçip beklenen tarihi yaz.",
-    receivable: "Henüz yatmamış gelir. Takvimde beklenen para olarak görünür.",
-    payable: "Henüz ödenmemiş gider. Takvimde yaklaşan ödeme olarak görünür.",
+    expense: "Para Ã§Ä±ktÄ±ysa gider. Ä°leri tarihli Ã¶demeyi Takvim iÃ§in Ã–deme olarak gir.",
+    income: "Para yattÄ±ysa gelir. MaaÅŸ yatacaksa Alacak seÃ§ip beklenen tarihi yaz.",
+    receivable: "HenÃ¼z yatmamÄ±ÅŸ gelir. Takvimde beklenen para olarak gÃ¶rÃ¼nÃ¼r.",
+    payable: "HenÃ¼z Ã¶denmemiÅŸ gider. Takvimde yaklaÅŸan Ã¶deme olarak gÃ¶rÃ¼nÃ¼r.",
   }[type.id];
-  const headingLabel = type.id === "income" || type.id === "receivable" ? "Gelir başlığı" : "Gider başlığı";
-  const headingPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Maaş, ek iş, satış" : "Örn. Kira, HGS, market";
-  const shortPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. maaş günü, yan gelir, tahsilat" : "Örn. haraç, yol yedi, ayın tokadı";
-  const notePlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Haziran maaşı, prim dahil" : "Örn. kasada farklı çıktı, ortak ödeme";
+  const headingLabel = type.id === "income" || type.id === "receivable" ? "Gelir baÅŸlÄ±ÄŸÄ±" : "Gider baÅŸlÄ±ÄŸÄ±";
+  const headingPlaceholder = type.id === "income" || type.id === "receivable" ? "Ã–rn. MaaÅŸ, ek iÅŸ, satÄ±ÅŸ" : "Ã–rn. Kira, HGS, market";
+  const shortPlaceholder = type.id === "income" || type.id === "receivable" ? "Ã–rn. maaÅŸ gÃ¼nÃ¼, yan gelir, tahsilat" : "Ã–rn. haraÃ§, yol yedi, ayÄ±n tokadÄ±";
+  const notePlaceholder = type.id === "income" || type.id === "receivable" ? "Ã–rn. Haziran maaÅŸÄ±, prim dahil" : "Ã–rn. kasada farklÄ± Ã§Ä±ktÄ±, ortak Ã¶deme";
   return `
     <form class="form-card form-grid" id="entryForm">
       <div class="section-head">
         <div>
           <h2>${type.label} hareketi ekle</h2>
-          <p>${activeProject().name} içine kayıt düşer.</p>
+          <p>${activeProject().name} iÃ§ine kayÄ±t dÃ¼ÅŸer.</p>
         </div>
       </div>
 
@@ -578,7 +597,7 @@ function renderAdd() {
         </label>
         <label class="fx-rate-field ${draft.currency === "TRY" ? "is-hidden" : ""}">
           <span class="field-label">Kur</span>
-          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="Örn. 32,5" value="${draft.exchangeRate || 1}" autocomplete="off" />
+          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="Ã–rn. 32,5" value="${draft.exchangeRate || 1}" autocomplete="off" />
         </label>
       </div>
 
@@ -586,16 +605,16 @@ function renderAdd() {
         <label>
           <span class="field-label">${dateLabel}</span>
           <input class="select-input" name="date" type="date" value="${draft.date || todayKey()}" />
-          <span class="field-help">Maaş her ayın 1'inde yatıyorsa o günü seç.</span>
+          <span class="field-help">MaaÅŸ her ayÄ±n 1'inde yatÄ±yorsa o gÃ¼nÃ¼ seÃ§.</span>
         </label>
         ${
           type.id === "expense"
             ? `
               <label>
-                <span class="field-label">Hesaplaşma</span>
+                <span class="field-label">HesaplaÅŸma</span>
                 <select class="select-input" name="settlement">
                   <option value="in" ${draft.settlement === "in" ? "selected" : ""}>Dahil</option>
-                  <option value="out" ${draft.settlement === "out" ? "selected" : ""}>Dahil değil</option>
+                  <option value="out" ${draft.settlement === "out" ? "selected" : ""}>Dahil deÄŸil</option>
                 </select>
               </label>
             `
@@ -609,12 +628,12 @@ function renderAdd() {
       </div>
 
       <div>
-        <label class="field-label" for="shortName">Kısa isim / lakap</label>
+        <label class="field-label" for="shortName">KÄ±sa isim / lakap</label>
         <input class="text-input" id="shortName" name="shortName" placeholder="${shortPlaceholder}" autocomplete="off" />
       </div>
 
       <div>
-        <span class="field-label">Öneriler</span>
+        <span class="field-label">Ã–neriler</span>
         <div class="chips">
           ${suggestions.map((item) => `<button class="chip" data-suggestion="${item.name}" data-short="${item.shortName}" data-emoji="${item.emoji}" type="button">${item.emoji} ${item.name}</button>`).join("")}
         </div>
@@ -638,40 +657,59 @@ function renderAdd() {
                 <label>
                   <span class="field-label">Bildirim modu</span>
                   <select class="select-input" name="notificationMode">
-                    <option value="open" ${draft.notificationMode === "open" ? "selected" : ""}>Açık bildir</option>
-                    <option value="surprise" ${draft.notificationMode === "surprise" ? "selected" : ""}>Sürpriz tahmin</option>
+                    <option value="open" ${draft.notificationMode === "open" ? "selected" : ""}>AÃ§Ä±k bildir</option>
+                    <option value="surprise" ${draft.notificationMode === "surprise" ? "selected" : ""}>SÃ¼rpriz tahmin</option>
                     <option value="silent" ${draft.notificationMode === "silent" ? "selected" : ""}>Sessiz kaydet</option>
                   </select>
                 </label>
-                <div class="grid-2">
-                  <label>
-                    <span class="field-label">Bildirim emoji</span>
-                    <input class="text-input" name="notificationEmoji" maxlength="4" value="${draft.notificationEmoji || "🎲"}" autocomplete="off" />
-                  </label>
-                  <label>
-                    <span class="field-label">Bildirim foto</span>
-                    <input class="text-input" name="notificationPhoto" type="file" accept="image/*" />
-                  </label>
+                <div class="media-picker">
+                  <div>
+                    <span class="field-label">Bildirim medyasÄ±</span>
+                    <p class="field-help">Emoji, GIF/sticker linki veya fotoÄŸraf aynÄ± mesaj alanÄ± gibi Ã§alÄ±ÅŸÄ±r.</p>
+                  </div>
+                  <div class="media-grid">
+                    <label>
+                      <span class="field-label">Emoji</span>
+                      <input class="text-input" name="notificationEmoji" maxlength="4" value="${draft.notificationEmoji || "ğŸ²"}" autocomplete="off" />
+                    </label>
+                    <label>
+                      <span class="field-label">GIF / sticker</span>
+                      <input class="text-input" name="notificationGif" placeholder="Link veya kÄ±sa ad" value="${draft.notificationGif || ""}" autocomplete="off" />
+                    </label>
+                    <label class="photo-pick compact-pick">
+                      <span>FotoÄŸraf</span>
+                      <strong>SeÃ§</strong>
+                      <input name="notificationPhoto" type="file" accept="image/*" />
+                    </label>
+                  </div>
                 </div>
-                <div class="grid-2">
-                  <label>
-                    <span class="field-label">Doğru tepki</span>
-                    <input class="text-input" name="successReaction" value="${draft.successReaction || "✅"}" autocomplete="off" />
-                  </label>
-                  <label>
-                    <span class="field-label">Yanlış tepki</span>
-                    <input class="text-input" name="failReaction" value="${draft.failReaction || "🙃"}" autocomplete="off" />
-                  </label>
-                </div>
-                <div class="grid-2">
-                  <label>
-                    <span class="field-label">Doğru foto/sticker</span>
-                    <input class="text-input" name="successPhoto" type="file" accept="image/*" />
-                  </label>
-                  <label>
-                    <span class="field-label">Yanlış foto/sticker</span>
-                    <input class="text-input" name="failPhoto" type="file" accept="image/*" />
-                  </label>
+                <div class="media-picker">
+                  <div>
+                    <span class="field-label">Tahmin sonrasÄ± tepkiler</span>
+                    <p class="field-help">DoÄŸru ve yanlÄ±ÅŸ cevap iÃ§in ayrÄ± medya seÃ§ilebilir.</p>
+                  </div>
+                  <div class="reaction-grid">
+                    <div class="reaction-column">
+                      <strong>DoÄŸru</strong>
+                      <input class="text-input" name="successReaction" value="${draft.successReaction || "âœ…"}" autocomplete="off" />
+                      <input class="text-input" name="successGif" placeholder="GIF / sticker linki" value="${draft.successGif || ""}" autocomplete="off" />
+                      <label class="photo-pick compact-pick">
+                        <span>FotoÄŸraf</span>
+                        <strong>SeÃ§</strong>
+                        <input name="successPhoto" type="file" accept="image/*" />
+                      </label>
+                    </div>
+                    <div class="reaction-column">
+                      <strong>YanlÄ±ÅŸ</strong>
+                      <input class="text-input" name="failReaction" value="${draft.failReaction || "ğŸ™ƒ"}" autocomplete="off" />
+                      <input class="text-input" name="failGif" placeholder="GIF / sticker linki" value="${draft.failGif || ""}" autocomplete="off" />
+                      <label class="photo-pick compact-pick">
+                        <span>FotoÄŸraf</span>
+                        <strong>SeÃ§</strong>
+                        <input name="failPhoto" type="file" accept="image/*" />
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </details>
@@ -682,17 +720,67 @@ function renderAdd() {
       <label>
         <span class="field-label">Not (opsiyonel)</span>
         <input class="text-input" name="note" placeholder="${notePlaceholder}" autocomplete="off" />
-        <span class="field-help">Hesaba katılmaz; sadece hareketin açıklaması olarak saklanır.</span>
+        <span class="field-help">Hesaba katÄ±lmaz; sadece hareketin aÃ§Ä±klamasÄ± olarak saklanÄ±r.</span>
       </label>
 
       <label class="photo-pick">
-        <span>Fiş, belge veya ürün fotoğrafı ekle (opsiyonel)</span>
-        <strong>Seç</strong>
+        <span>FiÅŸ, belge veya Ã¼rÃ¼n fotoÄŸrafÄ± ekle (opsiyonel)</span>
+        <strong>SeÃ§</strong>
         <input id="photoInput" name="photo" type="file" accept="image/*" />
       </label>
 
       <button class="primary-button" type="submit">Kaydet</button>
     </form>
+  `;
+}
+
+function renderMovements() {
+  const period = state.movementPeriod || "month";
+  const entries = actualEntries().filter((entry) => isInPeriod(entry.date, period));
+  const totals = calculateTotals(entries);
+  const label = periodLabel(period);
+
+  return `
+    <section class="segmented segmented-four">
+      ${[
+        ["day", "GÃ¼n"],
+        ["week", "Hafta"],
+        ["month", "Ay"],
+        ["all", "TÃ¼mÃ¼"],
+      ].map(([value, labelText]) => `<button class="segment ${period === value ? "active" : ""}" data-movement-period="${value}" type="button">${labelText}</button>`).join("")}
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>${label} hareketleri</h2>
+          <p>GÃ¶rÃ¼nen kayÄ±tlar, tamamlanan tahmin oyunlarÄ±na gÃ¶re hesaplanÄ±r.</p>
+        </div>
+        <span class="quick-pill">${entries.length} kayÄ±t</span>
+      </div>
+      <div class="grid-2 compact-stats">
+        <article class="stat-card small">
+          <p class="stat-label">Giren</p>
+          <p class="stat-value positive">${money(totals.income)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Ã‡Ä±kan</p>
+          <p class="stat-value warning">${money(totals.expense)}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Detay</h2>
+          <p>FotoÄŸraf, not, dÃ¶viz ve oyun sonucu burada gÃ¶rÃ¼nÃ¼r.</p>
+        </div>
+      </div>
+      <div class="expense-list">
+        ${entries.length ? entries.map(movementEntryRow).join("") : `<div class="empty-state">Bu dÃ¶nem iÃ§in gÃ¶rÃ¼nen hareket yok.</div>`}
+      </div>
+    </section>
   `;
 }
 
@@ -705,19 +793,19 @@ function renderCalendar() {
       <div class="section-head">
         <div>
           <h2>Takvim</h2>
-          <p>Beklenen alacaklar ve yaklaşan ödemeler.</p>
+          <p>Beklenen alacaklar ve yaklaÅŸan Ã¶demeler.</p>
         </div>
         <button class="tiny-button" data-action="go-add-payable" type="button">Ekle</button>
       </div>
       <div class="expense-list">
-        ${pending.length ? pending.map(pendingRow).join("") : `<div class="empty-state">Takvim boş. Kira, MTV, müşteri ödemesi gibi şeyleri ekleyebilirsin.</div>`}
+        ${pending.length ? pending.map(pendingRow).join("") : `<div class="empty-state">Takvim boÅŸ. Kira, MTV, mÃ¼ÅŸteri Ã¶demesi gibi ÅŸeyleri ekleyebilirsin.</div>`}
       </div>
     </section>
 
     <section class="card">
-      <h2>Son tarihli kayıtlar</h2>
+      <h2>Son tarihli kayÄ±tlar</h2>
       <div class="expense-list">
-        ${actual.length ? actual.map(entryRow).join("") : `<div class="empty-state">Gerçekleşmiş kayıt yok.</div>`}
+        ${actual.length ? actual.map(entryRow).join("") : `<div class="empty-state">GerÃ§ekleÅŸmiÅŸ kayÄ±t yok.</div>`}
       </div>
     </section>
   `;
@@ -730,12 +818,12 @@ function renderNotifications() {
       <div class="section-head">
         <div>
           <h2>Bildirimler</h2>
-          <p>Bu ekranda sadece bu profile gelen proje bildirimleri görünür.</p>
+          <p>Bu ekranda sadece bu profile gelen proje bildirimleri gÃ¶rÃ¼nÃ¼r.</p>
         </div>
         <span class="quick-pill">${notifications.length}</span>
       </div>
       <div class="expense-list">
-        ${notifications.length ? notifications.map(notificationRow).join("") : `<div class="empty-state">Şu an bu profile gelen bildirim yok.</div>`}
+        ${notifications.length ? notifications.map(notificationRow).join("") : `<div class="empty-state">Åu an bu profile gelen bildirim yok.</div>`}
       </div>
     </section>
   `;
@@ -745,12 +833,13 @@ function renderReport() {
   const period = state.reportPeriod;
   const entries = actualEntries().filter((entry) => isInPeriod(entry.date, period));
   const totals = calculateTotals(entries);
-  const label = period === "day" ? "Bugün" : period === "week" ? "Bu hafta" : "Bu ay";
+  const label = periodLabel(period);
+  const netClass = totals.actual >= 0 ? "positive" : "warning";
 
   return `
     <section class="segmented">
       ${[
-        ["day", "Gün"],
+        ["day", "GÃ¼n"],
         ["week", "Hafta"],
         ["month", "Ay"],
       ].map(([value, labelText]) => `<button class="segment ${period === value ? "active" : ""}" data-period="${value}" type="button">${labelText}</button>`).join("")}
@@ -760,24 +849,54 @@ function renderReport() {
       <div class="section-head">
         <div>
           <h2>${label} raporu</h2>
-          <p>Giren ${money(totals.income)}, çıkan ${money(totals.expense)}.</p>
+          <p>Giren ${money(totals.income)}, Ã§Ä±kan ${money(totals.expense)}, net ${money(totals.actual)}.</p>
         </div>
-        <span class="quick-pill">${entries.length} kayıt</span>
+        <span class="quick-pill">${entries.length} kayÄ±t</span>
+      </div>
+      <div class="grid-2 compact-stats">
+        <article class="stat-card small">
+          <p class="stat-label">Giren</p>
+          <p class="stat-value positive">${money(totals.income)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Ã‡Ä±kan</p>
+          <p class="stat-value warning">${money(totals.expense)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Net</p>
+          <p class="stat-value ${netClass}">${money(totals.actual)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Ortalama</p>
+          <p class="stat-value">${money(entries.length ? totals.expense / entries.length : 0)}</p>
+        </article>
       </div>
       <div class="bars" style="margin-top: 16px;">
         ${headingBars(entries)}
       </div>
     </section>
 
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Rapor detayÄ±</h2>
+          <p>Bu dÃ¶nemde gÃ¶rÃ¼nen gelir ve giderler.</p>
+        </div>
+      </div>
+      <div class="expense-list">
+        ${entries.length ? entries.map(movementEntryRow).join("") : `<div class="empty-state">Bu dÃ¶nem iÃ§in raporlanacak hareket yok.</div>`}
+      </div>
+    </section>
+
     <section class="receipt-card">
-      <h2 class="receipt-title">KASA FİŞİ</h2>
+      <h2 class="receipt-title">KASA FÄ°ÅÄ°</h2>
       <div class="receipt-line"><span>${label} giren</span><strong>${money(totals.income)}</strong></div>
-      <div class="receipt-line"><span>${label} çıkan</span><strong>${money(totals.expense)}</strong></div>
+      <div class="receipt-line"><span>${label} Ã§Ä±kan</span><strong>${money(totals.expense)}</strong></div>
       <div class="receipt-line"><span>Net</span><strong>${money(totals.actual)}</strong></div>
       ${exchangeReceiptLines(entries)}
-      <div class="receipt-line"><span>En hareketli başlık</span><strong>${topHeading(entries)}</strong></div>
-      <p class="receipt-comment">${entries.length ? "Kasa konuştu, fiş çıktı." : "Kasa bugün sessiz."}</p>
-      <button class="share-button" data-action="share-receipt" type="button">Fişi paylaş</button>
+      <div class="receipt-line"><span>En hareketli baÅŸlÄ±k</span><strong>${topHeading(entries)}</strong></div>
+      <p class="receipt-comment">${entries.length ? "Kasa konuÅŸtu, fiÅŸ Ã§Ä±ktÄ±." : "Kasa bugÃ¼n sessiz."}</p>
+      <button class="share-button" data-action="share-receipt" type="button">FiÅŸi paylaÅŸ</button>
     </section>
   `;
 }
@@ -796,16 +915,16 @@ function renderGroup() {
       <div class="section-head">
         <div>
           <h2>Projelerim</h2>
-          <p>Proje seç, üyeleri bağla, gelir/gider senaryosunu kur.</p>
+          <p>Proje seÃ§, Ã¼yeleri baÄŸla, gelir/gider senaryosunu kur.</p>
         </div>
       </div>
       <div class="quick-actions compact">
         <button class="action-button income" data-action="go-add-income" type="button">
-          <span>💰</span>
+          <span>ğŸ’°</span>
           Gelir ekle
         </button>
         <button class="action-button expense" data-action="go-add-expense" type="button">
-          <span>💸</span>
+          <span>ğŸ’¸</span>
           Gider ekle
         </button>
       </div>
@@ -813,8 +932,8 @@ function renderGroup() {
         ${state.projects.map(projectRow).join("")}
       </div>
       <form class="inline-form" id="projectForm">
-        <input class="text-input" name="projectName" placeholder="Yeni proje adı" autocomplete="off" />
-        <input class="text-input" name="purpose" list="purposeList" placeholder="Kasa amacı: Ev, iş, araç..." autocomplete="off" />
+        <input class="text-input" name="projectName" placeholder="Yeni proje adÄ±" autocomplete="off" />
+        <input class="text-input" name="purpose" list="purposeList" placeholder="Kasa amacÄ±: Ev, iÅŸ, araÃ§..." autocomplete="off" />
         <datalist id="purposeList">
           ${purposeOptions.map((purpose) => `<option value="${purpose}"></option>`).join("")}
         </datalist>
@@ -825,7 +944,7 @@ function renderGroup() {
           ? `
             <form class="inline-form cloud-join-card" id="joinProjectForm">
               <input class="text-input" name="projectCode" placeholder="Kasa kodu: KASA-EVK-1234" autocomplete="off" />
-              <button class="secondary-button" type="submit">Kodla katıl</button>
+              <button class="secondary-button" type="submit">Kodla katÄ±l</button>
             </form>
           `
           : ""
@@ -833,26 +952,26 @@ function renderGroup() {
     </section>
 
     <section class="card">
-      <h2>Projeye kişi ekle</h2>
+      <h2>Projeye kiÅŸi ekle</h2>
       <p>${
         canManageUsers
           ? cloudReady
-            ? `Diğer kişi önce kendi telefonunda e-posta ile hesap açsın. Sonra e-postasını buraya yazıp ${project.name} kasasına ekle.`
-            : `Önce diğer profili oluştur. Sonra adını buraya yazıp ${project.name} kasasına ekle.`
-          : `Şu an ${projectUserLabel(user)} hesabındasın. Kullanıcı eklemek için ${projectUserLabel(owner)} hesabıyla giriş yap.`
+            ? `DiÄŸer kiÅŸi Ã¶nce kendi telefonunda e-posta ile hesap aÃ§sÄ±n. Sonra e-postasÄ±nÄ± buraya yazÄ±p ${project.name} kasasÄ±na ekle.`
+            : `Ã–nce diÄŸer profili oluÅŸtur. Sonra adÄ±nÄ± buraya yazÄ±p ${project.name} kasasÄ±na ekle.`
+          : `Åu an ${projectUserLabel(user)} hesabÄ±ndasÄ±n. KullanÄ±cÄ± eklemek iÃ§in ${projectUserLabel(owner)} hesabÄ±yla giriÅŸ yap.`
       }</p>
       ${
         canManageUsers
           ? `
             <form class="inline-form featured-form" id="projectUserForm">
-              <input class="text-input" name="userName" placeholder="${cloudReady ? "havva@mail.com" : "Örn. Havva veya Derya"}" autocomplete="${cloudReady ? "email" : "off"}" />
+              <input class="text-input" name="userName" placeholder="${cloudReady ? "havva@mail.com" : "Ã–rn. Havva veya Derya"}" autocomplete="${cloudReady ? "email" : "off"}" />
               <button class="primary-button" type="submit">Kasaya ekle</button>
             </form>
           `
           : `
             <div class="inline-form featured-form">
-              <button class="secondary-button" data-action="logout" type="button">Çıkış yap</button>
-              <span class="field-help">Sonra kasa sahibi profiliyle tekrar giriş yap.</span>
+              <button class="secondary-button" data-action="logout" type="button">Ã‡Ä±kÄ±ÅŸ yap</button>
+              <span class="field-help">Sonra kasa sahibi profiliyle tekrar giriÅŸ yap.</span>
             </div>
           `
       }
@@ -861,8 +980,8 @@ function renderGroup() {
     <section class="card">
       <div class="section-head">
         <div>
-          <h2>Sonraki aşama: proje erişimi</h2>
-          <p>${cloudReady ? "Bu kodu başka telefondaki kullanıcı girerse aynı kasaya katılır." : "Bu denemede katılımı manuel profil ekleyerek yapıyoruz. Kod/link modeli gerçek çoklu telefon sürümüne kalacak."}</p>
+          <h2>Sonraki aÅŸama: proje eriÅŸimi</h2>
+          <p>${cloudReady ? "Bu kodu baÅŸka telefondaki kullanÄ±cÄ± girerse aynÄ± kasaya katÄ±lÄ±r." : "Bu denemede katÄ±lÄ±mÄ± manuel profil ekleyerek yapÄ±yoruz. Kod/link modeli gerÃ§ek Ã§oklu telefon sÃ¼rÃ¼mÃ¼ne kalacak."}</p>
         </div>
       </div>
       <div class="invite-box">
@@ -876,11 +995,11 @@ function renderGroup() {
     </section>
 
     <section class="card">
-      <h2>Kasa kullanıcıları</h2>
+      <h2>Kasa kullanÄ±cÄ±larÄ±</h2>
       <p>${
         canManageUsers
-          ? `Kasa sahibi ${projectUserLabel(owner)}. Kullanıcı adını yazıp bu kasaya ekleyebilir.`
-          : `Bu kasayı ${projectUserLabel(owner)} yönetir. Kullanıcı ekleme sadece onda.`
+          ? `Kasa sahibi ${projectUserLabel(owner)}. KullanÄ±cÄ± adÄ±nÄ± yazÄ±p bu kasaya ekleyebilir.`
+          : `Bu kasayÄ± ${projectUserLabel(owner)} yÃ¶netir. KullanÄ±cÄ± ekleme sadece onda.`
       }</p>
       <div class="expense-list" style="margin-top:12px;">
         ${state.users.map(userLinkRow).join("")}
@@ -889,37 +1008,37 @@ function renderGroup() {
         canManageUsers
           ? `
             <form class="inline-form" id="userForm">
-              <input class="text-input" name="userName" placeholder="${cloudReady ? "E-posta: havva@mail.com" : "Kullanıcı adı: Havva"}" autocomplete="${cloudReady ? "email" : "off"}" />
+              <input class="text-input" name="userName" placeholder="${cloudReady ? "E-posta: havva@mail.com" : "KullanÄ±cÄ± adÄ±: Havva"}" autocomplete="${cloudReady ? "email" : "off"}" />
               <button class="primary-button" type="submit">Kasaya ekle</button>
             </form>
           `
-          : `<div class="empty-state" style="margin-top:12px;">Kullanıcı eklemek için kasa sahibi hesabıyla giriş yap.</div>`
+          : `<div class="empty-state" style="margin-top:12px;">KullanÄ±cÄ± eklemek iÃ§in kasa sahibi hesabÄ±yla giriÅŸ yap.</div>`
       }
     </section>
 
     <section class="card">
       <div class="section-head">
         <div>
-          <h2>Borç & alacak</h2>
-          <p>${state.settlementVisible ? "Hesaplaşma görünür." : "Şu an gizli. Ev huzuru modu."}</p>
+          <h2>BorÃ§ & alacak</h2>
+          <p>${state.settlementVisible ? "HesaplaÅŸma gÃ¶rÃ¼nÃ¼r." : "Åu an gizli. Ev huzuru modu."}</p>
         </div>
-        <button class="tiny-button" data-action="toggle-settlement" type="button">${state.settlementVisible ? "Gizle" : "Göster"}</button>
+        <button class="tiny-button" data-action="toggle-settlement" type="button">${state.settlementVisible ? "Gizle" : "GÃ¶ster"}</button>
       </div>
       ${
         state.settlementVisible
           ? `
             <div style="margin-top: 10px;">
-              ${balances.length ? balances.map(balanceRow).join("") : `<div class="empty-state">Hesaplaşmaya dahil gider yok.</div>`}
+              ${balances.length ? balances.map(balanceRow).join("") : `<div class="empty-state">HesaplaÅŸmaya dahil gider yok.</div>`}
             </div>
             <div style="margin-top: 12px;">
               ${
                 transactions.length
-                  ? transactions.map((tx) => `<div class="split-row"><strong>${tx.from} → ${tx.to}</strong><span>${money(tx.amount)}</span></div>`).join("")
-                  : `<div class="empty-state">Şimdilik hesap kapanmış görünüyor.</div>`
+                  ? transactions.map((tx) => `<div class="split-row"><strong>${tx.from} â†’ ${tx.to}</strong><span>${money(tx.amount)}</span></div>`).join("")
+                  : `<div class="empty-state">Åimdilik hesap kapanmÄ±ÅŸ gÃ¶rÃ¼nÃ¼yor.</div>`
               }
             </div>
           `
-          : `<div class="empty-state" style="margin-top: 12px;">Açınca seçili projede kim kime ne kadar göndermeli görünür.</div>`
+          : `<div class="empty-state" style="margin-top: 12px;">AÃ§Ä±nca seÃ§ili projede kim kime ne kadar gÃ¶ndermeli gÃ¶rÃ¼nÃ¼r.</div>`
       }
     </section>
   `;
@@ -930,39 +1049,82 @@ function renderHeadings() {
     <section class="form-card form-grid">
       <div class="section-head">
         <div>
-          <h2>Başlık ekle</h2>
-          <p>Resmi ad başka, proje içi lakabı başka olabilir.</p>
+          <h2>BaÅŸlÄ±k ekle</h2>
+          <p>Resmi ad baÅŸka, proje iÃ§i lakabÄ± baÅŸka olabilir.</p>
         </div>
       </div>
 
       <form class="form-grid" id="headingForm">
         <label>
-          <span class="field-label">Başlık adı</span>
-          <input class="text-input" name="headingName" placeholder="Örn. Altın" autocomplete="off" />
+          <span class="field-label">BaÅŸlÄ±k adÄ±</span>
+          <input class="text-input" name="headingName" placeholder="Ã–rn. AltÄ±n" autocomplete="off" />
         </label>
         <label>
-          <span class="field-label">Kısa isim / lakap</span>
-          <input class="text-input" name="shortName" placeholder="Örn. haraç" autocomplete="off" />
+          <span class="field-label">KÄ±sa isim / lakap</span>
+          <input class="text-input" name="shortName" placeholder="Ã–rn. haraÃ§" autocomplete="off" />
         </label>
         <div>
           <span class="field-label">Emoji</span>
           <div class="chips">
-            ${["🛒", "🏠", "⛽", "🚗", "💡", "🪙", "🍼", "🏖️", "💼", "🧾"]
+            ${["ğŸ›’", "ğŸ ", "â›½", "ğŸš—", "ğŸ’¡", "ğŸª™", "ğŸ¼", "ğŸ–ï¸", "ğŸ’¼", "ğŸ§¾"]
               .map((emoji) => `<button class="emoji-chip ${draft.emoji === emoji ? "selected" : ""}" data-chip="emoji" data-value="${emoji}" type="button">${emoji}</button>`)
               .join("")}
           </div>
         </div>
-        <button class="primary-button" type="submit">Başlığı kaydet</button>
+        <button class="primary-button" type="submit">BaÅŸlÄ±ÄŸÄ± kaydet</button>
       </form>
     </section>
 
     <section class="card">
-      <h2>${activeProject().name} başlıkları</h2>
+      <h2>${activeProject().name} baÅŸlÄ±klarÄ±</h2>
       <div class="expense-list">
-        ${projectHeadings().length ? projectHeadings().map(headingRow).join("") : `<div class="empty-state">Henüz başlık yok.</div>`}
+        ${projectHeadings().length ? projectHeadings().map(headingRow).join("") : `<div class="empty-state">HenÃ¼z baÅŸlÄ±k yok.</div>`}
       </div>
     </section>
   `;
+}
+
+
+function formFile(data, name) {
+  const file = data.get(name);
+  return file && typeof file === "object" && file.size ? file : null;
+}
+
+function readImageAsDataUrl(file) {
+  if (!file || typeof FileReader === "undefined") return Promise.resolve("");
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const source = String(reader.result || "");
+      if (!source.startsWith("data:image/")) return resolve(source);
+      if (file.type === "image/gif") return resolve(source);
+
+      const image = new Image();
+      image.onload = () => {
+        const maxSide = 900;
+        const scale = Math.min(1, maxSide / Math.max(image.width || maxSide, image.height || maxSide));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round((image.width || maxSide) * scale));
+        canvas.height = Math.max(1, Math.round((image.height || maxSide) * scale));
+        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.78));
+      };
+      image.onerror = () => resolve(source);
+      image.src = source;
+    };
+    reader.onerror = () => resolve("");
+    reader.readAsDataURL(file);
+  });
+}
+
+async function mediaFromForm(data, fields) {
+  const file = formFile(data, fields.photo);
+  return {
+    emoji: String(data.get(fields.emoji) || "").trim(),
+    gif: String(data.get(fields.gif) || "").trim(),
+    photoName: file?.name || "",
+    photoData: await readImageAsDataUrl(file),
+  };
 }
 
 function bindScreen() {
@@ -990,10 +1152,18 @@ function bindScreen() {
     });
   });
 
+  app.querySelectorAll("[data-action='open-movements']").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.activeView = "movements";
+      saveState();
+      render();
+    });
+  });
+
   app.querySelectorAll("[data-action='go-add'], [data-action='go-add-expense']").forEach((button) => {
     button.addEventListener("click", () => {
       draft.type = "expense";
-      draft.emoji = "💸";
+      draft.emoji = "ğŸ’¸";
       draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
       draft.date = todayKey();
       draft.amountInput = "";
@@ -1006,7 +1176,7 @@ function bindScreen() {
   app.querySelectorAll("[data-action='go-add-income']").forEach((button) => {
     button.addEventListener("click", () => {
       draft.type = "income";
-      draft.emoji = "💰";
+      draft.emoji = "ğŸ’°";
       draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
       draft.date = todayKey();
       draft.amountInput = "";
@@ -1019,7 +1189,7 @@ function bindScreen() {
   app.querySelectorAll("[data-action='go-add-payable']").forEach((button) => {
     button.addEventListener("click", () => {
       draft.type = "payable";
-      draft.emoji = "⏰";
+      draft.emoji = "â°";
       draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
       draft.date = todayKey();
       draft.amountInput = "";
@@ -1104,7 +1274,7 @@ function bindScreen() {
       draft = makeDraft();
       saveState();
       render();
-      toast("Çıkış yapıldı.");
+      toast("Ã‡Ä±kÄ±ÅŸ yapÄ±ldÄ±.");
     });
   });
 
@@ -1115,10 +1285,10 @@ function bindScreen() {
   app.querySelectorAll("[data-action='guess-notification']").forEach((button) => {
     button.addEventListener("click", () => {
       const result = guessNotification(button.dataset.id, button.dataset.guess);
-      if (result.status === "already") return toast("Bu sürprizi zaten tahmin ettin.");
+      if (result.status === "already") return toast("Bu sÃ¼rprizi zaten tahmin ettin.");
       saveState();
       render();
-      toast(result.guess?.correct ? "Doğru tahmin." : "Yanlış tahmin.");
+      toast(result.guess?.correct ? "DoÄŸru tahmin." : "YanlÄ±ÅŸ tahmin.");
     });
   });
 
@@ -1129,6 +1299,14 @@ function bindScreen() {
   app.querySelectorAll("[data-period]").forEach((button) => {
     button.addEventListener("click", () => {
       state.reportPeriod = button.dataset.period;
+      saveState();
+      render();
+    });
+  });
+
+  app.querySelectorAll("[data-movement-period]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.movementPeriod = button.dataset.movementPeriod;
       saveState();
       render();
     });
@@ -1145,9 +1323,12 @@ function bindScreen() {
         draft.date = String(form.elements.date?.value || draft.date || todayKey());
         draft.settlement = String(form.elements.settlement?.value || draft.settlement || "in");
         draft.notificationMode = String(form.elements.notificationMode?.value || draft.notificationMode || "open");
-        draft.notificationEmoji = String(form.elements.notificationEmoji?.value || draft.notificationEmoji || "🎲");
-        draft.successReaction = String(form.elements.successReaction?.value || draft.successReaction || "✅");
-        draft.failReaction = String(form.elements.failReaction?.value || draft.failReaction || "🙃");
+        draft.notificationEmoji = String(form.elements.notificationEmoji?.value || draft.notificationEmoji || "ğŸ²");
+        draft.notificationGif = String(form.elements.notificationGif?.value || draft.notificationGif || "");
+        draft.successReaction = String(form.elements.successReaction?.value || draft.successReaction || "âœ…");
+        draft.successGif = String(form.elements.successGif?.value || draft.successGif || "");
+        draft.failReaction = String(form.elements.failReaction?.value || draft.failReaction || "ğŸ™ƒ");
+        draft.failGif = String(form.elements.failGif?.value || draft.failGif || "");
       }
       draft.type = button.dataset.entryType;
       draft.emoji = emojiOptionsFor(draft.type)[0] || entryTypes.find((type) => type.id === draft.type)?.emoji || draft.emoji;
@@ -1158,7 +1339,7 @@ function bindScreen() {
   app.querySelectorAll("[data-chip='emoji']").forEach((button) => {
     button.addEventListener("click", () => {
       draft.emoji = button.dataset.value;
-      render();
+      button.closest(".chips")?.querySelectorAll(".emoji-chip").forEach((chip) => chip.classList.toggle("selected", chip === button));
     });
   });
 
@@ -1189,10 +1370,10 @@ function bindScreen() {
       const name = String(data.get("userName") || "").trim();
       const email = String(data.get("email") || "").trim().toLowerCase();
       const password = normalizePassword(data.get("password"));
-      if (!name) return toast("Ad soyad yazalım.");
+      if (!name) return toast("Ad soyad yazalÄ±m.");
       if (typeof isCloudReady === "function" && isCloudReady()) {
-        if (!email || !email.includes("@")) return toast("Geçerli bir e-posta yazalım.");
-        if (password.length < 6) return toast("Bulut hesabı için şifre en az 6 karakter olsun.");
+        if (!email || !email.includes("@")) return toast("GeÃ§erli bir e-posta yazalÄ±m.");
+        if (password.length < 6) return toast("Bulut hesabÄ± iÃ§in ÅŸifre en az 6 karakter olsun.");
         try {
           const result = await cloudSignUp({
             name,
@@ -1201,12 +1382,12 @@ function bindScreen() {
             nickname: String(data.get("nickname") || "").trim(),
           });
           render();
-          return toast(result.session ? "Hesap açıldı ve giriş yapıldı." : "Hesap açıldı. E-postadaki doğrulama linkini kontrol et.");
+          return toast(result.session ? "Hesap aÃ§Ä±ldÄ± ve giriÅŸ yapÄ±ldÄ±." : "Hesap aÃ§Ä±ldÄ±. E-postadaki doÄŸrulama linkini kontrol et.");
         } catch (error) {
           return toast(friendlyCloudError(error));
         }
       }
-      if (password.length < 4) return toast("Şifre en az 4 karakter olsun.");
+      if (password.length < 4) return toast("Åifre en az 4 karakter olsun.");
       const user = createUser(name, password, {
         email,
         nickname: String(data.get("nickname") || "").trim(),
@@ -1218,7 +1399,7 @@ function bindScreen() {
       state.authMode = "login";
       saveState();
       render();
-      toast("Hesap oluşturuldu. Şimdi giriş yap.");
+      toast("Hesap oluÅŸturuldu. Åimdi giriÅŸ yap.");
     });
   }
 
@@ -1228,13 +1409,13 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(firstProjectForm);
       const name = String(data.get("projectName") || "").trim();
-      if (!name) return toast("Kasa adını yazalım.");
+      if (!name) return toast("Kasa adÄ±nÄ± yazalÄ±m.");
       createProject(name, String(data.get("purpose") || "").trim() || "Genel kasa");
       try {
         saveState();
         if (typeof isCloudReady === "function" && isCloudReady()) await cloudPushState();
         render();
-        toast("Kasa oluşturuldu.");
+        toast("Kasa oluÅŸturuldu.");
       } catch (error) {
         toast(friendlyCloudError(error));
       }
@@ -1249,30 +1430,30 @@ function bindScreen() {
       if (typeof isCloudReady === "function" && isCloudReady()) {
         const email = String(data.get("loginEmail") || "").trim().toLowerCase();
         const password = normalizePassword(data.get("loginPassword"));
-        if (!email || !email.includes("@")) return toast("E-postanı yazalım.");
-        if (!password) return toast("Şifreni yazalım.");
+        if (!email || !email.includes("@")) return toast("E-postanÄ± yazalÄ±m.");
+        if (!password) return toast("Åifreni yazalÄ±m.");
         try {
           await cloudSignIn({ email, password });
           render();
-          return toast("Giriş yapıldı.");
+          return toast("GiriÅŸ yapÄ±ldÄ±.");
         } catch (error) {
           return toast(friendlyCloudError(error));
         }
       }
       const user = state.users.find((item) => item.id === String(data.get("loginUserId")));
-      if (!state.users.length) return toast("Önce kullanıcı oluştur.");
-      if (!user) return toast("Kullanıcı bulunamadı.");
+      if (!state.users.length) return toast("Ã–nce kullanÄ±cÄ± oluÅŸtur.");
+      if (!user) return toast("KullanÄ±cÄ± bulunamadÄ±.");
       const password = normalizePassword(data.get("loginPassword"));
-      if (user.password && normalizePassword(user.password) !== password) return toast("Şifre yanlış.");
-      if (!user.password && password) return toast("Bu profil şifresiz.");
-      if (!user.password && !password) return toast("Bu profil için şifre yok. Deneme profillerini hareket içinde seçebilirsin.");
+      if (user.password && normalizePassword(user.password) !== password) return toast("Åifre yanlÄ±ÅŸ.");
+      if (!user.password && password) return toast("Bu profil ÅŸifresiz.");
+      if (!user.password && !password) return toast("Bu profil iÃ§in ÅŸifre yok. Deneme profillerini hareket iÃ§inde seÃ§ebilirsin.");
       state.signedInUserId = user.id;
       state.activeUserId = user.id;
       state.pendingLoginUserId = "";
       draft = makeDraft();
       saveState();
       render();
-      toast(`${profileLabel(user)} giriş yaptı.`);
+      toast(`${profileLabel(user)} giriÅŸ yaptÄ±.`);
     });
   }
 
@@ -1282,11 +1463,11 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(quickUserForm);
       const name = String(data.get("userName") || "").trim();
-      if (!name) return toast("Kullanıcı adını yazalım.");
+      if (!name) return toast("KullanÄ±cÄ± adÄ±nÄ± yazalÄ±m.");
       createUser(name, String(data.get("password") || ""), { nickname: String(data.get("nickname") || "").trim(), makeActive: false });
       saveState();
       render();
-      toast("Kullanıcı oluşturuldu ve projeye bağlandı.");
+      toast("KullanÄ±cÄ± oluÅŸturuldu ve projeye baÄŸlandÄ±.");
     });
   }
 
@@ -1295,25 +1476,25 @@ function bindScreen() {
     joinProjectForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const code = normalizeCode(new FormData(joinProjectForm).get("projectCode"));
-      if (!code) return toast("Proje kodunu yazalım.");
+      if (!code) return toast("Proje kodunu yazalÄ±m.");
       if (typeof isCloudReady === "function" && isCloudReady()) {
         try {
           await cloudJoinProjectByCode(code);
           render();
-          return toast("Kasaya katıldın.");
+          return toast("Kasaya katÄ±ldÄ±n.");
         } catch (error) {
           return toast(friendlyCloudError(error));
         }
       }
       const project = state.projects.find((item) => normalizeCode(projectCode(item)) === code);
-      if (!project) return toast("Bu kod bu cihazda yok. Gerçekte bulut veritabanından açılacak.");
+      if (!project) return toast("Bu kod bu cihazda yok. GerÃ§ekte bulut veritabanÄ±ndan aÃ§Ä±lacak.");
       const userId = state.activeUserId || state.users[0]?.id;
       if (userId && !project.memberIds.includes(userId)) project.memberIds.push(userId);
       state.activeProjectId = project.id;
       draft = makeDraft();
       saveState();
       render();
-      toast("Projeye katıldın.");
+      toast("Projeye katÄ±ldÄ±n.");
     });
   }
 
@@ -1344,16 +1525,19 @@ function bindScreen() {
       });
     }
 
-    entryForm.querySelectorAll("select[name='notificationMode'], input[name='notificationEmoji'], input[name='successReaction'], input[name='failReaction']").forEach((field) => {
+    entryForm.querySelectorAll("select[name='notificationMode'], input[name='notificationEmoji'], input[name='notificationGif'], input[name='successReaction'], input[name='successGif'], input[name='failReaction'], input[name='failGif']").forEach((field) => {
       field.addEventListener("change", () => {
         draft.notificationMode = entryForm.elements.notificationMode?.value || draft.notificationMode;
         draft.notificationEmoji = entryForm.elements.notificationEmoji?.value || draft.notificationEmoji;
+        draft.notificationGif = entryForm.elements.notificationGif?.value || draft.notificationGif;
         draft.successReaction = entryForm.elements.successReaction?.value || draft.successReaction;
+        draft.successGif = entryForm.elements.successGif?.value || draft.successGif;
         draft.failReaction = entryForm.elements.failReaction?.value || draft.failReaction;
+        draft.failGif = entryForm.elements.failGif?.value || draft.failGif;
       });
     });
 
-    entryForm.addEventListener("submit", (event) => {
+    entryForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(entryForm);
       const enteredAmount = parseAmount(data.get("amount"));
@@ -1362,11 +1546,11 @@ function bindScreen() {
       const amount = enteredAmount * exchangeRate;
       const headingName = String(data.get("headingName") || "").trim();
 
-      if (!enteredAmount || enteredAmount <= 0) return toast("Önce tutarı yazalım.");
-      if (!currencyOptions.some((item) => item.code === currency)) return toast("Para birimini seçelim.");
-      if (!exchangeRate || exchangeRate <= 0) return toast("Döviz için kuru yazalım.");
-      if (!headingName) return toast("Bir başlık yazalım.");
-      if (!activeMembers().length) return toast("Önce projeye kullanıcı bağlayalım.");
+      if (!enteredAmount || enteredAmount <= 0) return toast("Ã–nce tutarÄ± yazalÄ±m.");
+      if (!currencyOptions.some((item) => item.code === currency)) return toast("Para birimini seÃ§elim.");
+      if (!exchangeRate || exchangeRate <= 0) return toast("DÃ¶viz iÃ§in kuru yazalÄ±m.");
+      if (!headingName) return toast("Bir baÅŸlÄ±k yazalÄ±m.");
+      if (!activeMembers().length) return toast("Ã–nce projeye kullanÄ±cÄ± baÄŸlayalÄ±m.");
 
       const short = String(data.get("shortName") || "").trim() || headingName;
       const heading = ensureHeading(headingName, short, draft.emoji);
@@ -1381,6 +1565,18 @@ function bindScreen() {
       draft.currency = currency;
       draft.exchangeRate = exchangeRate;
       draft.amountInput = formatAmountInput(data.get("amount"));
+      draft.notificationMode = String(data.get("notificationMode") || draft.notificationMode || "silent");
+      draft.notificationEmoji = String(data.get("notificationEmoji") || draft.notificationEmoji || "ğŸ²").trim();
+      draft.notificationGif = String(data.get("notificationGif") || "").trim();
+      draft.successReaction = String(data.get("successReaction") || draft.successReaction || "âœ…").trim();
+      draft.successGif = String(data.get("successGif") || "").trim();
+      draft.failReaction = String(data.get("failReaction") || draft.failReaction || "ğŸ™ƒ").trim();
+      draft.failGif = String(data.get("failGif") || "").trim();
+
+      const entryPhoto = formFile(data, "photo");
+      const notificationMedia = await mediaFromForm(data, { emoji: "notificationEmoji", gif: "notificationGif", photo: "notificationPhoto" });
+      const successMedia = await mediaFromForm(data, { emoji: "successReaction", gif: "successGif", photo: "successPhoto" });
+      const failMedia = await mediaFromForm(data, { emoji: "failReaction", gif: "failGif", photo: "failPhoto" });
 
       const entry = {
         id: makeId(),
@@ -1397,22 +1593,30 @@ function bindScreen() {
         userId,
         date,
         note: String(data.get("note") || "").trim(),
-        photoName: data.get("photo")?.name || "",
+        photoName: entryPhoto?.name || "",
+        photoData: await readImageAsDataUrl(entryPhoto),
         settlement,
         status: ["receivable", "payable"].includes(draft.type) ? "pending" : "done",
         createdAt: new Date().toISOString(),
       };
 
       state.entries.unshift(entry);
-      createEntryNotification(entry, {
-        mode: String(data.get("notificationMode") || "silent"),
-        emoji: String(data.get("notificationEmoji") || "").trim() || "🎲",
-        photoName: data.get("notificationPhoto")?.name || "",
-        successReaction: String(data.get("successReaction") || "").trim() || "✅",
-        successPhotoName: data.get("successPhoto")?.name || "",
-        failReaction: String(data.get("failReaction") || "").trim() || "🙃",
-        failPhotoName: data.get("failPhoto")?.name || "",
+      const notification = createEntryNotification(entry, {
+        mode: draft.notificationMode,
+        emoji: notificationMedia.emoji || "ğŸ²",
+        gif: notificationMedia.gif,
+        photoName: notificationMedia.photoName,
+        photoData: notificationMedia.photoData,
+        successReaction: successMedia.emoji || "âœ…",
+        successGif: successMedia.gif,
+        successPhotoName: successMedia.photoName,
+        successPhotoData: successMedia.photoData,
+        failReaction: failMedia.emoji || "ğŸ™ƒ",
+        failGif: failMedia.gif,
+        failPhotoName: failMedia.photoName,
+        failPhotoData: failMedia.photoData,
       });
+      if (notification?.mode === "surprise") entry.lockedNotificationId = notification.id;
 
       saveState();
       state.activeView = "home";
@@ -1429,11 +1633,11 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(headingForm);
       const name = String(data.get("headingName") || "").trim();
-      if (!name) return toast("Başlık adını yazalım.");
+      if (!name) return toast("BaÅŸlÄ±k adÄ±nÄ± yazalÄ±m.");
       ensureHeading(name, String(data.get("shortName") || "").trim() || name, draft.emoji);
       saveState();
       render();
-      toast("Başlık eklendi.");
+      toast("BaÅŸlÄ±k eklendi.");
     });
   }
 
@@ -1442,19 +1646,19 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(userForm);
       const name = String(data.get("userName") || "").trim();
-      if (!name) return toast((typeof isCloudReady === "function" && isCloudReady()) ? "Kasaya eklenecek e-postayı yazalım." : "Kasaya eklenecek kullanıcı adını yazalım.");
+      if (!name) return toast((typeof isCloudReady === "function" && isCloudReady()) ? "Kasaya eklenecek e-postayÄ± yazalÄ±m." : "Kasaya eklenecek kullanÄ±cÄ± adÄ±nÄ± yazalÄ±m.");
       if (typeof isCloudReady === "function" && isCloudReady()) {
         try {
           await cloudAddMemberByEmail(name);
           render();
-          return toast("Kullanıcı kasaya eklendi.");
+          return toast("KullanÄ±cÄ± kasaya eklendi.");
         } catch (error) {
           return toast(friendlyCloudError(error));
         }
       }
       const result = addUserToActiveProjectByName(name);
-      if (result.status === "forbidden") return toast("Kullanıcı eklemeyi sadece kasa sahibi yapar.");
-      if (result.status === "missing-user") return toast("Bu adda kullanıcı yok. Önce profilini oluştur.");
+      if (result.status === "forbidden") return toast("KullanÄ±cÄ± eklemeyi sadece kasa sahibi yapar.");
+      if (result.status === "missing-user") return toast("Bu adda kullanÄ±cÄ± yok. Ã–nce profilini oluÅŸtur.");
       if (result.status === "already") return toast(`${shortName(result.user.name)} zaten bu kasada.`);
       saveState();
       render();
@@ -1467,10 +1671,10 @@ function bindScreen() {
       event.preventDefault();
       const result = setProjectMemberAlias(aliasForm.dataset.id, new FormData(aliasForm).get("alias"));
       if (result.status === "forbidden") return toast("Lakap vermeyi sadece kasa sahibi yapar.");
-      if (result.status === "missing-user") return toast("Bu kullanıcı bu kasada yok.");
+      if (result.status === "missing-user") return toast("Bu kullanÄ±cÄ± bu kasada yok.");
       saveState();
       render();
-      toast("Kasa içi lakap kaydedildi.");
+      toast("Kasa iÃ§i lakap kaydedildi.");
     });
   });
 
@@ -1480,7 +1684,7 @@ function bindScreen() {
       event.preventDefault();
       const data = new FormData(projectForm);
       const name = String(data.get("projectName") || "").trim();
-      if (!name) return toast("Proje adını yazalım.");
+      if (!name) return toast("Proje adÄ±nÄ± yazalÄ±m.");
       createProject(name, String(data.get("purpose") || "").trim() || "Genel kasa");
       try {
         saveState();
@@ -1493,6 +1697,7 @@ function bindScreen() {
     });
   }
 }
+
 
 function activeProject() {
   return state.projects.find((project) => project.id === state.activeProjectId) || state.projects[0];
@@ -1513,8 +1718,11 @@ function projectAliasFor(userId, project = activeProject()) {
 }
 
 function projectUserLabel(user, project = activeProject()) {
-  if (!user) return "Kullanıcı";
-  return projectAliasFor(user.id, project) || profileLabel(user);
+  if (!user) return "KullanÄ±cÄ±";
+  const base = profileLabel(user);
+  const alias = projectAliasFor(user.id, project);
+  if (!alias || normalize(alias) === normalize(base)) return base;
+  return `${base} (${alias})`;
 }
 
 function userLabelById(userId, project = activeProject()) {
@@ -1550,9 +1758,9 @@ function findUserByName(name) {
 }
 
 function createdByLabel(user) {
-  if (!user.createdBy) return "İlk hesap";
+  if (!user.createdBy) return "Ä°lk hesap";
   const creator = state.users.find((item) => item.id === user.createdBy);
-  return creator ? `${profileLabel(creator)} oluşturdu` : "Oluşturan bilinmiyor";
+  return creator ? `${profileLabel(creator)} oluÅŸturdu` : "OluÅŸturan bilinmiyor";
 }
 
 function createUser(name, password = "", options = {}) {
@@ -1597,7 +1805,7 @@ function projectCode(project) {
 }
 
 function generateProjectCode(seed = "") {
-  const clean = normalize(seed).replace(/[^a-z0-9ğüşöçıİ]/gi, "").slice(0, 3).toLocaleUpperCase("tr-TR") || "KSA";
+  const clean = normalize(seed).replace(/[^a-z0-9ÄŸÃ¼ÅŸÃ¶Ã§Ä±Ä°]/gi, "").slice(0, 3).toLocaleUpperCase("tr-TR") || "KSA";
   const random = Math.random().toString(36).slice(2, 6).toUpperCase();
   return `KASA-${clean}-${random}`;
 }
@@ -1611,8 +1819,13 @@ function inviteLink(project = activeProject()) {
   return `${base}?project=${encodeURIComponent(projectCode(project))}`;
 }
 
+function rawProjectEntries(project = activeProject()) {
+  if (!project) return [];
+  return state.entries.filter((entry) => entry.projectId === project.id);
+}
+
 function projectEntries() {
-  return state.entries.filter((entry) => entry.projectId === activeProject().id);
+  return rawProjectEntries().filter((entry) => entryVisibleForCurrentUser(entry));
 }
 
 function projectHeadings() {
@@ -1655,7 +1868,7 @@ function createEntryNotification(entry, options = {}) {
   if (!recipients.length) return;
 
   state.notifications = state.notifications || [];
-  state.notifications.unshift({
+  const notification = {
     id: makeId(),
     projectId: project.id,
     entryId: entry.id,
@@ -1665,15 +1878,23 @@ function createEntryNotification(entry, options = {}) {
     actualType: entry.type,
     title: entry.shortName || entry.headingName,
     amount: entry.amount,
-    emoji: options.emoji || "🎲",
+    emoji: options.emoji || "ğŸ²",
     photoName: options.photoName || "",
-    successReaction: options.successReaction || "✅",
+    photoData: options.photoData || "",
+    gif: options.gif || "",
+    successReaction: options.successReaction || "âœ…",
     successPhotoName: options.successPhotoName || "",
-    failReaction: options.failReaction || "🙃",
+    successPhotoData: options.successPhotoData || "",
+    successGif: options.successGif || "",
+    failReaction: options.failReaction || "ğŸ™ƒ",
     failPhotoName: options.failPhotoName || "",
+    failPhotoData: options.failPhotoData || "",
+    failGif: options.failGif || "",
     guesses: [],
     createdAt: new Date().toISOString(),
-  });
+  };
+  state.notifications.unshift(notification);
+  return notification;
 }
 
 function guessNotification(id, guess) {
@@ -1695,7 +1916,72 @@ function guessNotification(id, guess) {
 }
 
 function notificationGuessFor(notification, userId = currentUser()?.id) {
-  return notification.guesses?.find((guess) => guess.userId === userId);
+  return notification?.guesses?.find((guess) => guess.userId === userId);
+}
+
+function entryNotification(entry) {
+  if (!entry) return null;
+  return (state.notifications || []).find((item) => item.id === entry.lockedNotificationId || item.entryId === entry.id) || null;
+}
+
+function entryVisibleForCurrentUser(entry, userId = currentUser()?.id) {
+  if (!entry?.lockedNotificationId) return true;
+  if (!userId) return false;
+  if (entry.userId === userId) return true;
+
+  const notification = entryNotification(entry);
+  if (!notification) return false;
+  if (notification.mode !== "surprise") return true;
+  if (!notification.recipients?.includes(userId)) return true;
+  return Boolean(notificationGuessFor(notification, userId));
+}
+
+function notificationMedia(notification) {
+  return {
+    emoji: notification?.emoji || "ğŸ²",
+    photoName: notification?.photoName || "",
+    photoData: notification?.photoData || "",
+    gif: notification?.gif || "",
+  };
+}
+
+function notificationReactionMedia(notification, guess) {
+  if (!notification || !guess) return {};
+  if (guess.correct) {
+    return {
+      emoji: notification.successReaction || "âœ…",
+      photoName: notification.successPhotoName || "",
+      photoData: notification.successPhotoData || "",
+      gif: notification.successGif || "",
+    };
+  }
+  return {
+    emoji: notification.failReaction || "ğŸ™ƒ",
+    photoName: notification.failPhotoName || "",
+    photoData: notification.failPhotoData || "",
+    gif: notification.failGif || "",
+  };
+}
+
+function mediaPreviewHtml(media = {}, fallback = "ğŸ²") {
+  if (media.photoData) return `<img class="media-image" src="${media.photoData}" alt="${media.photoName || "Medya"}" />`;
+  if (media.gif) {
+    const value = String(media.gif).trim();
+    if (/^https?:\/\//i.test(value)) return `<img class="media-image" src="${value}" alt="GIF" />`;
+    return `<span class="media-gif">${value}</span>`;
+  }
+  if (media.photoName) return `<span class="media-gif">ğŸ“ ${media.photoName}</span>`;
+  return `<span>${media.emoji || fallback}</span>`;
+}
+
+function entryGameStatus(entry, userId = currentUser()?.id) {
+  const notification = entryNotification(entry);
+  if (!notification) return "";
+  if (notification.mode !== "surprise") return "AÃ§Ä±k bildirim";
+  if (entry.userId === userId) return "SÃ¼rpriz gÃ¶nderildi";
+  const guess = notificationGuessFor(notification, userId);
+  if (!guess) return "SÃ¼rpriz kilitli";
+  return guess.correct ? "Oyunda doÄŸru bildin" : "Oyunda yanÄ±ldÄ±n";
 }
 
 function ensureHeading(name, shortName, emoji) {
@@ -1712,7 +1998,7 @@ function ensureHeading(name, shortName, emoji) {
     projectId: activeProject().id,
     name,
     shortName: shortName || name,
-    emoji: emoji || "🧾",
+    emoji: emoji || "ğŸ§¾",
   };
   state.headings.push(heading);
   return heading;
@@ -1721,11 +2007,11 @@ function ensureHeading(name, shortName, emoji) {
 function toggleUserInProject(userId) {
   const project = activeProject();
   if (!isProjectOwner(project)) {
-    toast("Kullanıcıları sadece kasa sahibi düzenler.");
+    toast("KullanÄ±cÄ±larÄ± sadece kasa sahibi dÃ¼zenler.");
     return;
   }
   if (userId === projectOwnerId(project)) {
-    toast("Kasa sahibini kasadan çıkaramayız.");
+    toast("Kasa sahibini kasadan Ã§Ä±karamayÄ±z.");
     return;
   }
   if (!project.memberIds.includes(userId)) {
@@ -1733,7 +2019,7 @@ function toggleUserInProject(userId) {
     return;
   }
   if (project.memberIds.length === 1) {
-    toast("Projede en az bir kullanıcı kalsın.");
+    toast("Projede en az bir kullanÄ±cÄ± kalsÄ±n.");
     return;
   }
   project.memberIds = project.memberIds.filter((id) => id !== userId);
@@ -1778,12 +2064,12 @@ function settlePending(id) {
     status: "done",
     date: todayKey(),
     createdAt: new Date().toISOString(),
-    note: pending.note ? `${pending.note} · gerçekleşti` : "Takvimden gerçekleşti",
+    note: pending.note ? `${pending.note} Â· gerÃ§ekleÅŸti` : "Takvimden gerÃ§ekleÅŸti",
   });
 
   saveState();
   render();
-  toast(pending.type === "receivable" ? "Alacak gelir olarak kaydedildi." : "Ödeme gider olarak kaydedildi.");
+  toast(pending.type === "receivable" ? "Alacak gelir olarak kaydedildi." : "Ã–deme gider olarak kaydedildi.");
 }
 
 function headingPreview() {
@@ -1793,16 +2079,16 @@ function headingPreview() {
 function pendingDetailRows(type) {
   const entries = pendingEntriesByType(type);
   const label = type === "receivable" ? "gelecek" : "gidecek";
-  if (!entries.length) return `<div class="empty-state">Şimdilik ${label} bir kayıt yok.</div>`;
+  if (!entries.length) return `<div class="empty-state">Åimdilik ${label} bir kayÄ±t yok.</div>`;
   return entries
     .map((entry) => {
       const user = state.users.find((item) => item.id === entry.userId);
       return `
         <div class="expense-row">
-          <span class="emoji-dot">${entry.emoji || (type === "receivable" ? "🤝" : "⏰")}</span>
+          <span class="emoji-dot">${entry.emoji || (type === "receivable" ? "ğŸ¤" : "â°")}</span>
           <div class="expense-main">
             <p class="expense-title">${entry.shortName || entry.headingName}</p>
-            <p class="expense-meta">${projectUserLabel(user)} · ${formatShortDate(entry.date)} · ${type === "receivable" ? "Şu gelecek" : "Bu gidecek"}</p>
+            <p class="expense-meta">${projectUserLabel(user)} Â· ${formatShortDate(entry.date)} Â· ${type === "receivable" ? "Åu gelecek" : "Bu gidecek"}</p>
             ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
           </div>
           <strong class="expense-price">${money(entry.amount)}</strong>
@@ -1815,12 +2101,12 @@ function pendingDetailRows(type) {
 function projectRow(project) {
   return `
     <div class="expense-row">
-      <span class="emoji-dot">📁</span>
+      <span class="emoji-dot">ğŸ“</span>
       <div class="expense-main">
         <p class="expense-title">${project.name}</p>
-        <p class="expense-meta">${project.purpose} · ${project.memberIds.length} üye · ${projectCode(project)}</p>
+        <p class="expense-meta">${project.purpose} Â· ${project.memberIds.length} Ã¼ye Â· ${projectCode(project)}</p>
       </div>
-      <button class="mini-action" data-action="activate-project" data-id="${project.id}" type="button">${project.id === state.activeProjectId ? "Aktif" : "Seç"}</button>
+      <button class="mini-action" data-action="activate-project" data-id="${project.id}" type="button">${project.id === state.activeProjectId ? "Aktif" : "SeÃ§"}</button>
     </div>
   `;
 }
@@ -1830,7 +2116,7 @@ function notificationRow(notification) {
   const guess = notificationGuessFor(notification);
   const isSurprise = notification.mode === "surprise";
   const typeLabel = notification.actualType === "income" ? "gelir" : "gider";
-  const media = notification.photoName ? `📎 ${notification.photoName}` : notification.emoji || "🎲";
+  const media = mediaPreviewHtml(notificationMedia(notification));
 
   if (!isSurprise) {
     return `
@@ -1838,7 +2124,7 @@ function notificationRow(notification) {
         <div class="notification-hero">${media}</div>
         <div class="expense-main">
           <p class="expense-title">${projectUserLabel(actor)} ${typeLabel} ekledi</p>
-          <p class="expense-meta">${notification.title} · ${money(notification.amount)}</p>
+          <p class="expense-meta">${notification.title} Â· ${money(notification.amount)}</p>
         </div>
       </div>
     `;
@@ -1848,11 +2134,18 @@ function notificationRow(notification) {
     <div class="notification-card">
       <div class="notification-hero">${media}</div>
       <div class="expense-main">
-        <p class="expense-title">${projectUserLabel(actor)} sürpriz hareket gönderdi</p>
-        <p class="expense-meta">${guess ? `Tahminin: ${guess.guess === "income" ? "Gelir" : "Gider"}` : "Gelir mi gider mi? Tahmin et."}</p>
+        <p class="expense-title">${projectUserLabel(actor)} sÃ¼rpriz hareket gÃ¶nderdi</p>
+        <p class="expense-meta">${
+          guess
+            ? `AÃ§Ä±ldÄ±: ${typeLabel} Â· ${notification.title} Â· ${money(notification.amount)}`
+            : "Gelir mi gider mi? Tahmin et. Kasa detayÄ± tahmin bitene kadar kapalÄ±."
+        }</p>
         ${
           guess
-            ? `<div class="reaction-result ${guess.correct ? "correct" : "wrong"}">${guess.correct ? notification.successReaction : notification.failReaction} ${guess.correct ? "Doğru bildin." : "Yanlış tahmin."}${guess.correct && notification.successPhotoName ? ` · ${notification.successPhotoName}` : ""}${!guess.correct && notification.failPhotoName ? ` · ${notification.failPhotoName}` : ""}</div>`
+            ? `<div class="reaction-result ${guess.correct ? "correct" : "wrong"}">
+                <span>${guess.correct ? "DoÄŸru bildin." : "YanlÄ±ÅŸ tahmin."}</span>
+                <span class="reaction-media">${mediaPreviewHtml(notificationReactionMedia(notification, guess), guess.correct ? "âœ…" : "ğŸ™ƒ")}</span>
+              </div>`
             : `
               <div class="guess-actions">
                 <button class="mini-action" data-action="guess-notification" data-id="${notification.id}" data-guess="income" type="button">Gelir</button>
@@ -1872,19 +2165,20 @@ function userLinkRow(user) {
   const isOwner = user.id === projectOwnerId(project);
   const alias = projectAliasFor(user.id, project);
   const label = projectUserLabel(user, project);
+  const aliasText = alias ? `Bu kasadaki lakap: ${alias}` : "Kasa iÃ§i lakap yok";
   const action = isOwner
     ? `<span class="mini-action linked">Sahip</span>`
     : canManage
-      ? `<button class="mini-action ${linked ? "linked" : ""}" data-action="toggle-user-project" data-id="${user.id}" type="button">${linked ? "Çıkar" : "Bağla"}</button>`
-      : `<span class="neutral-pill">${linked ? "Üye" : "Dışarıda"}</span>`;
+      ? `<button class="mini-action ${linked ? "linked" : ""}" data-action="toggle-user-project" data-id="${user.id}" type="button">${linked ? "Ã‡Ä±kar" : "BaÄŸla"}</button>`
+      : `<span class="neutral-pill">${linked ? "Ãœye" : "DÄ±ÅŸarÄ±da"}</span>`;
 
   return `
     <div class="member-card">
       <div class="expense-row">
-        <span class="emoji-dot">👤</span>
+        <span class="emoji-dot">ğŸ‘¤</span>
         <div class="expense-main">
           <p class="expense-title">${label}</p>
-          <p class="expense-meta">${user.name}${alias ? ` · profil lakabı: ${profileLabel(user)}` : ""} · ${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
+          <p class="expense-meta">${user.name} Â· ${aliasText} Â· profil: ${profileLabel(user)} Â· ${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} Â· ${user.password ? "Åifreli" : "Åifresiz"} Â· ${createdByLabel(user)}</p>
         </div>
         ${action}
       </div>
@@ -1921,10 +2215,10 @@ function entryRow(entry) {
   const exchange = exchangeText(entry);
   return `
     <div class="expense-row">
-      <span class="emoji-dot">${entry.emoji || type?.emoji || "🧾"}</span>
+      <span class="emoji-dot">${entry.emoji || type?.emoji || "ğŸ§¾"}</span>
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
-        <p class="expense-meta">${projectUserLabel(user)} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        <p class="expense-meta">${projectUserLabel(user)} Â· ${type?.label || "Hareket"} Â· ${formatShortDate(entry.date)}${exchange ? ` Â· ${exchange}` : ""}</p>
         ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
       </div>
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
@@ -1934,20 +2228,44 @@ function entryRow(entry) {
   `;
 }
 
+function movementEntryRow(entry) {
+  const notification = entryNotification(entry);
+  const guess = notificationGuessFor(notification);
+  const gameStatus = entryGameStatus(entry);
+  const entryMedia = entry.photoData ? mediaPreviewHtml({ photoData: entry.photoData, photoName: entry.photoName }, "ğŸ“") : "";
+  const reactionMedia = guess ? mediaPreviewHtml(notificationReactionMedia(notification, guess), guess.correct ? "âœ…" : "ğŸ™ƒ") : "";
+  return `
+    <div class="movement-card">
+      ${entryRow(entry)}
+      ${
+        gameStatus || entryMedia
+          ? `
+            <div class="movement-extra">
+              ${gameStatus ? `<span class="neutral-pill">${gameStatus}</span>` : ""}
+              ${reactionMedia ? `<span class="movement-media">${reactionMedia}</span>` : ""}
+              ${entryMedia ? `<span class="movement-media">${entryMedia}</span>` : ""}
+            </div>
+          `
+          : ""
+      }
+    </div>
+  `;
+}
+
 function pendingRow(entry) {
   const isReceivable = entry.type === "receivable";
   const exchange = exchangeText(entry);
   return `
     <div class="expense-row">
-      <span class="emoji-dot">${entry.emoji || (isReceivable ? "🤝" : "⏰")}</span>
+      <span class="emoji-dot">${entry.emoji || (isReceivable ? "ğŸ¤" : "â°")}</span>
       <div class="expense-main">
         <p class="expense-title">${entry.shortName || entry.headingName}</p>
-        <p class="expense-meta">${isReceivable ? "Beklenen alacak" : "Yaklaşan ödeme"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
+        <p class="expense-meta">${isReceivable ? "Beklenen alacak" : "YaklaÅŸan Ã¶deme"} Â· ${formatShortDate(entry.date)}${exchange ? ` Â· ${exchange}` : ""}</p>
         ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
       </div>
       <div style="display:grid; gap:6px; justify-items:end;">
         <strong class="expense-price">${money(entry.amount)}</strong>
-        <button class="mini-action" data-action="settle-pending" data-id="${entry.id}" type="button">${isReceivable ? "Geldi" : "Ödendi"}</button>
+        <button class="mini-action" data-action="settle-pending" data-id="${entry.id}" type="button">${isReceivable ? "Geldi" : "Ã–dendi"}</button>
       </div>
     </div>
   `;
@@ -1958,7 +2276,7 @@ function balanceRow(item) {
     <div class="balance-row">
       <div>
         <div class="balance-name">${item.name}</div>
-        <div class="balance-state">${item.balance >= 0 ? "Alacaklı" : "Borçlu"}</div>
+        <div class="balance-state">${item.balance >= 0 ? "AlacaklÄ±" : "BorÃ§lu"}</div>
       </div>
       <span class="${item.balance >= 0 ? "positive-pill" : "negative-pill"}">${money(Math.abs(item.balance))}</span>
     </div>
@@ -1976,7 +2294,7 @@ function headingBars(entries) {
     .filter((heading) => heading.total > 0)
     .sort((a, b) => b.total - a.total);
 
-  if (!grouped.length) return `<div class="empty-state">Bu dönem için gider kaydı yok.</div>`;
+  if (!grouped.length) return `<div class="empty-state">Bu dÃ¶nem iÃ§in gider kaydÄ± yok.</div>`;
 
   return grouped
     .map((heading) => {
@@ -2042,9 +2360,17 @@ function simplifyDebts(balances) {
 }
 
 function isInPeriod(value, period) {
+  if (period === "all") return true;
   if (period === "day") return value === todayKey();
   if (period === "week") return isThisWeek(value);
   return isThisMonth(value);
+}
+
+function periodLabel(period) {
+  if (period === "day") return "BugÃ¼n";
+  if (period === "week") return "Bu hafta";
+  if (period === "month") return "Bu ay";
+  return "TÃ¼mÃ¼";
 }
 
 function topHeading(entries) {
@@ -2061,7 +2387,7 @@ function topHeading(entries) {
 
 function entryCountForHeading(id) {
   const count = projectEntries().filter((entry) => entry.headingId === id).length;
-  return `${count} kayıt`;
+  return `${count} kayÄ±t`;
 }
 
 function sum(entries) {
@@ -2110,7 +2436,7 @@ function formatRate(value) {
 function exchangeText(entry) {
   const currency = entry.currency || "TRY";
   if (currency === "TRY") return "";
-  return `${formatCurrencyAmount(entry.enteredAmount || entry.amount, currency)} × ${formatRate(entry.exchangeRate || 1)} = ${money(entry.amount)}`;
+  return `${formatCurrencyAmount(entry.enteredAmount || entry.amount, currency)} Ã— ${formatRate(entry.exchangeRate || 1)} = ${money(entry.amount)}`;
 }
 
 function exchangeReceiptLines(entries) {
@@ -2124,10 +2450,10 @@ function exchangeReceiptLines(entries) {
 
 async function copyProjectInvite() {
   const project = activeProject();
-  const text = `${project.name}\nKod: ${projectCode(project)}\nLink: ${inviteLink(project)}\n\nNot: Bu sürüm prototip. Gerçek ortak kullanım için bulut kayıt bağlanacak.`;
+  const text = `${project.name}\nKod: ${projectCode(project)}\nLink: ${inviteLink(project)}\n\nNot: Bu sÃ¼rÃ¼m prototip. GerÃ§ek ortak kullanÄ±m iÃ§in bulut kayÄ±t baÄŸlanacak.`;
   try {
     await navigator.clipboard.writeText(text);
-    toast("Proje kodu kopyalandı.");
+    toast("Proje kodu kopyalandÄ±.");
   } catch {
     toast(`Kod: ${projectCode(project)}`);
   }
@@ -2137,20 +2463,20 @@ async function shareReceipt() {
   const period = state.reportPeriod;
   const entries = actualEntries().filter((entry) => isInPeriod(entry.date, period));
   const totals = calculateTotals(entries);
-  const label = period === "day" ? "Bugün" : period === "week" ? "Bu hafta" : "Bu ay";
+  const label = period === "day" ? "BugÃ¼n" : period === "week" ? "Bu hafta" : "Bu ay";
   const exchangeLines = entries.map(exchangeText).filter(Boolean);
-  const exchangeBlock = exchangeLines.length ? `\nKur hesabı:\n${exchangeLines.join("\n")}` : "";
-  const text = `KASA FİŞİ\n${activeProject().name}\n${label} giren: ${money(totals.income)}\n${label} çıkan: ${money(totals.expense)}\nNet: ${money(totals.actual)}${exchangeBlock}\nEn hareketli başlık: ${topHeading(entries)}`;
+  const exchangeBlock = exchangeLines.length ? `\nKur hesabÄ±:\n${exchangeLines.join("\n")}` : "";
+  const text = `KASA FÄ°ÅÄ°\n${activeProject().name}\n${label} giren: ${money(totals.income)}\n${label} Ã§Ä±kan: ${money(totals.expense)}\nNet: ${money(totals.actual)}${exchangeBlock}\nEn hareketli baÅŸlÄ±k: ${topHeading(entries)}`;
 
   try {
     if (navigator.share) {
-      await navigator.share({ title: "Kasa Fişi", text });
+      await navigator.share({ title: "Kasa FiÅŸi", text });
     } else {
       await navigator.clipboard.writeText(text);
-      toast("Fiş metni kopyalandı.");
+      toast("FiÅŸ metni kopyalandÄ±.");
     }
   } catch {
-    toast("Paylaşım iptal edildi.");
+    toast("PaylaÅŸÄ±m iptal edildi.");
   }
 }
 
@@ -2163,7 +2489,7 @@ function byDateAsc(a, b) {
 }
 
 function shortName(name) {
-  return String(name || "").replace(" Ayyıldız", "");
+  return String(name || "").replace(" AyyÄ±ldÄ±z", "");
 }
 
 function normalize(value) {
@@ -2225,6 +2551,7 @@ function toast(message) {
   setTimeout(() => element.remove(), 2200);
 }
 
+
 let cloudClient = null;
 let cloudAuthSubscribed = false;
 let cloudSyncTimer = null;
@@ -2241,7 +2568,7 @@ function isCloudReady() {
 }
 
 function cloudLabel() {
-  return isCloudReady() ? "Bulut açık" : "Yerel deneme";
+  return isCloudReady() ? "Bulut aÃ§Ä±k" : "Yerel deneme";
 }
 
 function cloudDb() {
@@ -2264,11 +2591,12 @@ function setCloudStatus(message) {
 
 function friendlyCloudError(error) {
   const message = error?.message || String(error || "");
-  if (message.includes("relation") || message.includes("does not exist")) return "Supabase tabloları kurulmamış. supabase-schema.sql dosyasını çalıştırmamız gerekiyor.";
-  if (message.includes("row-level security")) return "Supabase izin kuralı engelledi. SQL politikalarını kontrol etmemiz gerekiyor.";
-  if (message.includes("Invalid login credentials")) return "E-posta veya şifre hatalı.";
-  if (message.includes("Email not confirmed")) return "Önce e-postadaki doğrulama linkine tıkla.";
-  return message || "Bulut işlemi tamamlanamadı.";
+  if (message.includes("column") && message.includes("does not exist")) return "Supabase yeni oyun alanlarÄ± eksik. supabase-game-fields.sql dosyasÄ±nÄ± SQL Editor'da Ã§alÄ±ÅŸtÄ±r.";
+  if (message.includes("relation") || message.includes("does not exist")) return "Supabase tablolarÄ± kurulmamÄ±ÅŸ. supabase-schema.sql dosyasÄ±nÄ± Ã§alÄ±ÅŸtÄ±rmamÄ±z gerekiyor.";
+  if (message.includes("row-level security")) return "Supabase izin kuralÄ± engelledi. SQL politikalarÄ±nÄ± kontrol etmemiz gerekiyor.";
+  if (message.includes("Invalid login credentials")) return "E-posta veya ÅŸifre hatalÄ±.";
+  if (message.includes("Email not confirmed")) return "Ã–nce e-postadaki doÄŸrulama linkine tÄ±kla.";
+  return message || "Bulut iÅŸlemi tamamlanamadÄ±.";
 }
 
 async function initCloudSession() {
@@ -2303,9 +2631,9 @@ async function initCloudSession() {
     await applyCloudUser(data.session.user);
     await loadCloudData();
     await ensureCloudStarterProject();
-    setCloudStatus("Bulut bağlı");
+    setCloudStatus("Bulut baÄŸlÄ±");
   } else {
-    setCloudStatus("Bulut hazır");
+    setCloudStatus("Bulut hazÄ±r");
   }
 }
 
@@ -2313,7 +2641,7 @@ async function applyCloudUser(authUser, profileInput = {}) {
   if (!authUser?.id) return null;
   const metadata = authUser.user_metadata || {};
   const email = String(authUser.email || profileInput.email || "").trim().toLowerCase();
-  const fallbackName = email ? email.split("@")[0] : "Kullanıcı";
+  const fallbackName = email ? email.split("@")[0] : "KullanÄ±cÄ±";
   const name = String(profileInput.name || metadata.name || metadata.full_name || fallbackName).trim();
   const nickname = String(profileInput.nickname || metadata.nickname || shortName(name)).trim();
   const existing = state.users.find((user) => user.id === authUser.id || normalize(user.email) === normalize(email));
@@ -2355,7 +2683,7 @@ async function applyCloudUser(authUser, profileInput = {}) {
 
 async function cloudSignUp({ name, nickname, email, password }) {
   const client = cloudDb();
-  if (!client) throw new Error("Bulut ayarı yok.");
+  if (!client) throw new Error("Bulut ayarÄ± yok.");
   const normalizedEmail = String(email || "").trim().toLowerCase();
   const { data, error } = await client.auth.signUp({
     email: normalizedEmail,
@@ -2371,10 +2699,10 @@ async function cloudSignUp({ name, nickname, email, password }) {
     await applyCloudUser(data.session.user, { name, nickname, email: normalizedEmail });
     await loadCloudData();
     await ensureCloudStarterProject();
-    setCloudStatus("Bulut bağlı");
+    setCloudStatus("Bulut baÄŸlÄ±");
   } else {
     state.authMode = "login";
-    setCloudStatus("E-posta doğrulama bekleniyor");
+    setCloudStatus("E-posta doÄŸrulama bekleniyor");
   }
   saveState();
   return data;
@@ -2382,7 +2710,7 @@ async function cloudSignUp({ name, nickname, email, password }) {
 
 async function cloudSignIn({ email, password }) {
   const client = cloudDb();
-  if (!client) throw new Error("Bulut ayarı yok.");
+  if (!client) throw new Error("Bulut ayarÄ± yok.");
   const { data, error } = await client.auth.signInWithPassword({
     email: String(email || "").trim().toLowerCase(),
     password,
@@ -2391,7 +2719,7 @@ async function cloudSignIn({ email, password }) {
   await applyCloudUser(data.user);
   await loadCloudData();
   await ensureCloudStarterProject();
-  setCloudStatus("Bulut bağlı");
+  setCloudStatus("Bulut baÄŸlÄ±");
   saveState();
   return data;
 }
@@ -2442,7 +2770,7 @@ async function loadCloudData() {
     const current = currentUser();
     state.users = profiles.map((profile) => ({
       id: profile.id,
-      name: profile.name || profile.email || "Kullanıcı",
+      name: profile.name || profile.email || "KullanÄ±cÄ±",
       nickname: profile.nickname || shortName(profile.name || profile.email || ""),
       email: profile.email || "",
       password: "",
@@ -2489,6 +2817,8 @@ async function loadCloudData() {
       date: entry.entry_date,
       note: entry.note || "",
       photoName: entry.photo_name || "",
+      photoData: entry.photo_data || "",
+      lockedNotificationId: entry.locked_notification_id || "",
       settlement: Boolean(entry.settlement),
       status: entry.status,
       createdAt: entry.created_at,
@@ -2506,10 +2836,16 @@ async function loadCloudData() {
       amount: Number(notification.amount || 0),
       emoji: notification.emoji,
       photoName: notification.photo_name || "",
-      successReaction: notification.success_reaction || "✅",
+      photoData: notification.photo_data || "",
+      gif: notification.gif || "",
+      successReaction: notification.success_reaction || "âœ…",
       successPhotoName: notification.success_photo_name || "",
-      failReaction: notification.fail_reaction || "🙃",
+      successPhotoData: notification.success_photo_data || "",
+      successGif: notification.success_gif || "",
+      failReaction: notification.fail_reaction || "ğŸ™ƒ",
       failPhotoName: notification.fail_photo_name || "",
+      failPhotoData: notification.fail_photo_data || "",
+      failGif: notification.fail_gif || "",
       guesses: Array.isArray(notification.guesses) ? notification.guesses : [],
       createdAt: notification.created_at,
     }));
@@ -2530,7 +2866,7 @@ async function ensureCloudStarterProject() {
   if (!isCloudReady() || !state.signedInUserId || state.projects.length) return;
   const user = currentUser();
   if (!user) return;
-  createProject(`${profileLabel(user)} Kasası`, "Kendi bütçem");
+  createProject(`${profileLabel(user)} KasasÄ±`, "Kendi bÃ¼tÃ§em");
   await cloudPushState();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
@@ -2629,6 +2965,8 @@ async function cloudPushState() {
         entry_date: entry.date,
         note: entry.note || "",
         photo_name: entry.photoName || "",
+        photo_data: entry.photoData || "",
+        locked_notification_id: entry.lockedNotificationId || null,
         settlement: Boolean(entry.settlement),
         status: entry.status,
         created_at: entry.createdAt || new Date().toISOString(),
@@ -2652,10 +2990,16 @@ async function cloudPushState() {
         amount: notification.amount,
         emoji: notification.emoji,
         photo_name: notification.photoName || "",
-        success_reaction: notification.successReaction || "✅",
+        photo_data: notification.photoData || "",
+        gif: notification.gif || "",
+        success_reaction: notification.successReaction || "âœ…",
         success_photo_name: notification.successPhotoName || "",
-        fail_reaction: notification.failReaction || "🙃",
+        success_photo_data: notification.successPhotoData || "",
+        success_gif: notification.successGif || "",
+        fail_reaction: notification.failReaction || "ğŸ™ƒ",
         fail_photo_name: notification.failPhotoName || "",
+        fail_photo_data: notification.failPhotoData || "",
+        fail_gif: notification.failGif || "",
         guesses: notification.guesses || [],
         created_at: notification.createdAt || new Date().toISOString(),
       }));
@@ -2674,7 +3018,7 @@ async function cloudPushState() {
 
 async function cloudJoinProjectByCode(code) {
   const client = cloudDb();
-  if (!client) throw new Error("Bulut ayarı yok.");
+  if (!client) throw new Error("Bulut ayarÄ± yok.");
   const { data, error } = await client.rpc("join_kasa_project", { invite_code: normalizeCode(code) });
   if (error) throw error;
   await loadCloudData();
@@ -2686,7 +3030,7 @@ async function cloudJoinProjectByCode(code) {
 async function cloudAddMemberByEmail(email) {
   const project = activeProject();
   const client = cloudDb();
-  if (!client || !project) throw new Error("Bulut ayarı yok.");
+  if (!client || !project) throw new Error("Bulut ayarÄ± yok.");
   const { data, error } = await client.rpc("add_kasa_member_by_email", {
     project_uuid: project.id,
     member_email: String(email || "").trim().toLowerCase(),
@@ -2697,4 +3041,6 @@ async function cloudAddMemberByEmail(email) {
   return data;
 }
 
+
 initApp();
+

@@ -14,8 +14,11 @@ function makeDraft() {
     date: todayKey(),
     notificationMode: "open",
     notificationEmoji: "🎲",
+    notificationGif: "",
     successReaction: "✅",
+    successGif: "",
     failReaction: "🙃",
+    failGif: "",
   };
 }
 
@@ -65,11 +68,34 @@ function normalizeState(saved) {
   const signedInUserId = users.some((user) => user.id === source.signedInUserId) ? source.signedInUserId : "";
   const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : signedInUserId;
   const pendingLoginUserId = users.some((user) => user.id === source.pendingLoginUserId) ? source.pendingLoginUserId : activeUserId || users[users.length - 1]?.id || "";
+  const reportPeriod = ["day", "week", "month"].includes(source.reportPeriod) ? source.reportPeriod : "month";
+  const movementPeriod = ["day", "week", "month", "all"].includes(source.movementPeriod) ? source.movementPeriod : "month";
+  const entries = Array.isArray(source.entries)
+    ? source.entries.map((entry) => ({
+        ...entry,
+        lockedNotificationId: entry.lockedNotificationId || "",
+        photoData: entry.photoData || "",
+      }))
+    : [];
+  const notifications = Array.isArray(source.notifications)
+    ? source.notifications.map((notification) => ({
+        ...notification,
+        photoData: notification.photoData || "",
+        gif: notification.gif || "",
+        successPhotoData: notification.successPhotoData || "",
+        successGif: notification.successGif || "",
+        failPhotoData: notification.failPhotoData || "",
+        failGif: notification.failGif || "",
+        guesses: Array.isArray(notification.guesses) ? notification.guesses : [],
+      }))
+    : [];
 
   return {
     ...seedState,
     ...source,
     activeView: source.activeView || "home",
+    reportPeriod,
+    movementPeriod,
     activeProjectId,
     activeUserId,
     signedInUserId,
@@ -83,8 +109,8 @@ function normalizeState(saved) {
     users,
     projects,
     headings: Array.isArray(source.headings) ? source.headings : [],
-    entries: Array.isArray(source.entries) ? source.entries : [],
-    notifications: Array.isArray(source.notifications) ? source.notifications : [],
+    entries,
+    notifications,
   };
 }
 
@@ -117,6 +143,7 @@ function render() {
   const screens = {
     home: renderHome,
     add: renderAdd,
+    movements: renderMovements,
     calendar: renderCalendar,
     report: renderReport,
     group: renderGroup,

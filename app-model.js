@@ -18,7 +18,10 @@ function projectAliasFor(userId, project = activeProject()) {
 
 function projectUserLabel(user, project = activeProject()) {
   if (!user) return "Kullanıcı";
-  return projectAliasFor(user.id, project) || profileLabel(user);
+  const base = profileLabel(user);
+  const alias = projectAliasFor(user.id, project);
+  if (!alias || normalize(alias) === normalize(base)) return base;
+  return `${base} (${alias})`;
 }
 
 function userLabelById(userId, project = activeProject()) {
@@ -115,8 +118,13 @@ function inviteLink(project = activeProject()) {
   return `${base}?project=${encodeURIComponent(projectCode(project))}`;
 }
 
+function rawProjectEntries(project = activeProject()) {
+  if (!project) return [];
+  return state.entries.filter((entry) => entry.projectId === project.id);
+}
+
 function projectEntries() {
-  return state.entries.filter((entry) => entry.projectId === activeProject().id);
+  return rawProjectEntries().filter((entry) => entryVisibleForCurrentUser(entry));
 }
 
 function projectHeadings() {
@@ -159,7 +167,7 @@ function createEntryNotification(entry, options = {}) {
   if (!recipients.length) return;
 
   state.notifications = state.notifications || [];
-  state.notifications.unshift({
+  const notification = {
     id: makeId(),
     projectId: project.id,
     entryId: entry.id,
@@ -171,13 +179,21 @@ function createEntryNotification(entry, options = {}) {
     amount: entry.amount,
     emoji: options.emoji || "🎲",
     photoName: options.photoName || "",
+    photoData: options.photoData || "",
+    gif: options.gif || "",
     successReaction: options.successReaction || "✅",
     successPhotoName: options.successPhotoName || "",
+    successPhotoData: options.successPhotoData || "",
+    successGif: options.successGif || "",
     failReaction: options.failReaction || "🙃",
     failPhotoName: options.failPhotoName || "",
+    failPhotoData: options.failPhotoData || "",
+    failGif: options.failGif || "",
     guesses: [],
     createdAt: new Date().toISOString(),
-  });
+  };
+  state.notifications.unshift(notification);
+  return notification;
 }
 
 function guessNotification(id, guess) {
@@ -199,7 +215,72 @@ function guessNotification(id, guess) {
 }
 
 function notificationGuessFor(notification, userId = currentUser()?.id) {
-  return notification.guesses?.find((guess) => guess.userId === userId);
+  return notification?.guesses?.find((guess) => guess.userId === userId);
+}
+
+function entryNotification(entry) {
+  if (!entry) return null;
+  return (state.notifications || []).find((item) => item.id === entry.lockedNotificationId || item.entryId === entry.id) || null;
+}
+
+function entryVisibleForCurrentUser(entry, userId = currentUser()?.id) {
+  if (!entry?.lockedNotificationId) return true;
+  if (!userId) return false;
+  if (entry.userId === userId) return true;
+
+  const notification = entryNotification(entry);
+  if (!notification) return false;
+  if (notification.mode !== "surprise") return true;
+  if (!notification.recipients?.includes(userId)) return true;
+  return Boolean(notificationGuessFor(notification, userId));
+}
+
+function notificationMedia(notification) {
+  return {
+    emoji: notification?.emoji || "🎲",
+    photoName: notification?.photoName || "",
+    photoData: notification?.photoData || "",
+    gif: notification?.gif || "",
+  };
+}
+
+function notificationReactionMedia(notification, guess) {
+  if (!notification || !guess) return {};
+  if (guess.correct) {
+    return {
+      emoji: notification.successReaction || "✅",
+      photoName: notification.successPhotoName || "",
+      photoData: notification.successPhotoData || "",
+      gif: notification.successGif || "",
+    };
+  }
+  return {
+    emoji: notification.failReaction || "🙃",
+    photoName: notification.failPhotoName || "",
+    photoData: notification.failPhotoData || "",
+    gif: notification.failGif || "",
+  };
+}
+
+function mediaPreviewHtml(media = {}, fallback = "🎲") {
+  if (media.photoData) return `<img class="media-image" src="${media.photoData}" alt="${media.photoName || "Medya"}" />`;
+  if (media.gif) {
+    const value = String(media.gif).trim();
+    if (/^https?:\/\//i.test(value)) return `<img class="media-image" src="${value}" alt="GIF" />`;
+    return `<span class="media-gif">${value}</span>`;
+  }
+  if (media.photoName) return `<span class="media-gif">📎 ${media.photoName}</span>`;
+  return `<span>${media.emoji || fallback}</span>`;
+}
+
+function entryGameStatus(entry, userId = currentUser()?.id) {
+  const notification = entryNotification(entry);
+  if (!notification) return "";
+  if (notification.mode !== "surprise") return "Açık bildirim";
+  if (entry.userId === userId) return "Sürpriz gönderildi";
+  const guess = notificationGuessFor(notification, userId);
+  if (!guess) return "Sürpriz kilitli";
+  return guess.correct ? "Oyunda doğru bildin" : "Oyunda yanıldın";
 }
 
 function ensureHeading(name, shortName, emoji) {
@@ -334,7 +415,7 @@ function notificationRow(notification) {
   const guess = notificationGuessFor(notification);
   const isSurprise = notification.mode === "surprise";
   const typeLabel = notification.actualType === "income" ? "gelir" : "gider";
-  const media = notification.photoName ? `📎 ${notification.photoName}` : notification.emoji || "🎲";
+  const media = mediaPreviewHtml(notificationMedia(notification));
 
   if (!isSurprise) {
     return `
@@ -353,10 +434,17 @@ function notificationRow(notification) {
       <div class="notification-hero">${media}</div>
       <div class="expense-main">
         <p class="expense-title">${projectUserLabel(actor)} sürpriz hareket gönderdi</p>
-        <p class="expense-meta">${guess ? `Tahminin: ${guess.guess === "income" ? "Gelir" : "Gider"}` : "Gelir mi gider mi? Tahmin et."}</p>
+        <p class="expense-meta">${
+          guess
+            ? `Açıldı: ${typeLabel} · ${notification.title} · ${money(notification.amount)}`
+            : "Gelir mi gider mi? Tahmin et. Kasa detayı tahmin bitene kadar kapalı."
+        }</p>
         ${
           guess
-            ? `<div class="reaction-result ${guess.correct ? "correct" : "wrong"}">${guess.correct ? notification.successReaction : notification.failReaction} ${guess.correct ? "Doğru bildin." : "Yanlış tahmin."}${guess.correct && notification.successPhotoName ? ` · ${notification.successPhotoName}` : ""}${!guess.correct && notification.failPhotoName ? ` · ${notification.failPhotoName}` : ""}</div>`
+            ? `<div class="reaction-result ${guess.correct ? "correct" : "wrong"}">
+                <span>${guess.correct ? "Doğru bildin." : "Yanlış tahmin."}</span>
+                <span class="reaction-media">${mediaPreviewHtml(notificationReactionMedia(notification, guess), guess.correct ? "✅" : "🙃")}</span>
+              </div>`
             : `
               <div class="guess-actions">
                 <button class="mini-action" data-action="guess-notification" data-id="${notification.id}" data-guess="income" type="button">Gelir</button>
@@ -376,6 +464,7 @@ function userLinkRow(user) {
   const isOwner = user.id === projectOwnerId(project);
   const alias = projectAliasFor(user.id, project);
   const label = projectUserLabel(user, project);
+  const aliasText = alias ? `Bu kasadaki lakap: ${alias}` : "Kasa içi lakap yok";
   const action = isOwner
     ? `<span class="mini-action linked">Sahip</span>`
     : canManage
@@ -388,7 +477,7 @@ function userLinkRow(user) {
         <span class="emoji-dot">👤</span>
         <div class="expense-main">
           <p class="expense-title">${label}</p>
-          <p class="expense-meta">${user.name}${alias ? ` · profil lakabı: ${profileLabel(user)}` : ""} · ${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
+          <p class="expense-meta">${user.name} · ${aliasText} · profil: ${profileLabel(user)} · ${isOwner ? "Kasa sahibi" : linked ? "Bu kasada" : "Bu kasada yok"} · ${user.password ? "Şifreli" : "Şifresiz"} · ${createdByLabel(user)}</p>
         </div>
         ${action}
       </div>
@@ -434,6 +523,30 @@ function entryRow(entry) {
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
         ${entry.type === "income" ? "+" : entry.type === "expense" ? "-" : ""}${money(entry.amount)}
       </strong>
+    </div>
+  `;
+}
+
+function movementEntryRow(entry) {
+  const notification = entryNotification(entry);
+  const guess = notificationGuessFor(notification);
+  const gameStatus = entryGameStatus(entry);
+  const entryMedia = entry.photoData ? mediaPreviewHtml({ photoData: entry.photoData, photoName: entry.photoName }, "📎") : "";
+  const reactionMedia = guess ? mediaPreviewHtml(notificationReactionMedia(notification, guess), guess.correct ? "✅" : "🙃") : "";
+  return `
+    <div class="movement-card">
+      ${entryRow(entry)}
+      ${
+        gameStatus || entryMedia
+          ? `
+            <div class="movement-extra">
+              ${gameStatus ? `<span class="neutral-pill">${gameStatus}</span>` : ""}
+              ${reactionMedia ? `<span class="movement-media">${reactionMedia}</span>` : ""}
+              ${entryMedia ? `<span class="movement-media">${entryMedia}</span>` : ""}
+            </div>
+          `
+          : ""
+      }
     </div>
   `;
 }
@@ -546,9 +659,17 @@ function simplifyDebts(balances) {
 }
 
 function isInPeriod(value, period) {
+  if (period === "all") return true;
   if (period === "day") return value === todayKey();
   if (period === "week") return isThisWeek(value);
   return isThisMonth(value);
+}
+
+function periodLabel(period) {
+  if (period === "day") return "Bugün";
+  if (period === "week") return "Bu hafta";
+  if (period === "month") return "Bu ay";
+  return "Tümü";
 }
 
 function topHeading(entries) {

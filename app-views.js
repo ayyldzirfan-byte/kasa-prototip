@@ -2,8 +2,8 @@ function renderHome() {
   const project = activeProject();
   const user = currentUser();
   const totals = calculateTotals(projectEntries());
-  const recent = actualEntries().slice(0, 4);
-  const upcoming = pendingEntries().slice(0, 3);
+  const recent = actualEntries().slice(0, 3);
+  const upcoming = pendingEntries().slice(0, 2);
   const notificationCount = notificationEntries().length;
 
   return `
@@ -95,17 +95,6 @@ function renderHome() {
     <section class="card">
       <div class="section-head">
         <div>
-          <h2>Başlıklar</h2>
-          <p>${projectHeadings().length ? `${projectHeadings().length} özel başlık var.` : "Başlıkları kullanıcı belirler. Hazır kalıp yok."}</p>
-        </div>
-        <button class="tiny-button" data-action="open-headings" type="button">Düzenle</button>
-      </div>
-      ${projectHeadings().length ? headingPreview() : `<div class="empty-state" style="margin-top: 12px;">Market, kira, haraç, HGS... Kasanın dilini sen kur.</div>`}
-    </section>
-
-    <section class="card">
-      <div class="section-head">
-        <div>
           <h2>Yaklaşanlar</h2>
           <p>Ödeme hatırlatıcıları burada görünür.</p>
         </div>
@@ -120,9 +109,9 @@ function renderHome() {
       <div class="section-head">
         <div>
           <h2>Son hareketler</h2>
-          <p>Gerçekleşen gelir ve giderler.</p>
+          <p>Detay ve oyun sonucu için tümünü aç.</p>
         </div>
-        <button class="tiny-button" data-action="go-add-expense" type="button">Ekle</button>
+        <button class="tiny-button" data-action="open-movements" type="button">Tümü</button>
       </div>
       <div class="expense-list">
         ${recent.length ? recent.map(entryRow).join("") : `<div class="empty-state">Kasa boş. İlk hareketi ekleyerek başlayalım.</div>`}
@@ -248,35 +237,54 @@ function renderAdd() {
                     <option value="silent" ${draft.notificationMode === "silent" ? "selected" : ""}>Sessiz kaydet</option>
                   </select>
                 </label>
-                <div class="grid-2">
-                  <label>
-                    <span class="field-label">Bildirim emoji</span>
-                    <input class="text-input" name="notificationEmoji" maxlength="4" value="${draft.notificationEmoji || "🎲"}" autocomplete="off" />
-                  </label>
-                  <label>
-                    <span class="field-label">Bildirim foto</span>
-                    <input class="text-input" name="notificationPhoto" type="file" accept="image/*" />
-                  </label>
+                <div class="media-picker">
+                  <div>
+                    <span class="field-label">Bildirim medyası</span>
+                    <p class="field-help">Emoji, GIF/sticker linki veya fotoğraf aynı mesaj alanı gibi çalışır.</p>
+                  </div>
+                  <div class="media-grid">
+                    <label>
+                      <span class="field-label">Emoji</span>
+                      <input class="text-input" name="notificationEmoji" maxlength="4" value="${draft.notificationEmoji || "🎲"}" autocomplete="off" />
+                    </label>
+                    <label>
+                      <span class="field-label">GIF / sticker</span>
+                      <input class="text-input" name="notificationGif" placeholder="Link veya kısa ad" value="${draft.notificationGif || ""}" autocomplete="off" />
+                    </label>
+                    <label class="photo-pick compact-pick">
+                      <span>Fotoğraf</span>
+                      <strong>Seç</strong>
+                      <input name="notificationPhoto" type="file" accept="image/*" />
+                    </label>
+                  </div>
                 </div>
-                <div class="grid-2">
-                  <label>
-                    <span class="field-label">Doğru tepki</span>
-                    <input class="text-input" name="successReaction" value="${draft.successReaction || "✅"}" autocomplete="off" />
-                  </label>
-                  <label>
-                    <span class="field-label">Yanlış tepki</span>
-                    <input class="text-input" name="failReaction" value="${draft.failReaction || "🙃"}" autocomplete="off" />
-                  </label>
-                </div>
-                <div class="grid-2">
-                  <label>
-                    <span class="field-label">Doğru foto/sticker</span>
-                    <input class="text-input" name="successPhoto" type="file" accept="image/*" />
-                  </label>
-                  <label>
-                    <span class="field-label">Yanlış foto/sticker</span>
-                    <input class="text-input" name="failPhoto" type="file" accept="image/*" />
-                  </label>
+                <div class="media-picker">
+                  <div>
+                    <span class="field-label">Tahmin sonrası tepkiler</span>
+                    <p class="field-help">Doğru ve yanlış cevap için ayrı medya seçilebilir.</p>
+                  </div>
+                  <div class="reaction-grid">
+                    <div class="reaction-column">
+                      <strong>Doğru</strong>
+                      <input class="text-input" name="successReaction" value="${draft.successReaction || "✅"}" autocomplete="off" />
+                      <input class="text-input" name="successGif" placeholder="GIF / sticker linki" value="${draft.successGif || ""}" autocomplete="off" />
+                      <label class="photo-pick compact-pick">
+                        <span>Fotoğraf</span>
+                        <strong>Seç</strong>
+                        <input name="successPhoto" type="file" accept="image/*" />
+                      </label>
+                    </div>
+                    <div class="reaction-column">
+                      <strong>Yanlış</strong>
+                      <input class="text-input" name="failReaction" value="${draft.failReaction || "🙃"}" autocomplete="off" />
+                      <input class="text-input" name="failGif" placeholder="GIF / sticker linki" value="${draft.failGif || ""}" autocomplete="off" />
+                      <label class="photo-pick compact-pick">
+                        <span>Fotoğraf</span>
+                        <strong>Seç</strong>
+                        <input name="failPhoto" type="file" accept="image/*" />
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </details>
@@ -298,6 +306,56 @@ function renderAdd() {
 
       <button class="primary-button" type="submit">Kaydet</button>
     </form>
+  `;
+}
+
+function renderMovements() {
+  const period = state.movementPeriod || "month";
+  const entries = actualEntries().filter((entry) => isInPeriod(entry.date, period));
+  const totals = calculateTotals(entries);
+  const label = periodLabel(period);
+
+  return `
+    <section class="segmented segmented-four">
+      ${[
+        ["day", "Gün"],
+        ["week", "Hafta"],
+        ["month", "Ay"],
+        ["all", "Tümü"],
+      ].map(([value, labelText]) => `<button class="segment ${period === value ? "active" : ""}" data-movement-period="${value}" type="button">${labelText}</button>`).join("")}
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>${label} hareketleri</h2>
+          <p>Görünen kayıtlar, tamamlanan tahmin oyunlarına göre hesaplanır.</p>
+        </div>
+        <span class="quick-pill">${entries.length} kayıt</span>
+      </div>
+      <div class="grid-2 compact-stats">
+        <article class="stat-card small">
+          <p class="stat-label">Giren</p>
+          <p class="stat-value positive">${money(totals.income)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Çıkan</p>
+          <p class="stat-value warning">${money(totals.expense)}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Detay</h2>
+          <p>Fotoğraf, not, döviz ve oyun sonucu burada görünür.</p>
+        </div>
+      </div>
+      <div class="expense-list">
+        ${entries.length ? entries.map(movementEntryRow).join("") : `<div class="empty-state">Bu dönem için görünen hareket yok.</div>`}
+      </div>
+    </section>
   `;
 }
 
@@ -350,7 +408,8 @@ function renderReport() {
   const period = state.reportPeriod;
   const entries = actualEntries().filter((entry) => isInPeriod(entry.date, period));
   const totals = calculateTotals(entries);
-  const label = period === "day" ? "Bugün" : period === "week" ? "Bu hafta" : "Bu ay";
+  const label = periodLabel(period);
+  const netClass = totals.actual >= 0 ? "positive" : "warning";
 
   return `
     <section class="segmented">
@@ -365,12 +424,42 @@ function renderReport() {
       <div class="section-head">
         <div>
           <h2>${label} raporu</h2>
-          <p>Giren ${money(totals.income)}, çıkan ${money(totals.expense)}.</p>
+          <p>Giren ${money(totals.income)}, çıkan ${money(totals.expense)}, net ${money(totals.actual)}.</p>
         </div>
         <span class="quick-pill">${entries.length} kayıt</span>
       </div>
+      <div class="grid-2 compact-stats">
+        <article class="stat-card small">
+          <p class="stat-label">Giren</p>
+          <p class="stat-value positive">${money(totals.income)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Çıkan</p>
+          <p class="stat-value warning">${money(totals.expense)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Net</p>
+          <p class="stat-value ${netClass}">${money(totals.actual)}</p>
+        </article>
+        <article class="stat-card small">
+          <p class="stat-label">Ortalama</p>
+          <p class="stat-value">${money(entries.length ? totals.expense / entries.length : 0)}</p>
+        </article>
+      </div>
       <div class="bars" style="margin-top: 16px;">
         ${headingBars(entries)}
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Rapor detayı</h2>
+          <p>Bu dönemde görünen gelir ve giderler.</p>
+        </div>
+      </div>
+      <div class="expense-list">
+        ${entries.length ? entries.map(movementEntryRow).join("") : `<div class="empty-state">Bu dönem için raporlanacak hareket yok.</div>`}
       </div>
     </section>
 
