@@ -8,6 +8,26 @@ function activeMembers() {
   return state.users.filter((user) => project.memberIds.includes(user.id));
 }
 
+function projectHeadingById(id) {
+  return state.headings.find((heading) => heading.id === id) || null;
+}
+
+function entryHeading(entry) {
+  const heading = projectHeadingById(entry?.headingId);
+  if (heading) return heading;
+  return {
+    id: entry?.headingId || "",
+    name: entry?.headingName || entry?.shortName || "Başlık",
+    shortName: entry?.shortName || entry?.headingName || "Başlık",
+    emoji: entry?.emoji || "🧾",
+  };
+}
+
+function entryTitle(entry) {
+  const heading = entryHeading(entry);
+  return entry?.shortName || heading.shortName || heading.name || "Hareket";
+}
+
 function profileLabel(user) {
   return user?.nickname || shortName(user?.name || "");
 }
@@ -69,6 +89,10 @@ function createUser(name, password = "", options = {}) {
     nickname: String(options.nickname || "").trim(),
     email: options.email || "",
     password: normalizePassword(password),
+    onayModu: personalityModes[options.onayModu] ? options.onayModu : "standart",
+    totalScore: Number(options.totalScore || 0),
+    correctGuesses: Number(options.correctGuesses || 0),
+    totalGuesses: Number(options.totalGuesses || 0),
     createdAt: new Date().toISOString(),
     createdBy: currentUser()?.id || "",
   };
@@ -91,6 +115,13 @@ function createProject(name, purpose = "Genel kasa") {
     createdBy: currentUser()?.id || "",
     memberIds: currentUser()?.id ? [currentUser().id] : [],
     memberAliases: {},
+    defaultCurrency: "TL",
+    defaultHeadings: [],
+    splitType: "equal",
+    templateId: "",
+    budgetLimits: {},
+    hasBudgetTarget: false,
+    hasGoalItems: false,
   };
   state.projects.push(project);
   state.activeProjectId = project.id;
@@ -127,6 +158,14 @@ function projectEntries() {
   return rawProjectEntries().filter((entry) => entryVisibleForCurrentUser(entry));
 }
 
+function visibleProjectEntries() {
+  return projectEntries();
+}
+
+function confirmedProjectEntries(project = activeProject()) {
+  return rawProjectEntries(project).filter((entry) => entryConfirmed(entry));
+}
+
 function projectHeadings() {
   return state.headings.filter((heading) => heading.projectId === activeProject().id);
 }
@@ -140,11 +179,11 @@ function emojiOptionsFor(typeId) {
 }
 
 function actualEntries() {
-  return projectEntries().filter((entry) => entry.status === "done").sort(byDateDesc);
+  return visibleProjectEntries().filter((entry) => entry.status === "done").sort(byDateDesc);
 }
 
 function pendingEntries() {
-  return projectEntries().filter((entry) => entry.status === "pending").sort(byDateAsc);
+  return visibleProjectEntries().filter((entry) => entry.status === "pending").sort(byDateAsc);
 }
 
 function pendingEntriesByType(type) {
@@ -175,7 +214,7 @@ function createEntryNotification(entry, options = {}) {
     recipients,
     mode: options.mode || "open",
     actualType: entry.type,
-    title: entry.shortName || entry.headingName,
+    title: entryTitle(entry),
     amount: entry.amount,
     emoji: options.emoji || "🎲",
     photoName: options.photoName || "",
@@ -189,6 +228,10 @@ function createEntryNotification(entry, options = {}) {
     failPhotoName: options.failPhotoName || "",
     failPhotoData: options.failPhotoData || "",
     failGif: options.failGif || "",
+    guessDeadline: options.guessDeadline || addHours(new Date().toISOString(), 48),
+    revealedAt: options.mode === "surprise" ? "" : new Date().toISOString(),
+    isCompleted: options.mode !== "surprise",
+    notificationType: "entry",
     guesses: [],
     createdAt: new Date().toISOString(),
   };
@@ -204,13 +247,28 @@ function guessNotification(id, guess) {
   const existing = notification.guesses.find((item) => item.userId === user.id);
   if (existing) return { status: "already", guess: existing };
 
+  const predictedType = typeof guess === "string" ? guess : guess?.predictedType;
+  const predictedAmount = typeof guess === "object" && guess.predictedAmount !== undefined ? Number(guess.predictedAmount || 0) || null : null;
+  const typeCorrect = predictedType === notification.actualType;
+  const amountCorrect = predictedAmount === null ? true : Math.abs(Number(notification.amount || 0) - predictedAmount) <= Number(notification.amount || 0) * 0.15;
+  const isCorrect = Boolean(typeCorrect && amountCorrect);
   const result = {
     userId: user.id,
-    guess,
-    correct: guess === notification.actualType,
+    predictedType,
+    predictedAmount,
+    isCorrect,
+    guessedAt: new Date().toISOString(),
+    guess: predictedType,
+    correct: isCorrect,
     at: new Date().toISOString(),
   };
   notification.guesses.push(result);
+  user.totalGuesses = Number(user.totalGuesses || 0) + 1;
+  if (isCorrect) {
+    user.totalScore = Number(user.totalScore || 0) + 10;
+    user.correctGuesses = Number(user.correctGuesses || 0) + 1;
+  }
+  maybeRevealNotification(notification);
   return { status: "saved", guess: result };
 }
 
@@ -225,14 +283,42 @@ function entryNotification(entry) {
 
 function entryVisibleForCurrentUser(entry, userId = currentUser()?.id) {
   if (!entry?.lockedNotificationId) return true;
-  if (!userId) return false;
-  if (entry.userId === userId) return true;
-
   const notification = entryNotification(entry);
   if (!notification) return false;
   if (notification.mode !== "surprise") return true;
-  if (!notification.recipients?.includes(userId)) return true;
-  return Boolean(notificationGuessFor(notification, userId));
+  maybeRevealNotification(notification);
+  return Boolean(notification.revealedAt || notification.isCompleted);
+}
+
+function entryConfirmed(entry) {
+  if (!entry || entry.status !== "done") return false;
+  if (!entry.lockedNotificationId) return true;
+  const notification = entryNotification(entry);
+  if (!notification) return false;
+  maybeRevealNotification(notification);
+  return Boolean(notification.revealedAt || notification.isCompleted);
+}
+
+function pendingSurpriseCount(project = activeProject()) {
+  if (!project) return 0;
+  return rawProjectEntries(project).filter((entry) => entry.status === "done" && entry.lockedNotificationId && !entryConfirmed(entry)).length;
+}
+
+function maybeRevealNotification(notification) {
+  if (!notification || notification.mode !== "surprise" || notification.revealedAt) return notification;
+  const recipients = Array.isArray(notification.recipients) ? notification.recipients : [];
+  const guesses = Array.isArray(notification.guesses) ? notification.guesses : [];
+  const allGuessed = recipients.length > 0 && recipients.every((userId) => guesses.some((guess) => guess.userId === userId));
+  const deadline = notification.guessDeadline || notification.autoRevealAt || addHours(notification.createdAt || new Date().toISOString(), 48);
+  const deadlinePassed = new Date(deadline).getTime() <= Date.now();
+  if (allGuessed || deadlinePassed) {
+    const now = new Date().toISOString();
+    notification.revealedAt = now;
+    notification.isCompleted = true;
+    const entry = state.entries.find((item) => item.id === notification.entryId);
+    if (entry && !entry.autoRevealAt) entry.autoRevealAt = deadline;
+  }
+  return notification;
 }
 
 function notificationMedia(notification) {
@@ -386,7 +472,7 @@ function pendingDetailRows(type) {
         <div class="expense-row">
           <span class="emoji-dot">${entry.emoji || (type === "receivable" ? "🤝" : "⏰")}</span>
           <div class="expense-main">
-            <p class="expense-title">${entry.shortName || entry.headingName}</p>
+            <p class="expense-title">${entryTitle(entry)}</p>
             <p class="expense-meta">${projectUserLabel(user)} · ${formatShortDate(entry.date)} · ${type === "receivable" ? "Şu gelecek" : "Bu gidecek"}</p>
             ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
           </div>
@@ -512,18 +598,22 @@ function entryRow(entry) {
   const type = entryTypes.find((item) => item.id === entry.type);
   const user = state.users.find((item) => item.id === entry.userId);
   const exchange = exchangeText(entry);
+  const reactions = reactionSummary(entry.id);
   return `
     <div class="expense-row">
       <span class="emoji-dot">${entry.emoji || type?.emoji || "🧾"}</span>
       <div class="expense-main">
-        <p class="expense-title">${entry.shortName || entry.headingName}</p>
+        <p class="expense-title">${entryTitle(entry)}</p>
         <p class="expense-meta">${projectUserLabel(user)} · ${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
         ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
+        ${reactions ? `<p class="expense-note reaction-line">${reactions}</p>` : ""}
       </div>
       <strong class="expense-price ${entry.type === "income" ? "price-positive" : entry.type === "expense" ? "price-negative" : ""}">
         ${entry.type === "income" ? "+" : entry.type === "expense" ? "-" : ""}${money(entry.amount)}
       </strong>
+      <button class="reaction-button" data-action="toggle-reaction-picker" data-id="${entry.id}" type="button">☺</button>
     </div>
+    ${state.reactionPickerEntryId === entry.id ? reactionPicker(entry) : ""}
   `;
 }
 
@@ -558,7 +648,7 @@ function pendingRow(entry) {
     <div class="expense-row">
       <span class="emoji-dot">${entry.emoji || (isReceivable ? "🤝" : "⏰")}</span>
       <div class="expense-main">
-        <p class="expense-title">${entry.shortName || entry.headingName}</p>
+        <p class="expense-title">${entryTitle(entry)}</p>
         <p class="expense-meta">${isReceivable ? "Beklenen alacak" : "Yaklaşan ödeme"} · ${formatShortDate(entry.date)}${exchange ? ` · ${exchange}` : ""}</p>
         ${entry.note ? `<p class="expense-note">${entry.note}</p>` : ""}
       </div>
@@ -609,7 +699,7 @@ function headingBars(entries) {
 }
 
 function calculateTotals(entries = projectEntries()) {
-  const done = entries.filter((entry) => entry.status === "done");
+  const done = entries.filter((entry) => entry.status === "done" && entryConfirmed(entry));
   const pending = entries.filter((entry) => entry.status === "pending");
   const income = sum(done.filter((entry) => entry.type === "income"));
   const expense = sum(done.filter((entry) => entry.type === "expense"));
@@ -621,23 +711,7 @@ function calculateTotals(entries = projectEntries()) {
 }
 
 function calculateBalances() {
-  const members = activeMembers();
-  const shared = projectEntries().filter((entry) => entry.status === "done" && entry.type === "expense" && entry.settlement);
-  if (!shared.length || !members.length) return [];
-
-  const total = sum(shared);
-  const share = total / members.length;
-
-  return members
-    .map((user) => {
-      const paid = sum(shared.filter((entry) => entry.userId === user.id));
-      return {
-        userId: user.id,
-        name: projectUserLabel(user),
-        balance: Math.round(paid - share),
-      };
-    })
-    .sort((a, b) => b.balance - a.balance);
+  return calculateNetBalances();
 }
 
 function simplifyDebts(balances) {
@@ -665,6 +739,33 @@ function isInPeriod(value, period) {
   return isThisMonth(value);
 }
 
+function addHours(value, hours) {
+  const date = new Date(value || new Date());
+  date.setHours(date.getHours() + Number(hours || 0));
+  return date.toISOString();
+}
+
+function daysBetween(start, end = new Date()) {
+  const a = startOfDay(typeof start === "string" ? dateFromKey(start.slice(0, 10)) : start);
+  const b = startOfDay(typeof end === "string" ? dateFromKey(end.slice(0, 10)) : end);
+  return Math.max(1, Math.round((b - a) / 86400000));
+}
+
+function monthKey(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function previousMonthKey(value = new Date()) {
+  const date = value instanceof Date ? new Date(value) : new Date(value);
+  date.setMonth(date.getMonth() - 1);
+  return monthKey(date);
+}
+
+function entryMonth(entry) {
+  return String(entry?.date || entry?.createdAt || todayKey()).slice(0, 7);
+}
+
 function periodLabel(period) {
   if (period === "day") return "Bugün";
   if (period === "week") return "Bu hafta";
@@ -685,7 +786,7 @@ function topHeading(entries) {
 }
 
 function entryCountForHeading(id) {
-  const count = projectEntries().filter((entry) => entry.headingId === id).length;
+  const count = visibleProjectEntries().filter((entry) => entry.headingId === id).length;
   return `${count} kayıt`;
 }
 

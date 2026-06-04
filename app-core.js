@@ -44,6 +44,10 @@ function normalizeState(saved) {
     nickname: user.nickname || "",
     email: user.email || "",
     password: normalizePassword(user.password),
+    onayModu: personalityModes[user.onayModu] ? user.onayModu : "standart",
+    totalScore: Number(user.totalScore || 0),
+    correctGuesses: Number(user.correctGuesses || 0),
+    totalGuesses: Number(user.totalGuesses || 0),
     createdAt: user.createdAt || new Date().toISOString(),
     createdBy: user.createdBy || "",
   }));
@@ -58,6 +62,13 @@ function normalizeState(saved) {
     createdBy: project.createdBy || source.activeUserId || "",
     memberIds: Array.isArray(project.memberIds) && project.memberIds.length ? project.memberIds.filter((id) => userIds.includes(id)) : userIds,
     memberAliases: project.memberAliases && typeof project.memberAliases === "object" ? project.memberAliases : {},
+    defaultCurrency: project.defaultCurrency || "TL",
+    defaultHeadings: Array.isArray(project.defaultHeadings) ? project.defaultHeadings : [],
+    splitType: project.splitType || "equal",
+    templateId: project.templateId || "",
+    budgetLimits: project.budgetLimits && typeof project.budgetLimits === "object" ? project.budgetLimits : {},
+    hasBudgetTarget: Boolean(project.hasBudgetTarget),
+    hasGoalItems: Boolean(project.hasGoalItems),
   }));
 
   projects.forEach((project) => {
@@ -73,8 +84,17 @@ function normalizeState(saved) {
   const entries = Array.isArray(source.entries)
     ? source.entries.map((entry) => ({
         ...entry,
+        headingId: entry.headingId || entry.heading_id || "",
+        headingName: entry.headingName || "",
         lockedNotificationId: entry.lockedNotificationId || "",
         photoData: entry.photoData || "",
+        autoRevealAt: entry.autoRevealAt || "",
+        rateLockedAt: entry.rateLockedAt || entry.createdAt || new Date().toISOString(),
+        paidById: entry.paidById || entry.userId || "",
+        splitWith: Array.isArray(entry.splitWith) && entry.splitWith.length ? entry.splitWith : entry.userId ? [entry.userId] : [],
+        splitRatio: Array.isArray(entry.splitRatio) && entry.splitRatio.length ? entry.splitRatio.map(Number) : [1],
+        ocrRawText: entry.ocrRawText ?? null,
+        ocrParsedAmount: entry.ocrParsedAmount ?? null,
       }))
     : [];
   const notifications = Array.isArray(source.notifications)
@@ -86,7 +106,73 @@ function normalizeState(saved) {
         successGif: notification.successGif || "",
         failPhotoData: notification.failPhotoData || "",
         failGif: notification.failGif || "",
-        guesses: Array.isArray(notification.guesses) ? notification.guesses : [],
+        guessDeadline: notification.guessDeadline || notification.autoRevealAt || addHours(notification.createdAt || new Date().toISOString(), 48),
+        revealedAt: notification.revealedAt || "",
+        isCompleted: Boolean(notification.isCompleted || notification.revealedAt),
+        notificationType: notification.notificationType || (notification.mode ? "entry" : "reaction"),
+        reactionEmoji: notification.reactionEmoji || "",
+        guesses: Array.isArray(notification.guesses)
+          ? notification.guesses.map((guess) => ({
+              userId: guess.userId,
+              predictedType: guess.predictedType || guess.guess || "",
+              predictedAmount: guess.predictedAmount ?? null,
+              isCorrect: guess.isCorrect ?? guess.correct ?? null,
+              guessedAt: guess.guessedAt || guess.at || new Date().toISOString(),
+              guess: guess.guess || guess.predictedType || "",
+              correct: guess.correct ?? guess.isCorrect ?? null,
+              at: guess.at || guess.guessedAt || new Date().toISOString(),
+            }))
+          : [],
+      }))
+    : [];
+  const reactions = Array.isArray(source.reactions)
+    ? source.reactions.map((reaction) => ({
+        id: reaction.id || makeId(),
+        entryId: reaction.entryId || "",
+        projectId: reaction.projectId || activeProjectId,
+        userId: reaction.userId || "",
+        emoji: reaction.emoji || "👀",
+        createdAt: reaction.createdAt || new Date().toISOString(),
+      }))
+    : [];
+  const reconciliations = Array.isArray(source.reconciliations)
+    ? source.reconciliations.map((item) => ({
+        id: item.id || makeId(),
+        projectId: item.projectId || activeProjectId,
+        userId: item.userId || "",
+        month: item.month || monthKey(),
+        bankName: item.bankName || "",
+        uploadedAt: item.uploadedAt || new Date().toISOString(),
+        statementTotal: Number(item.statementTotal || 0),
+        kasaTotal: Number(item.kasaTotal || 0),
+        diff: Number(item.diff || 0),
+        status: item.status || "pending",
+        rawRows: Array.isArray(item.rawRows) ? item.rawRows : [],
+      }))
+    : [];
+  const goals = Array.isArray(source.goals)
+    ? source.goals.map((goal) => ({
+        id: goal.id || makeId(),
+        projectId: goal.projectId || activeProjectId,
+        createdBy: goal.createdBy || signedInUserId || activeUserId || "",
+        title: goal.title || "Hedef",
+        targetAmount: Number(goal.targetAmount || 0),
+        currentAmount: Number(goal.currentAmount || 0),
+        deadline: goal.deadline || "",
+        items: Array.isArray(goal.items) ? goal.items : [],
+        status: goal.status || "active",
+        createdAt: goal.createdAt || new Date().toISOString(),
+      }))
+    : [];
+  const settlements = Array.isArray(source.settlements)
+    ? source.settlements.map((settlement) => ({
+        id: settlement.id || makeId(),
+        projectId: settlement.projectId || activeProjectId,
+        fromUserId: settlement.fromUserId || "",
+        toUserId: settlement.toUserId || "",
+        amount: Number(settlement.amount || 0),
+        settledAt: settlement.settledAt || new Date().toISOString(),
+        note: settlement.note || "",
       }))
     : [];
 
@@ -96,6 +182,8 @@ function normalizeState(saved) {
     activeView: source.activeView || "home",
     reportPeriod,
     movementPeriod,
+    calendarTab: ["calendar", "goals"].includes(source.calendarTab) ? source.calendarTab : "calendar",
+    addTab: ["entry", "statement"].includes(source.addTab) ? source.addTab : "entry",
     activeProjectId,
     activeUserId,
     signedInUserId,
@@ -111,6 +199,13 @@ function normalizeState(saved) {
     headings: Array.isArray(source.headings) ? source.headings : [],
     entries,
     notifications,
+    reactions,
+    reconciliations,
+    goals,
+    settlements,
+    reconciliationDetailId: source.reconciliationDetailId || "",
+    reactionPickerEntryId: source.reactionPickerEntryId || "",
+    selectedTemplateId: source.selectedTemplateId || "",
   };
 }
 

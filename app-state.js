@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "03.06.2026 22:39";
+const APP_UPDATED_AT = "03.06.2026 23:37";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -68,14 +68,100 @@ const currencyOptions = [
   { code: "GBP", label: "GBP" },
 ];
 
+const personalityModes = {
+  standart: { label: "Standart", success: "Doğru bildin.", fail: "Yanlış tahmin." },
+  fatihterim: { label: "Fatih Terim", success: "Biz bitti demeden bitmez.", fail: "Hiç bitmeyen maç yok." },
+  efsane: { label: "Efsane", success: "Efsane doğru bildi.", fail: "Bu sefer olmadı, efsane bile yanılır." },
+  sakin: { label: "Sakin", success: "Hmm. Bildin.", fail: "Olmadı." },
+};
+
+const reactionPreset = ["🔥", "💸", "🤦", "🎉", "👀"];
+
+const keywordEmojiMap = {
+  market: "🛒",
+  kira: "🏠",
+  benzin: "⛽",
+  fatura: "💡",
+  yemek: "🍽",
+  kahve: "☕",
+  taksi: "🚕",
+  sinema: "🎬",
+  spor: "🏋",
+  sağlık: "💊",
+  saglik: "💊",
+  giyim: "👕",
+  oyun: "🎮",
+  tatil: "✈️",
+  hediye: "🎁",
+  kitap: "📚",
+};
+
+const bankColumnMaps = {
+  garanti: { label: "Garanti", dateCol: 0, descCol: 1, amountCol: 3, delimiter: ";" },
+  isbank: { label: "İş Bankası", dateCol: 0, descCol: 2, amountCol: 4, delimiter: "," },
+  yapikredi: { label: "Yapı Kredi", dateCol: 0, descCol: 1, amountCol: 2, delimiter: ";" },
+  akbank: { label: "Akbank", dateCol: 1, descCol: 2, amountCol: 5, delimiter: "," },
+  ziraat: { label: "Ziraat", dateCol: 0, descCol: 1, amountCol: 3, delimiter: ";" },
+  other: { label: "Diğer", dateCol: 0, descCol: 1, amountCol: 2, delimiter: ";" },
+};
+
+const projectTemplates = [
+  { id: "roommates", name: "Ev arkadaşları", headings: ["Kira", "Elektrik", "Su", "İnternet", "Market", "Temizlik", "Diğer"], splitType: "equal", hasBudgetTarget: false },
+  { id: "couple-trip", name: "Çift tatil bütçesi", headings: ["Ulaşım", "Konaklama", "Yemek", "Aktivite", "Alışveriş", "Acil"], splitType: "equal", hasBudgetTarget: true, hasGoalItems: true },
+  { id: "group-trip", name: "Grup tatili", headings: ["Ulaşım", "Konaklama", "Yemek", "Aktivite", "Alışveriş", "Acil"], splitType: "weighted", suggestedMemberCount: 4, hasGoalItems: true },
+  { id: "personal-goal", name: "Kişisel hedef", headings: ["Hedef katkı", "Ekstra gelir", "Tasarruf"], splitType: "individual", hasGoalItems: true, savingsCoach: true },
+  { id: "family-budget", name: "Aile bütçesi", headings: ["Kira", "Market", "Eğitim", "Sağlık", "Ulaşım", "Eğlence", "Giyim", "Diğer"], splitType: "weighted", hasBudgetTarget: true },
+];
+
+const funnyMessages = {
+  asimEglence: [
+    "Bugün eğlenceye {tutar} TL. Müsriflik bu.",
+    "{tutar} TL eğlence. Kasa seni izliyor.",
+    "Kahveye {tutar} TL. Bu para {hedefGun} günlük PC bütçen.",
+  ],
+  asimGenel: [
+    "Bu hızla gidersen ay bitmeden para bitmez.",
+    "{başlık} bu ay {tutar} TL oldu. Geçen ay {gecenAy} TL idi.",
+    "Harcama rekoru kırmak üzeresin.",
+  ],
+  reconciliationDiff: [
+    "Ekstren {diff} TL fazla gösteriyor. Cebinde delik mi var?",
+    "{diff} TL kayıp. Dedektif moduna geçtik.",
+    "Kasa ile banka arasında {diff} TL fark. Birileri bir şeyler saklıyor.",
+    "{diff} TL gizemli hareket. Kasa sorguluyor.",
+  ],
+  reconciliationMatch: [
+    "Her şey tuttu. Terfi ettiniz.",
+    "Kasa ile banka el sıkıştı. Nadiren olur.",
+    "Mükemmel uyum. Kasa seninle gurur duyuyor.",
+    "Hiçbir şey kaybolmadı. Sen gerçeksin.",
+  ],
+  monthlyWin: [
+    "Geçen aya göre {farkMutlak} TL tasarruf ettin. Terfi ettiniz.",
+    "Bu ay kasayı iyi tuttu. {farkMutlak} TL kurtardın.",
+    "Ay sonu raporu: başarılıydın.",
+  ],
+  monthlyWarn: [
+    "Geçen aya göre {fark} TL daha fazla harcadın. Ne oldu?",
+    "Bu ay biraz taştı. Bir sonraki ay telafi?",
+    "{fark} TL fark var. Sürpriz harcamalar mıydı?",
+  ],
+  monthlyNeutral: ["Tutarlısın. Geçen ayla neredeyse aynı.", "Ay kapandı, kasa dengelendi."],
+};
+
 const defaultUsers = [];
 
 const seedState = {
   activeView: "home",
   reportPeriod: "month",
   movementPeriod: "month",
+  calendarTab: "calendar",
+  addTab: "entry",
   settlementVisible: false,
   pendingDetail: "",
+  reconciliationDetailId: "",
+  reactionPickerEntryId: "",
+  selectedTemplateId: "",
   activeProjectId: "",
   activeUserId: "",
   signedInUserId: "",
@@ -91,6 +177,10 @@ const seedState = {
   headings: [],
   entries: [],
   notifications: [],
+  reactions: [],
+  reconciliations: [],
+  goals: [],
+  settlements: [],
 };
 
 let state;
