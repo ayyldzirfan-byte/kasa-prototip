@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f8f3ea" />
+    <meta name="theme-color" content="#f6f7f5" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Kasa" />
-    <title>Ev Kasası Prototip</title>
+    <title>Kasa Prototip</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="stylesheet" href="./styles.css" />
@@ -29,10 +29,13 @@
 
       <nav class="tabbar" aria-label="Ana menü">
         <button class="tab active" data-view="home" type="button">
-          <span>Ana</span>
+          <span>Kasa</span>
         </button>
         <button class="tab" data-view="movements" type="button">
-          <span>Hareket</span>
+          <span>Hareketler</span>
+        </button>
+        <button class="tab" data-view="group" type="button">
+          <span>Bütçeler</span>
         </button>
         <button class="tab" data-view="calendar" type="button">
           <span>Takvim</span>
@@ -42,7 +45,7 @@
         </button>
       </nav>
 
-      <div class="update-stamp" aria-label="Son güncelleme">Güncellendi 03.06.2026 23:37</div>
+      <div class="update-stamp" aria-label="Son güncelleme">Güncellendi 06.06.2026 00:07</div>
     </div>
 
     <script src="./cloud-config.js"></script>
@@ -55,6 +58,7 @@
     <script src="./app-model.js"></script>
     <script src="./app-cloud.js"></script>
     <script src="./app-blocks.js"></script>
+    <script src="./app-product-pass.js"></script>
     <script src="./app-init.js"></script>
   </body>
 </html>
