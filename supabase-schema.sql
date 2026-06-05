@@ -6,6 +6,8 @@ create table if not exists public.kasa_profiles (
   email text unique,
   name text not null,
   nickname text default '',
+  photo_name text not null default '',
+  photo_data text not null default '',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -16,6 +18,8 @@ create table if not exists public.kasa_projects (
   purpose text default 'Genel kasa',
   code text not null unique,
   created_by uuid not null references auth.users(id) on delete cascade,
+  photo_name text not null default '',
+  photo_data text not null default '',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -25,6 +29,8 @@ create table if not exists public.kasa_project_members (
   user_id uuid not null references auth.users(id) on delete cascade,
   role text not null default 'member' check (role in ('owner', 'member')),
   alias text default '',
+  photo_name text not null default '',
+  photo_data text not null default '',
   created_at timestamptz not null default now(),
   primary key (project_id, user_id)
 );
@@ -48,7 +54,6 @@ create table if not exists public.kasa_entries (
   currency text not null default 'TRY',
   exchange_rate numeric not null default 1,
   heading_id uuid,
-  heading_name text not null,
   short_name text not null,
   emoji text default '',
   entry_date date not null,
@@ -56,6 +61,16 @@ create table if not exists public.kasa_entries (
   photo_name text default '',
   photo_data text default '',
   locked_notification_id uuid,
+  auto_reveal_at timestamptz,
+  rate_locked_at timestamptz not null default now(),
+  paid_by_id uuid,
+  split_with uuid[] not null default '{}'::uuid[],
+  split_ratio numeric[] not null default '{}'::numeric[],
+  ocr_raw_text text,
+  ocr_parsed_amount numeric,
+  installment_group_id uuid,
+  installment_index integer not null default 0,
+  installment_count integer not null default 0,
   settlement boolean not null default false,
   status text not null check (status in ('done', 'pending')),
   created_at timestamptz not null default now()

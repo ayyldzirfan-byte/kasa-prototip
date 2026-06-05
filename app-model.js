@@ -36,6 +36,14 @@ function projectAliasFor(userId, project = activeProject()) {
   return project?.memberAliases?.[userId] || "";
 }
 
+function projectMemberPhotoFor(userId, project = activeProject()) {
+  return project?.memberPhotos?.[userId] || null;
+}
+
+function userPhotoFor(user) {
+  return user?.photoData ? { photoName: user.photoName || "", photoData: user.photoData } : null;
+}
+
 function projectUserLabel(user, project = activeProject()) {
   if (!user) return "Kullanıcı";
   const base = profileLabel(user);
@@ -89,6 +97,8 @@ function createUser(name, password = "", options = {}) {
     nickname: String(options.nickname || "").trim(),
     email: options.email || "",
     password: normalizePassword(password),
+    photoName: options.photoName || "",
+    photoData: options.photoData || "",
     onayModu: personalityModes[options.onayModu] ? options.onayModu : "standart",
     totalScore: Number(options.totalScore || 0),
     correctGuesses: Number(options.correctGuesses || 0),
@@ -115,6 +125,9 @@ function createProject(name, purpose = "Genel kasa") {
     createdBy: currentUser()?.id || "",
     memberIds: currentUser()?.id ? [currentUser().id] : [],
     memberAliases: {},
+    memberPhotos: {},
+    photoName: "",
+    photoData: "",
     defaultCurrency: "TL",
     defaultHeadings: [],
     splitType: "equal",
@@ -889,7 +902,7 @@ function byDateAsc(a, b) {
 }
 
 function shortName(name) {
-  return String(name || "").replace(" Ayyıldız", "");
+  return String(name || "").trim().split(/\s+/)[0] || "";
 }
 
 function normalize(value) {

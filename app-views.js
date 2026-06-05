@@ -35,7 +35,7 @@ function renderHome() {
           <h2>${project.name}</h2>
           <p>${activeMembers().map((user) => projectUserLabel(user)).join(", ") || "Henüz üye yok"}</p>
         </div>
-        <button class="tiny-button" data-action="open-group" type="button">Yönet</button>
+        <button class="tiny-button" data-action="open-projects-list" type="button">Yeni proje oluştur</button>
       </div>
       <label style="display:block; margin-top: 12px;">
         <span class="field-label">Aktif proje</span>
@@ -140,9 +140,9 @@ function renderAdd() {
     payable: "Henüz ödenmemiş gider. Takvimde yaklaşan ödeme olarak görünür.",
   }[type.id];
   const headingLabel = type.id === "income" || type.id === "receivable" ? "Gelir başlığı" : "Gider başlığı";
-  const headingPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Maaş, ek iş, satış" : "Örn. Kira, HGS, market";
-  const shortPlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. maaş günü, yan gelir, tahsilat" : "Örn. haraç, yol yedi, ayın tokadı";
-  const notePlaceholder = type.id === "income" || type.id === "receivable" ? "Örn. Haziran maaşı, prim dahil" : "Örn. kasada farklı çıktı, ortak ödeme";
+  const headingPlaceholder = "Başlık yaz";
+  const shortPlaceholder = "Kısa isim";
+  const notePlaceholder = "Açıklama";
   return `
     <form class="form-card form-grid" id="entryForm">
       <div class="section-head">
@@ -172,7 +172,7 @@ function renderAdd() {
         </label>
         <label class="fx-rate-field ${draft.currency === "TRY" ? "is-hidden" : ""}">
           <span class="field-label">Kur</span>
-          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="Örn. 32,5" value="${draft.exchangeRate || 1}" autocomplete="off" />
+          <input class="select-input" name="exchangeRate" inputmode="decimal" placeholder="32,50" value="${draft.exchangeRate || 1}" autocomplete="off" />
         </label>
       </div>
 
@@ -539,7 +539,7 @@ function renderGroup() {
         canManageUsers
           ? `
             <form class="inline-form featured-form" id="projectUserForm">
-              <input class="text-input" name="userName" placeholder="${cloudReady ? "havva@mail.com" : "Örn. Havva veya Derya"}" autocomplete="${cloudReady ? "email" : "off"}" />
+              <input class="text-input" name="userName" placeholder="${cloudReady ? "mail@ornek.com" : "Kullanıcı adı"}" autocomplete="${cloudReady ? "email" : "off"}" />
               <button class="primary-button" type="submit">Kasaya ekle</button>
             </form>
           `
@@ -583,7 +583,7 @@ function renderGroup() {
         canManageUsers
           ? `
             <form class="inline-form" id="userForm">
-              <input class="text-input" name="userName" placeholder="${cloudReady ? "E-posta: havva@mail.com" : "Kullanıcı adı: Havva"}" autocomplete="${cloudReady ? "email" : "off"}" />
+              <input class="text-input" name="userName" placeholder="${cloudReady ? "E-posta: mail@ornek.com" : "Kullanıcı adı"}" autocomplete="${cloudReady ? "email" : "off"}" />
               <button class="primary-button" type="submit">Kasaya ekle</button>
             </form>
           `
@@ -632,11 +632,11 @@ function renderHeadings() {
       <form class="form-grid" id="headingForm">
         <label>
           <span class="field-label">Başlık adı</span>
-          <input class="text-input" name="headingName" placeholder="Örn. Altın" autocomplete="off" />
+          <input class="text-input" name="headingName" placeholder="Başlık" autocomplete="off" />
         </label>
         <label>
           <span class="field-label">Kısa isim / lakap</span>
-          <input class="text-input" name="shortName" placeholder="Örn. haraç" autocomplete="off" />
+          <input class="text-input" name="shortName" placeholder="Kısa isim" autocomplete="off" />
         </label>
         <div>
           <span class="field-label">Emoji</span>

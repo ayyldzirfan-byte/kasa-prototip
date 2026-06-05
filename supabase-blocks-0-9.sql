@@ -5,7 +5,9 @@ alter table public.kasa_profiles
   add column if not exists onay_modu text not null default 'standart',
   add column if not exists total_score integer not null default 0,
   add column if not exists correct_guesses integer not null default 0,
-  add column if not exists total_guesses integer not null default 0;
+  add column if not exists total_guesses integer not null default 0,
+  add column if not exists photo_name text not null default '',
+  add column if not exists photo_data text not null default '';
 
 alter table public.kasa_projects
   add column if not exists default_currency text not null default 'TL',
@@ -14,7 +16,13 @@ alter table public.kasa_projects
   add column if not exists template_id text not null default '',
   add column if not exists budget_limits jsonb not null default '{}'::jsonb,
   add column if not exists has_budget_target boolean not null default false,
-  add column if not exists has_goal_items boolean not null default false;
+  add column if not exists has_goal_items boolean not null default false,
+  add column if not exists photo_name text not null default '',
+  add column if not exists photo_data text not null default '';
+
+alter table public.kasa_project_members
+  add column if not exists photo_name text not null default '',
+  add column if not exists photo_data text not null default '';
 
 alter table public.kasa_entries
   add column if not exists auto_reveal_at timestamptz,
@@ -23,7 +31,10 @@ alter table public.kasa_entries
   add column if not exists split_with uuid[] not null default '{}'::uuid[],
   add column if not exists split_ratio numeric[] not null default '{}'::numeric[],
   add column if not exists ocr_raw_text text,
-  add column if not exists ocr_parsed_amount numeric;
+  add column if not exists ocr_parsed_amount numeric,
+  add column if not exists installment_group_id uuid,
+  add column if not exists installment_index integer not null default 0,
+  add column if not exists installment_count integer not null default 0;
 
 update public.kasa_entries
 set paid_by_id = coalesce(paid_by_id, user_id),

@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "03.06.2026 23:37";
+const APP_UPDATED_AT = "05.06.2026 23:10";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -16,7 +16,6 @@ const headingSuggestionGroups = {
     { name: "Araç HGS", shortName: "HGS", emoji: "🚗" },
     { name: "Araç MTV", shortName: "MTV", emoji: "🧾" },
     { name: "Fatura", shortName: "Fatura", emoji: "💡" },
-    { name: "Altın", shortName: "Haraç", emoji: "🪙" },
     { name: "Çocuk", shortName: "Mini", emoji: "🍼" },
     { name: "Tatil", shortName: "Kaçış", emoji: "🏖️" },
     { name: "Diğer gider", shortName: "Diğer", emoji: "🧾" },
@@ -162,6 +161,12 @@ const seedState = {
   reconciliationDetailId: "",
   reactionPickerEntryId: "",
   selectedTemplateId: "",
+  previousView: "",
+  groupMode: "list",
+  activeMemberProfileId: "",
+  lockedEntryType: "",
+  calendarMonth: "",
+  calendarFlip: 0,
   activeProjectId: "",
   activeUserId: "",
   signedInUserId: "",

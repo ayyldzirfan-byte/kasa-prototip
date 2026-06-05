@@ -44,6 +44,8 @@ function normalizeState(saved) {
     nickname: user.nickname || "",
     email: user.email || "",
     password: normalizePassword(user.password),
+    photoName: user.photoName || "",
+    photoData: user.photoData || "",
     onayModu: personalityModes[user.onayModu] ? user.onayModu : "standart",
     totalScore: Number(user.totalScore || 0),
     correctGuesses: Number(user.correctGuesses || 0),
@@ -62,6 +64,9 @@ function normalizeState(saved) {
     createdBy: project.createdBy || source.activeUserId || "",
     memberIds: Array.isArray(project.memberIds) && project.memberIds.length ? project.memberIds.filter((id) => userIds.includes(id)) : userIds,
     memberAliases: project.memberAliases && typeof project.memberAliases === "object" ? project.memberAliases : {},
+    memberPhotos: project.memberPhotos && typeof project.memberPhotos === "object" ? project.memberPhotos : {},
+    photoName: project.photoName || "",
+    photoData: project.photoData || "",
     defaultCurrency: project.defaultCurrency || "TL",
     defaultHeadings: Array.isArray(project.defaultHeadings) ? project.defaultHeadings : [],
     splitType: project.splitType || "equal",
@@ -95,6 +100,9 @@ function normalizeState(saved) {
         splitRatio: Array.isArray(entry.splitRatio) && entry.splitRatio.length ? entry.splitRatio.map(Number) : [1],
         ocrRawText: entry.ocrRawText ?? null,
         ocrParsedAmount: entry.ocrParsedAmount ?? null,
+        installmentGroupId: entry.installmentGroupId || "",
+        installmentIndex: Number(entry.installmentIndex || 0),
+        installmentCount: Number(entry.installmentCount || 0),
       }))
     : [];
   const notifications = Array.isArray(source.notifications)
@@ -206,6 +214,12 @@ function normalizeState(saved) {
     reconciliationDetailId: source.reconciliationDetailId || "",
     reactionPickerEntryId: source.reactionPickerEntryId || "",
     selectedTemplateId: source.selectedTemplateId || "",
+    previousView: source.previousView || "",
+    groupMode: ["list", "detail", "member"].includes(source.groupMode) ? source.groupMode : "list",
+    activeMemberProfileId: users.some((user) => user.id === source.activeMemberProfileId) ? source.activeMemberProfileId : "",
+    lockedEntryType: source.lockedEntryType || "",
+    calendarMonth: source.calendarMonth || monthKey(),
+    calendarFlip: Number(source.calendarFlip || 0),
   };
 }
 
@@ -291,15 +305,15 @@ function renderAuth() {
             <form class="form-grid" id="accountForm">
               <label>
                 <span class="field-label">Ad soyad</span>
-                <input class="text-input" name="userName" placeholder="Örn. İrfan Ayyıldız" autocomplete="name" />
+                <input class="text-input" name="userName" placeholder="Ad soyad" autocomplete="name" />
               </label>
               <label>
                 <span class="field-label">Kısa isim / lakap</span>
-                <input class="text-input" name="nickname" placeholder="Örn. İrfan, anne, ortak" autocomplete="off" />
+                <input class="text-input" name="nickname" placeholder="Kısa isim" autocomplete="off" />
               </label>
               <label>
                 <span class="field-label">E-posta</span>
-                <input class="text-input" name="email" type="email" placeholder="Örn. irfan@mail.com" autocomplete="email" />
+                <input class="text-input" name="email" type="email" placeholder="mail@ornek.com" autocomplete="email" />
               </label>
               <label>
                 <span class="field-label">Şifre</span>
@@ -358,7 +372,7 @@ function renderProjectSetup() {
       <form class="form-grid" id="firstProjectForm">
         <label>
           <span class="field-label">Kasa / proje adı</span>
-          <input class="text-input" name="projectName" placeholder="Örn. Ev Kasası" autocomplete="off" />
+          <input class="text-input" name="projectName" placeholder="Proje adı" autocomplete="off" />
         </label>
         <label>
           <span class="field-label">Amaç</span>
