@@ -65,6 +65,7 @@ function normalizeState(saved) {
     memberIds: Array.isArray(project.memberIds) && project.memberIds.length ? project.memberIds.filter((id) => userIds.includes(id)) : userIds,
     memberAliases: project.memberAliases && typeof project.memberAliases === "object" ? project.memberAliases : {},
     memberPhotos: project.memberPhotos && typeof project.memberPhotos === "object" ? project.memberPhotos : {},
+    memberSince: project.memberSince && typeof project.memberSince === "object" ? project.memberSince : project.budgetLimits?.__memberSince && typeof project.budgetLimits.__memberSince === "object" ? project.budgetLimits.__memberSince : {},
     photoName: project.photoName || "",
     photoData: project.photoData || "",
     defaultCurrency: project.defaultCurrency || "TL",
@@ -84,7 +85,7 @@ function normalizeState(saved) {
   const signedInUserId = users.some((user) => user.id === source.signedInUserId) ? source.signedInUserId : "";
   const activeUserId = users.some((user) => user.id === source.activeUserId) ? source.activeUserId : signedInUserId;
   const pendingLoginUserId = users.some((user) => user.id === source.pendingLoginUserId) ? source.pendingLoginUserId : activeUserId || users[users.length - 1]?.id || "";
-  const reportPeriod = ["day", "week", "month"].includes(source.reportPeriod) ? source.reportPeriod : "month";
+  const reportPeriod = ["day", "week", "month", "all"].includes(source.reportPeriod) ? source.reportPeriod : "month";
   const movementPeriod = ["day", "week", "month", "all"].includes(source.movementPeriod) ? source.movementPeriod : "month";
   const entries = Array.isArray(source.entries)
     ? source.entries.map((entry) => ({
@@ -219,6 +220,7 @@ function normalizeState(saved) {
     activeMemberProfileId: users.some((user) => user.id === source.activeMemberProfileId) ? source.activeMemberProfileId : "",
     lockedEntryType: source.lockedEntryType || "",
     calendarMonth: source.calendarMonth || monthKey(),
+    calendarDay: source.calendarDay || todayKey(),
     calendarFlip: Number(source.calendarFlip || 0),
   };
 }
