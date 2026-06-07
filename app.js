@@ -8301,9 +8301,15 @@ function pendingSurpriseCountForUser(user = currentUser()) {
 function lockedSurpriseCountForUser(user = currentUser()) {
   if (!user) return 0;
   return (state.entries || []).filter((entry) => {
-    if (!entry.lockedNotificationId || personalAmountForEntry(entry, user) <= 0) return false;
+    if (!entry.lockedNotificationId) return false;
     const notification = entryNotification(entry);
-    return !notification?.revealedAt;
+    const project = state.projects.find((item) => item.id === entry.projectId);
+    const belongsToUser =
+      entry.userId === user.id ||
+      entry.paidById === user.id ||
+      (Array.isArray(entry.splitWith) && entry.splitWith.includes(user.id)) ||
+      (Array.isArray(project?.memberIds) && project.memberIds.includes(user.id));
+    return belongsToUser && !notification?.revealedAt;
   }).length;
 }
 
