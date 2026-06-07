@@ -8298,6 +8298,15 @@ function pendingSurpriseCountForUser(user = currentUser()) {
   return (state.entries || []).filter((entry) => personalAmountForEntry(entry, user) > 0 && entry.status === "done" && entry.lockedNotificationId && !entryConfirmed(entry)).length;
 }
 
+function lockedSurpriseCountForUser(user = currentUser()) {
+  if (!user) return 0;
+  return (state.entries || []).filter((entry) => {
+    if (!entry.lockedNotificationId || personalAmountForEntry(entry, user) <= 0) return false;
+    const notification = entryNotification(entry);
+    return !notification?.revealedAt;
+  }).length;
+}
+
 function projectImpactForUser(project, user = currentUser()) {
   const entries = personalProjectEntries(project, user);
   const totals = calculateTotals(entries);
@@ -8391,7 +8400,7 @@ function renderHome() {
   const recent = entries.filter((entry) => entry.status === "done" && entryConfirmed(entry)).sort(byDateDesc).slice(0, 4);
   const upcoming = entries.filter((entry) => entry.status === "pending").sort(byDateAsc).slice(0, 3);
   const notificationCount = notificationEntries().length;
-  const surpriseCount = pendingSurpriseCountForUser(user);
+  const surpriseCount = lockedSurpriseCountForUser(user);
 
   return `
     <section class="account-strip clean-strip">
@@ -8446,6 +8455,7 @@ function renderHome() {
       <div class="section-head"><div><h2>Yaklaşanlar</h2></div></div>
       <div class="expense-list">${upcoming.length ? upcoming.map(entrySummaryRow).join("") : `<div class="empty-state">Takvime düşecek ileri tarihli kayıt yok.</div>`}</div>
     </section>
+    ${surpriseCount ? `<button class="surprise-alert-row" data-action="open-notifications" type="button">🎁 ${surpriseCount} bekleyen sürpriz hareket</button>` : ""}
 
     <section class="card">
       <div class="section-head"><div><h2>Son hareketler</h2></div><button class="tiny-button" data-action="open-movements" type="button">Tümü</button></div>
@@ -8721,8 +8731,9 @@ function renderGroup() {
     <section class="card"><h2>Üyeler</h2><div class="expense-list" style="margin-top:12px;">${activeMembers().map(userLinkRow).join("") || `<div class="empty-state">Bu bütçede üye yok.</div>`}</div></section>
     <section class="card"><div class="section-head"><div><h2>Erişim</h2><p>${cloudReady ? "Başka telefondan aynı bütçeye katılmak için kullanılır." : "Yerel denemede kullanıcılar bu cihazda tutulur."}</p></div></div><div class="invite-box"><div><span class="field-label">Kod</span><strong>${projectCode(project)}</strong><p>${inviteLink(project)}</p></div><button class="mini-action" data-action="copy-project-link" type="button">Kopyala</button></div></section>
     <section class="card">
-      <div class="section-head"><div><h2>Borç & alacak</h2><p>${state.settlementVisible ? "Minimum transfer listesi görünür." : "Şu an gizli."}</p></div><button class="tiny-button" data-action="toggle-settlement" type="button">${state.settlementVisible ? "Gizle" : "Göster"}</button></div>
-      ${state.settlementVisible ? `<div style="margin-top:10px;">${balances.length ? balances.map(balanceRow).join("") : `<div class="empty-state">Hesaplaşmaya dahil gider yok.</div>`}</div><div style="margin-top:12px;">${transferRows(transfers)}</div>` : `<div class="empty-state" style="margin-top:12px;">Açınca kim kime ne kadar göndermeli görünür.</div>`}
+      <div class="section-head"><div><h2>Borç & alacak</h2><p>Minimum transfer listesi.</p></div></div>
+      <div style="margin-top:10px;">${balances.length ? balances.map(balanceRow).join("") : `<div class="empty-state">Hesaplaşmaya dahil gider yok.</div>`}</div>
+      <div style="margin-top:12px;">${transferRows(transfers)}</div>
     </section>
     <section class="card">
       <h2>Bütçeye kişi ekle</h2>
@@ -8889,7 +8900,7 @@ function renderReport() {
       <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${period === "all" ? "Toplam net etki." : `${label} net fark.`}</span></div>
     </section>
-    <section class="card receipt-card" id="receiptCard"><div class="receipt-header"><strong>KASA FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasa.app</p></section>
+    <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASA FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasa.app</p></section>
   `;
 }
 
