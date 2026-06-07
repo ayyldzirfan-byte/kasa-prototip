@@ -1667,11 +1667,11 @@ function renderReport() {
       </div>
     </section>
     <section class="card receipt-card" id="receiptCard">
-      <div class="receipt-header"><strong>KASA FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>
+      <div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>
       ${reportRows(currentEntries)}
       ${exchangeReceiptLines(currentEntries)}
       <div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div>
-      <p class="receipt-watermark">kasa.app</p>
+      <p class="receipt-watermark">kasam.app</p>
     </section>
   `;
 }
@@ -3116,7 +3116,7 @@ function renderReport() {
     ${reconciliationCards()}
     <section class="card"><div class="section-head"><div><h2>Rapor detayı</h2><p>Bu dönemde görünen gelir ve giderler.</p></div></div><div class="expense-list">${entries.length ? entries.map(movementEntryRow).join("") : `<div class="empty-state">Bu dönem için raporlanacak hareket yok.</div>`}</div></section>
     <section class="receipt-card" id="receiptCard">
-      <h2 class="receipt-title">KASA FİŞİ</h2>
+      <h2 class="receipt-title">KASAM FİŞİ</h2>
       <div class="receipt-line"><span>Tarih</span><strong>${new Date().toLocaleDateString("tr-TR")} ${new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}</strong></div>
       <div class="receipt-line"><span>Proje</span><strong>${activeProject().name}</strong></div>
       <div class="receipt-line"><span>${label} giren</span><strong>${money(totals.income)}</strong></div>
@@ -3124,7 +3124,7 @@ function renderReport() {
       <div class="receipt-line"><span>Net</span><strong>${money(totals.actual)}</strong></div>
       ${exchangeReceiptLines(entries)}
       <div class="receipt-line"><span>En hareketli başlık</span><strong>${topHeading(entries)}</strong></div>
-      <p class="receipt-watermark">kasa.app</p>
+      <p class="receipt-watermark">kasam.app</p>
       <button class="share-button" data-action="share-receipt" type="button">Fişi paylaş</button>
     </section>
   `;
@@ -3221,15 +3221,15 @@ function exchangeReceiptLines(entries) {
 
 async function shareReceipt() {
   const card = document.querySelector("#receiptCard");
-  const text = card?.innerText || "KASA FİŞİ";
+  const text = card?.innerText || "KASAM FİŞİ";
   try {
     if (window.html2canvas && card) {
       const canvas = await window.html2canvas(card, { backgroundColor: "#fffaf1", scale: 2 });
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
       if (blob && navigator.canShare) {
-        const file = new File([blob], "kasa-fisi.png", { type: "image/png" });
+        const file = new File([blob], "kasam-fisi.png", { type: "image/png" });
         if (navigator.canShare({ files: [file] })) {
-          await navigator.share({ title: "Kasa Fişi", text: "Kasa fişi", files: [file] });
+          await navigator.share({ title: "Kasam Fişi", text: "Kasam fişi", files: [file] });
           return;
         }
       }
@@ -3239,7 +3239,7 @@ async function shareReceipt() {
       link.click();
       return toast("Fiş görseli indirildi.");
     }
-    if (navigator.share) await navigator.share({ title: "Kasa Fişi", text });
+    if (navigator.share) await navigator.share({ title: "Kasam Fişi", text });
     else {
       await navigator.clipboard.writeText(text);
       toast("Fiş metni kopyalandı.");

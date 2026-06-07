@@ -1,4 +1,4 @@
-const CACHE_NAME = "kasa-prototype-v23";
+const CACHE_NAME = "kasam-production-v1";
 const ASSETS = [
   "./",
   "./index.html",
@@ -13,10 +13,21 @@ const ASSETS = [
   "./app-cloud.js",
   "./app-blocks.js",
   "./app-product-pass.js",
+  "./app-production.js",
   "./app-init.js",
   "./manifest.webmanifest",
   "./icon.svg",
+  "./icon-16.png",
+  "./icon-32.png",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./icon-maskable-192.png",
+  "./icon-maskable-512.png",
   "./apple-touch-icon.png",
+  "./robots.txt",
+  "./404.html",
+  "./gizlilik.html",
+  "./sartlar.html",
 ];
 
 self.addEventListener("install", (event) => {

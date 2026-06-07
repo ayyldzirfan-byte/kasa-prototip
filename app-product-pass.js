@@ -453,7 +453,7 @@ function renderReport() {
       <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${label} net fark. Pozitif değer geçen döneme göre kasada daha iyi net alan demek.</span></div>
     </section>
-    <section class="card receipt-card" id="receiptCard"><div class="receipt-header"><strong>KASA FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasa.app</p></section>
+    <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasam.app</p></section>
   `;
 }
 
@@ -1284,7 +1284,7 @@ function renderReport() {
       <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${period === "all" ? "Toplam net etki." : `${label} net fark.`}</span></div>
     </section>
-    <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASA FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasa.app</p></section>
+    <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasam.app</p></section>
   `;
 }
 
@@ -1293,9 +1293,9 @@ async function shareReceipt() {
   const entries = selectReportEntries(personalLedgerEntries().filter((entry) => entry.status === "done" && entryConfirmed(entry)), period);
   const totals = calculateTotals(entries);
   const label = period === "day" ? "Bugün" : period === "week" ? "Bu hafta" : period === "month" ? "Bu ay" : "Genel";
-  const text = `KASA FİŞİ\n${label}\nGiren: ${money(totals.income)}\nÇıkan: ${money(totals.expense)}\nNet: ${money(totals.actual)}\nHareket: ${entries.length}`;
+  const text = `KASAM FİŞİ\n${label}\nGiren: ${money(totals.income)}\nÇıkan: ${money(totals.expense)}\nNet: ${money(totals.actual)}\nHareket: ${entries.length}`;
   try {
-    if (navigator.share) await navigator.share({ title: "Kasa Fişi", text });
+    if (navigator.share) await navigator.share({ title: "Kasam Fişi", text });
     else {
       await navigator.clipboard.writeText(text);
       toast("Fiş metni kopyalandı.");

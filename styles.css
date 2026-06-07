@@ -2224,3 +2224,180 @@ button.calendar-cell {
   align-items: flex-start;
   gap: 4px;
 }
+
+/* Kasam production polish */
+:root {
+  --bg: #f7f8f5;
+  --surface: #ffffff;
+  --surface-strong: #ffffff;
+  --ink: #171717;
+  --muted: #69716b;
+  --line: #e5e9e2;
+  --green: #23845a;
+  --green-soft: #e3f5ea;
+  --coral: #d95f4c;
+  --coral-soft: #ffe9e5;
+  --yellow: #f4d35e;
+  --yellow-soft: #fff6ce;
+  --shadow: 0 20px 52px rgba(16, 24, 20, 0.12);
+}
+
+html {
+  background: #eef2ed;
+}
+
+body {
+  background: #eef2ed;
+}
+
+.phone-shell {
+  background: linear-gradient(180deg, #ffffff 0%, #f7f8f5 62%, #eef2ed 100%);
+}
+
+.hero {
+  background: linear-gradient(145deg, #ffffff 0%, #edf7ef 100%);
+  box-shadow: 0 14px 38px rgba(24, 56, 42, 0.08);
+}
+
+.card,
+.form-card,
+.stat-card,
+.receipt-card {
+  border-color: rgba(17, 17, 17, 0.07);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.primary-button {
+  background: #111111;
+  color: #fff8e6;
+}
+
+.secondary-button {
+  background: #eef2ed;
+  color: #111111;
+}
+
+.danger-button {
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: #ffe2dc;
+  color: #a12a1a;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.small-button {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 12px;
+}
+
+.check-row {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: start;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.check-row input {
+  margin-top: 2px;
+}
+
+.legal-links {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.legal-links a {
+  color: var(--green);
+}
+
+.legal-card {
+  margin-top: 30px;
+  line-height: 1.55;
+}
+
+.offline-badge {
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #111111;
+  color: #fff8e6;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.insight-card {
+  border-color: rgba(35, 132, 90, 0.2);
+  background: #f7fff9;
+}
+
+.insight-action {
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.stacked-actions {
+  display: grid;
+}
+
+.join-card {
+  border-top: 1px dashed var(--line);
+  padding-top: 14px;
+}
+
+.raw-block {
+  overflow: auto;
+  max-height: 220px;
+  margin: 12px 0 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f4f6f3;
+  color: #222;
+  font-size: 11px;
+  white-space: pre-wrap;
+}
+
+.danger-link {
+  background: #ffe8e2;
+  color: #9f2d1f;
+}
+
+.receipt-card {
+  font-family: "Roboto Mono", "Courier New", monospace;
+}
+
+.receipt-header-stacked strong {
+  letter-spacing: 0;
+}
+
+.receipt-watermark {
+  color: #111111;
+}
+
+.tabbar {
+  position: fixed;
+  right: max(12px, calc((100vw - 430px) / 2 + 12px));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: max(12px, calc((100vw - 430px) / 2 + 12px));
+}
+
+body[data-view="add"] .tabbar {
+  opacity: 0.62;
+  transform: translateY(4px);
+}

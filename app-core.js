@@ -289,9 +289,9 @@ function renderAuth() {
     <section class="auth-card form-grid onboarding-card">
       <div class="brand-lockup">
         <img src="./icon.svg" alt="" />
-        <p class="eyebrow">Geçici isim</p>
-        <h2>Kasa</h2>
-        <p>Ev, iş ve ortak harcamaları tek kasada takip et.</p>
+        <p class="eyebrow">Paranın nereye gittiğini bil.</p>
+        <h2>Kasam</h2>
+        <p>Kişisel ve ortak harcamaların tek ekranda.</p>
         <span class="cloud-pill">${typeof cloudLabel === "function" ? cloudLabel() : "Yerel deneme"}</span>
         ${state.cloudStatus ? `<span class="field-help">${state.cloudStatus}</span>` : ""}
       </div>

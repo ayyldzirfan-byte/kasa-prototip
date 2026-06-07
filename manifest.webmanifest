@@ -1,12 +1,27 @@
 {
-  "name": "Kasa Prototip",
-  "short_name": "Kasa",
-  "description": "Ortak ev, tatil ve aile harcamaları için basit prototip.",
+  "name": "Kasam",
+  "short_name": "Kasam",
+  "description": "Paranın nereye gittiğini bil. Kişisel ve ortak harcamaların tek ekranda.",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f8f3ea",
-  "theme_color": "#f8f3ea",
+  "orientation": "portrait",
+  "background_color": "#f7f8f5",
+  "theme_color": "#111111",
+  "categories": ["finance", "productivity"],
   "icons": [
+    {
+      "src": "./icon-16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "./apple-touch-icon.png",
       "sizes": "180x180",
@@ -14,9 +29,34 @@
       "purpose": "any"
     },
     {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "src": "./icon.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }

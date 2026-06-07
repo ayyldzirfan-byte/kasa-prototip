@@ -3,12 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f6f7f5" />
+    <meta name="description" content="Kasam ile kişisel ve ortak harcamalarını tek ekranda takip et." />
+    <meta property="og:title" content="Kasam" />
+    <meta property="og:description" content="Paranın nereye gittiğini bil." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./icon-512.png" />
+    <meta name="theme-color" content="#f7f8f5" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Kasa" />
-    <title>Kasa Prototip</title>
+    <meta name="apple-mobile-web-app-title" content="Kasam" />
+    <title>Kasam</title>
     <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./icon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./icon-32.png" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./kasa-extra.css" />
@@ -17,14 +24,14 @@
     <div class="phone-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Geçici isim</p>
-          <h1>Kasa</h1>
+          <p class="eyebrow">Paranın nereye gittiğini bil.</p>
+          <h1>Kasam</h1>
         </div>
         <div class="top-actions">
-          <button class="ghost-button" id="demoReset" type="button" aria-label="Kasayı sıfırla">
+          <button class="ghost-button" id="demoReset" type="button" aria-label="Kasam verilerini sıfırla">
             Sıfırla
           </button>
-          <div class="update-stamp" aria-label="Son güncelleme">Güncellendi 06.06.2026 10:16</div>
+          <div class="update-stamp" aria-label="Son güncelleme">Güncellendi 07.06.2026 23:45</div>
         </div>
       </header>
 
@@ -32,7 +39,7 @@
 
       <nav class="tabbar" aria-label="Ana menü">
         <button class="tab active" data-view="home" type="button">
-          <span>Kasa</span>
+          <span>Kasam</span>
         </button>
         <button class="tab" data-view="movements" type="button">
           <span>Hareketler</span>
@@ -52,6 +59,8 @@
     <script src="./cloud-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="./app-state.js"></script>
     <script src="./app-core.js"></script>
     <script src="./app-views.js"></script>
@@ -60,6 +69,7 @@
     <script src="./app-cloud.js"></script>
     <script src="./app-blocks.js"></script>
     <script src="./app-product-pass.js"></script>
+    <script src="./app-production.js"></script>
     <script src="./app-init.js"></script>
   </body>
 </html>
