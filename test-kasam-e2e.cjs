@@ -130,6 +130,47 @@ async function addEntry(page, { type, amount, heading }) {
     await page.waitForSelector("button[data-action='export-my-data']");
     record("profile export/delete controls");
 
+    const sharedSeed = {
+      activeView: "home",
+      reportPeriod: "month",
+      movementPeriod: "month",
+      groupMode: "detail",
+      activeProjectId: "p_shared",
+      activeUserId: "u_2",
+      signedInUserId: "u_2",
+      authMode: "login",
+      users: [
+        { id: "u_1", name: "Ortak Bir", nickname: "Bir", email: "bir@test.local", password: "1234", createdAt: "2026-06-01T00:00:00.000Z" },
+        { id: "u_2", name: "Ortak Iki", nickname: "Iki", email: "iki@test.local", password: "1234", createdAt: "2026-06-01T00:00:00.000Z" },
+      ],
+      projects: [{ id: "p_shared", name: "Ortak Butce", purpose: "Test", code: "KASAM-TEST", createdAt: "2026-06-01T00:00:00.000Z", createdBy: "u_1", memberIds: ["u_1", "u_2"], memberSince: { u_1: "2026-06-01", u_2: "2026-06-01" }, splitType: "equal" }],
+      headings: [{ id: "h_1", projectId: "p_shared", name: "Eski gider", shortName: "Eski gider", emoji: "" }],
+      entries: [
+        { id: "e_old", projectId: "p_shared", type: "expense", amount: 1000, enteredAmount: 1000, currency: "TRY", exchangeRate: 1, headingId: "h_1", shortName: "Eski gider", userId: "u_1", paidById: "u_1", splitWith: [], splitRatio: [], date: "2026-06-07", status: "done", createdAt: "2026-06-07T10:00:00.000Z" },
+        { id: "e_game", projectId: "p_shared", type: "expense", amount: 300, enteredAmount: 300, currency: "TRY", exchangeRate: 1, headingId: "h_1", shortName: "Eski oyun", userId: "u_1", paidById: "u_1", splitWith: [], splitRatio: [], date: "2026-06-07", status: "done", lockedNotificationId: "n_game", autoRevealAt: "2099-01-01T00:00:00.000Z", createdAt: "2026-06-07T11:00:00.000Z" },
+      ],
+      notifications: [],
+      reactions: [],
+      reconciliations: [],
+      goals: [],
+      settlements: [],
+    };
+    await page.evaluate((seed) => localStorage.setItem("kasa-prototype-state-v6", JSON.stringify(seed)), sharedSeed);
+    await page.reload({ waitUntil: "load" });
+    await page.waitForSelector(".personal-hero");
+    const sharedResult = await page.evaluate(() => ({
+      personalAmounts: personalLedgerEntries(currentUser()).map((entry) => ({ id: entry.id, amount: entry.amount, locked: Boolean(entry.lockedNotificationId) })),
+      notifications: notificationEntries().map((item) => ({ entryId: item.entryId, mode: item.mode, recipients: item.recipients })),
+    }));
+    assert.equal(sharedResult.personalAmounts.find((item) => item.id === "e_old")?.amount, 500);
+    assert.equal(sharedResult.personalAmounts.some((item) => item.id === "e_game"), false);
+    assert.equal(sharedResult.notifications.length, 2);
+    record("shared old entries and notifications");
+
+    await page.locator("nav .tab[data-view='group']").click();
+    await page.waitForSelector("button[data-action='go-add-movement'][data-project-id='p_shared']");
+    record("budget detail add movement button");
+
     await page.screenshot({ path: path.join(root, "screenshots", "kasam-production-e2e.png"), fullPage: true });
     assert.deepEqual(pageErrors, []);
     console.log(results.map((item) => `${item.status} ${item.name}`).join("\n"));

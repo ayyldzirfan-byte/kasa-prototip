@@ -3611,7 +3611,7 @@ async function cloudPushState() {
       if (error) throw error;
     }
     const notificationRows = (state.notifications || [])
-      .filter((notification) => notification.actorId === user.id || notification.recipients?.includes(user.id))
+      .filter((notification) => notification.actorId === user.id)
       .map((notification) => ({
         id: notification.id,
         project_id: notification.projectId,
@@ -3644,6 +3644,18 @@ async function cloudPushState() {
       }));
     if (notificationRows.length) {
       const { error } = await client.from("kasa_notifications").upsert(notificationRows, { onConflict: "id" });
+      if (error) throw error;
+    }
+    const notificationUpdates = (state.notifications || []).filter((notification) => notification.actorId !== user.id && notification.recipients?.includes(user.id));
+    for (const notification of notificationUpdates) {
+      const { error } = await client
+        .from("kasa_notifications")
+        .update({
+          guesses: notification.guesses || [],
+          revealed_at: notification.revealedAt || null,
+          is_completed: Boolean(notification.isCompleted),
+        })
+        .eq("id", notification.id);
       if (error) throw error;
     }
     const reactionRows = (state.reactions || []).filter((reaction) => reaction.userId === user.id).map((reaction) => ({ id: reaction.id, entry_id: reaction.entryId, project_id: reaction.projectId, user_id: reaction.userId, emoji: reaction.emoji, created_at: reaction.createdAt || blockNow() }));

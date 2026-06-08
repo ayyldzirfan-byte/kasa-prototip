@@ -2401,3 +2401,87 @@ body[data-view="add"] .tabbar {
   opacity: 0.62;
   transform: translateY(4px);
 }
+
+/* Shared ledger and compact form fixes */
+.movement-form,
+.movement-form *,
+.project-detail-card,
+.project-detail-card *,
+.notification-options,
+.notification-options *,
+.soft-details,
+.soft-details * {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.movement-form .date-field,
+.movement-form label,
+.notification-options label,
+.installment-fields label {
+  display: block;
+  width: 100%;
+}
+
+.movement-form input,
+.movement-form select,
+.movement-form textarea,
+.notification-options input,
+.notification-options select,
+.reaction-column input {
+  max-width: 100%;
+}
+
+.notification-options,
+.media-picker,
+.media-hub {
+  overflow: hidden;
+}
+
+.reaction-grid,
+.media-grid,
+.installment-fields,
+.featured-form {
+  grid-template-columns: 1fr;
+  width: 100%;
+}
+
+.reaction-column {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.split-preview-box {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbfcf8;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.split-preview-box strong {
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.planned-stats {
+  margin-top: 12px;
+}
+
+.planned-stats .planned-help {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.project-actions {
+  margin-top: 12px;
+}
+
+.project-entry-row .expense-note,
+.movement-card-row .expense-note {
+  overflow-wrap: anywhere;
+}
