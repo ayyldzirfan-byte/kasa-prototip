@@ -5,6 +5,9 @@ const jsonHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const coachPrompt =
+  "Aşağıdaki kullanıcının son 3 aylık harcama verisini analiz et. Türkçe yaz. Samimi, kısa ve güvenilir ol. Şunları üret: 1) genel finansal sağlık, 2) tutar bazlı 3 tasarruf fırsatı, 3) alışkanlık analizi, 4) hedef planı, 5) gelecek ay için 3 somut eylem. Sadece JSON döndür: {summary, opportunities, habits, goalPlan, actions}. Veri:\n";
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: jsonHeaders });
   if (req.method !== "POST") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: jsonHeaders });
@@ -29,9 +32,7 @@ Deno.serve(async (req) => {
         messages: [
           {
             role: "user",
-            content:
-              "Aşağıdaki kullanıcının 3 aylık harcama verisini analiz et. Türkçe yaz. Samimi ve güvenilir ol. JSON döndür: {summary, opportunities, habits, goalPlan, actions}. Veri:\n" +
-              JSON.stringify(summary),
+            content: coachPrompt + JSON.stringify(summary),
           },
         ],
       }),

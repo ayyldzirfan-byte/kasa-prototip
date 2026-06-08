@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "07.06.2026 23:45";
+var KASAM_UPDATED_AT = "09.06.2026 00:24";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -13,7 +13,7 @@ var KASAM_TOASTS = {
   deleted: "Silindi.",
   network: "Bağlantı kurulamadı. Veriler güvende, tekrar denenecek.",
   forbidden: "Bu kasaya erişim iznin yok.",
-  generic: "Bir şeyler ters gitti. Lütfen tekrar dene.",
+  generic: "Bir şeyler ters gitti. Tekrar dene.",
 };
 var KASAM_EMPTY = {
   movements: "Henüz bir hareket yok. İlk hareketi sen ekle.",
@@ -32,7 +32,11 @@ function kasamEscape(value) {
 }
 
 function kasamCleanText(value, maxLength = 200) {
-  return String(value ?? "")
+  const raw = String(value ?? "");
+  const sanitized = window.DOMPurify
+    ? window.DOMPurify.sanitize(raw, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
+    : raw;
+  return String(sanitized)
     .replace(/<[^>]*>/g, "")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
     .replace(/\s+/g, " ")
@@ -100,6 +104,32 @@ function kasamFormatDate(value) {
 
 function kasamToast(message) {
   toast(kasamCleanText(message || KASAM_TOASTS.generic, 220));
+}
+
+function kasamIcon(name, className = "icon-neutral") {
+  return `<i class="kasam-icon ${className}" data-lucide="${kasamEscape(name)}" aria-hidden="true"></i>`;
+}
+
+function kasamEntryTypeIcon(type) {
+  return { income: "trending-up", expense: "trending-down", receivable: "hand-coins", payable: "calendar-clock" }[type] || "activity";
+}
+
+function kasamMovementIcon(entry) {
+  const type = entry?.type || "expense";
+  if (type === "income" || type === "receivable") return kasamIcon("arrow-down-left", "icon-income");
+  if (entry?.status === "pending") return kasamIcon("clock", "icon-pending");
+  return kasamIcon("arrow-up-right", "icon-expense");
+}
+
+function kasamInsightIcon(type) {
+  const map = { anomaly: "alert-triangle", weekly: "calendar-check", monthly: "lightbulb", goal: "target", coaching: "lightbulb", success: "trophy" };
+  const name = map[type] || "lightbulb";
+  const tone = type === "anomaly" ? "icon-expense" : type === "goal" ? "icon-income" : "icon-pending";
+  return kasamIcon(name, tone);
+}
+
+function kasamRenderLucide() {
+  if (window.lucide?.createIcons) window.lucide.createIcons();
 }
 
 if (typeof bankColumnMaps === "object") {
@@ -346,7 +376,8 @@ function applyProductionChrome() {
     badge.className = "offline-badge";
     badge.type = "button";
     badge.dataset.action = "manual-retry";
-    badge.textContent = "Çevrimdışı";
+    badge.innerHTML = `${kasamIcon("wifi-off", "icon-pending")} Çevrimdışı`;
+    badge.addEventListener("click", () => processRetryQueue(true));
     document.querySelector(".top-actions")?.prepend(badge);
   }
 }
@@ -367,7 +398,7 @@ function renderLegalPage(type) {
           `
           : `
             <p>Kasam, kişisel ve ortak bütçe takibi için yardımcı bir uygulamadır. Banka, ödeme kuruluşu veya finansal danışman değildir.</p>
-            <p>Kullanıcı, girdiği verilerin doğruluğundan ve ortak kasaya eklediği üyelerin izinlerinden sorumludur.</p>
+            <p>Kullanıcı, girdiği verilerin doğruluğundan ve ortak bütçeye eklediği üyelerin izinlerinden sorumludur.</p>
             <p>Uygulama finansal kararları otomatik vermez; raporlar ve öneriler bilgilendirme amaçlıdır.</p>
           `
       }
@@ -385,6 +416,7 @@ render = function renderKasam() {
     app.innerHTML = renderLegalPage("privacy");
     applyProductionChrome();
     bindScreen();
+    kasamRenderLucide();
     return;
   }
   if (path.endsWith("/sartlar") || path.endsWith("/sartlar.html")) {
@@ -392,10 +424,12 @@ render = function renderKasam() {
     app.innerHTML = renderLegalPage("terms");
     applyProductionChrome();
     bindScreen();
+    kasamRenderLucide();
     return;
   }
   kasamBaseRender();
   applyProductionChrome();
+  kasamRenderLucide();
   runInsightEngineQuietly();
 };
 
@@ -442,9 +476,9 @@ function renderAuth() {
               <label><span class="field-label">Kısa isim</span><input class="text-input" name="nickname" maxlength="80" placeholder="Kısa isim" autocomplete="off" /></label>
               <label><span class="field-label">E-posta</span><input class="text-input" name="email" type="email" maxlength="120" placeholder="mail@ornek.com" autocomplete="email" /></label>
               <label><span class="field-label">Şifre</span><input class="text-input" name="password" type="password" placeholder="${cloudReady ? "En az 6 karakter" : "En az 4 karakter"}" autocomplete="new-password" /></label>
-              <label class="check-row"><input name="legalAccepted" type="checkbox" /> <span>Gizlilik politikasını ve kullanım şartlarını okudum, kabul ediyorum.</span></label>
+              <label class="check-row"><input name="legalAccepted" type="checkbox" /> <span>${kasamIcon("shield", "icon-income")} Gizlilik politikasını ve kullanım şartlarını okudum, kabul ediyorum.</span></label>
               <div class="legal-links"><a href="/gizlilik">Gizlilik</a><a href="/sartlar">Şartlar</a></div>
-              <button class="primary-button" type="submit">Kaydet</button>
+              <button class="primary-button" type="submit">${kasamIcon("check", "icon-neutral")} Kaydet</button>
             </form>
           `
           : cloudReady
@@ -549,7 +583,7 @@ function renderProjectSetup() {
       <div>
         <p class="eyebrow">${KASAM_BRAND.slogan}</p>
         <h2>${projectUserLabel(user)}, şimdi kasanı seç</h2>
-        <p class="hero-note">Kendi kasanı oluşturabilir veya ortak bir kasaya kodla katılma talebi gönderebilirsin.</p>
+        <p class="hero-note">Kendi bütçeni oluşturabilir veya ortak bütçeye kodla katılma talebi gönderebilirsin.</p>
       </div>
       <form class="form-grid" id="firstProjectForm">
         <label><span class="field-label">Bütçe adı</span><input class="text-input" name="projectName" maxlength="200" placeholder="Kendi Kasam" autocomplete="off" /></label>
@@ -605,7 +639,7 @@ async function handleProjectForm(form) {
 
 async function handleJoinProjectForm(form) {
   const code = normalizeCode(new FormData(form).get("projectCode"));
-  if (!code) return kasamToast("Kasa kodunu yaz.");
+  if (!code) return kasamToast("Bütçe kodunu yaz.");
   if (typeof isCloudReady === "function" && isCloudReady()) {
     try {
       await cloudJoinProjectByCode(code);
@@ -661,7 +695,7 @@ function insightCardHtml() {
   const insights = kasamUnreadInsights();
   if (!insights.length) return "";
   const top = insights[0];
-  const icon = { anomaly: "🔴", weekly: "🟡", monthly: "💡", goal: "🟢", coaching: "💡", success: "🏆" }[top.type] || "💡";
+  const icon = kasamInsightIcon(top.type);
   return `
     <section class="card insight-card">
       <div class="section-head">
@@ -699,8 +733,8 @@ function renderHome() {
         </span>
       </button>
       <div class="account-actions">
-        <button class="tiny-button" data-action="open-notifications" type="button">Bildirimler${notificationCount ? ` (${notificationCount})` : ""}</button>
-        <button class="tiny-button muted-button" data-action="logout" type="button">Çıkış</button>
+        <button class="tiny-button" data-action="open-notifications" type="button">${kasamIcon("bell", "icon-neutral")} Bildirimler${notificationCount ? ` (${notificationCount})` : ""}</button>
+        <button class="tiny-button muted-button" data-action="logout" type="button">${kasamIcon("log-out", "icon-neutral")} Çıkış</button>
       </div>
     </section>
 
@@ -718,7 +752,7 @@ function renderHome() {
     ${insightCardHtml()}
 
     <section class="single-action-card">
-      <button class="primary-button movement-add-button" data-action="go-add-movement" type="button">Hareket ekle</button>
+      <button class="primary-button movement-add-button" data-action="go-add-movement" type="button">${kasamIcon("plus-circle", "icon-income")} Hareket ekle</button>
     </section>
 
     <section class="grid-2">
@@ -743,7 +777,7 @@ function renderHome() {
       <div class="section-head"><div><h2>Beklenen Hareketler</h2></div></div>
       <div class="expense-list">${upcoming.length ? upcoming.map(entrySummaryRow).join("") : `<div class="empty-state">${KASAM_EMPTY.calendarDay}</div>`}</div>
     </section>
-    ${surpriseCount ? `<button class="surprise-alert-row" data-action="open-notifications" type="button">🎁 ${surpriseCount} bekleyen sürpriz hareket</button>` : ""}
+    ${surpriseCount ? `<button class="surprise-alert-row" data-action="open-notifications" type="button">${kasamIcon("gift", "icon-pending")} ${surpriseCount} bekleyen sürpriz hareket</button>` : ""}
 
     <section class="card">
       <div class="section-head"><div><h2>Son hareketler</h2></div><button class="tiny-button" data-action="open-movements" type="button">Tümü</button></div>
@@ -773,8 +807,8 @@ function renderOwnProfilePage() {
     <section class="card">
       <h2>Veri ve hesap</h2>
       <div class="inline-actions stacked-actions">
-        <button class="secondary-button" data-action="export-my-data" type="button">Verilerimi indir</button>
-        <button class="danger-button" data-action="delete-account" type="button">Hesabımı sil</button>
+        <button class="secondary-button" data-action="export-my-data" type="button">${kasamIcon("download", "icon-neutral")} Verilerimi indir</button>
+        <button class="danger-button" data-action="delete-account" type="button">${kasamIcon("trash-2", "icon-expense")} Hesabımı sil</button>
       </div>
     </section>
   `;
@@ -790,7 +824,7 @@ function renderAdd() {
     <form class="form-card form-grid movement-form" id="entryForm">
       <div class="section-head"><div><h2>${isExpense ? "Gider ekle" : "Gelir ekle"}</h2><p>Hareketi kendi kasana veya bağlı bir bütçeye işle.</p></div></div>
       <label><span class="field-label">Nereye işlensin?</span><select class="select-input" name="projectId">${state.projects.map((project) => `<option value="${project.id}" ${project.id === targetProject?.id ? "selected" : ""}>${kasamSafe(project.name)}</option>`).join("")}</select></label>
-      <div class="type-grid two-types">${KASA_UI_ENTRY_TYPES.map((item) => `<button class="type-chip ${type.id === item.id ? "selected" : ""}" data-entry-type="${item.id}" type="button"><span>${item.emoji}</span><strong>${kasamSafe(item.label)}</strong><small>${kasamSafe(item.helper)}</small></button>`).join("")}</div>
+      <div class="type-grid two-types">${KASA_UI_ENTRY_TYPES.map((item) => `<button class="type-chip ${type.id === item.id ? "selected" : ""}" data-entry-type="${item.id}" type="button">${kasamIcon(kasamEntryTypeIcon(item.id), item.id === "income" ? "icon-income" : "icon-expense")}<strong>${kasamSafe(item.label)}</strong><small>${kasamSafe(item.helper)}</small></button>`).join("")}</div>
       <input type="hidden" name="userId" value="${currentUser()?.id || ""}" />
       <div><label class="field-label" for="amount">Tutar</label><input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="1.000" value="${kasamEscape(amountValue)}" autocomplete="off" /></div>
       <div class="grid-2 currency-grid ${draft.currency === "TRY" ? "single" : ""}">
@@ -802,7 +836,7 @@ function renderAdd() {
       <div class="heading-media-row media-inline-row"><span class="field-label">Emoji, GIF, fotoğraf</span>${mediaHubHtml()}</div>
       ${isExpense ? `<details class="soft-details"><summary>Taksitli harcama</summary><div class="inline-form installment-fields"><label><span class="field-label">Taksit sayısı</span><input class="text-input" name="installmentCount" inputmode="numeric" placeholder="1" autocomplete="off" /></label><span class="field-help">2 ve üstü girilirse sonraki aylar takvimde görünür.</span></div></details>` : ""}
       <details class="soft-details"><summary>Bildirim oyunu</summary><div class="form-grid notification-options"><label><span class="field-label">Bildirim modu</span><select class="select-input" name="notificationMode"><option value="open" ${draft.notificationMode === "open" ? "selected" : ""}>Açık bildir</option><option value="surprise" ${draft.notificationMode === "surprise" ? "selected" : ""}>Tahmin oyunu</option><option value="silent" ${draft.notificationMode === "silent" ? "selected" : ""}>Sessiz kaydet</option></select></label>${reactionSetupHtml()}</div></details>
-      <button class="primary-button" type="submit">Kaydet</button>
+      <button class="primary-button" data-action="save-entry" type="submit">Kaydet</button>
     </form>
   `;
 }
@@ -950,7 +984,7 @@ function renderProjectList() {
         <input class="text-input" name="purpose" maxlength="200" placeholder="Amaç" autocomplete="off" />
         <button class="primary-button" type="submit">Kaydet</button>
       </form>
-      ${cloudReady ? `<form class="inline-form cloud-join-card" id="joinProjectForm"><input class="text-input" name="projectCode" maxlength="40" placeholder="Kasa kodu" autocomplete="off" /><button class="secondary-button" type="submit">Katılma talebi gönder</button></form>` : ""}
+      ${cloudReady ? `<form class="inline-form cloud-join-card" id="joinProjectForm"><input class="text-input" name="projectCode" maxlength="40" placeholder="Bütçe kodu" autocomplete="off" /><button class="secondary-button" type="submit">Katılma talebi gönder</button></form>` : ""}
     </section>
   `;
 }
@@ -1052,7 +1086,7 @@ function renderCalendar() {
   const dayEntries = calendarEntries().filter((entry) => entry.date === selectedDay).sort(byDateAsc);
   const planned = calendarEntries().filter((entry) => entry.status === "pending").sort(byDateAsc).slice(0, 6);
   return `
-    <section class="card desk-calendar-card"><div class="calendar-top"><button class="tiny-button" data-action="month-prev" type="button">Önceki</button><div><p class="eyebrow">Takvim</p><h2>${kasamSafe(monthText)}</h2></div><button class="tiny-button" data-action="month-next" type="button">Sonraki</button></div><div class="desk-calendar" data-flip="${state.calendarFlip || 0}">${calendarGridHtml(base)}</div></section>
+    <section class="card desk-calendar-card"><div class="calendar-top"><button class="tiny-button" data-action="month-prev" type="button">${kasamIcon("chevron-left", "icon-neutral")} Önceki</button><div><p class="eyebrow">Takvim</p><h2>${kasamSafe(monthText)}</h2></div><button class="tiny-button" data-action="month-next" type="button">Sonraki ${kasamIcon("chevron-right", "icon-neutral")}</button></div><div class="desk-calendar" data-flip="${state.calendarFlip || 0}">${calendarGridHtml(base)}</div></section>
     <section class="card"><div class="section-head"><div><h2>${formatShortDate(selectedDay)}</h2><p>Seçilen günün hareketleri.</p></div></div><div class="expense-list">${dayEntries.length ? dayEntries.map(entrySummaryRow).join("") : `<div class="empty-state">${KASAM_EMPTY.calendarDay}</div>`}</div></section>
     <section class="card"><div class="section-head"><div><h2>Planlananlar</h2></div></div><div class="expense-list">${planned.length ? planned.map(entrySummaryRow).join("") : `<div class="empty-state">Takvime bağlı plan yok.</div>`}</div></section>
   `;
@@ -1573,7 +1607,7 @@ function kasamProjectMovementRows(project) {
       const locked = entry.lockedNotificationId && !entryConfirmed(entry);
       return `
         <div class="expense-row movement-card-row project-entry-row">
-          <span class="emoji-dot">${isIncome ? "💰" : "💸"}</span>
+          <span class="emoji-dot system-icon-dot">${kasamMovementIcon(entry)}</span>
           <div class="expense-main">
             <p class="expense-title">${locked ? "Tahmin oyunu açık" : entryTitle(entry)}</p>
             <p class="expense-meta">${formatShortDate(entry.date)}${entry.status === "pending" ? " · planlandı" : ""}</p>
@@ -1724,7 +1758,7 @@ entrySummaryRow = function entrySummaryRowKasam(entry) {
   const locked = entry.lockedNotificationId && !entryConfirmed(entry);
   return `
     <div class="expense-row movement-card-row">
-      <span class="emoji-dot">${isIncome ? "💰" : "💸"}</span>
+      <span class="emoji-dot system-icon-dot">${kasamMovementIcon(entry)}</span>
       <div class="expense-main">
         <p class="expense-title">${locked ? "Tahmin oyunu açık" : entryTitle(entry)}</p>
         <p class="expense-meta">${entryProjectName(entry)} · ${formatShortDate(entry.date)}${entry.status === "pending" ? " · planlandı" : ""}</p>
@@ -1742,7 +1776,7 @@ entryRow = function entryRowKasam(entry) {
   const locked = entry.lockedNotificationId && !entryConfirmed(entry);
   return `
     <div class="expense-row">
-      <span class="emoji-dot">${isIncome ? "💰" : "💸"}</span>
+      <span class="emoji-dot system-icon-dot">${kasamMovementIcon(entry)}</span>
       <div class="expense-main">
         <p class="expense-title">${locked ? "Tahmin oyunu açık" : entryTitle(entry)}</p>
         <p class="expense-meta">${type?.label || "Hareket"} · ${formatShortDate(entry.date)}${entry.status === "pending" ? " · planlandı" : ""}</p>
@@ -1750,7 +1784,7 @@ entryRow = function entryRowKasam(entry) {
         ${reactions ? `<p class="expense-note reaction-line">${reactions}</p>` : ""}
       </div>
       <strong class="expense-price ${isIncome ? "price-positive" : "price-negative"}">${locked ? "??" : `${isIncome ? "+" : "-"}${money(kasamOriginalAmount(entry))}`}</strong>
-      <button class="reaction-button" data-action="toggle-reaction-picker" data-id="${entry.id}" type="button" aria-label="Tepki ver">☺</button>
+      <button class="reaction-button" data-action="toggle-reaction-picker" data-id="${entry.id}" type="button" aria-label="Tepki ver">${kasamIcon("smile", "icon-neutral")}</button>
     </div>
     ${state.reactionPickerEntryId === entry.id ? reactionPicker(entry) : ""}
   `;
@@ -1775,7 +1809,7 @@ renderAdd = function renderAddKasam() {
     <form class="form-card form-grid movement-form" id="entryForm">
       <div class="section-head"><div><h2>${isExpense ? "Gider ekle" : "Gelir ekle"}</h2><p>Hareket seçilen bütçeye işlenir; ortak bütçelerde paylar üyelere yansır.</p></div></div>
       <label><span class="field-label">Nereye işlensin?</span><select class="select-input" name="projectId">${visibleProjects.map((project) => `<option value="${project.id}" ${project.id === targetProject?.id ? "selected" : ""}>${kasamSafe(project.name)}</option>`).join("")}</select></label>
-      <div class="type-grid two-types">${KASA_UI_ENTRY_TYPES.map((item) => `<button class="type-chip ${type.id === item.id ? "selected" : ""}" data-entry-type="${item.id}" type="button"><span>${item.emoji}</span><strong>${kasamSafe(item.label)}</strong><small>${kasamSafe(item.helper)}</small></button>`).join("")}</div>
+      <div class="type-grid two-types">${KASA_UI_ENTRY_TYPES.map((item) => `<button class="type-chip ${type.id === item.id ? "selected" : ""}" data-entry-type="${item.id}" type="button">${kasamIcon(kasamEntryTypeIcon(item.id), item.id === "income" ? "icon-income" : "icon-expense")}<strong>${kasamSafe(item.label)}</strong><small>${kasamSafe(item.helper)}</small></button>`).join("")}</div>
       ${kasamSplitPreviewHtml(targetProject, type.id)}
       <input type="hidden" name="userId" value="${currentUser()?.id || ""}" />
       <div><label class="field-label" for="amount">Tutar</label><input class="amount-input" id="amount" name="amount" inputmode="decimal" placeholder="1.000" value="${kasamEscape(amountValue)}" autocomplete="off" /></div>
@@ -1788,7 +1822,7 @@ renderAdd = function renderAddKasam() {
       <div class="heading-media-row media-inline-row"><span class="field-label">Emoji, GIF, fotoğraf</span>${mediaHubHtml()}</div>
       ${isExpense ? `<details class="soft-details"><summary>Taksitli harcama</summary><div class="inline-form installment-fields"><label><span class="field-label">Taksit sayısı</span><input class="text-input" name="installmentCount" inputmode="numeric" placeholder="1" autocomplete="off" /></label><span class="field-help">2 ve üstü girilirse sonraki aylar takvimde görünür.</span></div></details>` : ""}
       <details class="soft-details"><summary>Bildirim oyunu</summary><div class="form-grid notification-options"><label><span class="field-label">Bildirim modu</span><select class="select-input" name="notificationMode"><option value="open" ${draft.notificationMode === "open" ? "selected" : ""}>Açık bildir</option><option value="surprise" ${draft.notificationMode === "surprise" ? "selected" : ""}>Tahmin oyunu</option><option value="silent" ${draft.notificationMode === "silent" ? "selected" : ""}>Sessiz kaydet</option></select></label>${reactionSetupHtml()}</div></details>
-      <button class="primary-button" type="submit">Kaydet</button>
+      <button class="primary-button" data-action="save-entry" type="submit">Kaydet</button>
     </form>
   `;
 };
@@ -1889,6 +1923,7 @@ cloudPushState = async function cloudPushStateKasam() {
   if (!kasamIsOnline()) {
     queueCloudRetry({ operation: "pushState" });
     setCloudStatus("Çevrimdışı");
+    kasamToast("Kaydedildi (senkronize edilecek)");
     return;
   }
   try {
@@ -1998,6 +2033,47 @@ cloudPushState = async function cloudPushStateKasam() {
 var kasamBaseBindScreen = bindScreen;
 bindScreen = function bindScreenKasam() {
   kasamBaseBindScreen();
+  const entryForm = app.querySelector("#entryForm");
+  if (entryForm && !entryForm.dataset.kasamSubmitBound) {
+    entryForm.dataset.kasamSubmitBound = "1";
+    entryForm.addEventListener(
+      "submit",
+      async (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        try {
+          await handleEntrySubmit(entryForm);
+        } catch (error) {
+          window.__lastKasamEntryError = error?.message || String(error);
+          logError(error, "entry-submit");
+          kasamToast(KASAM_TOASTS.general);
+        }
+      },
+      true,
+    );
+  }
+  app.querySelectorAll("[data-action='save-entry']").forEach((button) => {
+    if (button.dataset.kasamClickBound) return;
+    button.dataset.kasamClickBound = "1";
+    button.addEventListener(
+      "click",
+      async (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const form = button.closest("#entryForm");
+        if (form) {
+          try {
+            await handleEntrySubmit(form);
+          } catch (error) {
+            window.__lastKasamEntryError = error?.message || String(error);
+            logError(error, "entry-save-click");
+            kasamToast(KASAM_TOASTS.general);
+          }
+        }
+      },
+      true,
+    );
+  });
   app.querySelectorAll("[data-action='onboarding-start']").forEach((button) =>
     button.addEventListener("click", () => {
       state.onboardingStep = "account";

@@ -52,17 +52,43 @@ async function fill(page, selector, value) {
 }
 
 async function submit(page, selector) {
-  await page.$eval(selector, (form) => form.requestSubmit());
+  const primarySave = page.locator(`${selector} [data-action='save-entry']`);
+  if (await primarySave.count()) {
+    await primarySave.first().click();
+    return;
+  }
+  await page.locator(`${selector} button[type='submit']`).last().click();
 }
 
 async function addEntry(page, { type, amount, heading }) {
   await page.locator("button[data-action='go-add-movement']").first().click();
   await page.waitForSelector("#entryForm");
   await page.locator(`[data-entry-type='${type}']`).click();
+  await page.waitForFunction((entryType) => {
+    const heading = document.querySelector("#entryForm h2")?.textContent || "";
+    return entryType === "income" ? heading.includes("Gelir") : heading.includes("Gider");
+  }, type);
   await fill(page, "#amount", String(amount));
   await fill(page, "#headingName", heading);
   await submit(page, "#entryForm");
-  await page.waitForSelector(".personal-hero");
+  try {
+    await page.waitForSelector(".personal-hero");
+  } catch (error) {
+    console.error("ADD_ENTRY_TIMEOUT_STATE", await page.evaluate(() => ({
+      url: location.href,
+      html: document.querySelector("#app")?.innerText?.slice(0, 900) || "",
+      amount: document.querySelector("#amount")?.value || "",
+      heading: document.querySelector("#headingName")?.value || "",
+      typeTitle: document.querySelector("#entryForm h2")?.textContent || "",
+      toast: document.querySelector("#toast")?.textContent || "",
+      saveAction: document.querySelector("#entryForm button[type='submit']")?.getAttribute("data-action") || "",
+      saveBound: document.querySelector("#entryForm button[type='submit']")?.dataset.kasamClickBound || "",
+      submitBound: document.querySelector("#entryForm")?.dataset.kasamSubmitBound || "",
+      hasEntryForm: Boolean(document.querySelector("#entryForm")),
+      hasHero: Boolean(document.querySelector(".personal-hero")),
+    })));
+    throw error;
+  }
 }
 
 (async () => {
@@ -73,13 +99,29 @@ async function addEntry(page, { type, amount, heading }) {
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("console", (msg) => {
-    if (msg.type() === "error" && !msg.text().includes("Failed to load resource: net::ERR_FAILED")) pageErrors.push(msg.text());
+    if (
+      msg.type() === "error" &&
+      !msg.text().includes("Failed to load resource: net::ERR_FAILED") &&
+      !msg.text().includes("Failed to load resource: net::ERR_NETWORK_ACCESS_DENIED")
+    ) {
+      pageErrors.push(msg.text());
+    }
   });
   await page.route("https://cdn.jsdelivr.net/**", (route) => route.abort());
 
   try {
     await page.goto(appUrl, { waitUntil: "load" });
-    await page.evaluate(() => localStorage.clear());
+    await page.evaluate(async () => {
+      localStorage.clear();
+      if ("serviceWorker" in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((registration) => registration.unregister()));
+      }
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((key) => caches.delete(key)));
+      }
+    });
     await page.reload({ waitUntil: "load" });
     await assert.match(await page.locator("body").innerText(), /Kasam/);
     record("onboarding welcome");

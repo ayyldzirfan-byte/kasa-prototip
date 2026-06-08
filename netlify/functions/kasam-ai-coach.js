@@ -5,6 +5,9 @@ const JSON_HEADERS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const COACH_PROMPT =
+  "Aşağıdaki kullanıcının son 3 aylık harcama verisini analiz et. Türkçe yaz. Samimi, kısa ve güvenilir ol. Şunları üret: 1) genel finansal sağlık, 2) tutar bazlı 3 tasarruf fırsatı, 3) alışkanlık analizi, 4) hedef planı, 5) gelecek ay için 3 somut eylem. Sadece JSON döndür: {summary, opportunities, habits, goalPlan, actions}. Veri:\n";
+
 exports.handler = async function kasamAiCoach(event) {
   if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers: JSON_HEADERS, body: "" };
   if (event.httpMethod !== "POST") {
@@ -33,9 +36,7 @@ exports.handler = async function kasamAiCoach(event) {
         messages: [
           {
             role: "user",
-            content:
-              "Aşağıdaki kullanıcının 3 aylık harcama verisini analiz et. Türkçe yaz. Samimi ve güvenilir ol. JSON döndür: {summary, opportunities, habits, goalPlan, actions}. Veri:\n" +
-              JSON.stringify(summary),
+            content: COACH_PROMPT + JSON.stringify(summary),
           },
         ],
       }),

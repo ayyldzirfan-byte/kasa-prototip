@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "07.06.2026 23:45";
+const APP_UPDATED_AT = "09.06.2026 00:24";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -126,13 +126,13 @@ const funnyMessages = {
   reconciliationDiff: [
     "Ekstren {diff} TL fazla gösteriyor. Cebinde delik mi var?",
     "{diff} TL kayıp. Dedektif moduna geçtik.",
-    "Kasa ile banka arasında {diff} TL fark. Birileri bir şeyler saklıyor.",
+    "Banka ile kayıtların arasında {diff} TL fark var.",
     "{diff} TL gizemli hareket. Kasa sorguluyor.",
   ],
   reconciliationMatch: [
     "Her şey tuttu. Terfi ettiniz.",
-    "Kasa ile banka el sıkıştı. Nadiren olur.",
-    "Mükemmel uyum. Kasa seninle gurur duyuyor.",
+    "Banka ve kayıtların tuttu.",
+    "Kayıtlar temiz görünüyor.",
     "Hiçbir şey kaybolmadı. Sen gerçeksin.",
   ],
   monthlyWin: [
@@ -214,7 +214,7 @@ async function initApp() {
     draft = makeDraft();
     saveState();
     render();
-    toast("Kasa temizlendi.");
+    toast("Kasam temizlendi.");
   });
 
   tabs.forEach((tab) => {
