@@ -104,25 +104,43 @@ async function fill(page, selector, value) {
     await page.locator("#entryForm [data-action='save-entry']").click();
     await page.waitForSelector(".project-detail-card");
 
+    await page.locator("button[data-action='go-add-movement'][data-project-id='p_shared']").click();
+    await page.waitForSelector("#entryForm");
+    await page.locator("button[data-entry-type='income']").click();
+    await fill(page, "#amount", 600);
+    await fill(page, "#headingName", "Ortak gelir");
+    await page.locator("#entryForm [data-action='save-entry']").click();
+    await page.waitForSelector(".project-detail-card");
+
     const result = await page.evaluate(() => {
       const user1 = state.users.find((user) => user.id === "u_1");
       const user2 = state.users.find((user) => user.id === "u_2");
+      const entries = state.entries.filter((entry) => entry.projectId === "p_shared");
       return {
-        totalEntries: state.entries.filter((entry) => entry.projectId === "p_shared").length,
-        splitWith: state.entries[0]?.splitWith || [],
-        splitRatio: state.entries[0]?.splitRatio || [],
+        totalEntries: entries.length,
+        entries: entries.map((entry) => ({ type: entry.type, amount: entry.amount, splitWith: entry.splitWith || [], splitRatio: entry.splitRatio || [] })),
         user1Personal: personalLedgerEntries(user1).map((entry) => ({ type: entry.type, amount: entry.amount, projectId: entry.projectId })),
         user2Personal: personalLedgerEntries(user2).map((entry) => ({ type: entry.type, amount: entry.amount, projectId: entry.projectId })),
         groupEntries: personalProjectEntries(state.projects[0], user2).map((entry) => ({ amount: entry.amount, projectId: entry.projectId })),
+        notifications: state.notifications.map((item) => ({ actorId: item.actorId, recipients: item.recipients, actualType: item.actualType, mode: item.mode })),
       };
     });
 
-    assert.equal(result.totalEntries, 1);
-    assert.deepEqual(result.splitWith.sort(), ["u_1", "u_2"]);
-    assert.deepEqual(result.splitRatio, [0.5, 0.5]);
-    assert.equal(result.user1Personal[0]?.amount, 500);
-    assert.equal(result.user2Personal[0]?.amount, 500);
-    assert.equal(result.groupEntries[0]?.amount, 500);
+    assert.equal(result.totalEntries, 2);
+    const expenseEntry = result.entries.find((entry) => entry.type === "expense");
+    const incomeEntry = result.entries.find((entry) => entry.type === "income");
+    assert.deepEqual(expenseEntry.splitWith.sort(), ["u_1", "u_2"]);
+    assert.deepEqual(expenseEntry.splitRatio, [0.5, 0.5]);
+    assert.deepEqual(incomeEntry.splitWith.sort(), ["u_1", "u_2"]);
+    assert.deepEqual(incomeEntry.splitRatio, [0.5, 0.5]);
+    assert.equal(result.user1Personal.find((entry) => entry.type === "expense")?.amount, 500);
+    assert.equal(result.user2Personal.find((entry) => entry.type === "expense")?.amount, 500);
+    assert.equal(result.user1Personal.find((entry) => entry.type === "income")?.amount, 300);
+    assert.equal(result.user2Personal.find((entry) => entry.type === "income")?.amount, 300);
+    assert.ok(result.groupEntries.some((entry) => entry.amount === 500));
+    assert.ok(result.groupEntries.some((entry) => entry.amount === 300));
+    assert.equal(result.notifications.length, 2);
+    assert.ok(result.notifications.every((item) => item.actorId === "u_2" && item.recipients.includes("u_1")));
     console.log("SHARED LEDGER TEST OK");
   } finally {
     await browser.close();

@@ -663,13 +663,44 @@ async function handleJoinProjectForm(form) {
   kasamToast("Kaydedildi.");
 }
 
+function kasamCloudErrorText(error) {
+  return String(error?.message || error?.details || error?.hint || error || "");
+}
+
+function kasamCloudMissingFeature(error) {
+  const message = kasamCloudErrorText(error).toLocaleLowerCase("tr-TR");
+  return (
+    error?.code === "PGRST202" ||
+    error?.code === "PGRST205" ||
+    error?.code === "42703" ||
+    message.includes("could not find") ||
+    message.includes("does not exist") ||
+    message.includes("schema cache")
+  );
+}
+
+async function kasamFallbackJoinProjectByCode(client, code) {
+  const { data, error } = await client.rpc("join_kasa_project", { invite_code: normalizeCode(code) });
+  if (error) throw error;
+  await loadCloudData();
+  if (data) state.activeProjectId = data;
+  state.joinRequests = Array.isArray(state.joinRequests) ? state.joinRequests : [];
+  state.joinRequests = state.joinRequests.filter((request) => normalizeCode(request.code || "") !== normalizeCode(code));
+  saveState();
+  return data;
+}
+
 async function cloudJoinProjectByCode(code) {
   const client = cloudDb();
   if (!client) throw new Error("Bulut ayarı yok.");
-  const { data, error } = await client.rpc("request_kasa_project_access", { invite_code: normalizeCode(code) });
-  if (error) throw error;
+  const normalizedCode = normalizeCode(code);
+  const { data, error } = await client.rpc("request_kasa_project_access", { invite_code: normalizedCode });
+  if (error) {
+    if (kasamCloudMissingFeature(error)) return kasamFallbackJoinProjectByCode(client, normalizedCode);
+    throw error;
+  }
   state.joinRequests = Array.isArray(state.joinRequests) ? state.joinRequests : [];
-  if (data) state.joinRequests.unshift({ id: data, code, status: "pending", createdAt: kasamNow() });
+  if (data) state.joinRequests.unshift({ id: data, code: normalizedCode, status: "pending", createdAt: kasamNow() });
   saveState();
   return data;
 }
@@ -678,7 +709,10 @@ async function cloudApproveJoinRequest(requestId, approved = true) {
   const client = cloudDb();
   if (!client) throw new Error("Bulut ayarı yok.");
   const { data, error } = await client.rpc("approve_kasa_join_request", { request_uuid: requestId, approve_request: approved });
-  if (error) throw error;
+  if (error) {
+    if (kasamCloudMissingFeature(error)) throw new Error("Katilma onayi icin Supabase production migration eksik. supabase-shared-budget-fix.sql dosyasini calistir.");
+    throw error;
+  }
   await loadCloudData();
   return data;
 }
@@ -1607,6 +1641,53 @@ personalProjectEntries = function personalProjectEntriesKasam(project, user = cu
   return personalLedgerEntries(user).filter((entry) => entry.projectId === project.id);
 };
 
+var kasamBaseCreateEntryNotification = typeof createEntryNotification === "function" ? createEntryNotification : null;
+createEntryNotification = function createEntryNotificationKasam(entry, options = {}) {
+  const project = kasamProjectForEntry(entry) || activeProject();
+  const actor = currentUser();
+  if (!project || !actor || options.mode === "silent") return null;
+  const splitIds = kasamSplitIdsForEntry(entry);
+  const recipientSource = splitIds.length ? splitIds : project.memberIds || [];
+  const recipients = [...new Set(recipientSource.filter((id) => id && id !== actor.id))];
+  if (!recipients.length) return null;
+
+  state.notifications = state.notifications || [];
+  const now = kasamNow();
+  const deadline = options.guessDeadline || addHours(now, 48);
+  const notification = {
+    id: makeId(),
+    projectId: project.id,
+    entryId: entry.id,
+    actorId: actor.id,
+    recipients,
+    mode: options.mode || "open",
+    actualType: entry.type,
+    title: entryTitle(entry),
+    amount: Number(entry.amount || 0),
+    emoji: options.emoji || "🎲",
+    photoName: options.photoName || "",
+    photoData: options.photoData || "",
+    gif: options.gif || "",
+    successReaction: options.successReaction || "✅",
+    successPhotoName: options.successPhotoName || "",
+    successPhotoData: options.successPhotoData || "",
+    successGif: options.successGif || "",
+    failReaction: options.failReaction || "🙂",
+    failPhotoName: options.failPhotoName || "",
+    failPhotoData: options.failPhotoData || "",
+    failGif: options.failGif || "",
+    guessDeadline: deadline,
+    revealedAt: options.mode === "surprise" ? "" : now,
+    isCompleted: options.mode !== "surprise",
+    notificationType: "entry",
+    reactionEmoji: "",
+    guesses: [],
+    createdAt: now,
+  };
+  state.notifications.unshift(notification);
+  return notification;
+};
+
 function kasamEntrySplitText(entry, compact = false) {
   const project = kasamProjectForEntry(entry);
   const payer = state.users.find((user) => user.id === (entry?.paidById || entry?.userId));
@@ -1947,6 +2028,26 @@ loadCloudData = async function loadCloudDataKasam() {
   }
 };
 
+async function kasamUpsertWithSchemaFallback(client, tableName, rows, options, fallbackMapper) {
+  if (!rows?.length) return null;
+  const result = await client.from(tableName).upsert(rows, options);
+  if (!result.error) return result;
+  if (!fallbackMapper || !kasamCloudMissingFeature(result.error)) throw result.error;
+  const fallbackRows = rows.map(fallbackMapper).filter(Boolean);
+  if (!fallbackRows.length) return result;
+  const fallbackResult = await client.from(tableName).upsert(fallbackRows, options);
+  if (fallbackResult.error) throw fallbackResult.error;
+  setCloudStatus("Bulut senkron (eski sema uyumu)");
+  return fallbackResult;
+}
+
+async function kasamOptionalCloudUpsert(client, tableName, rows, options) {
+  if (!rows?.length) return null;
+  const result = await client.from(tableName).upsert(rows, options);
+  if (result.error && !kasamCloudMissingFeature(result.error)) throw result.error;
+  return result;
+}
+
 var kasamBaseCloudPushState = typeof cloudPushState === "function" ? cloudPushState : null;
 cloudPushState = async function cloudPushStateKasam() {
   if (!kasamBaseCloudPushState || !(typeof isCloudReady === "function" && isCloudReady()) || !state?.signedInUserId) return;
@@ -1957,7 +2058,12 @@ cloudPushState = async function cloudPushStateKasam() {
     return;
   }
   try {
-    await kasamBaseCloudPushState();
+    try {
+      await kasamBaseCloudPushState();
+    } catch (error) {
+      if (!kasamCloudMissingFeature(error)) throw error;
+      setCloudStatus("Bulut senkron (eksik production semasi)");
+    }
     const client = cloudDb();
     const user = currentUser();
     if (!user) return;
@@ -1974,7 +2080,14 @@ cloudPushState = async function cloudPushStateKasam() {
         archived_at: project.archivedAt || null,
         updated_at: kasamNow(),
       }));
-    if (projectRows.length) await client.from("kasa_projects").upsert(projectRows, { onConflict: "id" });
+    await kasamUpsertWithSchemaFallback(client, "kasa_projects", projectRows, { onConflict: "id" }, (row) => ({
+      id: row.id,
+      name: row.name,
+      purpose: row.purpose,
+      code: row.code,
+      created_by: row.created_by,
+      updated_at: row.updated_at,
+    }));
 
     const entryRows = (state.entries || [])
       .filter((entry) => entry.userId === user.id)
@@ -2010,7 +2123,47 @@ cloudPushState = async function cloudPushStateKasam() {
         created_at: entry.createdAt || kasamNow(),
         updated_at: entry.updatedAt || kasamNow(),
       }));
-    if (entryRows.length) await client.from("kasa_entries").upsert(entryRows, { onConflict: "id" });
+    await kasamUpsertWithSchemaFallback(client, "kasa_entries", entryRows, { onConflict: "id" }, (row) => {
+      const { updated_at, ...legacyRow } = row;
+      return legacyRow;
+    });
+
+    const notificationRows = (state.notifications || [])
+      .filter((notification) => notification.actorId === user.id || notification.recipients?.includes(user.id))
+      .map((notification) => ({
+        id: notification.id,
+        project_id: notification.projectId,
+        entry_id: notification.entryId,
+        actor_id: notification.actorId,
+        recipients: notification.recipients || [],
+        mode: notification.mode,
+        actual_type: notification.actualType || "expense",
+        title: notification.title || "",
+        amount: notification.amount || 0,
+        emoji: notification.emoji || "",
+        photo_name: notification.photoName || "",
+        photo_data: notification.photoData || "",
+        gif: notification.gif || "",
+        success_reaction: notification.successReaction || "✅",
+        success_photo_name: notification.successPhotoName || "",
+        success_photo_data: notification.successPhotoData || "",
+        success_gif: notification.successGif || "",
+        fail_reaction: notification.failReaction || "🙂",
+        fail_photo_name: notification.failPhotoName || "",
+        fail_photo_data: notification.failPhotoData || "",
+        fail_gif: notification.failGif || "",
+        guess_deadline: notification.guessDeadline || null,
+        revealed_at: notification.revealedAt || null,
+        is_completed: Boolean(notification.isCompleted),
+        notification_type: notification.notificationType || "entry",
+        reaction_emoji: notification.reactionEmoji || "",
+        guesses: notification.guesses || [],
+        created_at: notification.createdAt || kasamNow(),
+      }));
+    await kasamUpsertWithSchemaFallback(client, "kasa_notifications", notificationRows, { onConflict: "id" }, (row) => {
+      const { guess_deadline, revealed_at, is_completed, notification_type, reaction_emoji, ...legacyRow } = row;
+      return legacyRow;
+    });
 
     const reconciliationRows = (state.reconciliations || [])
       .filter((item) => item.userId === user.id)
@@ -2031,7 +2184,7 @@ cloudPushState = async function cloudPushStateKasam() {
         unmatched_rows: item.unmatchedRows || [],
         ai_analysis: item.aiAnalysis || null,
       }));
-    if (reconciliationRows.length) await client.from("kasa_reconciliations").upsert(reconciliationRows, { onConflict: "id" });
+    await kasamOptionalCloudUpsert(client, "kasa_reconciliations", reconciliationRows, { onConflict: "id" });
 
     const insightRows = (state.insights || [])
       .filter((item) => item.userId === user.id)
@@ -2047,7 +2200,7 @@ cloudPushState = async function cloudPushStateKasam() {
         is_read: Boolean(item.isRead),
         created_at: item.createdAt || kasamNow(),
       }));
-    if (insightRows.length) await client.from("kasa_insights").upsert(insightRows, { onConflict: "id" });
+    await kasamOptionalCloudUpsert(client, "kasa_insights", insightRows, { onConflict: "id" });
 
     state.cloudSyncAt = kasamNow();
     setCloudStatus("Bulut senkron");
@@ -2059,6 +2212,38 @@ cloudPushState = async function cloudPushStateKasam() {
     throw error;
   }
 };
+
+let kasamCloudRefreshTimer = null;
+let kasamCloudRefreshBusy = false;
+
+async function kasamRefreshCloudData(reason = "auto") {
+  if (kasamCloudRefreshBusy) return;
+  if (!(typeof isCloudReady === "function" && isCloudReady()) || !state?.signedInUserId || !kasamIsOnline()) return;
+  if (document.hidden && reason === "interval") return;
+  kasamCloudRefreshBusy = true;
+  try {
+    await loadCloudData();
+    if (state?.entries?.length) kasamBackfillEntryNotifications();
+    if (state.activeView !== "add") render();
+  } catch (error) {
+    logError(error, `cloud-refresh-${reason}`);
+    setCloudStatus(friendlyCloudError(error));
+  } finally {
+    kasamCloudRefreshBusy = false;
+  }
+}
+
+function kasamStartCloudRefresh() {
+  if (kasamCloudRefreshTimer) return;
+  kasamCloudRefreshTimer = window.setInterval(() => kasamRefreshCloudData("interval"), 25000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) kasamRefreshCloudData("visible");
+  });
+  window.addEventListener("focus", () => kasamRefreshCloudData("focus"));
+  window.addEventListener("online", () => kasamRefreshCloudData("online"));
+}
+
+kasamStartCloudRefresh();
 
 var kasamBaseBindScreen = bindScreen;
 bindScreen = function bindScreenKasam() {

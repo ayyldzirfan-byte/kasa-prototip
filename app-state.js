@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "09.06.2026 00:24";
+const APP_UPDATED_AT = "09.06.2026 00:58";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
