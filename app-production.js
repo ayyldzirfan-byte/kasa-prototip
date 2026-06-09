@@ -1577,6 +1577,36 @@ function kasamShareForUser(entry, userId) {
   return kasamOriginalAmount(entry) * Number(ratios[index] || fallback);
 }
 
+var kasamBaseEntryShareForUserSafe = typeof entryShareForUserSafe === "function" ? entryShareForUserSafe : null;
+entryShareForUserSafe = function entryShareForUserSafeKasam(entry, userId) {
+  return kasamShareForUser(entry, userId);
+};
+
+var kasamBasePersonalAmountForEntry = typeof personalAmountForEntry === "function" ? personalAmountForEntry : null;
+personalAmountForEntry = function personalAmountForEntryKasam(entry, user = currentUser()) {
+  if (!entry || !user || !entryVisibleForCurrentUser(entry, user.id)) return 0;
+  const project = kasamProjectForEntry(entry);
+  if (!project || !memberResponsibleForEntry(project, user.id, entry.date)) return 0;
+  const shared = project.splitType !== "individual" && (project.memberIds || []).length > 1;
+  const directOwner = entry.userId === user.id || entry.paidById === user.id;
+  if (!shared) return directOwner ? Number(entry.amount || 0) : 0;
+  const share = kasamShareForUser(entry, user.id);
+  if (share > 0) return share;
+  return directOwner ? Number(entry.amount || 0) : 0;
+};
+
+personalLedgerEntries = function personalLedgerEntriesKasam(user = currentUser()) {
+  if (!user) return [];
+  return (state.entries || [])
+    .map((entry) => personalEntryCopy(entry, user))
+    .filter(Boolean);
+};
+
+personalProjectEntries = function personalProjectEntriesKasam(project, user = currentUser()) {
+  if (!project || !user) return [];
+  return personalLedgerEntries(user).filter((entry) => entry.projectId === project.id);
+};
+
 function kasamEntrySplitText(entry, compact = false) {
   const project = kasamProjectForEntry(entry);
   const payer = state.users.find((user) => user.id === (entry?.paidById || entry?.userId));
