@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "10.06.2026 22:15";
+const APP_UPDATED_AT = "10.06.2026 22:40";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -233,6 +233,26 @@ async function initApp() {
   render();
 
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    navigator.serviceWorker
+      .register("./sw.js?v=20260610-2240")
+      .then((registration) => {
+        registration.update().catch(() => {});
+        if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        registration.addEventListener("updatefound", () => {
+          const worker = registration.installing;
+          if (!worker) return;
+          worker.addEventListener("statechange", () => {
+            if (worker.state === "installed" && navigator.serviceWorker.controller) {
+              worker.postMessage({ type: "SKIP_WAITING" });
+            }
+          });
+        });
+      })
+      .catch(() => {});
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (sessionStorage.getItem("kasam-sw-reloaded") === "1") return;
+      sessionStorage.setItem("kasam-sw-reloaded", "1");
+      location.reload();
+    });
   }
 }
