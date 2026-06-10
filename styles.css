@@ -3001,6 +3001,236 @@ textarea:focus {
   }
 }
 
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #F4F1EB;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #EDEAE3;
+  --color-text-primary: #1A1A18;
+  --color-text-secondary: #6B6860;
+  --color-text-muted: #A8A59E;
+  --color-border: #E0DDD6;
+  --color-border-strong: #C8C5BE;
+  --color-success-bg: #EAF4EE;
+  --color-warning-bg: #FDF6E3;
+  --color-error-bg: #FDECEA;
+  --color-receipt-bg: #FFFFFF;
+  --color-legacy-clean-bg: #EEF2ED;
+  --color-legacy-clean-bg-2: #F7F8F5;
+  --color-legacy-clean-bg-3: #F4F6F3;
+  --color-legacy-soft-panel: #FBFCF8;
+  --overlay-white-54: hsl(0 0% 100% / 0.54);
+  --overlay-white-58: hsl(0 0% 100% / 0.58);
+  --overlay-white-64: hsl(0 0% 100% / 0.64);
+  --overlay-white-68: hsl(0 0% 100% / 0.68);
+  --overlay-white-72: hsl(0 0% 100% / 0.72);
+  --overlay-white-74: hsl(0 0% 100% / 0.74);
+  --overlay-white-78: hsl(0 0% 100% / 0.78);
+  --overlay-white-82: hsl(0 0% 100% / 0.82);
+  --overlay-white-86: hsl(0 0% 100% / 0.86);
+  --overlay-white-88: hsl(0 0% 100% / 0.88);
+  --overlay-white-90: hsl(0 0% 100% / 0.90);
+  --overlay-white-92: hsl(0 0% 100% / 0.92);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #141412;
+  --color-surface: #1E1E1C;
+  --color-surface-2: #2A2A28;
+  --color-text-primary: #F0EDE6;
+  --color-text-secondary: #B6B1A8;
+  --color-text-muted: #8A867E;
+  --color-border: #2E2E2C;
+  --color-border-strong: #464640;
+  --color-success-bg: #183226;
+  --color-warning-bg: #33270F;
+  --color-error-bg: #351817;
+  --color-receipt-bg: #1E1E1C;
+  --color-legacy-warm-1: #191916;
+  --color-legacy-warm-2: #141412;
+  --color-legacy-warm-3: #1E1E1C;
+  --color-legacy-warm-4: #2A2517;
+  --color-legacy-green-text: #82D3A6;
+  --color-legacy-expense-text: #F39A8C;
+  --color-legacy-amber-text: #E8C547;
+  --color-legacy-amber-dark: #F0C85A;
+  --color-legacy-brown: #D8D2C7;
+  --color-legacy-dash: #464640;
+  --color-legacy-track: #2A2A28;
+  --color-legacy-paper-line: #3E3E3C;
+  --color-legacy-clean-bg: #141412;
+  --color-legacy-clean-bg-2: #141412;
+  --color-legacy-clean-bg-3: #2A2A28;
+  --color-legacy-soft-panel: #1E1E1C;
+  --overlay-white-54: hsl(45 5% 15% / 0.54);
+  --overlay-white-58: hsl(45 5% 15% / 0.58);
+  --overlay-white-64: hsl(45 5% 15% / 0.64);
+  --overlay-white-68: hsl(45 5% 15% / 0.68);
+  --overlay-white-72: hsl(45 5% 15% / 0.72);
+  --overlay-white-74: hsl(45 5% 15% / 0.74);
+  --overlay-white-78: hsl(45 5% 15% / 0.78);
+  --overlay-white-82: hsl(45 5% 15% / 0.82);
+  --overlay-white-86: hsl(45 5% 15% / 0.86);
+  --overlay-white-88: hsl(45 5% 15% / 0.88);
+  --overlay-white-90: hsl(45 5% 15% / 0.90);
+  --overlay-white-92: hsl(45 5% 15% / 0.92);
+  --overlay-border-soft: hsl(45 10% 86% / 0.10);
+  --overlay-shadow-soft: hsl(0 0% 0% / 0.28);
+  --overlay-shadow-md: hsl(0 0% 0% / 0.34);
+  --overlay-shadow-lg: hsl(0 0% 0% / 0.40);
+}
+
+:root[data-theme="dark"] body {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+:root[data-theme="dark"] .phone-shell {
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 70%, #0F0F0D 100%);
+}
+
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .form-card,
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .receipt-card,
+:root[data-theme="dark"] .expense-row,
+:root[data-theme="dark"] .project-list-row,
+:root[data-theme="dark"] .notification-card,
+:root[data-theme="dark"] .member-card,
+:root[data-theme="dark"] .template-card,
+:root[data-theme="dark"] .goal-card,
+:root[data-theme="dark"] .join-card,
+:root[data-theme="dark"] .member-list-button,
+:root[data-theme="dark"] .tabbar {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+:root[data-theme="dark"] .text-input,
+:root[data-theme="dark"] .select-input,
+:root[data-theme="dark"] .amount-input,
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] .segment,
+:root[data-theme="dark"] .secondary-button,
+:root[data-theme="dark"] .ghost-button,
+:root[data-theme="dark"] .tiny-button,
+:root[data-theme="dark"] .share-button,
+:root[data-theme="dark"] .mini-action,
+:root[data-theme="dark"] .calendar-cell,
+:root[data-theme="dark"] .raw-block,
+:root[data-theme="dark"] .split-preview-box,
+:root[data-theme="dark"] .soft-details,
+:root[data-theme="dark"] .invite-box {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-2);
+  color: var(--color-text-primary);
+}
+
+:root[data-theme="dark"] .primary-button {
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+:root[data-theme="dark"] ::placeholder {
+  color: var(--color-text-muted);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-text-secondary: #B6B1A8;
+    --color-text-muted: #8A867E;
+    --color-legacy-warm-1: #191916;
+    --color-legacy-warm-2: #141412;
+    --color-legacy-warm-3: #1E1E1C;
+    --color-legacy-warm-4: #2A2517;
+    --color-legacy-green-text: #82D3A6;
+    --color-legacy-expense-text: #F39A8C;
+    --color-legacy-amber-text: #E8C547;
+    --color-legacy-amber-dark: #F0C85A;
+    --color-legacy-brown: #D8D2C7;
+    --color-legacy-dash: #464640;
+    --color-legacy-track: #2A2A28;
+    --color-legacy-paper-line: #3E3E3C;
+    --overlay-white-54: hsl(45 5% 15% / 0.54);
+    --overlay-white-58: hsl(45 5% 15% / 0.58);
+    --overlay-white-64: hsl(45 5% 15% / 0.64);
+    --overlay-white-68: hsl(45 5% 15% / 0.68);
+    --overlay-white-72: hsl(45 5% 15% / 0.72);
+    --overlay-white-74: hsl(45 5% 15% / 0.74);
+    --overlay-white-78: hsl(45 5% 15% / 0.78);
+    --overlay-white-82: hsl(45 5% 15% / 0.82);
+    --overlay-white-86: hsl(45 5% 15% / 0.86);
+    --overlay-white-88: hsl(45 5% 15% / 0.88);
+    --overlay-white-90: hsl(45 5% 15% / 0.90);
+    --overlay-white-92: hsl(45 5% 15% / 0.92);
+    --overlay-border-soft: hsl(45 10% 86% / 0.10);
+    --overlay-border-green: hsl(144 51% 66% / 0.22);
+    --overlay-border-green-strong: hsl(144 51% 66% / 0.35);
+    --overlay-border-warn: hsl(46 78% 62% / 0.34);
+    --overlay-shadow-soft: hsl(0 0% 0% / 0.28);
+    --overlay-shadow-md: hsl(0 0% 0% / 0.34);
+    --overlay-shadow-lg: hsl(0 0% 0% / 0.40);
+  }
+
+  :root:not([data-theme="light"]) .phone-shell {
+    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 70%, #0F0F0D 100%);
+  }
+
+  :root:not([data-theme="light"]) .card,
+  :root:not([data-theme="light"]) .form-card,
+  :root:not([data-theme="light"]) .stat-card,
+  :root:not([data-theme="light"]) .receipt-card,
+  :root:not([data-theme="light"]) .expense-row,
+  :root:not([data-theme="light"]) .project-list-row,
+  :root:not([data-theme="light"]) .notification-card,
+  :root:not([data-theme="light"]) .member-card,
+  :root:not([data-theme="light"]) .template-card,
+  :root:not([data-theme="light"]) .goal-card,
+  :root:not([data-theme="light"]) .join-card,
+  :root:not([data-theme="light"]) .member-list-button,
+  :root:not([data-theme="light"]) .tabbar {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+  }
+
+  :root:not([data-theme="light"]) .text-input,
+  :root:not([data-theme="light"]) .select-input,
+  :root:not([data-theme="light"]) .amount-input,
+  :root:not([data-theme="light"]) input,
+  :root:not([data-theme="light"]) select,
+  :root:not([data-theme="light"]) textarea,
+  :root:not([data-theme="light"]) .segment,
+  :root:not([data-theme="light"]) .secondary-button,
+  :root:not([data-theme="light"]) .ghost-button,
+  :root:not([data-theme="light"]) .tiny-button,
+  :root:not([data-theme="light"]) .share-button,
+  :root:not([data-theme="light"]) .mini-action,
+  :root:not([data-theme="light"]) .calendar-cell,
+  :root:not([data-theme="light"]) .raw-block,
+  :root:not([data-theme="light"]) .split-preview-box,
+  :root:not([data-theme="light"]) .soft-details,
+  :root:not([data-theme="light"]) .invite-box {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-2);
+    color: var(--color-text-primary);
+  }
+
+  :root:not([data-theme="light"]) .primary-button {
+    background: var(--color-accent);
+    color: var(--color-text-primary);
+  }
+
+  :root:not([data-theme="light"]) ::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
 @media (max-width: 390px) {
   .phone-shell {
     padding-right: var(--space-4);

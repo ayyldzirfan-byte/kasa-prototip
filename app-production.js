@@ -166,6 +166,7 @@ normalizeState = function normalizeStateKasam(saved) {
   normalized.joinRequests = Array.isArray(normalized.joinRequests) ? normalized.joinRequests : [];
   normalized.lastInsightRun = normalized.lastInsightRun || {};
   normalized.installPromptDismissedAt = normalized.installPromptDismissedAt || "";
+  normalized.themeMode = ["system", "light", "dark"].includes(normalized.themeMode) ? normalized.themeMode : "system";
 
   normalized.users = (normalized.users || []).map((user) => ({
     ...user,
@@ -357,7 +358,10 @@ function applyProductionChrome() {
   }
   document.title = "Kasam";
   document.documentElement.lang = "tr";
-  document.querySelector("meta[name='theme-color']")?.setAttribute("content", "#f7f8f5");
+  const themeMode = ["light", "dark"].includes(state?.themeMode) ? state.themeMode : "system";
+  if (themeMode === "system") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.dataset.theme = themeMode;
+  document.querySelector("meta[name='theme-color']")?.setAttribute("content", themeMode === "dark" ? "#141412" : "#F4F1EB");
   document.querySelector("meta[name='apple-mobile-web-app-title']")?.setAttribute("content", "Kasam");
   const eyebrow = document.querySelector(".topbar .eyebrow");
   if (eyebrow) eyebrow.textContent = KASAM_BRAND.slogan;
@@ -833,6 +837,7 @@ function renderOwnProfilePage() {
       </div>
       <form class="form-grid profile-page-form" id="ownProfileForm">
         <label><span class="field-label">Tahmin cevabı tarzı</span><select class="select-input" name="onayMode">${Object.entries(personalityModes).map(([id, item]) => `<option value="${id}" ${user.onayModu === id ? "selected" : ""}>${kasamSafe(item.label)}</option>`).join("")}</select></label>
+        <label><span class="field-label">Tema</span><select class="select-input" name="themeMode"><option value="system" ${state.themeMode === "system" ? "selected" : ""}>Sistem</option><option value="light" ${state.themeMode === "light" ? "selected" : ""}>Açık</option><option value="dark" ${state.themeMode === "dark" ? "selected" : ""}>Koyu</option></select></label>
         <label class="photo-pick compact-pick"><span data-file-label>Kendi profil resmin</span><strong>Seç</strong><input name="profilePhoto" type="file" accept="image/*" /></label>
         <button class="primary-button" type="submit">Kaydet</button>
       </form>

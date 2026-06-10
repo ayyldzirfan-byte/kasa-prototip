@@ -1310,7 +1310,9 @@ async function handleOwnProfileForm(form) {
   if (!user) return;
   const data = new FormData(form);
   const onayMode = String(data.get("onayMode") || user.onayModu);
+  const themeMode = String(data.get("themeMode") || state.themeMode || "system");
   if (personalityModes[onayMode]) user.onayModu = onayMode;
+  if (["system", "light", "dark"].includes(themeMode)) state.themeMode = themeMode;
   const file = formFile(data, "profilePhoto");
   if (file) {
     user.photoName = file.name;
