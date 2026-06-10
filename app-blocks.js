@@ -1532,7 +1532,7 @@ function notificationRow(notification) {
   if (guess && !completed) {
     return `
       <div class="notification-card surprise-locked">
-        <div class="notification-hero">${media}</div>
+        <div class="notification-hero">?</div>
         <div class="expense-main">
           <p class="expense-title">Tahmin kaydedildi</p>
           <p class="expense-meta">Detay herkes tahmin edince veya süre dolunca açılacak.</p>
@@ -2394,10 +2394,10 @@ function notificationRow(notification) {
 
   return `
     <div class="notification-card surprise-locked">
-      <div class="notification-hero">${media}</div>
+      <div class="notification-hero">?</div>
       <div class="expense-main">
-        <p class="expense-title">${projectUserLabel(actor)} sürpriz hareket gönderdi</p>
-        <p class="expense-meta">?? · ?? · ${relativeDate(notification.createdAt)} · detay kapalı</p>
+        <p class="expense-title">Yeni tahmin var</p>
+        <p class="expense-meta">${projectUserLabel(actor)} gönderdi · ${relativeDate(notification.createdAt)} · detay kapalı</p>
         <form class="guess-form" data-guess-form data-id="${notification.id}">
           <div class="guess-actions">
             <button class="mini-action" name="predictedType" value="income" type="submit">Gelir mi?</button>

@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "10.06.2026 22:40";
+var KASAM_UPDATED_AT = "10.06.2026 22:50";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -836,7 +836,6 @@ function renderOwnProfilePage() {
         </div>
       </div>
       <form class="form-grid profile-page-form" id="ownProfileForm">
-        <label><span class="field-label">Tahmin cevabı tarzı</span><select class="select-input" name="onayMode">${Object.entries(personalityModes).map(([id, item]) => `<option value="${id}" ${user.onayModu === id ? "selected" : ""}>${kasamSafe(item.label)}</option>`).join("")}</select></label>
         <label><span class="field-label">Tema</span><select class="select-input" name="themeMode"><option value="system" ${state.themeMode === "system" ? "selected" : ""}>Sistem</option><option value="light" ${state.themeMode === "light" ? "selected" : ""}>Açık</option><option value="dark" ${state.themeMode === "dark" ? "selected" : ""}>Koyu</option></select></label>
         <label class="photo-pick compact-pick"><span data-file-label>Kendi profil resmin</span><strong>Seç</strong><input name="profilePhoto" type="file" accept="image/*" /></label>
         <button class="primary-button" type="submit">Kaydet</button>
@@ -1160,7 +1159,7 @@ function renderReport() {
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${period === "all" ? "Toplam net etki." : `${label} net fark.`}</span></div>
     </section>
     ${reconciliationCardsHtml()}
-    <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">${KASAM_BRAND.watermark}</p></section>
+    <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${kasamReceiptDistributionHtml(activeProject(), period)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">${KASAM_BRAND.watermark}</p></section>
   `;
 }
 
@@ -1693,21 +1692,92 @@ createEntryNotification = function createEntryNotificationKasam(entry, options =
   return notification;
 };
 
+function kasamIsPersonalProject(project = activeProject()) {
+  if (!project) return true;
+  return project.splitType === "individual" || (project.memberIds || []).length <= 1;
+}
+
+function kasamFinancialUserName(user) {
+  return kasamCleanText(user?.name || profileLabel(user) || "Kullanıcı");
+}
+
+function kasamUserNameById(userId) {
+  return kasamFinancialUserName(state.users.find((user) => user.id === userId));
+}
+
 function kasamEntrySplitText(entry, compact = false) {
   const project = kasamProjectForEntry(entry);
   const payer = state.users.find((user) => user.id === (entry?.paidById || entry?.userId));
   const ids = kasamSplitIdsForEntry(entry);
   const payLabel = entry?.type === "income" || entry?.type === "receivable" ? "Giren" : "Ödeyen";
-  const payerText = `${payLabel}: ${payer ? projectUserLabel(payer, project) : "Bilinmiyor"}`;
+  const payerText = `${payLabel}: ${payer ? kasamFinancialUserName(payer) : "Bilinmiyor"}`;
   const shares = ids
     .map((userId) => {
       const user = state.users.find((item) => item.id === userId);
       if (!user) return "";
-      return `${projectUserLabel(user, project)} ${money(kasamShareForUser(entry, userId))}`;
+      return `${kasamFinancialUserName(user)} ${money(kasamShareForUser(entry, userId))}`;
     })
     .filter(Boolean)
     .join(compact ? " · " : " / ");
   return shares ? `${payerText} · Paylaşım: ${shares}` : payerText;
+}
+
+calculateBalances = function calculateBalancesKasam() {
+  const project = activeProject();
+  if (!project || kasamIsPersonalProject(project)) return [];
+  const confirmed = (state.entries || []).filter((entry) => entry.projectId === project.id && entry.type === "expense" && entry.status === "done" && entryConfirmed(entry));
+  return activeMembers().map((user) => {
+    const paid = sum(confirmed.filter((entry) => (entry.paidById || entry.userId) === user.id));
+    const share = confirmed.reduce((total, entry) => total + personalAmountForEntry(entry, user), 0);
+    return { userId: user.id, name: kasamFinancialUserName(user), paid, share, balance: paid - share };
+  }).filter((item) => item.paid || item.share || item.balance);
+};
+
+function kasamReceiptProjectEntries(project, period) {
+  if (!project) return [];
+  const entries = (state.entries || []).filter((entry) => entry.projectId === project.id && entry.status === "done" && entryConfirmed(entry));
+  return period === "all" ? entries : entriesForPeriod(entries, period);
+}
+
+function kasamReceiptDistributionHtml(project, period) {
+  if (!project) return "";
+  const entries = kasamReceiptProjectEntries(project, period);
+  if (!entries.length) return "";
+  const totals = calculateTotals(entries);
+  const paidMap = new Map();
+  const shareMap = new Map();
+  entries.filter((entry) => entry.type === "expense").forEach((entry) => {
+    const paidById = entry.paidById || entry.userId || "";
+    paidMap.set(paidById, Number(paidMap.get(paidById) || 0) + Number(entry.amount || 0));
+    kasamSplitIdsForEntry(entry).forEach((userId) => {
+      shareMap.set(userId, Number(shareMap.get(userId) || 0) + kasamShareForUser(entry, userId));
+    });
+  });
+  const balances = [...new Set([...(project.memberIds || []), ...paidMap.keys(), ...shareMap.keys()].filter(Boolean))]
+    .map((userId) => ({
+      userId,
+      name: kasamUserNameById(userId),
+      paid: Number(paidMap.get(userId) || 0),
+      share: Number(shareMap.get(userId) || 0),
+    }))
+    .map((item) => ({ ...item, balance: Math.round(item.paid - item.share) }))
+    .filter((item) => item.paid || item.share || item.balance);
+  const transfers = minimumTransfers(balances);
+  const paidRows = balances.filter((item) => item.paid).map((item) => `<div class="receipt-line"><span>${kasamSafe(item.name)}</span><strong>${money(item.paid)}</strong></div>`).join("");
+  const shareRows = balances.filter((item) => item.share).map((item) => `<div class="receipt-line"><span>${kasamSafe(item.name)}</span><strong>${money(item.share)}</strong></div>`).join("");
+  const transferLines = transfers.length
+    ? transfers.map((tx) => `<div class="receipt-line"><span>${kasamSafe(tx.from)} → ${kasamSafe(tx.to)}</span><strong>${money(tx.amount)}</strong></div>`).join("")
+    : `<div class="receipt-line"><span>Hesaplaşma</span><strong>Kapalı</strong></div>`;
+  const scope = period === "day" ? "günlük" : period === "week" ? "haftalık" : period === "month" ? "aylık" : "genel";
+  return `
+    <div class="receipt-subtitle">Kasa çıktısı: ${kasamSafe(project.name)} (${scope})</div>
+    <div class="receipt-line"><span>Kasa giren</span><strong>${money(totals.income)}</strong></div>
+    <div class="receipt-line"><span>Kasa çıkan</span><strong>${money(totals.expense)}</strong></div>
+    <div class="receipt-line"><span>Kasa net</span><strong>${money(totals.actual)}</strong></div>
+    ${paidRows ? `<div class="receipt-subtitle">Kim ödedi</div>${paidRows}` : ""}
+    ${shareRows ? `<div class="receipt-subtitle">Pay dağılımı</div>${shareRows}` : ""}
+    ${!kasamIsPersonalProject(project) ? `<div class="receipt-subtitle">Hesaplaşma</div>${transferLines}` : ""}
+  `;
 }
 
 function kasamProjectMovementRows(project) {
@@ -1743,14 +1813,14 @@ function kasamSplitPreviewHtml(project, type = draft?.type || "expense") {
   const members = ids
     .map((userId) => {
       const member = state.users.find((item) => item.id === userId);
-      return member ? projectUserLabel(member, project) : "";
+      return member ? kasamFinancialUserName(member) : "";
     })
     .filter(Boolean);
   const label = type === "income" ? "Gelir paylaşımı" : "Gider paylaşımı";
   return `
     <section class="split-preview-box">
       <strong>${label}</strong>
-      <span>${type === "income" ? "Giren kişi" : "Ödeyen kişi"}: ${projectUserLabel(user, project)}</span>
+      <span>${type === "income" ? "Giren kişi" : "Ödeyen kişi"}: ${kasamFinancialUserName(user)}</span>
       <span>${members.length ? members.join(" / ") : "Sadece sen"}</span>
     </section>
   `;
@@ -1911,7 +1981,114 @@ notificationEntries = function notificationEntriesKasam() {
   if (!user) return [];
   return (state.notifications || [])
     .filter((item) => item.actorId === user.id || (Array.isArray(item.recipients) && item.recipients.includes(user.id)))
+    .filter((item) => !(item.mode === "surprise" && (item.revealedAt || item.isCompleted)))
     .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+};
+
+notificationRow = function notificationRowKasam(notification) {
+  const actor = state.users.find((user) => user.id === notification.actorId);
+  const guess = notificationGuessFor(notification);
+  const isSurprise = notification.mode === "surprise";
+  const isReaction = notification.notificationType === "reaction";
+  const isMember = notification.notificationType === "member";
+  const typeLabel = notification.actualType === "income" ? "gelir" : notification.actualType === "expense" ? "gider" : "hareket";
+  const media = mediaPreviewHtml(notificationMedia(notification));
+  const completed = Boolean(notification.revealedAt || notification.isCompleted);
+
+  if (isMember) {
+    return `
+      <div class="notification-card member-notification">
+        <div class="notification-hero member-added-pulse">+</div>
+        <div class="expense-main">
+          <p class="expense-title">Yeni kişi eklendi</p>
+          <p class="expense-meta">${notification.title} · ${projectUserLabel(actor)} ekledi · ${relativeDate(notification.createdAt)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  if (isReaction) {
+    return `
+      <div class="notification-card reaction-notification">
+        <div class="notification-hero pop-emoji">${notification.reactionEmoji || "👀"}</div>
+        <div class="expense-main">
+          <p class="expense-title">${projectUserLabel(actor)} tepki verdi</p>
+          <p class="expense-meta">${notification.title}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  if (!isSurprise) {
+    return `
+      <div class="notification-card">
+        <div class="notification-hero">${media}</div>
+        <div class="expense-main">
+          <p class="expense-title">${projectUserLabel(actor)} ${typeLabel} ekledi</p>
+          <p class="expense-meta">${notification.title} · ${money(notification.amount)} · ${relativeDate(notification.createdAt)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  if (guess && !completed) {
+    return `
+      <div class="notification-card surprise-locked">
+        <div class="notification-hero">?</div>
+        <div class="expense-main">
+          <p class="expense-title">Tahmin kaydedildi</p>
+          <p class="expense-meta">Detay herkes tahmin edince veya süre dolunca açılacak.</p>
+        </div>
+      </div>
+    `;
+  }
+
+  if (guess && completed) {
+    const correct = Boolean(guess.isCorrect ?? guess.correct);
+    const ownerText = onayText(actor, correct);
+    return `
+      <div class="notification-card ${correct ? "guess-correct" : "guess-wrong"}">
+        <div class="notification-hero">${mediaPreviewHtml(notificationReactionMedia(notification, guess), correct ? "✅" : "🙂")}</div>
+        <div class="expense-main">
+          <p class="expense-title">${correct ? "Kestirdin! +10 puan" : "Sürpriz geldi geçti."}</p>
+          <p class="expense-meta">${ownerText} Gerçek: ${typeLabel} · ${money(notification.amount)} · kasa açıldı</p>
+          <div class="reaction-result ${correct ? "correct confetti-burst" : "wrong shake-once"}">
+            <span>${correct ? "Doğru tahmin" : "Yanlış tahmin"}</span>
+            <span class="reaction-media">${mediaPreviewHtml(notificationReactionMedia(notification, guess), correct ? "✅" : "🙂")}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (completed) {
+    return `
+      <div class="notification-card">
+        <div class="notification-hero">${media}</div>
+        <div class="expense-main">
+          <p class="expense-title">Sürpriz açıldı</p>
+          <p class="expense-meta">Gerçek: ${typeLabel} · ${notification.title} · ${money(notification.amount)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="notification-card surprise-locked">
+      <div class="notification-hero">?</div>
+      <div class="expense-main">
+        <p class="expense-title">Yeni tahmin var</p>
+        <p class="expense-meta">${projectUserLabel(actor)} gönderdi · ${relativeDate(notification.createdAt)} · detay kapalı</p>
+        <form class="guess-form" data-guess-form data-id="${notification.id}">
+          <div class="guess-actions">
+            <button class="mini-action" name="predictedType" value="income" type="submit">Gelir mi?</button>
+            <button class="mini-action" name="predictedType" value="expense" type="submit">Gider mi?</button>
+          </div>
+          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini opsiyonel" autocomplete="off" />
+        </form>
+      </div>
+    </div>
+  `;
 };
 
 renderAdd = function renderAddKasam() {
@@ -1945,7 +2122,13 @@ renderAdd = function renderAddKasam() {
 
 renderGroup = function renderGroupKasam() {
   const project = activeProject();
-  if (state.groupMode === "member" && state.activeMemberProfileId) return renderMemberProfile();
+  if (!project) return renderProjectList();
+  const isPersonal = kasamIsPersonalProject(project);
+  if (isPersonal && state.groupMode === "member") {
+    state.groupMode = "detail";
+    state.activeMemberProfileId = "";
+  }
+  if (!isPersonal && state.groupMode === "member" && state.activeMemberProfileId) return renderMemberProfile();
   if (state.groupMode !== "detail") return renderProjectList();
   projectMemberSinceMap(project);
   const balances = calculateBalances();
@@ -1958,7 +2141,7 @@ renderGroup = function renderGroupKasam() {
   return `
     <section class="card project-detail-card">
       <div class="section-head">
-        <div class="project-card-title">${projectPhotoHtml(project)}<div><h2>${kasamSafe(project.name)}</h2><p>${projectCode(project)}</p></div></div>
+        <div class="project-card-title">${projectPhotoHtml(project)}<div><h2>${kasamSafe(project.name)}</h2>${isPersonal ? `<p>Kişisel kasa</p>` : `<p>${projectCode(project)}</p>`}</div></div>
         <button class="tiny-button" data-action="open-projects-list" type="button">Bütçeler</button>
       </div>
       ${kasamPlannedSummaryHtml(personalEntries)}
@@ -1968,16 +2151,16 @@ renderGroup = function renderGroupKasam() {
       <p class="field-help">Hareket sayısı: ${movementCount}. İleri tarihli kayıtlar plan sonrası alana gider.</p>
       ${canManageUsers ? `<form class="inline-form project-photo-form" id="projectPhotoForm"><label class="photo-pick compact-pick"><span data-file-label>Bütçe resmi</span><strong>Seç</strong><input name="projectPhoto" type="file" accept="image/*" /></label><button class="secondary-button" type="submit">Kaydet</button></form>` : ""}
     </section>
-    <section class="card"><h2>Üyeler</h2><div class="expense-list" style="margin-top:12px;">${activeMembers().map(userLinkRow).join("") || `<div class="empty-state">Bu bütçede üye yok.</div>`}</div></section>
+    ${isPersonal ? "" : `<section class="card"><h2>Üyeler</h2><div class="expense-list" style="margin-top:12px;">${activeMembers().map(userLinkRow).join("") || `<div class="empty-state">Bu bütçede üye yok.</div>`}</div></section>`}
     <section class="card"><div class="section-head"><div><h2>Bütçe hareketleri</h2><p>Bu bütçedeki açık hareketler ve pay dağılımı.</p></div></div><div class="expense-list">${kasamProjectMovementRows(project)}</div></section>
-    <section class="card"><div class="section-head"><div><h2>Erişim</h2><p>${cloudReady ? "Katılma talepleri kasa sahibi onayladıktan sonra açılır." : "Yerel denemede kullanıcılar bu cihazda tutulur."}</p></div></div><div class="invite-box"><div><span class="field-label">Kod</span><strong>${projectCode(project)}</strong><p>${inviteLink(project)}</p></div><button class="mini-action" data-action="copy-project-link" type="button">Kopyala</button></div></section>
-    ${canManageUsers ? `<section class="card"><h2>Katılma talepleri</h2><div class="expense-list">${joinRequestRows()}</div></section>` : ""}
-    <section class="card"><div class="section-head"><div><h2>Borç & alacak</h2><p>Kim ödedi, kimin payına ne düştü.</p></div></div><div style="margin-top:10px;">${balances.length ? balances.map(balanceRow).join("") : `<div class="empty-state">Hesaplaşmaya dahil gider yok.</div>`}</div><div style="margin-top:12px;">${transferRows(transfers)}</div></section>
-    <section class="card">
+    ${isPersonal ? "" : `<section class="card"><div class="section-head"><div><h2>Erişim</h2><p>${cloudReady ? "Katılma talepleri kasa sahibi onayladıktan sonra açılır." : "Yerel denemede kullanıcılar bu cihazda tutulur."}</p></div></div><div class="invite-box"><div><span class="field-label">Kod</span><strong>${projectCode(project)}</strong><p>${inviteLink(project)}</p></div><button class="mini-action" data-action="copy-project-link" type="button">Kopyala</button></div></section>`}
+    ${!isPersonal && canManageUsers ? `<section class="card"><h2>Katılma talepleri</h2><div class="expense-list">${joinRequestRows()}</div></section>` : ""}
+    ${isPersonal ? "" : `<section class="card"><div class="section-head"><div><h2>Borç & alacak</h2><p>Kim ödedi, kimin payına ne düştü.</p></div></div><div style="margin-top:10px;">${balances.length ? balances.map(balanceRow).join("") : `<div class="empty-state">Hesaplaşmaya dahil gider yok.</div>`}</div><div style="margin-top:12px;">${transferRows(transfers)}</div></section>`}
+    ${isPersonal ? "" : `<section class="card">
       <h2>Bütçeye kişi ekle</h2>
       <p>${canManageUsers ? (cloudReady ? `E-posta ile hesabı olan kişiyi ekle veya talebini onayla.` : `Bu cihazda açılmış kullanıcı adını yaz.`) : `Kullanıcı eklemek için ${projectUserLabel(owner)} hesabıyla giriş yap.`}</p>
       ${canManageUsers ? `<form class="inline-form featured-form" id="projectUserForm"><input class="text-input" name="userName" maxlength="120" placeholder="${cloudReady ? "mail@ornek.com" : "Kullanıcı adı"}" autocomplete="${cloudReady ? "email" : "off"}" /><label><span class="field-label">Sorumluluk başlangıcı</span><input class="select-input" name="memberSince" type="date" value="${todayKey()}" /></label><button class="primary-button" type="submit">Ekle</button></form>` : `<div class="empty-state" style="margin-top:12px;">Sadece bütçe sahibi ekleme yapabilir.</div>`}
-    </section>
+    </section>`}
   `;
 };
 
