@@ -332,7 +332,7 @@ function notificationRow(notification) {
             <button class="mini-action" name="predictedType" value="income" type="submit">Gelir mi?</button>
             <button class="mini-action" name="predictedType" value="expense" type="submit">Gider mi?</button>
           </div>
-          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini opsiyonel" autocomplete="off" />
+          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini" autocomplete="off" />
         </form>
       </div>
     </div>
@@ -1564,7 +1564,7 @@ function notificationRow(notification) {
             <button class="mini-action" name="predictedType" value="income" type="submit">Gelir mi?</button>
             <button class="mini-action" name="predictedType" value="expense" type="submit">Gider mi?</button>
           </div>
-          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini opsiyonel" autocomplete="off" />
+          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini" autocomplete="off" />
         </form>
       </div>
     </div>
@@ -2403,7 +2403,7 @@ function notificationRow(notification) {
             <button class="mini-action" name="predictedType" value="income" type="submit">Gelir mi?</button>
             <button class="mini-action" name="predictedType" value="expense" type="submit">Gider mi?</button>
           </div>
-          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini opsiyonel" autocomplete="off" />
+          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini" autocomplete="off" />
         </form>
       </div>
     </div>

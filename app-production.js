@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "10.06.2026 22:50";
+var KASAM_UPDATED_AT = "11.06.2026 08:52";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -312,7 +312,14 @@ scheduleCloudSync = function scheduleCloudSyncKasam() {
     queueCloudRetry({ operation: "pushState" });
     return;
   }
-  if (kasamBaseScheduleCloudSync) kasamBaseScheduleCloudSync();
+  clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(() => {
+    cloudPushState().catch((error) => {
+      logError(error, "scheduled-cloud-push");
+      queueCloudRetry({ operation: "pushState" });
+      setCloudStatus(friendlyCloudError(error));
+    });
+  }, 500);
 };
 
 async function processRetryQueue(manual = false) {
@@ -978,8 +985,21 @@ async function handleEntrySubmit(form) {
   state.activeView = state.previousView && state.previousView !== "add" ? state.previousView : "home";
   state.previousView = "";
   saveState();
+  let syncWarning = "";
+  if (typeof isCloudReady === "function" && isCloudReady() && state.signedInUserId) {
+    try {
+      await cloudPushState();
+    } catch (error) {
+      entry.syncStatus = "pending";
+      if (notification) notification.syncStatus = "pending";
+      queueCloudRetry({ operation: "pushState" });
+      syncWarning = "Kaydedildi, bulut senkron bekliyor.";
+      logError(error, "entry-immediate-cloud-push");
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+  }
   render();
-  kasamToast(delay || (installmentCount > 1 ? "Taksitli gider takvime işlendi." : KASAM_TOASTS.saved));
+  kasamToast(syncWarning || delay || (installmentCount > 1 ? "Taksitli gider takvime işlendi." : KASAM_TOASTS.saved));
 }
 
 function renderNotifications() {
@@ -1722,6 +1742,71 @@ function kasamEntrySplitText(entry, compact = false) {
   return shares ? `${payerText} · Paylaşım: ${shares}` : payerText;
 }
 
+function kasamItemTimestamp(item = {}) {
+  const values = [item.updatedAt, item.updated_at, item.createdAt, item.created_at, item.guessedAt].filter(Boolean);
+  const times = values.map((value) => Date.parse(String(value))).filter((value) => Number.isFinite(value));
+  return times.length ? Math.max(...times) : 0;
+}
+
+function kasamMergeLocalItems(cloudItems = [], localItems = [], shouldKeepLocal = () => false) {
+  const merged = new Map();
+  (cloudItems || []).forEach((item) => {
+    if (item?.id) merged.set(item.id, item);
+  });
+  (localItems || []).forEach((localItem) => {
+    if (!localItem?.id || !shouldKeepLocal(localItem)) return;
+    const cloudItem = merged.get(localItem.id);
+    if (!cloudItem || kasamItemTimestamp(localItem) > kasamItemTimestamp(cloudItem)) {
+      merged.set(localItem.id, { ...localItem, syncStatus: localItem.syncStatus || "pending" });
+    }
+  });
+  return [...merged.values()];
+}
+
+function kasamEnsureCloudMemberUsers(localUsers = []) {
+  const existing = new Map((state.users || []).map((user) => [user.id, user]));
+  const localById = new Map((localUsers || []).map((user) => [user.id, user]));
+  const memberIds = [...new Set((state.projects || []).flatMap((project) => project.memberIds || []).filter(Boolean))];
+  memberIds.forEach((userId, index) => {
+    if (existing.has(userId)) return;
+    const localUser = localById.get(userId);
+    state.users.push({
+      id: userId,
+      name: localUser?.name || `Üye ${index + 1}`,
+      nickname: localUser?.nickname || shortName(localUser?.name || `Üye ${index + 1}`),
+      email: userId === state.signedInUserId ? localUser?.email || "" : "",
+      password: "",
+      photoName: localUser?.photoName || "",
+      photoData: localUser?.photoData || "",
+      onayModu: localUser?.onayModu || "standart",
+      totalScore: Number(localUser?.totalScore || 0),
+      correctGuesses: Number(localUser?.correctGuesses || 0),
+      totalGuesses: Number(localUser?.totalGuesses || 0),
+      createdAt: localUser?.createdAt || kasamNow(),
+      createdBy: "",
+    });
+  });
+}
+
+function kasamRestoreLocalPendingAfterCloud(localSnapshot = {}) {
+  const userId = state.signedInUserId || "";
+  kasamEnsureCloudMemberUsers(localSnapshot.users || []);
+  const visibleProjectIds = new Set((state.projects || []).map((project) => project.id));
+  const localVisibleProjectIds = new Set([...(localSnapshot.projects || []).map((project) => project.id), ...visibleProjectIds]);
+  state.headings = kasamMergeLocalItems(state.headings, localSnapshot.headings, (heading) => localVisibleProjectIds.has(heading.projectId));
+  state.entries = kasamMergeLocalItems(state.entries, localSnapshot.entries, (entry) => {
+    if (!entry || !localVisibleProjectIds.has(entry.projectId)) return false;
+    return entry.userId === userId || entry.paidById === userId || entry.syncStatus === "pending";
+  });
+  state.notifications = kasamMergeLocalItems(state.notifications, localSnapshot.notifications, (notification) => {
+    if (!notification || !localVisibleProjectIds.has(notification.projectId)) return false;
+    return notification.actorId === userId || (Array.isArray(notification.recipients) && notification.recipients.includes(userId)) || notification.syncStatus === "pending";
+  });
+  state.reactions = kasamMergeLocalItems(state.reactions, localSnapshot.reactions, (reaction) => reaction.userId === userId || localVisibleProjectIds.has(reaction.projectId));
+  state.goals = kasamMergeLocalItems(state.goals, localSnapshot.goals, (goal) => goal.createdBy === userId || localVisibleProjectIds.has(goal.projectId));
+  state.settlements = kasamMergeLocalItems(state.settlements, localSnapshot.settlements, (settlement) => localVisibleProjectIds.has(settlement.projectId));
+}
+
 calculateBalances = function calculateBalancesKasam() {
   const project = activeProject();
   if (!project || kasamIsPersonalProject(project)) return [];
@@ -1985,6 +2070,133 @@ notificationEntries = function notificationEntriesKasam() {
     .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 };
 
+function kasamGuessFor(notification, userId = currentUser()?.id) {
+  notification.guesses = Array.isArray(notification.guesses) ? notification.guesses : [];
+  return notification.guesses.find((guess) => guess.userId === userId) || null;
+}
+
+function kasamGuessSteps(notification) {
+  const project = state.projects.find((item) => item.id === notification.projectId);
+  const memberCount = (project?.memberIds || []).length;
+  return memberCount >= 3 ? ["actor", "type", "heading", "amount"] : ["type", "heading", "amount"];
+}
+
+function kasamGuessStepDone(guess, step) {
+  return Array.isArray(guess?.steps) && guess.steps.some((item) => item.step === step);
+}
+
+function kasamGuessComplete(notification, userId = currentUser()?.id) {
+  const guess = kasamGuessFor(notification, userId);
+  if (!guess) return false;
+  if (guess.completed) return true;
+  if (!Array.isArray(guess.steps)) return Boolean(guess.predictedType);
+  return kasamGuessSteps(notification).every((step) => kasamGuessStepDone(guess, step));
+}
+
+var kasamBaseMaybeRevealNotification = typeof maybeRevealNotification === "function" ? maybeRevealNotification : null;
+maybeRevealNotification = function maybeRevealNotificationKasam(notification) {
+  if (!notification || notification.mode !== "surprise" || notification.revealedAt) return notification;
+  const recipients = Array.isArray(notification.recipients) ? notification.recipients : [];
+  const entry = (state.entries || []).find((item) => item.id === notification.entryId);
+  const deadline = notification.guessDeadline || entry?.autoRevealAt || addHours(notification.createdAt || kasamNow(), 48);
+  const deadlinePassed = new Date(deadline).getTime() <= Date.now();
+  const allCompleted = recipients.length > 0 && recipients.every((userId) => kasamGuessComplete(notification, userId));
+  if (allCompleted || deadlinePassed) {
+    notification.revealedAt = kasamNow();
+    notification.isCompleted = true;
+    if (entry) entry.autoRevealAt = entry.autoRevealAt || deadline;
+  }
+  return notification;
+};
+
+guessNotification = function guessNotificationKasam(id, guessInput = {}) {
+  const notification = (state.notifications || []).find((item) => item.id === id);
+  const user = currentUser();
+  if (!notification || !user) return { status: "missing" };
+  notification.guesses = Array.isArray(notification.guesses) ? notification.guesses : [];
+  let guess = notification.guesses.find((item) => item.userId === user.id);
+  if (!guess) {
+    guess = { userId: user.id, steps: [], predictedType: "", predictedAmount: null, predictedActorId: "", predictedTitle: "", isCorrect: null, guessedAt: kasamNow() };
+    notification.guesses.push(guess);
+  }
+  guess.steps = Array.isArray(guess.steps) ? guess.steps : [];
+  const step = String(guessInput.step || "type");
+  const alreadyDone = kasamGuessStepDone(guess, step);
+  if (alreadyDone && !guessInput.replace) return { status: "already", guess, notification };
+  let correct = false;
+  if (step === "actor") {
+    guess.predictedActorId = String(guessInput.predictedActorId || "");
+    correct = guess.predictedActorId === notification.actorId;
+  } else if (step === "type") {
+    guess.predictedType = String(guessInput.predictedType || "");
+    correct = guess.predictedType === notification.actualType;
+  } else if (step === "heading") {
+    guess.predictedTitle = kasamCleanText(guessInput.predictedTitle || "");
+    correct = normalize(guess.predictedTitle) === normalize(notification.title || "");
+  } else if (step === "amount") {
+    const predictedAmount = guessInput.predictedAmount === "" || guessInput.predictedAmount === null || guessInput.predictedAmount === undefined ? null : Number(guessInput.predictedAmount);
+    guess.predictedAmount = Number.isFinite(predictedAmount) && predictedAmount > 0 ? predictedAmount : null;
+    correct = amountGuessCorrect(notification.amount, guess.predictedAmount);
+  }
+  const stepResult = { step, correct, at: kasamNow() };
+  guess.steps = guess.steps.filter((item) => item.step !== step).concat(stepResult);
+  guess.guessedAt = kasamNow();
+  guess.at = guess.guessedAt;
+  const completed = kasamGuessComplete(notification, user.id);
+  if (completed && !guess.scoredAt) {
+    guess.completed = true;
+    guess.isCorrect = kasamGuessSteps(notification).every((item) => kasamGuessStepDone(guess, item) && guess.steps.find((stepItem) => stepItem.step === item)?.correct);
+    guess.correct = guess.isCorrect;
+    user.totalGuesses = Number(user.totalGuesses || 0) + 1;
+    if (guess.isCorrect) {
+      user.totalScore = Number(user.totalScore || 0) + 10;
+      user.correctGuesses = Number(user.correctGuesses || 0) + 1;
+    }
+    guess.scoredAt = kasamNow();
+  }
+  maybeRevealNotification(notification);
+  return { status: completed ? "saved" : "partial", guess, notification, stepResult };
+};
+
+function kasamNextGuessStep(notification, guess) {
+  return kasamGuessSteps(notification).find((step) => !kasamGuessStepDone(guess, step)) || "";
+}
+
+function kasamGuessResultHtml(notification, guess) {
+  const last = Array.isArray(guess?.steps) ? guess.steps[guess.steps.length - 1] : null;
+  if (!last) return "";
+  const media = mediaPreviewHtml(notificationReactionMedia(notification, { isCorrect: last.correct }), last.correct ? "OK" : "X");
+  return `<div class="guess-step-result ${last.correct ? "correct confetti-burst" : "wrong shake-once"}"><div class="guess-result-media">${media}</div><strong>${last.correct ? "Doğru" : "Yanlış"}</strong></div>`;
+}
+
+function kasamHeadingChoices(notification) {
+  const project = state.projects.find((item) => item.id === notification.projectId);
+  const choices = new Set([notification.title]);
+  (state.headings || [])
+    .filter((heading) => heading.projectId === project?.id)
+    .forEach((heading) => choices.add(heading.shortName || heading.name));
+  if (choices.size < 2) choices.add("Diğer");
+  return [...choices].filter(Boolean).slice(0, 4);
+}
+
+function kasamGuessFormHtml(notification, guess) {
+  const step = kasamNextGuessStep(notification, guess);
+  const project = state.projects.find((item) => item.id === notification.projectId);
+  if (!step) return `<p class="expense-meta">Tahmin tamamlandı. Diğer cevaplar bekleniyor.</p>`;
+  if (step === "actor") {
+    const members = (project?.memberIds || []).map((id) => state.users.find((user) => user.id === id)).filter(Boolean);
+    return `<form class="guess-form" data-guess-form data-id="${notification.id}" data-step="actor"><p class="guess-question">Kim hareket ekledi?</p><div class="guess-actions">${members.map((user) => `<button class="mini-action" name="predictedActorId" value="${kasamSafe(user.id)}" type="submit">${kasamFinancialUserName(user)}</button>`).join("")}</div></form>`;
+  }
+  if (step === "type") {
+    return `<form class="guess-form" data-guess-form data-id="${notification.id}" data-step="type"><p class="guess-question">Gelir mi, gider mi?</p><div class="guess-actions"><button class="mini-action" name="predictedType" value="income" type="submit">Gelir</button><button class="mini-action" name="predictedType" value="expense" type="submit">Gider</button></div></form>`;
+  }
+  if (step === "heading") {
+    const actor = state.users.find((user) => user.id === notification.actorId);
+    return `<form class="guess-form" data-guess-form data-id="${notification.id}" data-step="heading"><p class="guess-question">${kasamFinancialUserName(actor)} hangi kalemi ekledi?</p><div class="guess-actions">${kasamHeadingChoices(notification).map((title) => `<button class="mini-action" name="predictedTitle" value="${kasamSafe(title)}" type="submit">${kasamSafe(title)}</button>`).join("")}</div></form>`;
+  }
+  return `<form class="guess-form" data-guess-form data-id="${notification.id}" data-step="amount"><p class="guess-question">Tutar ne olabilir?</p><div class="guess-amount-row"><input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini" autocomplete="off" /><button class="mini-action" type="submit">Tahmin et</button></div></form>`;
+}
+
 notificationRow = function notificationRowKasam(notification) {
   const actor = state.users.find((user) => user.id === notification.actorId);
   const guess = notificationGuessFor(notification);
@@ -2036,8 +2248,10 @@ notificationRow = function notificationRowKasam(notification) {
       <div class="notification-card surprise-locked">
         <div class="notification-hero">?</div>
         <div class="expense-main">
-          <p class="expense-title">Tahmin kaydedildi</p>
-          <p class="expense-meta">Detay herkes tahmin edince veya süre dolunca açılacak.</p>
+          <p class="expense-title">Yeni tahmin var</p>
+          <p class="expense-meta">${relativeDate(notification.createdAt)} · detaylar oyun bitene kadar kapalı</p>
+          ${kasamGuessResultHtml(notification, guess)}
+          ${kasamGuessFormHtml(notification, guess)}
         </div>
       </div>
     `;
@@ -2078,17 +2292,30 @@ notificationRow = function notificationRowKasam(notification) {
       <div class="notification-hero">?</div>
       <div class="expense-main">
         <p class="expense-title">Yeni tahmin var</p>
-        <p class="expense-meta">${projectUserLabel(actor)} gönderdi · ${relativeDate(notification.createdAt)} · detay kapalı</p>
-        <form class="guess-form" data-guess-form data-id="${notification.id}">
-          <div class="guess-actions">
-            <button class="mini-action" name="predictedType" value="income" type="submit">Gelir mi?</button>
-            <button class="mini-action" name="predictedType" value="expense" type="submit">Gider mi?</button>
-          </div>
-          <input class="text-input guess-amount" name="predictedAmount" inputmode="numeric" placeholder="Tutar tahmini opsiyonel" autocomplete="off" />
-        </form>
+        <p class="expense-meta">${relativeDate(notification.createdAt)} · detay kapalı</p>
+        ${kasamGuessFormHtml(notification, null)}
       </div>
     </div>
   `;
+};
+
+handleGuessForm = function handleGuessFormKasam(event, form) {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  const submitter = event.submitter;
+  const data = new FormData(form);
+  const step = form.dataset.step || String(data.get("step") || "type");
+  const payload = { step };
+  if (step === "actor") payload.predictedActorId = submitter?.value || String(data.get("predictedActorId") || "");
+  if (step === "type") payload.predictedType = submitter?.value || String(data.get("predictedType") || "");
+  if (step === "heading") payload.predictedTitle = submitter?.value || String(data.get("predictedTitle") || "");
+  if (step === "amount") payload.predictedAmount = parseAmount(data.get("predictedAmount"));
+  const result = guessNotification(form.dataset.id, payload);
+  if (result.status === "already") return kasamToast("Bu adımı zaten cevapladın.");
+  saveState();
+  render();
+  if (result.status === "saved") return kasamToast(result.guess?.isCorrect ? "Kestirdin. +10 puan" : "Tahmin tamamlandı.");
+  return kasamToast(result.stepResult?.correct ? "Doğru." : "Yanlış.");
 };
 
 renderAdd = function renderAddKasam() {
@@ -2166,11 +2393,24 @@ renderGroup = function renderGroupKasam() {
 
 var kasamBaseLoadCloudData = typeof loadCloudData === "function" ? loadCloudData : null;
 loadCloudData = async function loadCloudDataKasam() {
+  const localSnapshot = {
+    users: [...(state.users || [])],
+    projects: [...(state.projects || [])],
+    headings: [...(state.headings || [])],
+    entries: [...(state.entries || [])],
+    notifications: [...(state.notifications || [])],
+    reactions: [...(state.reactions || [])],
+    goals: [...(state.goals || [])],
+    settlements: [...(state.settlements || [])],
+  };
   if (kasamBaseLoadCloudData) await kasamBaseLoadCloudData();
   if (!(typeof isCloudReady === "function" && isCloudReady()) || !state.signedInUserId) return;
   const client = cloudDb();
   const projectIds = (state.projects || []).map((project) => project.id);
   try {
+    kasamRestoreLocalPendingAfterCloud(localSnapshot);
+    const hasPendingLocal = [...(state.entries || []), ...(state.notifications || [])].some((item) => item.syncStatus === "pending");
+    if (hasPendingLocal && typeof scheduleCloudSync === "function") scheduleCloudSync();
     if (projectIds.length) {
       const [joinResult, insightResult] = await Promise.all([
         client.from("kasa_join_requests").select("*").in("project_id", projectIds).order("created_at", { ascending: false }),
@@ -2390,6 +2630,12 @@ cloudPushState = async function cloudPushStateKasam() {
       }));
     await kasamOptionalCloudUpsert(client, "kasa_insights", insightRows, { onConflict: "id" });
 
+    (state.entries || []).forEach((entry) => {
+      if (entry.userId === user.id || entry.paidById === user.id) delete entry.syncStatus;
+    });
+    (state.notifications || []).forEach((notification) => {
+      if (notification.actorId === user.id || notification.recipients?.includes(user.id)) delete notification.syncStatus;
+    });
     state.cloudSyncAt = kasamNow();
     setCloudStatus("Bulut senkron");
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -2476,6 +2722,11 @@ bindScreen = function bindScreenKasam() {
       },
       true,
     );
+  });
+  app.querySelectorAll("[data-guess-form]").forEach((form) => {
+    if (form.dataset.kasamGuessBound) return;
+    form.dataset.kasamGuessBound = "1";
+    form.addEventListener("submit", (event) => handleGuessForm(event, form), true);
   });
   app.querySelectorAll("[data-action='onboarding-start']").forEach((button) =>
     button.addEventListener("click", () => {

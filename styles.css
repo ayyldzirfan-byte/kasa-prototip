@@ -2579,6 +2579,69 @@ body[data-view="add"] .tabbar {
   overflow-wrap: anywhere;
 }
 
+.type-chip.selected strong,
+.type-chip.selected small {
+  color: inherit;
+}
+
+.guess-form {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 100%;
+}
+
+.guess-question {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.guess-actions {
+  align-items: stretch;
+}
+
+.guess-actions .mini-action {
+  flex: 1 1 calc(50% - var(--space-2));
+  min-width: 116px;
+  white-space: normal;
+}
+
+.guess-amount-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  align-items: center;
+  max-width: 100%;
+}
+
+.guess-step-result {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.guess-result-media {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.guess-result-media .media-image,
+.guess-result-media .media-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* Kasam production design system pass */
 html {
   color-scheme: light dark;
