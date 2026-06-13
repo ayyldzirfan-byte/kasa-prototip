@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 10:45";
+var KASAM_UPDATED_AT = "13.06.2026 11:26";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -978,6 +978,7 @@ function renderOwnProfilePage() {
       </div>
       <form class="form-grid profile-page-form" id="ownProfileForm">
         <label><span class="field-label">Tema</span><select class="select-input" name="themeMode"><option value="system" ${state.themeMode === "system" ? "selected" : ""}>Sistem</option><option value="light" ${state.themeMode === "light" ? "selected" : ""}>Açık</option><option value="dark" ${state.themeMode === "dark" ? "selected" : ""}>Koyu</option></select></label>
+        <label class="switch-line"><input type="checkbox" name="soundEnabled" ${state.soundEnabled === false ? "" : "checked"} /> Oyun sesleri</label>
         <label class="photo-pick compact-pick"><span data-file-label>Kendi profil resmin</span><strong>Seç</strong><input name="profilePhoto" type="file" accept="image/*" /></label>
         <button class="primary-button" type="submit">Kaydet</button>
       </form>
@@ -2687,6 +2688,23 @@ cloudPushState = async function cloudPushStateKasam() {
       updated_at: row.updated_at,
     }));
 
+    const memberRows = (state.projects || [])
+      .filter((project) => project.createdBy === user.id)
+      .flatMap((project) =>
+        (project.memberIds || []).map((memberId) => ({
+          project_id: project.id,
+          user_id: memberId,
+          role: memberId === project.createdBy ? "owner" : "member",
+          alias: project.memberAliases?.[memberId] || "",
+          member_since: project.memberSince?.[memberId] || project.createdAt || kasamNow(),
+          familiarity_scores: project.familiarityScores?.[memberId] || {},
+        })),
+      );
+    await kasamUpsertWithSchemaFallback(client, "kasa_project_members", memberRows, { onConflict: "project_id,user_id" }, (row) => {
+      const { member_since, familiarity_scores, ...legacyRow } = row;
+      return legacyRow;
+    });
+
     const entryRows = (state.entries || [])
       .filter((entry) => entry.userId === user.id)
       .map((entry) => ({
@@ -2756,10 +2774,55 @@ cloudPushState = async function cloudPushStateKasam() {
         notification_type: notification.notificationType || "entry",
         reaction_emoji: notification.reactionEmoji || "",
         guesses: notification.guesses || [],
+        hide_actor: notification.hideActor ?? true,
+        game_phase: notification.gamePhase || 1,
+        phase1_guesses: notification.phase1Guesses || [],
+        phase2_guesses: notification.phase2Guesses || [],
+        phase3_options: notification.phase3Options || [],
+        phase3_correct: notification.phase3Correct || 0,
+        phase3_guesses: notification.phase3Guesses || [],
+        phase3_image: notification.phase3Image || "",
+        actor_wrong_reaction: notification.actorWrongReaction || null,
+        actor_correct_reaction: notification.actorCorrectReaction || null,
+        type_wrong_reaction: notification.typeWrongReaction || null,
+        type_correct_reaction: notification.typeCorrectReaction || null,
+        category_wrong_reaction: notification.categoryWrongReaction || null,
+        category_correct_reaction: notification.categoryCorrectReaction || null,
+        phase1_completed: Boolean(notification.phase1Completed),
+        phase2_completed: Boolean(notification.phase2Completed),
+        phase3_completed: Boolean(notification.phase3Completed),
+        game_fully_completed: Boolean(notification.gameFullyCompleted),
+        game_version: notification.gameVersion || "v1",
         created_at: notification.createdAt || kasamNow(),
       }));
     await kasamUpsertWithSchemaFallback(client, "kasa_notifications", notificationRows, { onConflict: "id" }, (row) => {
-      const { guess_deadline, revealed_at, is_completed, notification_type, reaction_emoji, ...legacyRow } = row;
+      const {
+        guess_deadline,
+        revealed_at,
+        is_completed,
+        notification_type,
+        reaction_emoji,
+        hide_actor,
+        game_phase,
+        phase1_guesses,
+        phase2_guesses,
+        phase3_options,
+        phase3_correct,
+        phase3_guesses,
+        phase3_image,
+        actor_wrong_reaction,
+        actor_correct_reaction,
+        type_wrong_reaction,
+        type_correct_reaction,
+        category_wrong_reaction,
+        category_correct_reaction,
+        phase1_completed,
+        phase2_completed,
+        phase3_completed,
+        game_fully_completed,
+        game_version,
+        ...legacyRow
+      } = row;
       return legacyRow;
     });
 

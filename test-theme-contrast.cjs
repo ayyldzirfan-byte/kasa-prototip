@@ -34,6 +34,11 @@ assert.doesNotMatch(css, /,\s*@media\b/, "CSS selector list cannot contain @medi
 assert.match(css, /:root\[data-theme="light"\]/, "explicit light theme variables must exist");
 assert.match(css, /:root\[data-theme="dark"\]/, "explicit dark theme variables must exist");
 assert.match(css, /:root:not\(\[data-theme="light"\]\)\s+\{[\s\S]*--overlay-white-92:\s*hsl\(45 5% 15% \/ 0\.92\)/, "system dark mode must darken legacy white overlays");
+assert.match(css, /\.game-result-overlay\.correct\s*\{[\s\S]*rgba\(0,\s*0,\s*0,\s*0\.85\)/, "dark game overlay must use dark readable backdrop");
+assert.match(css, /:root\[data-theme="light"\]\s+\.game-result-overlay\.correct\s*\{[\s\S]*rgba\(255,\s*255,\s*255,\s*0\.90\)/, "light game overlay must use light readable backdrop");
+assert.match(css, /\.game-media-picker\s*\{[\s\S]*background:\s*var\(--color-surface\)/, "game picker must use theme surface token");
+assert.match(css, /\.game-picker-tabs\s*\{[\s\S]*background:\s*var\(--color-surface-2\)/, "game picker tabs must use theme surface token");
+assert.match(css, /\.sticker-button\.selected\s*\{[\s\S]*border-color:\s*var\(--color-accent\)/, "selected sticker must use accent token");
 assert.ok(contrast("#F4F1EB", "#1A1A18") >= 7, "light mode body contrast should be AAA-level");
 assert.ok(contrast("#FFFFFF", "#1A1A18") >= 7, "light mode card contrast should be AAA-level");
 assert.ok(contrast("#141412", "#F0EDE6") >= 7, "dark mode body contrast should be AAA-level");

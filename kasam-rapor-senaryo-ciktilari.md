@@ -1,6 +1,6 @@
 # Kasam Rapor Senaryo Çıktıları
 
-Test tarihi: 2026-06-11
+Test tarihi: 2026-06-13
 
 ## Bireysel kullanıcı + ortak bütçe payı
 
@@ -13,9 +13,9 @@ Test tarihi: 2026-06-11
 
 ## Günlük detay satırları
 
-- 2026-06-11 / Kahve / expense: 120 TL
-- 2026-06-11 / Ortak market / expense: 500 TL (ortak hareket toplamı 1.000 TL)
-- 2026-06-11 / Ortak katkı / income: 300 TL (ortak hareket toplamı 600 TL)
+- 2026-06-13 / Kahve / expense: 120 TL
+- 2026-06-13 / Ortak market / expense: 500 TL (ortak hareket toplamı 1.000 TL)
+- 2026-06-13 / Ortak katkı / income: 300 TL (ortak hareket toplamı 600 TL)
 
 ## Diğer ortak kullanıcı günlük etkisi
 
