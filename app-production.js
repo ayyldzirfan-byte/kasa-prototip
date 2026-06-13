@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 08:23";
+var KASAM_UPDATED_AT = "13.06.2026 09:03";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -2220,7 +2220,11 @@ notificationEntries = function notificationEntriesKasam() {
   if (!user) return [];
   return (state.notifications || [])
     .filter((item) => item.actorId === user.id || (Array.isArray(item.recipients) && item.recipients.includes(user.id)))
-    .filter((item) => !(item.mode === "surprise" && (item.revealedAt || item.isCompleted)))
+    .filter((item) => {
+      if (item.mode !== "surprise") return true;
+      maybeRevealNotification(item);
+      return !(item.revealedAt || (item.isCompleted && kasamGuessComplete(item, user.id)));
+    })
     .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 };
 
@@ -2249,7 +2253,7 @@ function kasamGuessComplete(notification, userId = currentUser()?.id) {
 
 var kasamBaseMaybeRevealNotification = typeof maybeRevealNotification === "function" ? maybeRevealNotification : null;
 maybeRevealNotification = function maybeRevealNotificationKasam(notification) {
-  if (!notification || notification.mode !== "surprise" || notification.revealedAt) return notification;
+  if (!notification || notification.mode !== "surprise") return notification;
   const recipients = Array.isArray(notification.recipients) ? notification.recipients : [];
   const entry = (state.entries || []).find((item) => item.id === notification.entryId);
   const deadline = notification.guessDeadline || entry?.autoRevealAt || addHours(notification.createdAt || kasamNow(), 48);
@@ -2259,6 +2263,9 @@ maybeRevealNotification = function maybeRevealNotificationKasam(notification) {
     notification.revealedAt = kasamNow();
     notification.isCompleted = true;
     if (entry) entry.autoRevealAt = entry.autoRevealAt || deadline;
+  } else {
+    notification.revealedAt = "";
+    notification.isCompleted = false;
   }
   return notification;
 };
@@ -2297,6 +2304,10 @@ guessNotification = function guessNotificationKasam(id, guessInput = {}) {
   guess.guessedAt = kasamNow();
   guess.at = guess.guessedAt;
   const completed = kasamGuessComplete(notification, user.id);
+  if (!completed) {
+    notification.revealedAt = "";
+    notification.isCompleted = false;
+  }
   if (completed && !guess.scoredAt) {
     guess.completed = true;
     guess.isCorrect = kasamGuessSteps(notification).every((item) => kasamGuessStepDone(guess, item) && guess.steps.find((stepItem) => stepItem.step === item)?.correct);
@@ -2359,7 +2370,9 @@ notificationRow = function notificationRowKasam(notification) {
   const isMember = notification.notificationType === "member";
   const typeLabel = notification.actualType === "income" ? "gelir" : notification.actualType === "expense" ? "gider" : "hareket";
   const media = mediaPreviewHtml(notificationMedia(notification));
-  const completed = Boolean(notification.revealedAt || notification.isCompleted);
+  maybeRevealNotification(notification);
+  const userGuessComplete = guess ? kasamGuessComplete(notification, currentUser()?.id) : false;
+  const completed = Boolean(notification.revealedAt || (notification.isCompleted && userGuessComplete));
 
   if (isMember) {
     return `

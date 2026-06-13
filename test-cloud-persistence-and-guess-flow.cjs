@@ -149,13 +149,40 @@ const result = JSON.parse(JSON.stringify(vm.runInContext(`
     successReaction: "OK",
     failReaction: "NO",
     guesses: [],
+    guessDeadline: "2099-01-01T00:00:00.000Z",
     createdAt: "2026-06-11T05:02:00.000Z"
   }];
   const initialHtml = notificationRow(state.notifications[0]);
   const first = guessNotification("n_game", { step: "actor", predictedActorId: "u_1" });
+  const afterCorrectFirstHtml = notificationRow(state.notifications[0]);
+  const afterCorrectFirstVisible = notificationEntries().some((item) => item.id === "n_game");
   const second = guessNotification("n_game", { step: "type", predictedType: "expense" });
   const third = guessNotification("n_game", { step: "heading", predictedTitle: "Elektrik" });
   const fourth = guessNotification("n_game", { step: "amount", predictedAmount: 920 });
+  const completedGame = state.notifications[0].isCompleted;
+  const revealedGame = Boolean(state.notifications[0].revealedAt);
+
+  state.notifications = [{
+    id: "n_wrong_game",
+    projectId: "p_shared",
+    entryId: "e_pending",
+    actorId: "u_1",
+    recipients: ["u_2"],
+    mode: "surprise",
+    actualType: "expense",
+    title: "Elektrik",
+    amount: 900,
+    successReaction: "OK",
+    failReaction: "NO",
+    guesses: [],
+    guessDeadline: "2099-01-01T00:00:00.000Z",
+    isCompleted: true,
+    revealedAt: "2026-06-11T05:03:00.000Z",
+    createdAt: "2026-06-11T05:03:00.000Z"
+  }];
+  const wrongFirst = guessNotification("n_wrong_game", { step: "actor", predictedActorId: "u_3" });
+  const afterWrongFirstHtml = notificationRow(state.notifications[0]);
+  const afterWrongFirstVisible = notificationEntries().some((item) => item.id === "n_wrong_game");
   ({
     restoredEntry,
     restoredNotification,
@@ -163,8 +190,15 @@ const result = JSON.parse(JSON.stringify(vm.runInContext(`
     initialHasActorQuestion: initialHtml.includes("Kim hareket ekledi?"),
     initialLeaksAmountOptional: initialHtml.includes("Tutar tahmini opsiyonel"),
     statuses: [first.status, second.status, third.status, fourth.status],
-    completed: state.notifications[0].isCompleted,
-    revealed: Boolean(state.notifications[0].revealedAt),
+    afterCorrectFirstHasNext: afterCorrectFirstHtml.includes("Gelir mi, gider mi?"),
+    afterCorrectFirstVisible,
+    wrongFirstStatus: wrongFirst.status,
+    afterWrongFirstHasWrongResult: afterWrongFirstHtml.includes("Yanl"),
+    afterWrongFirstHasNext: afterWrongFirstHtml.includes("Gelir mi, gider mi?"),
+    afterWrongFirstVisible,
+    wrongStillCompleted: Boolean(state.notifications[0].isCompleted || state.notifications[0].revealedAt),
+    completed: completedGame,
+    revealed: revealedGame,
     score: currentUser().totalScore,
     correctGuesses: currentUser().correctGuesses,
     totalGuesses: currentUser().totalGuesses
@@ -178,6 +212,13 @@ assert.equal(result.hasAllMemberStubs, true);
 assert.equal(result.initialHasActorQuestion, true);
 assert.equal(result.initialLeaksAmountOptional, false);
 assert.deepEqual(result.statuses, ["partial", "partial", "partial", "saved"]);
+assert.equal(result.afterCorrectFirstHasNext, true, "correct step should continue to next question");
+assert.equal(result.afterCorrectFirstVisible, true, "correct partial guess should keep notification visible");
+assert.equal(result.wrongFirstStatus, "partial", "wrong first step should be partial");
+assert.equal(result.afterWrongFirstHasWrongResult, true, "wrong step should show wrong result");
+assert.equal(result.afterWrongFirstHasNext, true, "wrong step should continue to next question");
+assert.equal(result.afterWrongFirstVisible, true, "wrong partial guess should keep notification visible");
+assert.equal(result.wrongStillCompleted, false, "wrong partial guess should clear premature completion");
 assert.equal(result.completed, true);
 assert.equal(result.revealed, true);
 assert.equal(result.score, 10);
