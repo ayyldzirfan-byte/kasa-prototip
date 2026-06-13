@@ -329,7 +329,10 @@ function maybeRevealNotification(notification) {
     notification.revealedAt = now;
     notification.isCompleted = true;
     const entry = state.entries.find((item) => item.id === notification.entryId);
-    if (entry && !entry.autoRevealAt) entry.autoRevealAt = deadline;
+    if (entry) {
+      if (!entry.autoRevealAt) entry.autoRevealAt = deadline;
+      entry.lockedNotificationId = null;
+    }
   }
   return notification;
 }

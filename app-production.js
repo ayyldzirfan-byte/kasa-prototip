@@ -2262,7 +2262,10 @@ maybeRevealNotification = function maybeRevealNotificationKasam(notification) {
   if (allCompleted || deadlinePassed) {
     notification.revealedAt = kasamNow();
     notification.isCompleted = true;
-    if (entry) entry.autoRevealAt = entry.autoRevealAt || deadline;
+    if (entry) {
+      entry.autoRevealAt = entry.autoRevealAt || deadline;
+      entry.lockedNotificationId = null;
+    }
   } else {
     notification.revealedAt = "";
     notification.isCompleted = false;

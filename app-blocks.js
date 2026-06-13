@@ -114,7 +114,10 @@ function maybeRevealNotification(notification) {
   if (allGuessed || deadlinePassed) {
     notification.revealedAt = blockNow();
     notification.isCompleted = true;
-    if (entry) entry.autoRevealAt = entry.autoRevealAt || deadline;
+    if (entry) {
+      entry.autoRevealAt = entry.autoRevealAt || deadline;
+      entry.lockedNotificationId = null;
+    }
   }
   return notification;
 }
