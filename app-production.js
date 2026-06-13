@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "11.06.2026 23:16";
+var KASAM_UPDATED_AT = "13.06.2026 08:01";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -755,6 +755,116 @@ function insightCardHtml() {
   `;
 }
 
+function kasamClamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function kasamFinancialScore(totals) {
+  const base = Math.max(1, totals.income || totals.expense || totals.payable || totals.receivable || 1);
+  const balanceRatio = totals.comfortable / base;
+  const expenseRatio = totals.expense / base;
+  const payableRatio = totals.payable / base;
+  const raw = 78 + balanceRatio * 24 - Math.max(0, expenseRatio - 0.72) * 28 - payableRatio * 18;
+  return kasamClamp(Math.round(raw), 1, 99);
+}
+
+function kasamScoreLabel(score) {
+  if (score >= 85) return "Güçlü";
+  if (score >= 70) return "Dengeli";
+  if (score >= 50) return "Dikkat";
+  return "Riskli";
+}
+
+function kasamScoreTone(score) {
+  if (score >= 85) return "strong";
+  if (score >= 70) return "balanced";
+  if (score >= 50) return "watch";
+  return "risk";
+}
+
+function kasamPersonalPeriodTotals(entries, period) {
+  return calculateTotals(kasamPeriodEntries(entries, period));
+}
+
+function kasamContributorItems(entries) {
+  const confirmed = kasamConfirmedEntries(entries).filter((entry) => entryConfirmed(entry));
+  const groups = new Map();
+  confirmed.forEach((entry) => {
+    const title = entryTitle(entry);
+    const current = groups.get(title) || { title, income: 0, expense: 0, count: 0 };
+    if (entry.type === "income") current.income += Number(entry.amount || 0);
+    if (entry.type === "expense") current.expense += Number(entry.amount || 0);
+    current.count += 1;
+    groups.set(title, current);
+  });
+  return [...groups.values()]
+    .map((item) => ({ ...item, effect: item.income - item.expense, volume: item.income + item.expense }))
+    .sort((a, b) => b.volume - a.volume)
+    .slice(0, 4);
+}
+
+function kasamFinanceCoachText(totals, contributors) {
+  const topExpense = contributors.filter((item) => item.expense > item.income).sort((a, b) => b.expense - a.expense)[0];
+  if (totals.comfortable < 0) return "Bu dönem kasa açık veriyor. Yaklaşan ödemeleri önce kapatmak daha doğru.";
+  if (totals.payable > totals.receivable && totals.payable > 0) return "Yaklaşan ödemeler beklenen gelirden hızlı geliyor. Takvim tarafını kontrol et.";
+  if (topExpense) return `${topExpense.title} bu dönemin en çok yoran kalemi. Limit koymaya değer.`;
+  return "Ritim dengeli. Yeni hareket ekledikçe skor daha anlamlı hale gelir.";
+}
+
+function kasamFinanceIndexHtml(entries, totals, compact = false) {
+  const score = kasamFinancialScore(totals);
+  const tone = kasamScoreTone(score);
+  const contributors = kasamContributorItems(entries);
+  const coach = kasamFinanceCoachText(totals, contributors);
+  return `
+    <section class="finance-index-hero finance-tone-${tone}">
+      <div class="score-ring" style="--score-progress: ${score}%">
+        <span>${score}</span>
+        <small>Skor</small>
+      </div>
+      <div class="finance-index-copy">
+        <p class="eyebrow">Finansal ritim</p>
+        <h2>${kasamScoreLabel(score)}</h2>
+        <p>${kasamSafe(coach)}</p>
+      </div>
+      ${compact ? "" : `<span class="quick-pill">${money(totals.comfortable)}</span>`}
+    </section>
+  `;
+}
+
+function kasamRhythmGridHtml(entries) {
+  const day = kasamPersonalPeriodTotals(entries, "day");
+  const week = kasamPersonalPeriodTotals(entries, "week");
+  const month = kasamPersonalPeriodTotals(entries, "month");
+  return `
+    <section class="rhythm-grid">
+      <article class="rhythm-card"><span>${kasamIcon("activity", "icon-neutral")}</span><p>Bugün</p><strong>${money(day.actual)}</strong></article>
+      <article class="rhythm-card"><span>${kasamIcon("calendar-check", "icon-neutral")}</span><p>Bu hafta</p><strong>${money(week.actual)}</strong></article>
+      <article class="rhythm-card"><span>${kasamIcon("calendar-range", "icon-neutral")}</span><p>Bu ay</p><strong>${money(month.actual)}</strong></article>
+    </section>
+  `;
+}
+
+function kasamContributorHtml(entries, title = "Skoru etkileyenler") {
+  const items = kasamContributorItems(entries);
+  if (!items.length) return "";
+  const max = Math.max(1, ...items.map((item) => item.volume));
+  return `
+    <section class="card contributor-card">
+      <div class="section-head"><div><h2>${title}</h2><p>Kasam skoru hangi kalemlerden etkileniyor.</p></div></div>
+      <div class="contributor-list">
+        ${items
+          .map((item) => {
+            const width = Math.max(6, Math.round((item.volume / max) * 100));
+            const negative = item.effect < 0;
+            return `<div class="contributor-line ${negative ? "negative" : "positive"}"><div class="bar-text"><span>${kasamSafe(item.title)}</span><strong>${negative ? "-" : "+"}${money(Math.abs(item.effect))}</strong></div><div class="bar-bg"><div class="bar-fill" style="width:${width}%"></div></div></div>`;
+          })
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
 function statusSummaryLabel(value) {
   return Number(value || 0) >= 0 ? "Dengede" : "Açık";
 }
@@ -783,7 +893,10 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="hero personal-hero">
+    ${kasamFinanceIndexHtml(entries, totals)}
+    ${kasamRhythmGridHtml(entries)}
+
+    <section class="hero personal-hero compact-balance-card">
       <div class="hero-row">
         <div>
           <p class="hero-title">Net durum</p>
@@ -795,6 +908,7 @@ function renderHome() {
     </section>
 
     ${insightCardHtml()}
+    ${kasamContributorHtml(entries)}
 
     <section class="single-action-card">
       <button class="primary-button movement-add-button" data-action="go-add-movement" type="button">${kasamIcon("plus-circle", "icon-income")} Hareket ekle</button>
@@ -1172,12 +1286,14 @@ function renderReport() {
   const diff = period === "all" ? totals.actual : totals.actual - previousTotals.actual;
   const label = period === "day" ? "günlük" : period === "week" ? "haftalık" : period === "month" ? "aylık" : "genel";
   return `
+    ${kasamFinanceIndexHtml(currentEntries, totals, true)}
     <section class="card">
       <div class="section-head"><div><h2>Rapor</h2><p>${period === "all" ? "Tüm kişisel kasa etkisi." : `${reportPeriodTitle(period)} ile ${reportPeriodTitle(period, -1)} karşılaştırılır.`}</p></div><button class="share-button compact-share" data-action="share-receipt" type="button">Fişi paylaş</button></div>
       <div class="segmented segmented-four"><button class="segment ${period === "day" ? "active" : ""}" data-period="day" type="button">Gün</button><button class="segment ${period === "week" ? "active" : ""}" data-period="week" type="button">Hafta</button><button class="segment ${period === "month" ? "active" : ""}" data-period="month" type="button">Ay</button><button class="segment ${period === "all" ? "active" : ""}" data-period="all" type="button">Genel</button></div>
       <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${period === "all" ? "Toplam net etki." : `${label} net fark.`}</span></div>
     </section>
+    ${kasamContributorHtml(currentEntries, "Dönem katkıları")}
     ${reconciliationCardsHtml()}
     <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${kasamReceiptDistributionHtml(activeProject(), period)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">${KASAM_BRAND.watermark}</p></section>
   `;

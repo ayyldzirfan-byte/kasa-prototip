@@ -2438,6 +2438,185 @@ body {
   font-weight: 800;
 }
 
+.finance-index-hero {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 20% 0%, var(--color-surface-2), transparent 44%),
+    var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.score-ring {
+  --score-progress: 72%;
+  --ring-color: var(--color-accent);
+  display: grid;
+  width: 96px;
+  height: 96px;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background:
+    radial-gradient(circle, var(--color-surface) 0 58%, transparent 59%),
+    conic-gradient(var(--ring-color) var(--score-progress), var(--color-surface-2) 0);
+  color: var(--color-text-primary);
+}
+
+.score-ring span {
+  margin-top: var(--space-2);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: 0.9;
+}
+
+.score-ring small {
+  margin-top: -18px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+}
+
+.finance-index-copy {
+  min-width: 0;
+}
+
+.finance-index-copy h2 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--text-2xl);
+  letter-spacing: var(--tracking-tight);
+}
+
+.finance-index-copy p:last-child {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.finance-tone-strong .score-ring,
+.finance-tone-balanced .score-ring {
+  --ring-color: var(--color-income);
+}
+
+.finance-tone-watch .score-ring {
+  --ring-color: var(--color-pending);
+}
+
+.finance-tone-risk .score-ring {
+  --ring-color: var(--color-expense);
+}
+
+.rhythm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.rhythm-card {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.rhythm-card span {
+  color: var(--color-text-secondary);
+}
+
+.rhythm-card p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+}
+
+.rhythm-card strong {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-balance-card {
+  display: none;
+}
+
+.contributor-card {
+  overflow: hidden;
+}
+
+.contributor-list {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.contributor-line {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.contributor-line .bar-text {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--color-text-primary);
+}
+
+.contributor-line .bar-text span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contributor-line .bar-bg {
+  overflow: hidden;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-2);
+}
+
+.contributor-line .bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-income);
+}
+
+.contributor-line.negative .bar-fill {
+  background: var(--color-expense);
+}
+
+@media (max-width: 380px) {
+  .finance-index-hero {
+    grid-template-columns: 86px minmax(0, 1fr);
+  }
+
+  .finance-index-hero > .quick-pill {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .score-ring {
+    width: 78px;
+    height: 78px;
+  }
+
+  .score-ring span {
+    font-size: var(--text-2xl);
+  }
+}
+
 .inline-actions {
   display: flex;
   flex-wrap: wrap;
@@ -3160,7 +3339,7 @@ textarea:focus {
 }
 
 :root[data-theme="dark"] .phone-shell {
-  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 70%, #0F0F0D 100%);
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 70%, var(--color-primary) 100%);
 }
 
 :root[data-theme="dark"] .card,
@@ -3251,7 +3430,7 @@ textarea:focus {
   }
 
   :root:not([data-theme="light"]) .phone-shell {
-    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 70%, #0F0F0D 100%);
+    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 70%, var(--color-primary) 100%);
   }
 
   :root:not([data-theme="light"]) .card,

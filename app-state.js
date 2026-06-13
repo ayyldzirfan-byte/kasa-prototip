@@ -1,5 +1,5 @@
 const STORAGE_KEY = "kasa-prototype-state-v6";
-const APP_UPDATED_AT = "11.06.2026 23:16";
+const APP_UPDATED_AT = "13.06.2026 08:01";
 
 const entryTypes = [
   { id: "expense", label: "Gider", emoji: "💸" },
@@ -234,7 +234,7 @@ async function initApp() {
 
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     navigator.serviceWorker
-      .register("./sw.js?v=20260611-2316")
+      .register("./sw.js?v=20260613-0801")
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });
