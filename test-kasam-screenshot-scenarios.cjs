@@ -266,6 +266,7 @@ function writeReport() {
   try {
     await page.goto(appUrl, { waitUntil: "load" });
     await page.waitForSelector("#app");
+    await page.waitForFunction(() => typeof normalizeState === "function" && typeof makeDraft === "function" && typeof render === "function");
     await screenshot(page, "onboarding", "Ilk acilis ekrani");
     assert.match(await page.locator("body").innerText(), /Kasam/);
     check("Onboarding ekrani acildi");

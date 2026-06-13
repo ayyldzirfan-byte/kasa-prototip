@@ -7,7 +7,7 @@ const { chromium } = require("playwright");
 const root = process.cwd();
 const port = 4184;
 const storageKey = "kasa-prototype-state-v6";
-const appUrl = `http://127.0.0.1:${port}/index.html?v=20260613-1937&testScenario=1`;
+const appUrl = `http://127.0.0.1:${port}/index.html?v=20260613-1952&testScenario=1`;
 const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const results = [];
 
@@ -99,6 +99,33 @@ function startServer() {
     assert.match(result.projectName, /Yılmaz Ailesi/);
     assert.match(result.appText, /Mehmet|Yılmaz Ailesi/);
     record("localStorage aktif kullanıcı Mehmet olarak yüklendi", result.activeUserEmail);
+
+    const bannerText = await page.locator("[data-testid='test-mode-banner']").innerText();
+    assert.match(bannerText, /Test modu/);
+    assert.match(bannerText, /Senaryo 1: Yılmaz Ailesi/);
+    record("test modu bannerı senaryo adını gösteriyor");
+
+    const secondUserId = await page.locator("[data-action='test-user-switch'] option").nth(1).getAttribute("value");
+    await page.locator("[data-action='test-user-switch']").selectOption(secondUserId);
+    await page.waitForFunction((key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const user = state.users.find((item) => item.id === state.activeUserId);
+      return user?.email === "fatma.s1@kasam.test";
+    }, storageKey);
+    const switched = await page.evaluate((key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const user = state.users.find((item) => item.id === state.activeUserId);
+      return { email: user?.email, signedInMatches: state.signedInUserId === state.activeUserId };
+    }, storageKey);
+    assert.equal(switched.email, "fatma.s1@kasam.test");
+    assert.equal(switched.signedInMatches, true);
+    record("test modu kullanıcı değiştiriyor", switched.email);
+
+    await page.locator("[data-action='exit-test-mode']").click();
+    await page.waitForFunction(() => !location.search.includes("testScenario"));
+    await page.waitForFunction((key) => !localStorage.getItem(key), storageKey);
+    assert.ok(!page.url().includes("testScenario"));
+    record("test modundan çıkış parametreyi ve localStorage state'i temizliyor");
 
     if (errors.length) throw new Error(errors.join("\n"));
     console.log(`Toplam: ${results.length} test, ${results.length} geçti, 0 başarısız`);

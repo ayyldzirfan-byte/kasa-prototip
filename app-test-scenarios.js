@@ -1,6 +1,6 @@
 /* Kasam realistic test scenarios. */
 (function kasamTestScenariosModule(root) {
-  const TEST_SCENARIO_VERSION = "20260613-1937";
+  const TEST_SCENARIO_VERSION = "20260613-1952";
   const REPORT_DATE = "13.06.2026";
 
   function kasamScenarioMoney(value) {
@@ -81,6 +81,9 @@
       joinRequests: [],
       testScenarioVersion: TEST_SCENARIO_VERSION,
       testScenarioLoadedAt: new Date().toISOString(),
+      testScenarioMode: false,
+      testScenarioSelector: "",
+      testScenarioExitUrl: "",
       testScenarioMeta: [],
     };
   }
@@ -690,6 +693,9 @@
       state.cloudStatus = "Test modu";
       state.cloudUserId = "";
       state.cloudSyncAt = "";
+      state.testScenarioMode = true;
+      state.testScenarioSelector = selected;
+      state.testScenarioExitUrl = root.location ? `${root.location.origin}${root.location.pathname}` : "";
       state.testScenarioMeta = summaries;
     }
     return state;
@@ -701,6 +707,59 @@
     } catch (error) {
       root.__kasamTestScenarioBypassErrors = [...(root.__kasamTestScenarioBypassErrors || []), `${name}: ${error.message}`];
     }
+    try {
+      if (/^[A-Za-z_$][\w$]*$/.test(name) && typeof root.Function === "function") root.Function("fn", `${name} = fn;`)(fn);
+    } catch (error) {
+      root.__kasamTestScenarioBypassErrors = [...(root.__kasamTestScenarioBypassErrors || []), `${name}: ${error.message}`];
+    }
+  }
+
+  function testScenarioSelectorFromUrl() {
+    try {
+      return new URLSearchParams(location.search || "").get("testScenario") || "";
+    } catch {
+      return "";
+    }
+  }
+
+  function testScenarioEscape(value) {
+    if (typeof kasamSafe === "function") return kasamSafe(value);
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function testScenarioProject() {
+    const summary = state?.testScenarioMeta?.[0];
+    return state?.projects?.find((project) => project.id === summary?.projectId) || state?.projects?.find((project) => project.id === state?.activeProjectId) || null;
+  }
+
+  function testScenarioUsers() {
+    const project = testScenarioProject();
+    const ids = Array.isArray(project?.memberIds) ? project.memberIds : [];
+    return ids.map((id) => state.users.find((user) => user.id === id)).filter(Boolean);
+  }
+
+  function activateTestScenarioUser(userId) {
+    const user = state?.users?.find((item) => item.id === userId) || state?.users?.[0];
+    if (!user) return null;
+    state.activeUserId = user.id;
+    state.signedInUserId = user.id;
+    state.pendingLoginUserId = user.id;
+    state.pendingLoginEmail = user.email || "";
+    state.testScenarioActiveEmail = user.email || "";
+    state.authMode = "login";
+    state.onboardingStep = "done";
+    state.activeView = "home";
+    state.cloudEnabled = false;
+    state.cloudStatus = "Test modu";
+    state.cloudUserId = "";
+    state.cloudSyncAt = "";
+    state.testScenarioMode = true;
+    return user;
   }
 
   function applyTestScenarioAuthBypass(selector) {
@@ -742,33 +801,121 @@
     return true;
   }
 
-  function initTestScenario(selector = "all") {
+  function initTestScenario(selector = "all", options = {}) {
     if (typeof seedState === "undefined" || typeof normalizeState !== "function") {
       throw new Error("Kasam uygulama durumu hazır değil.");
     }
     const scenarioState = buildKasamTestScenarioState(selector);
     state = normalizeState({ ...seedState, ...scenarioState });
+    activateTestScenarioUser(state.activeUserId);
     if (typeof makeDraft === "function") draft = makeDraft();
     if (typeof saveState === "function") saveState();
-    if (typeof render === "function") render();
+    if (options.render !== false && typeof render === "function") render();
     return state.testScenarioMeta || [];
+  }
+
+  function ensureTestScenarioState(selector) {
+    if (!selector) return false;
+    applyTestScenarioAuthBypass(selector);
+    const normalizedSelector = String(selector || "all").toLocaleLowerCase("tr-TR");
+    const hasMatchingState = state?.testScenarioMode && state?.testScenarioSelector === normalizedSelector && state?.users?.length && state?.projects?.length;
+    if (!hasMatchingState) initTestScenario(selector, { render: false });
+    else activateTestScenarioUser(state.signedInUserId || state.activeUserId);
+    return true;
+  }
+
+  function testScenarioBannerHtml() {
+    const selector = testScenarioSelectorFromUrl();
+    if (!selector || !state?.testScenarioMode) return "";
+    const summary = state.testScenarioMeta?.[0] || {};
+    const project = testScenarioProject();
+    const users = testScenarioUsers();
+    const scenarioName = summary.projectName || project?.name || summary.title || "Test senaryosu";
+    return `
+      <section class="test-mode-banner" data-testid="test-mode-banner">
+        <div class="test-mode-copy">
+          <strong>🧪 Test modu</strong>
+          <span>Senaryo ${testScenarioEscape(summary.id || selector)}: ${testScenarioEscape(scenarioName)}</span>
+        </div>
+        <label class="test-user-switch">
+          <span>Kullanıcı değiştir</span>
+          <select data-action="test-user-switch" aria-label="Test kullanıcısı seç">
+            ${users.map((user) => `<option value="${testScenarioEscape(user.id)}" ${user.id === state.signedInUserId ? "selected" : ""}>${testScenarioEscape(user.name)} · ${testScenarioEscape(user.email)}</option>`).join("")}
+          </select>
+        </label>
+        <button class="tiny-button test-exit-button" data-action="exit-test-mode" type="button">Test modundan çık</button>
+      </section>
+    `;
   }
 
   root.KASAM_TEST_SCENARIO_VERSION = TEST_SCENARIO_VERSION;
   root.KASAM_TEST_SCENARIO_BUILDERS = KASAM_TEST_SCENARIO_BUILDERS;
   root.buildKasamTestScenarioState = buildKasamTestScenarioState;
   root.applyTestScenarioAuthBypass = applyTestScenarioAuthBypass;
+  root.ensureTestScenarioState = ensureTestScenarioState;
   root.initTestScenario = initTestScenario;
+
+  if (typeof render === "function" && !root.__kasamTestScenarioRenderWrapped) {
+    const baseRender = render;
+    root.__kasamTestScenarioRenderWrapped = true;
+    render = function renderWithTestScenarioBypass() {
+      const selector = testScenarioSelectorFromUrl();
+      if (selector) ensureTestScenarioState(selector);
+      return baseRender();
+    };
+  }
+
+  if (typeof renderHome === "function" && !root.__kasamTestScenarioHomeWrapped) {
+    const baseRenderHome = renderHome;
+    root.__kasamTestScenarioHomeWrapped = true;
+    renderHome = function renderHomeWithTestBanner() {
+      return `${testScenarioBannerHtml()}${baseRenderHome()}`;
+    };
+  }
+
+  if (typeof bindScreen === "function" && !root.__kasamTestScenarioBindWrapped) {
+    const baseBindScreen = bindScreen;
+    root.__kasamTestScenarioBindWrapped = true;
+    bindScreen = function bindScreenWithTestScenarioControls() {
+      baseBindScreen();
+      app.querySelectorAll("[data-action='test-user-switch']").forEach((select) => {
+        if (select.dataset.testSwitchBound) return;
+        select.dataset.testSwitchBound = "1";
+        select.addEventListener("change", () => {
+          activateTestScenarioUser(select.value);
+          if (typeof saveState === "function") saveState();
+          if (typeof render === "function") render();
+        });
+      });
+      app.querySelectorAll("[data-action='exit-test-mode']").forEach((button) => {
+        if (button.dataset.testExitBound) return;
+        button.dataset.testExitBound = "1";
+        button.addEventListener("click", () => {
+          try {
+            localStorage.removeItem(STORAGE_KEY);
+          } catch {}
+          root.KASAM_TEST_MODE = false;
+          const cleanUrl = state?.testScenarioExitUrl || `${location.origin}${location.pathname}`;
+          location.replace(cleanUrl);
+        });
+      });
+    };
+  }
 
   if (typeof initApp === "function" && !root.__kasamTestScenarioInitWrapped) {
     const baseInitApp = initApp;
     root.__kasamTestScenarioInitWrapped = true;
     initApp = async function initAppWithTestScenarios() {
-      const params = new URLSearchParams(location.search || "");
-      const selector = params.get("testScenario");
-      if (selector) applyTestScenarioAuthBypass(selector);
+      const selector = testScenarioSelectorFromUrl();
+      if (selector) {
+        applyTestScenarioAuthBypass(selector);
+        initTestScenario(selector, { render: false });
+      }
       await baseInitApp();
-      if (selector) initTestScenario(selector);
+      if (selector) {
+        ensureTestScenarioState(selector);
+        if (typeof render === "function") render();
+      }
     };
   }
 
@@ -779,6 +926,7 @@
       kasamScenarioMoney,
       buildKasamTestScenarioState,
       applyTestScenarioAuthBypass,
+      ensureTestScenarioState,
     };
   }
 })(typeof window !== "undefined" ? window : globalThis);
