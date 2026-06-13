@@ -479,11 +479,15 @@ test("GRUP 5.3 Yeni oyun bileşeni CSS'i hex renk içermez", () => {
 test("GRUP 6.1 Emoji, GIF ve Sticker sekmeleri mevcut", () => {
   const sandbox = createSandbox();
   const html = runInSandbox(sandbox, `kasamGameV2ContentPicker("actorCorrect", "Doğru tepki", "ok")`);
-  assert.match(html, /Emoji/);
-  assert.match(html, /GIF/);
-  assert.match(html, /Sticker/);
-  assert.match(html, /data-gif-search="actorCorrect"/);
-  assert.match(html, /data-gif-results="actorCorrect"/);
+  assert.match(html, /data-media-open="actorCorrect"/);
+  assert.match(html, /data-media-hidden-gif="actorCorrect"/);
+  assert.doesNotMatch(html, /GIF linki/);
+  const sheet = runInSandbox(sandbox, `kasamMediaSheetHtml("actorCorrect")`);
+  assert.match(sheet, /Emoji/);
+  assert.match(sheet, /GIF/);
+  assert.match(sheet, /Sticker/);
+  assert.match(sheet, /data-gif-search="actorCorrect"/);
+  assert.match(sheet, /data-gif-results="actorCorrect"/);
 });
 
 test("GRUP 6.2 Sticker paketi en az 20 item içerir", () => {

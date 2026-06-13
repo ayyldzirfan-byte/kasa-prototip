@@ -457,7 +457,7 @@ function kasamGameV2ContentPicker(prefix, label, fallback) {
           <input class="text-input" data-gif-query="${prefix}" placeholder="GIF ara: para, market, fatura..." autocomplete="off" />
           <button class="small-button" data-gif-search="${prefix}" type="button">Ara</button>
         </div>
-        <input class="text-input" name="${prefix}Gif" data-gif-value="${prefix}" placeholder="Seçilen GIF linki veya manuel link" autocomplete="off" />
+        <input type="hidden" name="${prefix}Gif" data-gif-value="${prefix}" value="" />
         <div class="gif-result-grid" data-gif-results="${prefix}" aria-live="polite"></div>
       </div>
       <input type="hidden" name="${prefix}Sticker" value="" />
@@ -465,6 +465,142 @@ function kasamGameV2ContentPicker(prefix, label, fallback) {
       <label class="media-file-button"><span>Foto</span><input name="${prefix}Photo" type="file" accept="image/*" /></label>
     </div>
   `;
+}
+
+var KASAM_MEDIA_EMOJIS = ["\u2713", "\u2715", "\u{1F3B2}", "\u{1F642}", "\u{1F602}", "\u{1F525}", "\u{1F4B8}", "\u{1F389}", "\u{1F440}", "\u{1F926}", "\u2615", "\u{1F6D2}", "\u{1F3E0}", "\u26A1", "\u26FD", "\u{1F381}"];
+
+function kasamMediaValuePreview({ emojiValue = "", gifValue = "", stickerValue = "", fallback = "\u2713" } = {}) {
+  const media = stickerValue || gifValue;
+  if (media) return `<span class="media-compact-thumb">${mediaPreviewHtml({ gif: media }, "GIF")}</span><span>Se\u00e7ildi</span>`;
+  return `<span class="media-compact-emoji">${kasamSafe(emojiValue || fallback, 24)}</span><span>Se\u00e7</span>`;
+}
+
+function kasamUnifiedMediaPicker({ prefix, label, fallback = "\u2713", emojiName, gifName, photoName, stickerName }) {
+  const form = document?.forms?.entryForm;
+  const emojiValue = String(form?.elements?.[emojiName]?.value || fallback || "").trim();
+  const gifValue = String(form?.elements?.[gifName]?.value || "").trim();
+  const stickerValue = String(form?.elements?.[stickerName]?.value || "").trim();
+  return `
+    <div class="media-compact-picker" data-media-picker="${prefix}" data-emoji-name="${emojiName}" data-gif-name="${gifName}" data-photo-name="${photoName}" data-sticker-name="${stickerName}" data-fallback="${kasamEscape(fallback)}">
+      <div class="media-compact-head"><strong>${kasamSafe(label)}</strong></div>
+      <button class="media-compact-button" data-media-open="${prefix}" type="button">
+        <span class="media-compact-preview" data-media-preview="${prefix}">${kasamMediaValuePreview({ emojiValue, gifValue, stickerValue, fallback })}</span>
+        <span class="media-compact-icon">${kasamIcon ? kasamIcon("plus", "icon-neutral") : "+"}</span>
+      </button>
+      <input type="hidden" name="${emojiName}" value="${kasamEscape(emojiValue || fallback)}" data-media-hidden-emoji="${prefix}" />
+      <input type="hidden" name="${gifName}" value="${kasamEscape(gifValue)}" data-media-hidden-gif="${prefix}" />
+      <input type="hidden" name="${stickerName}" value="${kasamEscape(stickerValue)}" data-media-hidden-sticker="${prefix}" />
+      <input class="visually-hidden-media-input" name="${photoName}" type="file" accept="image/*" data-media-photo-input="${prefix}" />
+    </div>
+  `;
+}
+
+kasamGameV2ContentPicker = function kasamGameV2ContentPickerCompact(prefix, label, fallback) {
+  return kasamUnifiedMediaPicker({
+    prefix,
+    label,
+    fallback,
+    emojiName: `${prefix}Emoji`,
+    gifName: `${prefix}Gif`,
+    photoName: `${prefix}Photo`,
+    stickerName: `${prefix}Sticker`,
+  });
+};
+
+mediaHubHtml = function mediaHubHtmlGameV2(prefix = "notification") {
+  const emojiName = prefix === "notification" ? "notificationEmoji" : `${prefix}Reaction`;
+  const gifName = prefix === "notification" ? "notificationGif" : `${prefix}Gif`;
+  const photoName = prefix === "notification" ? "photo" : `${prefix}Photo`;
+  const stickerName = `${prefix}Sticker`;
+  const label = prefix === "notification" ? "Medya" : prefix === "success" ? "Do\u011fru tepki" : prefix === "fail" ? "Yanl\u0131\u015f tepki" : "Medya";
+  const fallback = prefix === "notification" ? (draft.notificationEmoji || "\u{1F3B2}") : prefix === "success" ? (draft.successReaction || "\u2705") : (draft.failReaction || "\u{1F642}");
+  return kasamUnifiedMediaPicker({ prefix, label, fallback, emojiName, gifName, photoName, stickerName });
+};
+
+function kasamMediaSheetHtml(prefix) {
+  return `
+    <div class="media-sheet-backdrop" data-media-sheet="${prefix}">
+      <div class="media-sheet" role="dialog" aria-modal="true" aria-label="Medya se\u00e7">
+        <div class="media-sheet-handle"></div>
+        <div class="media-sheet-tabs">
+          <button class="active" data-media-tab="emoji" type="button">Emoji</button>
+          <button data-media-tab="gif" type="button">GIF</button>
+          <button data-media-tab="sticker" type="button">Sticker</button>
+        </div>
+        <div class="media-sheet-panel active" data-media-panel="emoji">
+          <div class="emoji-grid">${KASAM_MEDIA_EMOJIS.map((emoji) => `<button class="emoji-pick-button" data-media-emoji="${kasamEscape(emoji)}" type="button">${kasamSafe(emoji)}</button>`).join("")}</div>
+        </div>
+        <div class="media-sheet-panel" data-media-panel="gif">
+          <div class="game-gif-search-row">
+            <input class="text-input" data-gif-query="${prefix}" placeholder="GIF ara" autocomplete="off" />
+            <button class="small-button" data-gif-search="${prefix}" type="button">Ara</button>
+          </div>
+          <div class="gif-result-grid" data-gif-results="${prefix}" aria-live="polite"></div>
+        </div>
+        <div class="media-sheet-panel" data-media-panel="sticker">
+          <div class="sticker-grid">${KASAM_GAME_V2_STICKERS.slice(0, 20).map((sticker) => `<button class="sticker-button" data-media-sticker="${kasamEscape(sticker.data)}" type="button"><img src="${kasamGameV2SafeMedia(sticker.data)}" alt="${kasamSafe(sticker.label)}" /></button>`).join("")}</div>
+        </div>
+        <div class="media-sheet-footer">
+          <button class="ghost-button compact-action" data-media-photo="${prefix}" type="button">${kasamIcon ? kasamIcon("camera", "icon-neutral") : ""} Foto</button>
+          <button class="tiny-button" data-media-clear="${prefix}" type="button">Temizle</button>
+          <button class="primary-button compact-action" data-media-close type="button">Tamam</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function kasamMediaPickerFor(prefix) {
+  return app.querySelector(`[data-media-picker="${prefix}"]`);
+}
+
+function kasamUpdateMediaPreview(picker) {
+  if (!picker) return;
+  const prefix = picker.dataset.mediaPicker;
+  const emojiValue = picker.querySelector(`[data-media-hidden-emoji="${prefix}"]`)?.value || picker.dataset.fallback || "";
+  const gifValue = picker.querySelector(`[data-media-hidden-gif="${prefix}"]`)?.value || "";
+  const stickerValue = picker.querySelector(`[data-media-hidden-sticker="${prefix}"]`)?.value || "";
+  const fileInput = picker.querySelector(`[data-media-photo-input="${prefix}"]`);
+  const preview = picker.querySelector(`[data-media-preview="${prefix}"]`);
+  if (!preview) return;
+  if (fileInput?.files?.length) {
+    preview.innerHTML = `<span class="media-compact-emoji">${kasamIcon ? kasamIcon("camera", "icon-neutral") : ""}</span><span>Foto se\u00e7ildi</span>`;
+    return;
+  }
+  preview.innerHTML = kasamMediaValuePreview({ emojiValue, gifValue, stickerValue, fallback: picker.dataset.fallback || "\u2713" });
+}
+
+function kasamSetMediaValue(prefix, type, value) {
+  const picker = kasamMediaPickerFor(prefix);
+  if (!picker) return;
+  const emojiInput = picker.querySelector(`[data-media-hidden-emoji="${prefix}"]`);
+  const gifInput = picker.querySelector(`[data-media-hidden-gif="${prefix}"]`);
+  const stickerInput = picker.querySelector(`[data-media-hidden-sticker="${prefix}"]`);
+  if (type === "emoji") {
+    if (emojiInput) emojiInput.value = value;
+    if (gifInput) gifInput.value = "";
+    if (stickerInput) stickerInput.value = "";
+  }
+  if (type === "gif") {
+    if (gifInput) gifInput.value = value;
+    if (stickerInput) stickerInput.value = "";
+  }
+  if (type === "sticker") {
+    if (stickerInput) stickerInput.value = value;
+    if (gifInput) gifInput.value = value;
+  }
+  kasamUpdateMediaPreview(picker);
+}
+
+function kasamCloseMediaSheet() {
+  document.querySelectorAll("[data-media-sheet]").forEach((sheet) => sheet.remove());
+}
+
+function kasamOpenMediaSheet(prefix) {
+  kasamCloseMediaSheet();
+  document.body.insertAdjacentHTML("beforeend", kasamMediaSheetHtml(prefix));
+  const sheet = document.querySelector(`[data-media-sheet="${prefix}"]`);
+  if (sheet) kasamBindMediaSheet(sheet, prefix);
 }
 
 async function kasamGameV2FetchGifs(query) {
@@ -485,11 +621,11 @@ async function kasamGameV2FetchGifs(query) {
 }
 
 async function kasamGameV2SearchGifs(prefix) {
-  const picker = app.querySelector(`[data-game-picker="${prefix}"]`);
-  const queryInput = picker?.querySelector(`[data-gif-query="${prefix}"]`);
-  const results = picker?.querySelector(`[data-gif-results="${prefix}"]`);
+  const sheet = document.querySelector(`[data-media-sheet="${prefix}"]`);
+  const queryInput = sheet?.querySelector(`[data-gif-query="${prefix}"]`);
+  const results = sheet?.querySelector(`[data-gif-results="${prefix}"]`);
   const query = String(queryInput?.value || "").trim();
-  if (!picker || !results) return;
+  if (!sheet || !results) return;
   if (!query) {
     results.innerHTML = `<p class="gif-result-empty">Aramak için bir kelime yaz.</p>`;
     return;
@@ -507,6 +643,58 @@ async function kasamGameV2SearchGifs(prefix) {
   } catch (error) {
     results.innerHTML = `<p class="gif-result-empty">GIF araması çalışmadı. Key veya deploy kontrol edilmeli.</p>`;
   }
+}
+
+function kasamBindMediaSheet(sheet, prefix) {
+  sheet.addEventListener("click", (event) => {
+    if (event.target === sheet || event.target.closest("[data-media-close]")) {
+      kasamCloseMediaSheet();
+      return;
+    }
+    const tabButton = event.target.closest("[data-media-tab]");
+    if (tabButton) {
+      const tab = tabButton.dataset.mediaTab;
+      sheet.querySelectorAll("[data-media-tab]").forEach((button) => button.classList.toggle("active", button === tabButton));
+      sheet.querySelectorAll("[data-media-panel]").forEach((panel) => panel.classList.toggle("active", panel.dataset.mediaPanel === tab));
+      return;
+    }
+    const emojiButton = event.target.closest("[data-media-emoji]");
+    if (emojiButton) {
+      kasamSetMediaValue(prefix, "emoji", emojiButton.dataset.mediaEmoji);
+      kasamCloseMediaSheet();
+      return;
+    }
+    const stickerButton = event.target.closest("[data-media-sticker]");
+    if (stickerButton) {
+      kasamSetMediaValue(prefix, "sticker", stickerButton.dataset.mediaSticker);
+      kasamCloseMediaSheet();
+      return;
+    }
+    const gifButton = event.target.closest("[data-gif-url]");
+    if (gifButton) {
+      kasamSetMediaValue(prefix, "gif", gifButton.dataset.gifUrl);
+      kasamCloseMediaSheet();
+      return;
+    }
+    if (event.target.closest("[data-gif-search]")) {
+      kasamGameV2SearchGifs(prefix);
+      return;
+    }
+    if (event.target.closest("[data-media-photo]")) {
+      kasamMediaPickerFor(prefix)?.querySelector(`[data-media-photo-input="${prefix}"]`)?.click();
+      return;
+    }
+    if (event.target.closest("[data-media-clear]")) {
+      kasamSetMediaValue(prefix, "emoji", kasamMediaPickerFor(prefix)?.dataset.fallback || "\u2713");
+      kasamCloseMediaSheet();
+    }
+  });
+  sheet.querySelector(`[data-gif-query="${prefix}"]`)?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      kasamGameV2SearchGifs(prefix);
+    }
+  });
 }
 
 reactionSetupHtml = function reactionSetupHtmlGameV2() {
@@ -531,6 +719,19 @@ reactionSetupHtml = function reactionSetupHtmlGameV2() {
 var kasamGameV2BaseBindScreen = bindScreen;
 bindScreen = function bindScreenGameV2() {
   kasamGameV2BaseBindScreen();
+  app.querySelectorAll("[data-media-open]").forEach((button) => {
+    if (button.dataset.mediaOpenBound) return;
+    button.dataset.mediaOpenBound = "1";
+    button.addEventListener("click", () => kasamOpenMediaSheet(button.dataset.mediaOpen));
+  });
+  app.querySelectorAll("[data-media-photo-input]").forEach((input) => {
+    if (input.dataset.mediaPhotoBound) return;
+    input.dataset.mediaPhotoBound = "1";
+    input.addEventListener("change", () => {
+      kasamUpdateMediaPreview(kasamMediaPickerFor(input.dataset.mediaPhotoInput));
+      kasamCloseMediaSheet();
+    });
+  });
   app.querySelectorAll("[data-game-sticker]").forEach((button) => {
     if (button.dataset.gameStickerBound) return;
     button.dataset.gameStickerBound = "1";
