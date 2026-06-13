@@ -1,6 +1,6 @@
 # Kasam screenshot test raporu
 
-Tarih: 10.06.2026 22:40:38
+Tarih: 13.06.2026 19:17:34
 
 ## Kontroller
 - PASS: Onboarding ekrani acildi
@@ -9,7 +9,7 @@ Tarih: 10.06.2026 22:40:38
 - PASS: Ortak kasa detay bolumleri gorundu
 - PASS: Fis kasa dagilimini gercek kullanici adlariyla verdi
 - PASS: Tahmin listesi ipucu vermiyor
-- PASS: Tamamlanan tahmin aktif bildirim listesinden dustu
+- PASS: Tahmin tek cevapla kapanmadan sonraki asamaya devam etti
 - PASS: Aylik hareket ekraninda ortak kasa hareketleri gorundu
 - PASS: Takvim gun detayi ve ileri tarihli odeme gorundu
 - PASS: Gunluk rapor uretildi
@@ -24,7 +24,7 @@ Tarih: 10.06.2026 22:40:38
 - ortak-kasa-detay: screenshots/kasam-senaryo-testleri/04-ortak-kasa-detay.png - Ortak kasada uye, erisim ve borc/alacak gorunur
 - ortak-kasa-rapor-fis: screenshots/kasam-senaryo-testleri/05-ortak-kasa-rapor-fis.png - Aylik kasa fisinde odeme ve pay dagilimi
 - bildirim-oyunu-aktif: screenshots/kasam-senaryo-testleri/06-bildirim-oyunu-aktif.png - Aktif tahmin bildirimi gorsel ipucu gostermiyor
-- bildirim-oyunu-sonrasi: screenshots/kasam-senaryo-testleri/07-bildirim-oyunu-sonrasi.png - Tahmin tamamlaninca aktif bildirim listesi bosaldi
+- bildirim-oyunu-sonrasi: screenshots/kasam-senaryo-testleri/07-bildirim-oyunu-sonrasi.png - Tahmin cevabindan sonra oyun sonraki asamaya devam ediyor
 - hareketler-aylik: screenshots/kasam-senaryo-testleri/08-hareketler-aylik.png - Aylik hareket listesi
 - takvim-gun-detay: screenshots/kasam-senaryo-testleri/09-takvim-gun-detay.png - Takvimde gun secimi ve planli odeme
 - gunluk-rapor: screenshots/kasam-senaryo-testleri/10-gunluk-rapor.png - Gunluk rapor ornegi

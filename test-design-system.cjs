@@ -55,7 +55,7 @@ assert(index.includes('data-view="report"'));
 assert(index.includes('data-lucide="bar-chart-2"'));
 assert.deepEqual(tabViews, ["home", "movements", "group", "calendar", "report"]);
 assert.equal(tabViews.length, 5);
-assert(index.includes("<span>Kasam</span>"));
+assert(index.includes("<span>Ana ekran</span>"));
 assert(index.includes("<span>Hareketler</span>"));
 assert(index.includes("<span>Bütçeler</span>"));
 assert(index.includes("<span>Takvim</span>"));

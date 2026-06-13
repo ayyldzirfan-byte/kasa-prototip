@@ -1,4 +1,4 @@
-const CACHE_NAME = "kasam-production-v20260613-1737";
+﻿const CACHE_NAME = "kasam-production-v20260613-1916";
 const ASSETS = [
   "./",
   "./index.html",
@@ -18,6 +18,7 @@ const ASSETS = [
   "./app-sounds.js",
   "./app-game-v2.js",
   "./app-ui-fixes.js",
+  "./app-test-scenarios.js",
   "./app-init.js",
   "./app.js",
   "./manifest.webmanifest",
@@ -67,3 +68,4 @@ self.addEventListener("fetch", (event) => {
       .catch(() => caches.match(event.request)),
   );
 });
+

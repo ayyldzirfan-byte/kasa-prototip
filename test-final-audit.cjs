@@ -11,7 +11,9 @@ const css = read("styles.css") + "\n" + read("kasa-extra.css");
 const app = read("app-production.js");
 const html = read("index.html");
 
-const cssWithoutTokenBlocks = css.replace(/:root\s*{[\s\S]*?}\s*/g, "").replace(/@media\s*\(prefers-color-scheme:\s*dark\)\s*{\s*:root\s*{[\s\S]*?}\s*}/g, "");
+const cssWithoutTokenBlocks = css
+  .replace(/:root[^{]*\s*{[\s\S]*?}\s*/g, "")
+  .replace(/@media\s*\(prefers-color-scheme:\s*dark\)\s*{\s*:root[^{]*\s*{[\s\S]*?}\s*}/g, "");
 assert(!/(#[0-9a-fA-F]{3,8}|rgb\()/.test(cssWithoutTokenBlocks), "CSS token dışı hardcode renk var");
 assert(!/(Mükemmel|Harika|Tabii ki|İşleminiz|Lütfen|giriniz|yazalım|seçelim|bağlayalım)/.test(app + html), "AI/resmi kalıp kaldı");
 assert(app.includes("kasamIcon(\"home\"") || html.includes('data-lucide="home"'), "Lucide nav home yok");
@@ -59,7 +61,7 @@ function startServer(port) {
       await page.evaluate(() => localStorage.clear());
       await page.reload({ waitUntil: "load" });
       await page.locator("button[data-action='demo-start']").click();
-      await page.waitForSelector(".personal-hero");
+      await page.waitForFunction(() => document.body.dataset.view === "home" && (document.querySelector("#app")?.textContent || "").length > 100);
       const metrics = await page.evaluate(() => {
         const visibleButtons = Array.from(document.querySelectorAll("button, a")).filter((el) => {
           const rect = el.getBoundingClientRect();

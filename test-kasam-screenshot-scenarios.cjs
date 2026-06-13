@@ -291,6 +291,8 @@ function writeReport() {
     check("Ortak kasa detay bolumleri gorundu");
 
     await setView(page, "report", { activeProjectId: "project_shared", reportPeriod: "month" });
+    await page.locator("[data-action='open-receipt']").first().click();
+    await page.waitForSelector("#receiptCard");
     await screenshot(page, "ortak-kasa-rapor-fis", "Aylik kasa fisinde odeme ve pay dagilimi");
     const receiptText = await page.locator("#receiptCard").innerText();
     assert.match(receiptText, /Kasa çıktısı|KASA ÇIKTISI/);
@@ -311,9 +313,9 @@ function writeReport() {
 
     await page.locator(".guess-form button[value='expense']").first().click();
     await page.waitForTimeout(50);
-    await screenshot(page, "bildirim-oyunu-sonrasi", "Tahmin tamamlaninca aktif bildirim listesi bosaldi");
-    assert.doesNotMatch(await page.locator("#app").innerText(), /Yeni tahmin var/);
-    check("Tamamlanan tahmin aktif bildirim listesinden dustu");
+    await screenshot(page, "bildirim-oyunu-sonrasi", "Tahmin cevabindan sonra oyun sonraki asamaya devam ediyor");
+    assert.match(await page.locator("#app").innerText(), /Yeni tahmin var/);
+    check("Tahmin tek cevapla kapanmadan sonraki asamaya devam etti");
 
     await setView(page, "movements", { activeProjectId: "project_shared", movementPeriod: "month" });
     await screenshot(page, "hareketler-aylik", "Aylik hareket listesi");
@@ -327,11 +329,15 @@ function writeReport() {
     check("Takvim gun detayi ve ileri tarihli odeme gorundu");
 
     await setView(page, "report", { activeProjectId: "project_personal", reportPeriod: "day" });
+    await page.locator("[data-action='open-receipt']").first().click();
+    await page.waitForSelector("#receiptCard");
     await screenshot(page, "gunluk-rapor", "Gunluk rapor ornegi");
     assert.match(await page.locator("#receiptCard").innerText(), /KASAM FİŞİ|KASAM F/);
     check("Gunluk rapor uretildi");
 
     await setView(page, "report", { activeProjectId: "project_personal", reportPeriod: "week" });
+    await page.locator("[data-action='open-receipt']").first().click();
+    await page.waitForSelector("#receiptCard");
     await screenshot(page, "haftalik-rapor", "Haftalik rapor ornegi");
     assert.match(await page.locator("#receiptCard").innerText(), /Net|Kasam|KASAM/);
     check("Haftalik rapor uretildi");

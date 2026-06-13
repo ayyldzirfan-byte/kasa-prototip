@@ -1,6 +1,6 @@
-/* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
+﻿/* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 17:37";
+var KASAM_UPDATED_AT = "13.06.2026 19:16";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -2963,6 +2963,36 @@ bindScreen = function bindScreenKasam() {
     form.dataset.kasamGuessBound = "1";
     form.addEventListener("submit", (event) => handleGuessForm(event, form), true);
   });
+  const accountForm = app.querySelector("#accountForm");
+  if (accountForm && !accountForm.dataset.kasamAccountBound) {
+    accountForm.dataset.kasamAccountBound = "1";
+    const submitAccount = async (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      await handleAccountForm(accountForm);
+    };
+    accountForm.addEventListener(
+      "submit",
+      submitAccount,
+      true,
+    );
+    accountForm.querySelectorAll("button[type='submit']").forEach((button) => button.addEventListener("click", submitAccount, true));
+  }
+  const loginForm = app.querySelector("#loginForm");
+  if (loginForm && !loginForm.dataset.kasamLoginBound) {
+    loginForm.dataset.kasamLoginBound = "1";
+    const submitLogin = async (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      await handleLoginForm(loginForm);
+    };
+    loginForm.addEventListener(
+      "submit",
+      submitLogin,
+      true,
+    );
+    loginForm.querySelectorAll("button[type='submit']").forEach((button) => button.addEventListener("click", submitLogin, true));
+  }
   app.querySelectorAll("[data-action='onboarding-start']").forEach((button) =>
     button.addEventListener("click", () => {
       state.onboardingStep = "account";
@@ -3045,3 +3075,4 @@ bindScreen = function bindScreenKasam() {
   app.querySelectorAll("[data-action='export-my-data']").forEach((button) => button.addEventListener("click", exportMyData));
   app.querySelectorAll("[data-action='delete-account']").forEach((button) => button.addEventListener("click", deleteMyAccount));
 };
+

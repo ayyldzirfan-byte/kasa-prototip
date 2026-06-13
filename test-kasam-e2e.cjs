@@ -60,6 +60,10 @@ async function submit(page, selector) {
   await page.locator(`${selector} button[type='submit']`).last().click();
 }
 
+async function waitHome(page) {
+  await page.waitForFunction(() => document.body.dataset.view === "home" && (document.querySelector("#app")?.textContent || "").length > 100);
+}
+
 async function addEntry(page, { type, amount, heading }) {
   await page.locator("button[data-action='go-add-movement']").first().click();
   await page.waitForSelector("#entryForm");
@@ -72,7 +76,7 @@ async function addEntry(page, { type, amount, heading }) {
   await fill(page, "#headingName", heading);
   await submit(page, "#entryForm");
   try {
-    await page.waitForSelector(".personal-hero");
+    await waitHome(page);
   } catch (error) {
     console.error("ADD_ENTRY_TIMEOUT_STATE", await page.evaluate(() => ({
       url: location.href,
@@ -95,7 +99,8 @@ async function addEntry(page, { type, amount, heading }) {
   fs.mkdirSync(path.join(root, "screenshots"), { recursive: true });
   const server = await startServer();
   const browser = await chromium.launch({ headless: true, executablePath: chromePath });
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: "block" });
+  const page = await context.newPage();
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("console", (msg) => {
@@ -108,20 +113,29 @@ async function addEntry(page, { type, amount, heading }) {
     }
   });
   await page.route("https://cdn.jsdelivr.net/**", (route) => route.abort());
+  await page.route("**/cloud-config.js**", (route) =>
+    route.fulfill({ status: 200, contentType: "application/javascript; charset=utf-8", body: "window.KASA_CLOUD_CONFIG = {};" }),
+  );
 
   try {
     await page.goto(appUrl, { waitUntil: "load" });
-    await page.evaluate(async () => {
-      localStorage.clear();
-      if ("serviceWorker" in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map((registration) => registration.unregister()));
-      }
-      if ("caches" in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map((key) => caches.delete(key)));
-      }
-    });
+    try {
+      await page.evaluate(async () => {
+        localStorage.clear();
+        if ("serviceWorker" in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map((registration) => registration.unregister()));
+        }
+        if ("caches" in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((key) => caches.delete(key)));
+        }
+      });
+    } catch (error) {
+      if (!String(error?.message || error).includes("Execution context was destroyed")) throw error;
+      await page.goto(appUrl, { waitUntil: "load" });
+      await page.evaluate(() => localStorage.clear());
+    }
     await page.reload({ waitUntil: "load" });
     await assert.match(await page.locator("body").innerText(), /Kasam/);
     record("onboarding welcome");
@@ -130,6 +144,7 @@ async function addEntry(page, { type, amount, heading }) {
     await page.waitForSelector("#accountForm");
     await fill(page, "input[name='userName']", "Test Kullanici");
     await fill(page, "input[name='nickname']", "Test");
+    await fill(page, "input[name='email']", "test.kullanici@kasam.test");
     await fill(page, "input[name='password']", "1234");
     await page.locator("input[name='legalAccepted']").check();
     await submit(page, "#accountForm");
@@ -146,15 +161,15 @@ async function addEntry(page, { type, amount, heading }) {
     await fill(page, "input[name='projectName']", "Kendi Kasam");
     await fill(page, "input[name='purpose']", "Kisisel butce");
     await submit(page, "#firstProjectForm");
-    await page.waitForSelector(".personal-hero");
+    await waitHome(page);
     record("first budget create");
 
     await addEntry(page, { type: "income", amount: "10000", heading: "Maas" });
-    await assert.match(await page.locator(".personal-hero").innerText(), /10\.000/);
+    await assert.match(await page.locator("#app").innerText(), /10\.000/);
     record("income entry");
 
     await addEntry(page, { type: "expense", amount: "1250", heading: "Market" });
-    await assert.match(await page.locator(".personal-hero").innerText(), /8\.750/);
+    await assert.match(await page.locator("#app").innerText(), /8\.750/);
     record("expense entry");
 
     await page.locator("nav .tab[data-view='calendar']").click();
@@ -163,6 +178,7 @@ async function addEntry(page, { type, amount, heading }) {
     record("calendar render");
 
     await page.locator("nav .tab[data-view='report']").click();
+    await page.locator("[data-action='open-receipt']").first().click();
     await page.waitForSelector("#receiptCard");
     await assert.match(await page.locator("#receiptCard").innerText(), /KASAM/);
     record("report receipt");
@@ -199,7 +215,7 @@ async function addEntry(page, { type, amount, heading }) {
     };
     await page.evaluate((seed) => localStorage.setItem("kasa-prototype-state-v6", JSON.stringify(seed)), sharedSeed);
     await page.reload({ waitUntil: "load" });
-    await page.waitForSelector(".personal-hero");
+    await waitHome(page);
     const sharedResult = await page.evaluate(() => ({
       personalAmounts: personalLedgerEntries(currentUser()).map((entry) => ({ id: entry.id, amount: entry.amount, locked: Boolean(entry.lockedNotificationId) })),
       notifications: notificationEntries().map((item) => ({ entryId: item.entryId, mode: item.mode, recipients: item.recipients })),

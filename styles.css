@@ -3744,6 +3744,10 @@ body[data-view="onboarding"] .phone-shell {
   animation: balance-in var(--duration-normal) var(--ease-out) both;
 }
 
+.tiny-button {
+  min-height: 45px;
+}
+
 @keyframes balance-in {
   from {
     opacity: 0;
