@@ -221,7 +221,10 @@ button {
 .primary-button,
 .secondary-button {
   cursor: pointer;
-  transition: transform 0.16s ease, background 0.16s ease;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
 }
 
 .ghost-button:active,
@@ -249,7 +252,7 @@ button {
 }
 
 .app-view > * {
-  animation: view-soft-in 0.22s ease both;
+  animation: view-soft-in var(--duration-normal) var(--ease-out) both;
 }
 
 @keyframes view-soft-in {
@@ -916,7 +919,7 @@ button {
   gap: 8px;
   margin-top: 14px;
   transform-origin: top center;
-  animation: calendar-page 0.24s ease both;
+  animation: calendar-page var(--duration-normal) var(--ease-out) both;
 }
 
 @keyframes calendar-page {
@@ -2094,7 +2097,7 @@ body {
 
 .desk-calendar {
   perspective: 900px;
-  animation: calendar-page-lift 0.28s ease both;
+  animation: calendar-page-lift var(--duration-normal) var(--ease-out) both;
 }
 
 @keyframes calendar-page-lift {
@@ -3119,6 +3122,7 @@ textarea:focus {
 }
 
 .tabbar {
+  height: 64px;
   border-top: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   background: var(--color-surface);
@@ -3155,10 +3159,10 @@ textarea:focus {
 }
 
 .tab.active {
-  background: var(--color-accent);
+  background: transparent;
   color: var(--color-text-primary);
   font-weight: var(--weight-semibold);
-  box-shadow: inset 0 0 0 1px var(--overlay-border-soft);
+  box-shadow: none;
 }
 
 .tab.active span,
@@ -3168,7 +3172,7 @@ textarea:focus {
 }
 
 .tab.active::before {
-  opacity: 0;
+  opacity: 1;
   transform: translateY(0);
 }
 

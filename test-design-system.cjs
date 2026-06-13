@@ -28,6 +28,8 @@ assert(styles.includes("--duration-normal: 220ms;"));
 assert(styles.includes("@media (prefers-color-scheme: dark)"));
 assert(styles.includes("min-height: 44px"));
 assert(styles.includes("data-lucide") || styles.includes("[data-lucide]"));
+assert.match(styles, /\.tab\.active\s*{[\s\S]*background:\s*transparent;/);
+assert.match(styles, /\.tab\.active::before\s*{[\s\S]*opacity:\s*1;/);
 assert.equal(hexOutsideTokenDefinitions(styles).length, 0, JSON.stringify(hexOutsideTokenDefinitions(styles).slice(0, 5)));
 assert.equal(hexOutsideTokenDefinitions(extra).length, 0, JSON.stringify(hexOutsideTokenDefinitions(extra).slice(0, 5)));
 assert(!/rgb\(/i.test(styles + extra));
