@@ -10,6 +10,7 @@ const extra = read("kasa-extra.css");
 const index = read("index.html");
 const appProduction = read("app-production.js");
 const manifest = JSON.parse(read("manifest.webmanifest"));
+const tabViews = [...index.matchAll(/<button class="tab(?: active)?" data-view="([^"]+)"/g)].map((match) => match[1]);
 
 function hexOutsideTokenDefinitions(css) {
   return css
@@ -30,6 +31,14 @@ assert(styles.includes("min-height: 44px"));
 assert(styles.includes("data-lucide") || styles.includes("[data-lucide]"));
 assert.match(styles, /\.tab\.active\s*{[\s\S]*background:\s*transparent;/);
 assert.match(styles, /\.tab\.active::before\s*{[\s\S]*opacity:\s*1;/);
+assert(styles.includes("/* Emergency five-tab override */"));
+assert.match(styles, /\/\* Emergency five-tab override \*\/[\s\S]*\.tabbar\s*{[\s\S]*display:\s*flex;/);
+assert.match(styles, /\/\* Emergency five-tab override \*\/[\s\S]*\.tabbar\s*{[\s\S]*grid-template-columns:\s*none;/);
+assert.match(styles, /body\[data-view="add"\]\s+\.tabbar,[\s\S]*body\[data-view="onboarding"\]\s+\.tabbar\s*{[\s\S]*display:\s*flex;/);
+assert.match(styles, /\.tab\s*{[\s\S]*flex:\s*1 1 0;/);
+assert.match(styles, /\.tab\s*{[\s\S]*min-width:\s*0;/);
+assert.match(styles, /\.tab span\s*{[\s\S]*display:\s*none;/);
+assert.match(styles, /\.tab\.active span\s*{[\s\S]*display:\s*block;/);
 assert.equal(hexOutsideTokenDefinitions(styles).length, 0, JSON.stringify(hexOutsideTokenDefinitions(styles).slice(0, 5)));
 assert.equal(hexOutsideTokenDefinitions(extra).length, 0, JSON.stringify(hexOutsideTokenDefinitions(extra).slice(0, 5)));
 assert(!/rgb\(/i.test(styles + extra));
@@ -38,7 +47,19 @@ assert(index.includes("fonts.googleapis.com"));
 assert(index.includes("family=Inter"));
 assert(index.includes("lucide.min.js"));
 assert(index.includes('data-lucide="home"'));
+assert(index.includes('data-view="home"'));
+assert(index.includes('data-view="movements"'));
+assert(index.includes('data-view="group"'));
+assert(index.includes('data-view="calendar"'));
+assert(index.includes('data-view="report"'));
 assert(index.includes('data-lucide="bar-chart-2"'));
+assert.deepEqual(tabViews, ["home", "movements", "group", "calendar", "report"]);
+assert.equal(tabViews.length, 5);
+assert(index.includes("<span>Kasam</span>"));
+assert(index.includes("<span>Hareketler</span>"));
+assert(index.includes("<span>Bütçeler</span>"));
+assert(index.includes("<span>Takvim</span>"));
+assert(index.includes("<span>Rapor</span>"));
 
 assert(appProduction.includes("function kasamIcon"));
 assert(appProduction.includes("function kasamRenderLucide"));

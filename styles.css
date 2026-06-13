@@ -3128,10 +3128,37 @@ textarea:focus {
   background: var(--color-surface);
 }
 
+/* Emergency five-tab override */
+.tabbar {
+  position: fixed;
+  right: max(14px, calc((100vw - 430px) / 2 + 14px));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: max(14px, calc((100vw - 430px) / 2 + 14px));
+  display: flex;
+  grid-template-columns: none;
+  align-items: stretch;
+  gap: var(--space-1);
+  overflow: visible;
+  max-width: 402px;
+  margin: 0 auto;
+  padding: var(--space-2);
+}
+
+body[data-view="add"] .tabbar,
+body[data-view="onboarding"] .tabbar {
+  display: flex;
+}
+
+body[data-view="add"] .phone-shell,
+body[data-view="onboarding"] .phone-shell {
+  padding-bottom: calc(92px + env(safe-area-inset-bottom));
+}
+
 .tab {
   position: relative;
   display: grid;
-  min-width: 44px;
+  flex: 1 1 0;
+  min-width: 0;
   min-height: 44px;
   align-content: center;
   justify-items: center;
@@ -3139,7 +3166,15 @@ textarea:focus {
   border: 0;
   background: transparent;
   color: var(--color-text-secondary);
-  font-size: var(--text-xs);
+  font-size: 10px;
+}
+
+.tab span {
+  display: none;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tab::before {
@@ -3159,10 +3194,15 @@ textarea:focus {
 }
 
 .tab.active {
+  flex: 1.35 1 0;
   background: transparent;
   color: var(--color-text-primary);
   font-weight: var(--weight-semibold);
   box-shadow: none;
+}
+
+.tab.active span {
+  display: block;
 }
 
 .tab.active span,
@@ -3184,8 +3224,9 @@ textarea:focus {
 }
 
 .tab [data-lucide] {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  flex: none;
 }
 
 .icon-income,
