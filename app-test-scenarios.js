@@ -1,6 +1,6 @@
-﻿/* Kasam realistic test scenarios. */
+/* Kasam realistic test scenarios. */
 (function kasamTestScenariosModule(root) {
-  const TEST_SCENARIO_VERSION = "20260613-1916";
+  const TEST_SCENARIO_VERSION = "20260613-1937";
   const REPORT_DATE = "13.06.2026";
 
   function kasamScenarioMoney(value) {
@@ -60,6 +60,7 @@
       signedInUserId: "",
       pendingLoginUserId: "",
       pendingLoginEmail: "",
+      testScenarioActiveEmail: "",
       authMode: "login",
       cloudEnabled: false,
       cloudStatus: "",
@@ -679,9 +680,66 @@
       state.activeUserId = first.userIds[0] || "";
       state.signedInUserId = first.userIds[0] || "";
       state.pendingLoginUserId = first.userIds[0] || "";
+      const activeUser = state.users.find((user) => user.id === state.activeUserId);
+      state.pendingLoginEmail = activeUser?.email || "";
+      state.testScenarioActiveEmail = activeUser?.email || "";
+      state.authMode = "login";
+      state.onboardingStep = "done";
+      state.activeView = "home";
+      state.cloudEnabled = false;
+      state.cloudStatus = "Test modu";
+      state.cloudUserId = "";
+      state.cloudSyncAt = "";
       state.testScenarioMeta = summaries;
     }
     return state;
+  }
+
+  function assignTestScenarioNoop(name, fn) {
+    try {
+      if (typeof root[name] === "function") root[name] = fn;
+    } catch (error) {
+      root.__kasamTestScenarioBypassErrors = [...(root.__kasamTestScenarioBypassErrors || []), `${name}: ${error.message}`];
+    }
+  }
+
+  function applyTestScenarioAuthBypass(selector) {
+    if (!selector || root.__kasamTestScenarioBypassApplied) return Boolean(selector);
+    root.__kasamTestScenarioBypassApplied = true;
+    root.KASAM_TEST_MODE = true;
+    root.KASAM_TEST_SCENARIO_SELECTOR = selector;
+    root.KASA_CLOUD_CONFIG = {};
+    try {
+      if (typeof cloudSyncTimer !== "undefined" && cloudSyncTimer) {
+        clearTimeout(cloudSyncTimer);
+        cloudSyncTimer = null;
+      }
+    } catch (error) {
+      root.__kasamTestScenarioBypassErrors = [...(root.__kasamTestScenarioBypassErrors || []), `cloudSyncTimer: ${error.message}`];
+    }
+    try {
+      if (typeof kasamCloudRefreshTimer !== "undefined" && kasamCloudRefreshTimer) {
+        clearInterval(kasamCloudRefreshTimer);
+        kasamCloudRefreshTimer = null;
+      }
+    } catch (error) {
+      root.__kasamTestScenarioBypassErrors = [...(root.__kasamTestScenarioBypassErrors || []), `kasamCloudRefreshTimer: ${error.message}`];
+    }
+    assignTestScenarioNoop("isCloudReady", () => false);
+    assignTestScenarioNoop("initCloudSession", async () => {
+      if (typeof state !== "undefined") {
+        state.cloudEnabled = false;
+        state.cloudStatus = "Test modu";
+        state.cloudUserId = "";
+        state.cloudSyncAt = "";
+      }
+      if (typeof setCloudStatus === "function") setCloudStatus("Test modu");
+    });
+    assignTestScenarioNoop("cloudPushState", async () => undefined);
+    assignTestScenarioNoop("scheduleCloudSync", () => undefined);
+    assignTestScenarioNoop("kasamRefreshCloudData", async () => undefined);
+    assignTestScenarioNoop("kasamStartCloudRefresh", () => undefined);
+    return true;
   }
 
   function initTestScenario(selector = "all") {
@@ -699,15 +757,17 @@
   root.KASAM_TEST_SCENARIO_VERSION = TEST_SCENARIO_VERSION;
   root.KASAM_TEST_SCENARIO_BUILDERS = KASAM_TEST_SCENARIO_BUILDERS;
   root.buildKasamTestScenarioState = buildKasamTestScenarioState;
+  root.applyTestScenarioAuthBypass = applyTestScenarioAuthBypass;
   root.initTestScenario = initTestScenario;
 
   if (typeof initApp === "function" && !root.__kasamTestScenarioInitWrapped) {
     const baseInitApp = initApp;
     root.__kasamTestScenarioInitWrapped = true;
     initApp = async function initAppWithTestScenarios() {
-      await baseInitApp();
       const params = new URLSearchParams(location.search || "");
       const selector = params.get("testScenario");
+      if (selector) applyTestScenarioAuthBypass(selector);
+      await baseInitApp();
       if (selector) initTestScenario(selector);
     };
   }
@@ -718,6 +778,7 @@
       REPORT_DATE,
       kasamScenarioMoney,
       buildKasamTestScenarioState,
+      applyTestScenarioAuthBypass,
     };
   }
 })(typeof window !== "undefined" ? window : globalThis);

@@ -1,6 +1,6 @@
-﻿/* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
+/* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 19:16";
+var KASAM_UPDATED_AT = "13.06.2026 19:37";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -3075,4 +3075,3 @@ bindScreen = function bindScreenKasam() {
   app.querySelectorAll("[data-action='export-my-data']").forEach((button) => button.addEventListener("click", exportMyData));
   app.querySelectorAll("[data-action='delete-account']").forEach((button) => button.addEventListener("click", deleteMyAccount));
 };
-

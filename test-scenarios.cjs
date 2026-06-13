@@ -338,6 +338,15 @@ fs.mkdirSync(outputRoot, { recursive: true });
 state.testScenarioMeta.forEach(writeScenario);
 
 runGlobalCheck("8 senaryo üretildi", () => assert.equal(state.testScenarioMeta.length, 8));
+runGlobalCheck("testScenario=all aktif kullanıcı Mehmet", () => {
+  const user = usersById.get(state.activeUserId);
+  assert.equal(user?.email, "mehmet.s1@kasam.test");
+  assert.equal(state.signedInUserId, state.activeUserId);
+  assert.equal(state.pendingLoginEmail, "mehmet.s1@kasam.test");
+  assert.equal(state.testScenarioActiveEmail, "mehmet.s1@kasam.test");
+  assert.equal(state.cloudEnabled, false);
+  assert.equal(state.cloudStatus, "Test modu");
+});
 runGlobalCheck("Kasa kodları tekil", () => assert.equal(new Set(state.projects.map((project) => project.code)).size, state.projects.length));
 runGlobalCheck("Tüm senaryolarda en az 2 oyun var", () => state.testScenarioMeta.forEach((meta) => assert.ok(meta.gameCount >= 2, meta.title)));
 runGlobalCheck("Hedef özelliği kullanıldı", () => assert.ok(state.goals.length > 0));

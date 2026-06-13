@@ -2,7 +2,7 @@
   "name": "Kasam",
   "short_name": "Kasam",
   "description": "Paranın nereye gittiğini bil. Kişisel ve ortak harcamaların tek ekranda.",
-  "start_url": "./index.html?v=20260613-1526",
+  "start_url": "./index.html?v=20260613-1937",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
