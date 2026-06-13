@@ -420,19 +420,20 @@ async function kasamGameV2ReadReaction(data, prefix, fallback) {
 
 async function kasamGameV2PayloadFromForm(form) {
   const data = new FormData(form);
-  const imageFile = formFile(data, "categoryImage");
-  const options = [0, 1, 2, 3].map((index) => String(data.get(`categoryOption${index}`) || "").trim()).filter(Boolean);
+  const headingName = kasamCleanText(data.get("headingName") || "Hareket");
+  const reaction = await kasamGameV2ReadReaction(data, "gameReaction", "\u{1F381}");
+  const wrongReaction = { type: "emoji", data: "\u2715" };
   return {
-    hideActor: data.get("hideActor") !== "false",
-    categoryOptions: options,
-    phase3Correct: Number(data.get("phase3Correct") || 0),
-    phase3Image: imageFile ? await readImageAsDataUrl(imageFile) : "",
-    actorWrongReaction: await kasamGameV2ReadReaction(data, "actorWrong", "✕"),
-    actorCorrectReaction: await kasamGameV2ReadReaction(data, "actorCorrect", "✓"),
-    typeWrongReaction: await kasamGameV2ReadReaction(data, "typeWrong", "✕"),
-    typeCorrectReaction: await kasamGameV2ReadReaction(data, "typeCorrect", "✓"),
-    categoryWrongReaction: await kasamGameV2ReadReaction(data, "categoryWrong", "✕"),
-    categoryCorrectReaction: await kasamGameV2ReadReaction(data, "categoryCorrect", "✓"),
+    hideActor: true,
+    categoryOptions: kasamGameV2FourOptions([], headingName),
+    phase3Correct: 0,
+    phase3Image: "",
+    actorWrongReaction: wrongReaction,
+    actorCorrectReaction: reaction,
+    typeWrongReaction: wrongReaction,
+    typeCorrectReaction: reaction,
+    categoryWrongReaction: wrongReaction,
+    categoryCorrectReaction: reaction,
   };
 }
 
@@ -445,27 +446,6 @@ handleEntrySubmit = async function handleEntrySubmitGameV2(form) {
     window.__kasamGameV2FormPayload = null;
   }
 };
-
-function kasamGameV2ContentPicker(prefix, label, fallback) {
-  return `
-    <div class="game-media-picker" data-game-picker="${prefix}">
-      <strong>${kasamSafe(label)}</strong>
-      <div class="game-picker-tabs"><span>Emoji</span><span>GIF</span><span>Sticker</span></div>
-      <input class="text-input" name="${prefix}Emoji" value="${kasamSafe(fallback, 24)}" maxlength="24" autocomplete="off" />
-      <div class="game-gif-search">
-        <div class="game-gif-search-row">
-          <input class="text-input" data-gif-query="${prefix}" placeholder="GIF ara: para, market, fatura..." autocomplete="off" />
-          <button class="small-button" data-gif-search="${prefix}" type="button">Ara</button>
-        </div>
-        <input type="hidden" name="${prefix}Gif" data-gif-value="${prefix}" value="" />
-        <div class="gif-result-grid" data-gif-results="${prefix}" aria-live="polite"></div>
-      </div>
-      <input type="hidden" name="${prefix}Sticker" value="" />
-      <div class="sticker-grid">${KASAM_GAME_V2_STICKERS.slice(0, 20).map((sticker) => `<button class="sticker-button" data-game-sticker="${kasamEscape(sticker.data)}" type="button"><img src="${kasamGameV2SafeMedia(sticker.data)}" alt="${kasamSafe(sticker.label)}" /></button>`).join("")}</div>
-      <label class="media-file-button"><span>Foto</span><input name="${prefix}Photo" type="file" accept="image/*" /></label>
-    </div>
-  `;
-}
 
 var KASAM_MEDIA_EMOJIS = ["\u2713", "\u2715", "\u{1F3B2}", "\u{1F642}", "\u{1F602}", "\u{1F525}", "\u{1F4B8}", "\u{1F389}", "\u{1F440}", "\u{1F926}", "\u2615", "\u{1F6D2}", "\u{1F3E0}", "\u26A1", "\u26FD", "\u{1F381}"];
 
@@ -495,7 +475,7 @@ function kasamUnifiedMediaPicker({ prefix, label, fallback = "\u2713", emojiName
   `;
 }
 
-kasamGameV2ContentPicker = function kasamGameV2ContentPickerCompact(prefix, label, fallback) {
+function kasamGameV2ContentPicker(prefix, label, fallback) {
   return kasamUnifiedMediaPicker({
     prefix,
     label,
@@ -505,7 +485,7 @@ kasamGameV2ContentPicker = function kasamGameV2ContentPickerCompact(prefix, labe
     photoName: `${prefix}Photo`,
     stickerName: `${prefix}Sticker`,
   });
-};
+}
 
 mediaHubHtml = function mediaHubHtmlGameV2(prefix = "notification") {
   const emojiName = prefix === "notification" ? "notificationEmoji" : `${prefix}Reaction`;
@@ -699,19 +679,9 @@ function kasamBindMediaSheet(sheet, prefix) {
 
 reactionSetupHtml = function reactionSetupHtmlGameV2() {
   return `
-    <div class="game-v2-setup">
-      <label class="switch-line"><input type="checkbox" name="hideActor" value="true" checked /> Ekleyeni oyun bitene kadar gizle</label>
-      <div class="game-phase-setup"><h3>Asama 1 — Kim ekledi?</h3><div class="reaction-grid">${kasamGameV2ContentPicker("actorCorrect", "Dogru tepki", "✓")}${kasamGameV2ContentPicker("actorWrong", "Yanlis tepki", "✕")}</div></div>
-      <div class="game-phase-setup"><h3>Asama 2 — Gelir mi gider mi?</h3><div class="reaction-grid">${kasamGameV2ContentPicker("typeCorrect", "Dogru tepki", "✓")}${kasamGameV2ContentPicker("typeWrong", "Yanlis tepki", "✕")}</div></div>
-      <div class="game-phase-setup">
-        <h3>Asama 3 — Ne harcamasi?</h3>
-        <div class="grid-2">
-          ${[0, 1, 2, 3].map((index) => `<label><span class="field-label">${String.fromCharCode(65 + index)} secenegi</span><input class="text-input" name="categoryOption${index}" placeholder="${index === 0 ? "Dogru baslik" : "Yan secenek"}" autocomplete="off" /></label>`).join("")}
-        </div>
-        <label><span class="field-label">Dogru secenek</span><select class="select-input" name="phase3Correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label>
-        <label class="media-file-button"><span>Kategori gorseli</span><input name="categoryImage" type="file" accept="image/*" /></label>
-        <div class="reaction-grid">${kasamGameV2ContentPicker("categoryCorrect", "Dogru tepki", "✓")}${kasamGameV2ContentPicker("categoryWrong", "Yanlis tepki", "✕")}</div>
-      </div>
+    <div class="game-v2-setup compact-game-setup">
+      <p class="field-help">Tahmin oyunu yukarıdaki hareket bilgisinden otomatik kurulur; ek bilgi istemez.</p>
+      ${kasamGameV2ContentPicker("gameReaction", "Oyun tepkisi", "\u{1F381}")}
     </div>
   `;
 };

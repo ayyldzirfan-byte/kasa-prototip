@@ -490,6 +490,15 @@ test("GRUP 6.1 Emoji, GIF ve Sticker sekmeleri mevcut", () => {
   assert.match(sheet, /data-gif-results="actorCorrect"/);
 });
 
+test("GRUP 6.1b Oyun kurulumu hareket bilgisinden turetilir, tekrar alan acmaz", () => {
+  const sandbox = createSandbox();
+  const html = runInSandbox(sandbox, `reactionSetupHtml()`);
+  assert.match(html, /compact-game-setup/);
+  assert.match(html, /gameReaction/);
+  assert.doesNotMatch(html, /Asama 1|Asama 2|Asama 3|Kim ekledi|Gelir mi gider mi|Ne harcamasi/);
+  assert.doesNotMatch(html, /categoryOption|phase3Correct|hideActor|categoryImage|actorCorrect|typeCorrect|categoryCorrect/);
+});
+
 test("GRUP 6.2 Sticker paketi en az 20 item içerir", () => {
   const sandbox = createSandbox();
   const count = runInSandbox(sandbox, `KASAM_GAME_V2_STICKERS.length`);
