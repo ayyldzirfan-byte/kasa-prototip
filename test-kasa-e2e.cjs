@@ -13,6 +13,9 @@ const files = [
   "app-blocks.js",
   "app-product-pass.js",
   "app-production.js",
+  "app-sounds.js",
+  "app-game-v2.js",
+  "app-ui-fixes.js",
 ];
 
 const sandbox = {
@@ -537,6 +540,46 @@ const tests = [
       });
     `);
     assert.equal(amount, 3200);
+  }],
+  ["GRUP 8.11 - Kayitli kullanici girisi direkt ana ekrana gider", () => {
+    seedBaseState();
+    appEval(`
+      state.onboardingStep = "login";
+      state.authMode = "login";
+      state.signedInUserId = "u_owner";
+      state.activeUserId = "u_owner";
+      if (activeProject()) state.onboardingStep = "done";
+    `);
+    assert.equal(appEval(`state.onboardingStep;`), "done");
+    assert.equal(appEval(`currentUser().id;`), "u_owner");
+  }],
+  ["GRUP 8.12 - Yeni kayit profil/kurulum adimini acar", () => {
+    seedBaseState();
+    appEval(`
+      state.onboardingStep = "project";
+      state.signedInUserId = "u_owner";
+      state.activeUserId = "u_owner";
+    `);
+    assert.equal(appEval(`state.onboardingStep;`), "project");
+    assert.ok(appEval(`Boolean(currentUser());`));
+  }],
+  ["GRUP 8.13 - Takvimden hareket ekleme secili tarihi tasir", () => {
+    seedBaseState();
+    appEval(`
+      state.calendarDay = "2026-06-21";
+      draft.date = state.calendarDay;
+      state.previousView = "calendar";
+      state.activeView = "add";
+    `);
+    assert.equal(appEval(`draft.date;`), "2026-06-21");
+    assert.equal(appEval(`state.previousView;`), "calendar");
+    assert.equal(appEval(`state.activeView;`), "add");
+  }],
+  ["GRUP 8.14 - Son hareket oku dogru kasaya yonlenebilir", () => {
+    seedBaseState();
+    const html = appEval(`entrySummaryRow(state.entries.find((entry) => entry.id === "e_rent"));`);
+    assert.ok(html.includes(`data-action="entry-project-open"`));
+    assert.ok(html.includes(`data-id="p_shared"`));
   }],
 ];
 

@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 15:26";
+var KASAM_UPDATED_AT = "13.06.2026 17:37";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -2677,6 +2677,8 @@ cloudPushState = async function cloudPushStateKasam() {
         created_by: project.createdBy,
         join_approval_required: project.joinApprovalRequired !== false,
         archived_at: project.archivedAt || null,
+        photo_name: project.photoName || "",
+        photo_data: project.photoData || "",
         updated_at: kasamNow(),
       }));
     await kasamUpsertWithSchemaFallback(client, "kasa_projects", projectRows, { onConflict: "id" }, (row) => ({

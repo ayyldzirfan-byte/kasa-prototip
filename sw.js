@@ -1,9 +1,10 @@
-const CACHE_NAME = "kasam-production-v20260613-1526";
+const CACHE_NAME = "kasam-production-v20260613-1737";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./kasa-extra.css",
+  "./kasam-ui-fixes.css",
   "./cloud-config.js",
   "./app-state.js",
   "./app-core.js",
@@ -16,6 +17,7 @@ const ASSETS = [
   "./app-production.js",
   "./app-sounds.js",
   "./app-game-v2.js",
+  "./app-ui-fixes.js",
   "./app-init.js",
   "./app.js",
   "./manifest.webmanifest",
