@@ -1,6 +1,6 @@
 /* Kasam realistic test scenarios. */
 (function kasamTestScenariosModule(root) {
-  const TEST_SCENARIO_VERSION = "20260613-1952";
+  const TEST_SCENARIO_VERSION = "20260613-2012";
   const REPORT_DATE = "13.06.2026";
 
   function kasamScenarioMoney(value) {
@@ -390,31 +390,34 @@
     ]);
     ctx.addProject({ name: "Yılmaz Ailesi", purpose: "Aile bütçesi", code: "YILMAZ-EV-1", owner: "mehmet", members: ["mehmet", "fatma", "burak", "selin"], splitType: "weighted", templateId: "family-budget" });
     const members = ["mehmet", "fatma", "burak", "selin"];
+    const equal = kasamScenarioEqualRatios(members);
     const mehmetOnly = [1, 0, 0, 0];
+    const burakOnly = [0, 0, 1, 0];
+    const selinOnly = [0, 0, 0, 1];
     scenario.months.forEach((month, index) => {
       kasamScenarioAddMonthly(ctx, month, [
         { day: 1, type: "income", amount: 32000, heading: "Maaş", title: "Mehmet maaş", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 5, type: "income", amount: 3500, heading: "Burs", title: "Burak burs", user: "burak", paidBy: "burak", splitWith: members, splitRatio: [0, 0, 1, 0] },
-        { day: 6, type: "income", amount: 1500, heading: "Harçlık", title: "Selin harçlık", user: "selin", paidBy: "selin", splitWith: members, splitRatio: [0, 0, 0, 1] },
-        { day: 1, type: "expense", amount: 18000, heading: "Kira", title: "Kira", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 8, type: "expense", amount: [1750, 1450, 1250][index], heading: "Elektrik", title: "Elektrik faturası", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 9, type: "expense", amount: [2300, 1500, 850][index], heading: "Doğalgaz", title: "Doğalgaz faturası", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 10, type: "expense", amount: 400, heading: "Su", title: "Su faturası", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 11, type: "expense", amount: 599, heading: "İnternet", title: "İnternet", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 12, type: "expense", amount: 750, heading: "Aidat", title: "Aidat", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 13, type: "expense", amount: [9600, 10800, 11600][index], heading: "Market", title: "Aylık market", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
+        { day: 5, type: "income", amount: 3500, heading: "Burs", title: "Burak burs", user: "burak", paidBy: "burak", splitWith: members, splitRatio: burakOnly },
+        { day: 6, type: "income", amount: 1500, heading: "Harçlık", title: "Selin harçlık", user: "selin", paidBy: "selin", splitWith: members, splitRatio: selinOnly },
+        { day: 1, type: "expense", amount: 18000, heading: "Kira", title: "Kira", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 8, type: "expense", amount: [1750, 1450, 1250][index], heading: "Elektrik", title: "Elektrik faturası", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 9, type: "expense", amount: [2300, 1500, 850][index], heading: "Doğalgaz", title: "Doğalgaz faturası", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 10, type: "expense", amount: 400, heading: "Su", title: "Su faturası", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 11, type: "expense", amount: 599, heading: "İnternet", title: "İnternet", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 12, type: "expense", amount: 750, heading: "Aidat", title: "Aidat", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 13, type: "expense", amount: [9600, 10800, 11600][index], heading: "Market", title: "Aylık market", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: equal },
         { day: 15, type: "expense", amount: 2000, heading: "Ulaşım", title: "Mehmet ulaşım", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 16, type: "expense", amount: 600, heading: "Okul ulaşımı", title: "Burak ulaşım", user: "burak", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 17, type: "expense", amount: 400, heading: "Okul ulaşımı", title: "Selin ulaşım", user: "selin", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 20, type: "expense", amount: [700, 1800, 520][index], heading: "Sağlık", title: "Sağlık masrafı", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 22, type: "expense", amount: [1200, 2600, 1700][index], heading: "Giyim", title: "Giyim", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 24, type: "expense", amount: [1800, 2450, 2800][index], heading: "Eğlence", title: "Aile dışarı yemeği", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 26, type: "expense", amount: [750, 1200, 900][index], heading: "Üniversite", title: "Burak okul masrafı", user: "burak", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
-        { day: 27, type: "expense", amount: [350, 650, 500][index], heading: "Lise", title: "Selin okul masrafı", user: "selin", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly },
+        { day: 16, type: "expense", amount: 600, heading: "Okul ulaşımı", title: "Burak ulaşım", user: "burak", paidBy: "burak", splitWith: members, splitRatio: burakOnly },
+        { day: 17, type: "expense", amount: 400, heading: "Okul ulaşımı", title: "Selin ulaşım", user: "selin", paidBy: "selin", splitWith: members, splitRatio: selinOnly },
+        { day: 20, type: "expense", amount: [700, 1800, 520][index], heading: "Sağlık", title: "Sağlık masrafı", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 22, type: "expense", amount: [1200, 2600, 1700][index], heading: "Giyim", title: "Giyim", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 24, type: "expense", amount: [1800, 2450, 2800][index], heading: "Eğlence", title: "Aile dışarı yemeği", user: "mehmet", paidBy: "mehmet", splitWith: members, splitRatio: equal },
+        { day: 26, type: "expense", amount: [750, 1200, 900][index], heading: "Üniversite", title: "Burak okul masrafı", user: "burak", paidBy: "burak", splitWith: members, splitRatio: burakOnly },
+        { day: 27, type: "expense", amount: [350, 650, 500][index], heading: "Lise", title: "Selin okul masrafı", user: "selin", paidBy: "selin", splitWith: members, splitRatio: selinOnly },
       ]);
     });
-    const game1 = ctx.entry({ date: "2026-06-14", type: "expense", amount: 1847, heading: "Market", title: "Market alışverişi", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly });
-    const game2 = ctx.entry({ date: "2026-06-18", type: "expense", amount: 380, heading: "Yemek", title: "Arkadaş yemeği", user: "burak", paidBy: "mehmet", splitWith: members, splitRatio: mehmetOnly });
+    const game1 = ctx.entry({ date: "2026-06-14", type: "expense", amount: 1847, heading: "Market", title: "Market alışverişi", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: equal });
+    const game2 = ctx.entry({ date: "2026-06-18", type: "expense", amount: 380, heading: "Yemek", title: "Arkadaş yemeği", user: "burak", paidBy: "burak", splitWith: members, splitRatio: burakOnly });
     ctx.game(game1, { options: ["Market", "Temizlik", "Fatura", "Yakıt"] });
     ctx.game(game2, { options: ["Yemek", "Kafe", "Ulaşım", "Okul"] });
     ctx.reaction(game1, "mehmet", "👀");
