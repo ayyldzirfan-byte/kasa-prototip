@@ -482,6 +482,8 @@ test("GRUP 6.1 Emoji, GIF ve Sticker sekmeleri mevcut", () => {
   assert.match(html, /Emoji/);
   assert.match(html, /GIF/);
   assert.match(html, /Sticker/);
+  assert.match(html, /data-gif-search="actorCorrect"/);
+  assert.match(html, /data-gif-results="actorCorrect"/);
 });
 
 test("GRUP 6.2 Sticker paketi en az 20 item içerir", () => {
@@ -492,8 +494,11 @@ test("GRUP 6.2 Sticker paketi en az 20 item içerir", () => {
 
 test("GRUP 6.3 GIF arama Edge Function env key ve Giphy çağrısı kullanır", () => {
   const source = fs.readFileSync(path.join(__dirname, "netlify", "functions", "kasa-giphy-search.js"), "utf8");
+  const vercelSource = fs.readFileSync(path.join(__dirname, "api", "kasa-giphy-search.js"), "utf8");
   assert.match(source, /process\.env\.GIPHY_API_KEY/);
   assert.match(source, /api\.giphy\.com/);
+  assert.match(vercelSource, /process\.env\.GIPHY_API_KEY/);
+  assert.match(vercelSource, /api\.giphy\.com/);
 });
 
 let passed = 0;

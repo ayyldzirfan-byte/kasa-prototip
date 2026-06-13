@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 11:26";
+var KASAM_UPDATED_AT = "13.06.2026 14:31";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -1095,7 +1095,7 @@ async function handleEntrySubmit(form) {
   const mode = String(data.get("notificationMode") || draft.notificationMode || "silent");
   const notification = createEntryNotification(entry, {
     mode,
-    emoji: media.emoji || "🎲",
+    emoji: media.emoji || "\u{1F3B2}",
     gif: media.gif,
     photoName: media.photoName,
     photoData: media.photoData,
@@ -1103,7 +1103,7 @@ async function handleEntrySubmit(form) {
     successGif: successMedia.gif,
     successPhotoName: successMedia.photoName,
     successPhotoData: successMedia.photoData,
-    failReaction: failMedia.emoji || "🙂",
+    failReaction: failMedia.emoji || "\u{1F642}",
     failGif: failMedia.gif,
     failPhotoName: failMedia.photoName,
     failPhotoData: failMedia.photoData,
@@ -1451,7 +1451,7 @@ async function analyzeStatementImage(file) {
   const json = await response.json();
   return (json.rows || json.transactions || []).map((row) => ({
     date: normalizeStatementDate(row.date || row.tarih),
-    description: kasamCleanText(row.description || row.aciklama || row.açıklama || ""),
+    description: kasamCleanText(row.description || row.aciklama || row["a\u00e7\u0131klama"] || ""),
     amount: parseAmount(row.amount || row.tutar),
     currency: row.currency || row.paraBirimi || "TRY",
   }));
@@ -1843,7 +1843,7 @@ createEntryNotification = function createEntryNotificationKasam(entry, options =
     actualType: entry.type,
     title: entryTitle(entry),
     amount: Number(entry.amount || 0),
-    emoji: options.emoji || "🎲",
+    emoji: options.emoji || "\u{1F3B2}",
     photoName: options.photoName || "",
     photoData: options.photoData || "",
     gif: options.gif || "",
@@ -1851,7 +1851,7 @@ createEntryNotification = function createEntryNotificationKasam(entry, options =
     successPhotoName: options.successPhotoName || "",
     successPhotoData: options.successPhotoData || "",
     successGif: options.successGif || "",
-    failReaction: options.failReaction || "🙂",
+    failReaction: options.failReaction || "\u{1F642}",
     failPhotoName: options.failPhotoName || "",
     failPhotoData: options.failPhotoData || "",
     failGif: options.failGif || "",
@@ -2113,7 +2113,7 @@ function kasamBackfillEntryNotifications() {
       actualType: entry.type,
       title: entryTitle(entry),
       amount: Number(entry.amount || 0),
-      emoji: entry.emoji || "🎲",
+      emoji: entry.emoji || "\u{1F3B2}",
       photoName: entry.photoName || "",
       photoData: entry.photoData || "",
       gif: "",
@@ -2121,7 +2121,7 @@ function kasamBackfillEntryNotifications() {
       successPhotoName: "",
       successPhotoData: "",
       successGif: "",
-      failReaction: "🙂",
+      failReaction: "\u{1F642}",
       failPhotoName: "",
       failPhotoData: "",
       failGif: "",
@@ -2393,7 +2393,7 @@ notificationRow = function notificationRowKasam(notification) {
   if (isReaction) {
     return `
       <div class="notification-card reaction-notification">
-        <div class="notification-hero pop-emoji">${notification.reactionEmoji || "👀"}</div>
+        <div class="notification-hero pop-emoji">${notification.reactionEmoji || "\u{1F440}"}</div>
         <div class="expense-main">
           <p class="expense-title">${projectUserLabel(actor)} tepki verdi</p>
           <p class="expense-meta">${notification.title}</p>
@@ -2433,13 +2433,13 @@ notificationRow = function notificationRowKasam(notification) {
     const ownerText = onayText(actor, correct);
     return `
       <div class="notification-card ${correct ? "guess-correct" : "guess-wrong"}">
-        <div class="notification-hero">${mediaPreviewHtml(notificationReactionMedia(notification, guess), correct ? "✅" : "🙂")}</div>
+        <div class="notification-hero">${mediaPreviewHtml(notificationReactionMedia(notification, guess), correct ? "✅" : "\u{1F642}")}</div>
         <div class="expense-main">
           <p class="expense-title">${correct ? "Kestirdin! +10 puan" : "Sürpriz geldi geçti."}</p>
           <p class="expense-meta">${ownerText} Gerçek: ${typeLabel} · ${money(notification.amount)} · kasa açıldı</p>
           <div class="reaction-result ${correct ? "correct confetti-burst" : "wrong shake-once"}">
             <span>${correct ? "Doğru tahmin" : "Yanlış tahmin"}</span>
-            <span class="reaction-media">${mediaPreviewHtml(notificationReactionMedia(notification, guess), correct ? "✅" : "🙂")}</span>
+            <span class="reaction-media">${mediaPreviewHtml(notificationReactionMedia(notification, guess), correct ? "✅" : "\u{1F642}")}</span>
           </div>
         </div>
       </div>
@@ -2764,7 +2764,7 @@ cloudPushState = async function cloudPushStateKasam() {
         success_photo_name: notification.successPhotoName || "",
         success_photo_data: notification.successPhotoData || "",
         success_gif: notification.successGif || "",
-        fail_reaction: notification.failReaction || "🙂",
+        fail_reaction: notification.failReaction || "\u{1F642}",
         fail_photo_name: notification.failPhotoName || "",
         fail_photo_data: notification.failPhotoData || "",
         fail_gif: notification.failGif || "",

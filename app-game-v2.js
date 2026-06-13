@@ -452,12 +452,61 @@ function kasamGameV2ContentPicker(prefix, label, fallback) {
       <strong>${kasamSafe(label)}</strong>
       <div class="game-picker-tabs"><span>Emoji</span><span>GIF</span><span>Sticker</span></div>
       <input class="text-input" name="${prefix}Emoji" value="${kasamSafe(fallback, 24)}" maxlength="24" autocomplete="off" />
-      <input class="text-input" name="${prefix}Gif" placeholder="GIF linki veya arama sonucu" autocomplete="off" />
+      <div class="game-gif-search">
+        <div class="game-gif-search-row">
+          <input class="text-input" data-gif-query="${prefix}" placeholder="GIF ara: para, market, fatura..." autocomplete="off" />
+          <button class="small-button" data-gif-search="${prefix}" type="button">Ara</button>
+        </div>
+        <input class="text-input" name="${prefix}Gif" data-gif-value="${prefix}" placeholder="Seçilen GIF linki veya manuel link" autocomplete="off" />
+        <div class="gif-result-grid" data-gif-results="${prefix}" aria-live="polite"></div>
+      </div>
       <input type="hidden" name="${prefix}Sticker" value="" />
       <div class="sticker-grid">${KASAM_GAME_V2_STICKERS.slice(0, 20).map((sticker) => `<button class="sticker-button" data-game-sticker="${kasamEscape(sticker.data)}" type="button"><img src="${kasamGameV2SafeMedia(sticker.data)}" alt="${kasamSafe(sticker.label)}" /></button>`).join("")}</div>
       <label class="media-file-button"><span>Foto</span><input name="${prefix}Photo" type="file" accept="image/*" /></label>
     </div>
   `;
+}
+
+async function kasamGameV2FetchGifs(query) {
+  const params = new URLSearchParams({ q: query });
+  const endpoints = [`/api/kasa-giphy-search?${params}`, `/.netlify/functions/kasa-giphy-search?${params}`];
+  let lastError = null;
+  for (const endpoint of endpoints) {
+    try {
+      const response = await fetch(endpoint);
+      if (!response.ok) throw new Error(`gif-search-${response.status}`);
+      const payload = await response.json();
+      return Array.isArray(payload.data) ? payload.data : [];
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error("gif-search-failed");
+}
+
+async function kasamGameV2SearchGifs(prefix) {
+  const picker = app.querySelector(`[data-game-picker="${prefix}"]`);
+  const queryInput = picker?.querySelector(`[data-gif-query="${prefix}"]`);
+  const results = picker?.querySelector(`[data-gif-results="${prefix}"]`);
+  const query = String(queryInput?.value || "").trim();
+  if (!picker || !results) return;
+  if (!query) {
+    results.innerHTML = `<p class="gif-result-empty">Aramak için bir kelime yaz.</p>`;
+    return;
+  }
+  results.innerHTML = `<p class="gif-result-empty">GIF aranıyor...</p>`;
+  try {
+    const gifs = await kasamGameV2FetchGifs(query);
+    if (!gifs.length) {
+      results.innerHTML = `<p class="gif-result-empty">Sonuç bulunamadı.</p>`;
+      return;
+    }
+    results.innerHTML = gifs
+      .map((gif) => `<button class="gif-result-button" data-gif-url="${kasamEscape(gif.url)}" type="button"><img src="${kasamGameV2SafeMedia(gif.url)}" alt="${kasamSafe(gif.title || "GIF")}" /></button>`)
+      .join("");
+  } catch (error) {
+    results.innerHTML = `<p class="gif-result-empty">GIF araması çalışmadı. Key veya deploy kontrol edilmeli.</p>`;
+  }
 }
 
 reactionSetupHtml = function reactionSetupHtmlGameV2() {
@@ -490,6 +539,34 @@ bindScreen = function bindScreenGameV2() {
       const input = picker?.querySelector(`input[name="${picker.dataset.gamePicker}Sticker"]`);
       if (input) input.value = button.dataset.gameSticker;
       picker?.querySelectorAll(".sticker-button").forEach((item) => item.classList.toggle("selected", item === button));
+    });
+  });
+  app.querySelectorAll("[data-gif-search]").forEach((button) => {
+    if (button.dataset.gifSearchBound) return;
+    button.dataset.gifSearchBound = "1";
+    button.addEventListener("click", () => kasamGameV2SearchGifs(button.dataset.gifSearch));
+  });
+  app.querySelectorAll("[data-gif-query]").forEach((input) => {
+    if (input.dataset.gifQueryBound) return;
+    input.dataset.gifQueryBound = "1";
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        kasamGameV2SearchGifs(input.dataset.gifQuery);
+      }
+    });
+  });
+  app.querySelectorAll("[data-gif-results]").forEach((container) => {
+    if (container.dataset.gifResultsBound) return;
+    container.dataset.gifResultsBound = "1";
+    container.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-gif-url]");
+      if (!button) return;
+      const prefix = container.dataset.gifResults;
+      const picker = app.querySelector(`[data-game-picker="${prefix}"]`);
+      const input = picker?.querySelector(`[data-gif-value="${prefix}"]`);
+      if (input) input.value = button.dataset.gifUrl;
+      picker?.querySelectorAll(".gif-result-button").forEach((item) => item.classList.toggle("selected", item === button));
     });
   });
   app.querySelectorAll("[data-action='toggle-sound']").forEach((button) => {

@@ -1,3 +1,16 @@
+/*
+  KASAM — supabase-game-v2.sql
+  Çalıştırma tarihi: 13.06.2026
+
+  Bu dosyayı Supabase Dashboard > SQL Editor'a yapıştır ve çalıştır.
+  Tablolar zaten varsa ALTER TABLE ile güvenli güncelleme yapar.
+  Yoksa CREATE TABLE IF NOT EXISTS ile oluşturur.
+
+  Çalıştırma sırası önemli:
+  1. supabase-production-kasam.sql (daha önce çalıştırıldıysa atla)
+  2. supabase-game-v2.sql (bu dosya)
+*/
+
 alter table public.kasa_notifications
   add column if not exists hide_actor boolean default true,
   add column if not exists game_phase integer default 1 check (game_phase between 1 and 3),
@@ -21,6 +34,9 @@ alter table public.kasa_notifications
 
 alter table public.kasa_project_members
   add column if not exists familiarity_scores jsonb default '{}'::jsonb;
+
+alter table public.kasa_notifications enable row level security;
+alter table public.kasa_project_members enable row level security;
 
 update public.kasa_notifications
 set game_version = 'v2'
