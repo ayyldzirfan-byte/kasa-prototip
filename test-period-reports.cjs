@@ -192,6 +192,7 @@ const result = JSON.parse(JSON.stringify(vm.runInContext(`
     const totals = calculateTotals(currentEntries);
     const previousTotals = calculateTotals(previousEntries);
     const html = renderReport();
+    const receiptHtml = renderReceipt();
     return {
       period,
       userId,
@@ -202,7 +203,8 @@ const result = JSON.parse(JSON.stringify(vm.runInContext(`
       net: totals.actual,
       previousNet: previousTotals.actual,
       diff: period === "all" ? totals.actual : totals.actual - previousTotals.actual,
-      htmlHasReceipt: html.includes("KASAM F"),
+      htmlHasReceiptLink: html.includes('data-action="open-receipt"') && html.includes("Kasa fi"),
+      receiptHtmlHasReceipt: receiptHtml.includes("KASAM F"),
       htmlHasIncome: html.includes("Giren"),
       htmlHasExpense: html.includes("kan") || html.includes("Çıkan"),
       rows: currentEntries.map((entry) => ({
@@ -242,7 +244,8 @@ for (const period of result.periods) {
   assert.equal(period.income, expected[period.period].income, `${period.period} income`);
   assert.equal(period.expense, expected[period.period].expense, `${period.period} expense`);
   assert.equal(period.net, expected[period.period].net, `${period.period} net`);
-  assert.ok(period.htmlHasReceipt, `${period.period} receipt is rendered`);
+  assert.ok(period.htmlHasReceiptLink, `${period.period} receipt link is rendered`);
+  assert.ok(period.receiptHtmlHasReceipt, `${period.period} receipt page is rendered`);
   assert.ok(period.htmlHasIncome, `${period.period} income label is rendered`);
   assert.ok(period.htmlHasExpense, `${period.period} expense label is rendered`);
 }

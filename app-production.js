@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 08:01";
+var KASAM_UPDATED_AT = "13.06.2026 08:23";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -436,6 +436,26 @@ render = function renderKasam() {
     applyProductionChrome();
     bindScreen();
     kasamRenderLucide();
+    return;
+  }
+  if (state.activeView === "receipt" && currentUser() && activeProject()) {
+    document.body.dataset.view = "receipt";
+    const updateStamp = document.querySelector(".update-stamp");
+    if (updateStamp) updateStamp.textContent = `Güncellendi ${KASAM_UPDATED_AT}`;
+    tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.view === "report"));
+    app.innerHTML = `
+      <div class="back-row">
+        <button class="back-button" data-action="receipt-back" type="button" aria-label="Rapora dön">
+          ${kasamIcon("chevron-left", "icon-neutral")}
+          Rapor
+        </button>
+      </div>
+      ${renderReceipt()}
+    `;
+    applyProductionChrome();
+    bindScreen();
+    kasamRenderLucide();
+    runInsightEngineQuietly();
     return;
   }
   kasamBaseRender();
@@ -1288,14 +1308,32 @@ function renderReport() {
   return `
     ${kasamFinanceIndexHtml(currentEntries, totals, true)}
     <section class="card">
-      <div class="section-head"><div><h2>Rapor</h2><p>${period === "all" ? "Tüm kişisel kasa etkisi." : `${reportPeriodTitle(period)} ile ${reportPeriodTitle(period, -1)} karşılaştırılır.`}</p></div><button class="share-button compact-share" data-action="share-receipt" type="button">Fişi paylaş</button></div>
+      <div class="section-head"><div><h2>Rapor</h2><p>${period === "all" ? "Tüm kişisel kasa etkisi." : `${reportPeriodTitle(period)} ile ${reportPeriodTitle(period, -1)} karşılaştırılır.`}</p></div><button class="share-button compact-share" data-action="open-receipt" type="button">Fişi aç</button></div>
       <div class="segmented segmented-four"><button class="segment ${period === "day" ? "active" : ""}" data-period="day" type="button">Gün</button><button class="segment ${period === "week" ? "active" : ""}" data-period="week" type="button">Hafta</button><button class="segment ${period === "month" ? "active" : ""}" data-period="month" type="button">Ay</button><button class="segment ${period === "all" ? "active" : ""}" data-period="all" type="button">Genel</button></div>
       <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${period === "all" ? "Toplam net etki." : `${label} net fark.`}</span></div>
     </section>
     ${kasamContributorHtml(currentEntries, "Dönem katkıları")}
     ${reconciliationCardsHtml()}
-    <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${kasamReceiptDistributionHtml(activeProject(), period)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">${KASAM_BRAND.watermark}</p></section>
+    <section class="card receipt-preview-card"><div class="section-head"><div><h2>Kasa fişi</h2><p>Uzun fiş ayrı sayfada açılır.</p></div><button class="primary-button compact-action" data-action="open-receipt" type="button">${kasamIcon("receipt-text", "icon-neutral")} Fişi gör</button></div></section>
+  `;
+}
+
+function kasamReceiptHtml(period = state.reportPeriod || "month") {
+  const entries = personalLedgerEntries().filter((entry) => entry.status === "done" && entryConfirmed(entry));
+  const currentEntries = kasamPeriodEntries(entries, period);
+  const totals = calculateTotals(currentEntries);
+  return `<section class="card receipt-card receipt-page-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${kasamReceiptDistributionHtml(activeProject(), period)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">${KASAM_BRAND.watermark}</p></section>`;
+}
+
+function renderReceipt() {
+  const period = state.reportPeriod || "month";
+  return `
+    <section class="card receipt-page-actions">
+      <div class="section-head"><div><h2>Kasa fişi</h2><p>${reportPeriodTitle(period)} için paylaşılabilir fiş çıktısı.</p></div><button class="share-button compact-share" data-action="share-receipt" type="button">${kasamIcon("share-2", "icon-neutral")} Paylaş</button></div>
+      <div class="segmented segmented-four"><button class="segment ${period === "day" ? "active" : ""}" data-period="day" type="button">Gün</button><button class="segment ${period === "week" ? "active" : ""}" data-period="week" type="button">Hafta</button><button class="segment ${period === "month" ? "active" : ""}" data-period="month" type="button">Ay</button><button class="segment ${period === "all" ? "active" : ""}" data-period="all" type="button">Genel</button></div>
+    </section>
+    ${kasamReceiptHtml(period)}
   `;
 }
 
@@ -2891,6 +2929,22 @@ bindScreen = function bindScreenKasam() {
     }),
   );
   app.querySelectorAll("[data-action='open-report']").forEach((button) => button.addEventListener("click", () => goToView("report")));
+  app.querySelectorAll("[data-action='open-receipt']").forEach((button) =>
+    button.addEventListener("click", () => {
+      state.previousView = state.activeView || "report";
+      state.activeView = "receipt";
+      saveState();
+      render();
+    }),
+  );
+  app.querySelectorAll("[data-action='receipt-back']").forEach((button) =>
+    button.addEventListener("click", () => {
+      state.activeView = state.previousView && state.previousView !== "receipt" ? state.previousView : "report";
+      state.previousView = "";
+      saveState();
+      render();
+    }),
+  );
   app.querySelectorAll("[data-action='approve-join-request'], [data-action='reject-join-request']").forEach((button) =>
     button.addEventListener("click", async () => {
       const approved = button.dataset.action === "approve-join-request";

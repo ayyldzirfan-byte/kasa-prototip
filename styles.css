@@ -1520,6 +1520,27 @@ button {
   border: 2px solid transparent;
 }
 
+.receipt-preview-card .section-head,
+.receipt-page-actions .section-head {
+  align-items: center;
+}
+
+.receipt-page-actions {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.receipt-page-card {
+  margin-bottom: var(--space-8);
+}
+
+.compact-action {
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  white-space: nowrap;
+}
+
 .receipt-title {
   margin: 0 0 12px;
   text-align: center;
