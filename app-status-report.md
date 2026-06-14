@@ -66,7 +66,8 @@ Tarih: 2026-06-14
 ## Test Durumu
 | Test | Sonuç |
 |---|---|
-| `kasam-lint.cjs` | 11 kural, 11 geçti, 0 başarısız |
+| `kasam-lint.cjs` | 12 fail kuralı geçti, KURAL-025/KURAL-026 WARN kontrolleri 0 uyarı verdi |
+| `tests/visual-rules.spec.js` | 16 Playwright görsel test eklendi; local modül kurulumu bu oturumda npm/npx olmadığı için çalıştırılamadı |
 | `test-kasa-e2e.cjs` | 18 test, 18 geçti, 0 başarısız |
 | `test-game-v2.cjs` | 22 test, 22 geçti, 0 başarısız |
 | `test-ui-fixes.cjs` | 11 test, 11 geçti, 0 başarısız |
@@ -91,3 +92,8 @@ Tarih: 2026-06-14
 - Davet linkleri eski Netlify fallback yerine cloud-config.js appUrl de?erini kullan?r.
 - Hareketi ekleyen kullan?c? kendi hareketini silebilir; ilgili bildirim ve tepki kay?tlar? da temizlenir.
 - Yeni test: test-password-reset.cjs.
+
+## Son Guncelleme: Ekran Kalabaligi Kurali
+- KURAL-039 eklendi: ekran kalabaligi olusturulmayacak.
+- Hareket ekleme gibi kritik akislar kullanicidan ayni bilgiyi tekrar istemeyecek; ikincil ayarlar kompakt, acilir veya adim adim gosterilecek.
+- kasam-lint.cjs KURAL-039 icin temel kontrol ekledi.

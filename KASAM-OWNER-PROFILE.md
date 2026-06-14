@@ -106,3 +106,17 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Kullanici tarafinda is yoksa bu acikca belirtilmeli.
 - Kullanici tarafinda panel, telefon, Supabase, Vercel veya mail testi gibi is varsa once "Hazir misin?" diye sorulmali.
 - Kullanici "evet" demeden adim adim anlatima gecilmemeli.
+
+## Ek Tasarim Kurali: Ekran Kalabaligi
+- Ekran kalabaligi olusturulmayacak.
+- Kullanici hareket formunda zaten bilgi girdiyse ayni bilgi oyun, bildirim veya ek ayar alaninda tekrar istenmeyecek.
+- Ikincil ayarlar varsayilan ekranda surekli gorunur kalmayacak; ilgili anda acilir, adim adim veya kompakt sekilde gosterilecek.
+- Yeni UI eklenirken sadece ilgili parca degil, ayni ekranin tamami 375px mobil genislikte tasma, sikisma, tekrar ve odak kaybi acisindan kontrol edilecek.
+
+## Ek Kontrol Kurali: Gorsel Dogrulama
+- Sadece unit test gecti diye "tamamlandi" denmeyecek.
+- Playwright calistirilmadan UI gorevi kapatilmayacak.
+- PASS yazip ekran goruntusu almadan bitirilmeyecek.
+- Tekrarlayan hata: "Yaptim/PASS dedi ama gercekte olmamis" birden fazla kez yasandi; cozum KURAL-025 ve KURAL-028.
+- Kontrol yontemi: ekran goruntusu birincil, test ciktisi ikincildir.
+- Yeterli kriteri: gozle gorulunce yeterli; sadece test gecince yeterli sayilmaz.

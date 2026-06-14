@@ -190,6 +190,63 @@ function checkRule019() {
   return failures;
 }
 
+function checkRule039() {
+  const failures = [];
+  appFiles.filter((file) => file.endsWith(".js")).forEach((file) => {
+    const text = read(file);
+    const isAddFlow = /renderAdd|handleEntrySubmit|entry-form|add-entry/.test(text);
+    const repeatsGameSetup = /(AŞAMA|Aşama)\s*[123]\s*[—-]|Kim ekledi\?\s*[\s\S]{0,120}Gelir mi gider mi\?\s*[\s\S]{0,120}Ne harcaması\?/.test(text);
+    if (isAddFlow && repeatsGameSetup) {
+      failures.push(fail(file, 1, "Hareket ekleme ekraninda oyun asamalari tekrar kurulmus; bilgi hareketten turetilmeli ve ekran kompakt kalmali."));
+    }
+  });
+  const rules = fs.existsSync(path.join(root, "KASAM-RULES.md")) ? read("KASAM-RULES.md") : "";
+  if (!rules.includes("KURAL-039")) failures.push(fail("KASAM-RULES.md", 1, "Ekran kalabaligi kural kaydi eksik."));
+  return failures;
+}
+
+function listFilesRecursive(dir, predicate) {
+  if (!fs.existsSync(dir)) return [];
+  const result = [];
+  fs.readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      result.push(...listFilesRecursive(fullPath, predicate));
+      return;
+    }
+    if (!predicate || predicate(fullPath)) result.push(fullPath);
+  });
+  return result;
+}
+
+function checkRule025_GorselDogrulama() {
+  const screenshotsDir = path.join(root, "screenshots");
+  const images = listFilesRecursive(screenshotsDir, (file) => /\.(png|jpg|jpeg|webp)$/i.test(file));
+  const failures = [];
+  if (!fs.existsSync(screenshotsDir)) failures.push(fail("screenshots", 1, "KURAL-025: Gorsel dogrulama eksik - screenshots klasoru yok."));
+  if (fs.existsSync(screenshotsDir) && images.length < 5) failures.push(fail("screenshots", 1, "KURAL-025: Gorsel dogrulama eksik - en az 5 ekran goruntusu yok."));
+  return failures;
+}
+
+function checkRule026_PlaywrightTestGuncel() {
+  const specPath = path.join(root, "tests", "visual-rules.spec.js");
+  const failures = [];
+  if (!fs.existsSync(specPath)) return [fail("tests/visual-rules.spec.js", 1, "KURAL-026: Playwright gorsel test dosyasi yok.")];
+  const renderNames = new Set();
+  appFiles.filter((file) => file.endsWith(".js")).forEach((file) => {
+    const text = read(file);
+    const regex = /\b(?:function\s+|(?:const|let|var)\s+|^)(render[A-Z][A-Za-z0-9_]*)/gm;
+    let match;
+    while ((match = regex.exec(text))) renderNames.add(match[1]);
+  });
+  const spec = fs.readFileSync(specPath, "utf8");
+  const testCount = (spec.match(/\btest\(/g) || []).length;
+  if (testCount < Math.ceil(renderNames.size * 0.5)) {
+    failures.push(fail("tests/visual-rules.spec.js", 1, `KURAL-026: Bazi ekranlar icin gorsel test eksik. render=${renderNames.size}, test=${testCount}`));
+  }
+  return failures;
+}
+
 const checks = [
   ["KURAL-001", checkRule001],
   ["KURAL-002", checkRule002],
@@ -202,10 +259,17 @@ const checks = [
   ["KURAL-015", checkRule015],
   ["KURAL-018", checkRule018],
   ["KURAL-019", checkRule019],
+  ["KURAL-039", checkRule039],
+];
+
+const warnChecks = [
+  ["KURAL-025", checkRule025_GorselDogrulama],
+  ["KURAL-026", checkRule026_PlaywrightTestGuncel],
 ];
 
 let passed = 0;
 let failed = 0;
+let warned = 0;
 
 for (const [id, fn] of checks) {
   const result = fn();
@@ -219,4 +283,15 @@ for (const [id, fn] of checks) {
 }
 
 console.log(`${checks.length} kural, ${passed} geçti, ${failed} başarısız`);
+for (const [id, fn] of warnChecks) {
+  const result = fn();
+  if (!result.length) {
+    console.log(`âœ“ ${id}`);
+    continue;
+  }
+  warned += result.length;
+  result.forEach((item) => console.log(`WARN ${id} - ${item.file}:${item.line} - ${item.message}`));
+}
+
+console.log(`UyarÄ±: ${warned}`);
 if (failed > 0) process.exit(1);
