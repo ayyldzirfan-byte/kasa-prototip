@@ -336,7 +336,7 @@ async function processRetryQueue(manual = false) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   try {
     await cloudPushState();
-    setCloudStatus("Bulut senkron");
+    setCloudStatus("Senkron tamam");
     if (manual) kasamToast("Güncellendi.");
   } catch (error) {
     due.forEach((item) => {
@@ -904,7 +904,7 @@ function renderHome() {
         ${memberAvatarHtml(user, activeProject(), "member-avatar")}
         <span>
           <strong>${projectUserLabel(user) || "Kasam"}</strong>
-          <small>${state.cloudSyncAt ? `Bulut senkron: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : KASAM_BRAND.subSlogan}</small>
+          <small>${state.cloudSyncAt ? `Senkron tamam: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : KASAM_BRAND.subSlogan}</small>
         </span>
       </button>
       <div class="account-actions">
@@ -935,8 +935,8 @@ function renderHome() {
     </section>
 
     <section class="grid-2">
-      <article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-      <article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable"><p class="stat-label">Beklenen</p><p class="stat-value">${money(totals.receivable)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="payable"><p class="stat-label">Yaklaşan</p><p class="stat-value">${money(totals.payable)}</p></article>
     </section>
@@ -1313,7 +1313,7 @@ function renderReport() {
     <section class="card">
       <div class="section-head"><div><h2>Rapor</h2><p>${period === "all" ? "Tüm kişisel kasa etkisi." : `${reportPeriodTitle(period)} ile ${reportPeriodTitle(period, -1)} karşılaştırılır.`}</p></div><button class="share-button compact-share" data-action="open-receipt" type="button">Fişi aç</button></div>
       <div class="segmented segmented-four"><button class="segment ${period === "day" ? "active" : ""}" data-period="day" type="button">Gün</button><button class="segment ${period === "week" ? "active" : ""}" data-period="week" type="button">Hafta</button><button class="segment ${period === "month" ? "active" : ""}" data-period="month" type="button">Ay</button><button class="segment ${period === "all" ? "active" : ""}" data-period="all" type="button">Genel</button></div>
-      <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
+      <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${period === "all" ? "Toplam net etki." : `${label} net fark.`}</span></div>
     </section>
     ${kasamContributorHtml(currentEntries, "Dönem katkıları")}
@@ -1886,7 +1886,7 @@ function kasamEntrySplitText(entry, compact = false) {
   const project = kasamProjectForEntry(entry);
   const payer = state.users.find((user) => user.id === (entry?.paidById || entry?.userId));
   const ids = kasamSplitIdsForEntry(entry);
-  const payLabel = entry?.type === "income" || entry?.type === "receivable" ? "Giren" : "Ödeyen";
+  const payLabel = entry?.type === "income" || entry?.type === "receivable" ? "Gelir" : "Ödeyen";
   const payerText = `${payLabel}: ${payer ? kasamFinancialUserName(payer) : "Bilinmiyor"}`;
   const shares = ids
     .map((userId) => {
@@ -2062,7 +2062,7 @@ function kasamSplitPreviewHtml(project, type = draft?.type || "expense") {
   return `
     <section class="split-preview-box">
       <strong>${label}</strong>
-      <span>${type === "income" ? "Giren kişi" : "Ödeyen kişi"}: ${kasamFinancialUserName(user)}</span>
+      <span>${type === "income" ? "Gelir kişi" : "Ödeyen kişi"}: ${kasamFinancialUserName(user)}</span>
       <span>${members.length ? members.join(" / ") : "Sadece sen"}</span>
     </section>
   `;
@@ -2638,7 +2638,7 @@ async function kasamUpsertWithSchemaFallback(client, tableName, rows, options, f
   if (!fallbackRows.length) return result;
   const fallbackResult = await client.from(tableName).upsert(fallbackRows, options);
   if (fallbackResult.error) throw fallbackResult.error;
-  setCloudStatus("Bulut senkron (eski sema uyumu)");
+  setCloudStatus("Senkron tamam (eski sema uyumu)");
   return fallbackResult;
 }
 
@@ -2663,7 +2663,7 @@ cloudPushState = async function cloudPushStateKasam() {
       await kasamBaseCloudPushState();
     } catch (error) {
       if (!kasamCloudMissingFeature(error)) throw error;
-      setCloudStatus("Bulut senkron (eksik production semasi)");
+      setCloudStatus("Senkron tamam (eksik production semasi)");
     }
     const client = cloudDb();
     const user = currentUser();
@@ -2874,7 +2874,7 @@ cloudPushState = async function cloudPushStateKasam() {
       if (notification.actorId === user.id || notification.recipients?.includes(user.id)) delete notification.syncStatus;
     });
     state.cloudSyncAt = kasamNow();
-    setCloudStatus("Bulut senkron");
+    setCloudStatus("Senkron tamam");
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (error) {
     logError(error, "cloud-push-production");

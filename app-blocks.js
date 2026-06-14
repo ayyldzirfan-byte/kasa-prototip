@@ -944,8 +944,8 @@ function renderHome() {
     </section>
 
     <section class="grid-2">
-      <article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-      <article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable"><p class="stat-label">Beklenen</p><p class="stat-value">${money(totals.receivable)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="payable"><p class="stat-label">Yaklaşan</p><p class="stat-value">${money(totals.payable)}</p></article>
     </section>
@@ -1207,7 +1207,7 @@ function renderHome() {
         ${memberAvatarHtml(user, activeProject(), "member-avatar")}
         <div>
           <strong>${profileLabel(user) || "Kasa"}</strong>
-          <p>${state.cloudSyncAt ? `Bulut senkron: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : "Kendi paran ve bağlı bütçeler tek yerde."}</p>
+          <p>${state.cloudSyncAt ? `Senkron tamam: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : "Kendi paran ve bağlı bütçeler tek yerde."}</p>
         </div>
       </div>
       <div class="account-actions">
@@ -1233,8 +1233,8 @@ function renderHome() {
     </section>
 
     <section class="grid-2">
-      <article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-      <article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable"><p class="stat-label">Beklenen</p><p class="stat-value">${money(totals.receivable)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="payable"><p class="stat-label">Yaklaşan</p><p class="stat-value">${money(totals.payable)}</p></article>
     </section>
@@ -1661,8 +1661,8 @@ function renderReport() {
         <button class="segment ${period === "month" ? "active" : ""}" data-period="month" type="button">Ay</button>
       </div>
       <div class="grid-2 report-grid">
-        <article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-        <article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+        <article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+        <article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
       </div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}">
         <strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong>
@@ -3108,10 +3108,10 @@ function renderReport() {
   return `
     <section class="segmented">${[["day", "Gün"], ["week", "Hafta"], ["month", "Ay"]].map(([value, labelText]) => `<button class="segment ${period === value ? "active" : ""}" data-period="${value}" type="button">${labelText}</button>`).join("")}</section>
     <section class="card">
-      <div class="section-head"><div><h2>${label} raporu</h2><p>Giren ${money(totals.income)}, çıkan ${money(totals.expense)}, net ${money(totals.actual)}.</p></div><span class="quick-pill">${entries.length} kayıt</span></div>
+      <div class="section-head"><div><h2>${label} raporu</h2><p>Gelir ${money(totals.income)}, çıkan ${money(totals.expense)}, net ${money(totals.actual)}.</p></div><span class="quick-pill">${entries.length} kayıt</span></div>
       <div class="grid-2 compact-stats">
-        <article class="stat-card small"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-        <article class="stat-card small"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+        <article class="stat-card small"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+        <article class="stat-card small"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
         <article class="stat-card small"><p class="stat-label">Net</p><p class="stat-value ${netClass}">${money(totals.actual)}</p></article>
         <article class="stat-card small"><p class="stat-label">Ortalama</p><p class="stat-value">${money(entries.length ? totals.expense / entries.length : 0)}</p></article>
       </div>
@@ -3672,7 +3672,7 @@ async function cloudPushState() {
     const settlementRows = (state.settlements || []).map((settlement) => ({ id: settlement.id, project_id: settlement.projectId, from_user_id: settlement.fromUserId, to_user_id: settlement.toUserId, amount: settlement.amount, settled_at: settlement.settledAt || blockNow(), note: settlement.note || "" }));
     if (settlementRows.length) await client.from("kasa_settlements").upsert(settlementRows, { onConflict: "id" });
     state.cloudSyncAt = blockNow();
-    setCloudStatus("Bulut senkron");
+    setCloudStatus("Senkron tamam");
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } finally {
     cloudSyncBusy = false;
@@ -4152,8 +4152,8 @@ function renderHome() {
     </section>
 
     <section class="grid-2">
-      <article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-      <article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable"><p class="stat-label">Beklenen</p><p class="stat-value">${money(totals.receivable)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="payable"><p class="stat-label">Yaklaşan</p><p class="stat-value">${money(totals.payable)}</p></article>
     </section>

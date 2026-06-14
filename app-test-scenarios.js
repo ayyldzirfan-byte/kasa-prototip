@@ -725,6 +725,16 @@
     }
   }
 
+  function testScenarioUserIndexFromUrl() {
+    try {
+      const raw = new URLSearchParams(location.search || "").get("simUser") || "";
+      const index = Number.parseInt(raw, 10);
+      return Number.isFinite(index) && index > 0 ? index : 0;
+    } catch {
+      return 0;
+    }
+  }
+
   function testScenarioEscape(value) {
     if (typeof kasamSafe === "function") return kasamSafe(value);
     return String(value || "")
@@ -763,6 +773,13 @@
     state.cloudSyncAt = "";
     state.testScenarioMode = true;
     return user;
+  }
+
+  function activateTestScenarioUserByIndex(index) {
+    const users = testScenarioUsers();
+    const safeIndex = Number(index || 0);
+    const user = users[Math.max(0, safeIndex - 1)] || users[0] || state?.users?.[0];
+    return user ? activateTestScenarioUser(user.id) : null;
   }
 
   function applyTestScenarioAuthBypass(selector) {
@@ -810,7 +827,9 @@
     }
     const scenarioState = buildKasamTestScenarioState(selector);
     state = normalizeState({ ...seedState, ...scenarioState });
-    activateTestScenarioUser(state.activeUserId);
+    const simUserIndex = Number(options.simUser || testScenarioUserIndexFromUrl() || 0);
+    if (simUserIndex) activateTestScenarioUserByIndex(simUserIndex);
+    else activateTestScenarioUser(state.activeUserId);
     if (typeof makeDraft === "function") draft = makeDraft();
     if (typeof saveState === "function") saveState();
     if (options.render !== false && typeof render === "function") render();
@@ -823,7 +842,179 @@
     const normalizedSelector = String(selector || "all").toLocaleLowerCase("tr-TR");
     const hasMatchingState = state?.testScenarioMode && state?.testScenarioSelector === normalizedSelector && state?.users?.length && state?.projects?.length;
     if (!hasMatchingState) initTestScenario(selector, { render: false });
+    else {
+      const simUserIndex = testScenarioUserIndexFromUrl();
+      if (simUserIndex) activateTestScenarioUserByIndex(simUserIndex);
+      else activateTestScenarioUser(state.signedInUserId || state.activeUserId);
+    }
+    return true;
+  }
+
+  function testScenarioEnsureHeading(projectId, title, type) {
+    const name = kasamScenarioTitle(title) || (type === "income" ? "Gelir" : "Gider");
+    let heading = state.headings.find((item) => item.projectId === projectId && item.name === name && item.type === type);
+    if (heading) return heading;
+    heading = {
+      id: `sim-h-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      projectId,
+      name,
+      shortName: name,
+      emoji: "",
+      type,
+      createdAt: new Date().toISOString(),
+    };
+    state.headings.push(heading);
+    return heading;
+  }
+
+  function testScenarioEqualSplit(ids) {
+    const list = Array.isArray(ids) && ids.length ? ids : [];
+    const ratio = list.length ? 1 / list.length : 1;
+    return list.map(() => ratio);
+  }
+
+  function testScenarioSummary() {
+    const project = testScenarioProject();
+    const user = state?.users?.find((item) => item.id === state?.signedInUserId) || null;
+    const entries = state?.entries?.filter((entry) => !project || entry.projectId === project.id) || [];
+    const visibleEntries = entries.filter((entry) => !(entry.lockedNotificationId && !entry.revealedAt));
+    const income = visibleEntries.filter((entry) => entry.type === "income").reduce((sum, entry) => sum + Number(entry.amount || 0), 0);
+    const expense = visibleEntries.filter((entry) => entry.type === "expense").reduce((sum, entry) => sum + Number(entry.amount || 0), 0);
+    const personalNet = visibleEntries.reduce((sum, entry) => {
+      const splitWith = Array.isArray(entry.splitWith) ? entry.splitWith : [];
+      const index = splitWith.indexOf(user?.id);
+      const ratio = index >= 0 ? Number((entry.splitRatio || [])[index] || 0) : 0;
+      const amount = Number(entry.amount || 0) * ratio;
+      if (entry.type === "income") return sum + amount;
+      if (entry.type === "expense" || entry.type === "payable") return sum - amount;
+      return sum;
+    }, 0);
+    const unread = state?.notifications?.filter((item) => (item.recipients || []).includes(user?.id) && !item.isCompleted).length || 0;
+    return {
+      userId: user?.id || "",
+      userName: user?.name || "",
+      userEmail: user?.email || "",
+      projectId: project?.id || "",
+      projectName: project?.name || "",
+      entryCount: entries.length,
+      notificationCount: state?.notifications?.length || 0,
+      unread,
+      income,
+      expense,
+      net: income - expense,
+      personalNet,
+    };
+  }
+
+  function testScenarioAddSimEntry(payload = {}) {
+    const selector = testScenarioSelectorFromUrl() || state?.testScenarioSelector || "1";
+    ensureTestScenarioState(selector);
+    const users = testScenarioUsers();
+    const actor = state.users.find((item) => item.id === payload.userId) || users[Math.max(0, Number(payload.simUser || 1) - 1)] || users[0] || state.users[0];
+    const project = testScenarioProject();
+    if (!actor || !project) throw new Error("Test kullanıcısı veya kasa bulunamadı.");
+    activateTestScenarioUser(actor.id);
+    state.activeProjectId = project.id;
+    const type = payload.type === "income" ? "income" : "expense";
+    const amount = Math.max(0, Number(payload.amount || 0));
+    if (!amount) throw new Error("Tutar gir.");
+    const title = kasamScenarioTitle(payload.title || payload.heading || (type === "income" ? "Test geliri" : "Test gideri"));
+    const date = payload.date || new Date().toISOString().slice(0, 10);
+    const heading = testScenarioEnsureHeading(project.id, payload.heading || title, type);
+    const splitWith = Array.isArray(payload.splitWith) && payload.splitWith.length ? payload.splitWith : project.memberIds.slice();
+    const splitRatio = Array.isArray(payload.splitRatio) && payload.splitRatio.length === splitWith.length ? payload.splitRatio.map(Number) : testScenarioEqualSplit(splitWith);
+    const entry = {
+      id: `sim-e-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      projectId: project.id,
+      type,
+      amount,
+      originalAmount: amount,
+      enteredAmount: amount,
+      currency: "TRY",
+      exchangeRate: 1,
+      headingId: heading.id,
+      headingName: "",
+      shortName: title,
+      note: payload.note || "",
+      userId: actor.id,
+      paidById: actor.id,
+      splitWith,
+      splitRatio,
+      date,
+      status: "done",
+      lockedNotificationId: "",
+      autoRevealAt: "",
+      rateLockedAt: new Date().toISOString(),
+      photoName: "",
+      photoData: payload.photoData || "",
+      gif: payload.gif || "",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const mode = payload.mode || "open";
+    if (mode !== "silent") {
+      const notification = {
+        id: `sim-n-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        projectId: project.id,
+        entryId: entry.id,
+        actorId: actor.id,
+        recipients: project.memberIds.filter((id) => id !== actor.id),
+        mode,
+        actualType: type,
+        title,
+        amount,
+        emoji: mode === "surprise" ? "🎁" : "",
+        photoName: "",
+        photoData: payload.photoData || "",
+        gif: payload.gif || "",
+        successReaction: "✓",
+        failReaction: "✕",
+        guessDeadline: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+        revealedAt: mode === "surprise" ? "" : new Date().toISOString(),
+        isCompleted: mode !== "surprise",
+        notificationType: "entry",
+        guesses: [],
+        createdAt: new Date().toISOString(),
+        gameVersion: "v2",
+        hideActor: mode === "surprise",
+        gamePhase: 1,
+        phase1Guesses: [],
+        phase2Guesses: [],
+        phase3Options: [heading.name, "Market", "Fatura", "Ulaşım"],
+        phase3Correct: 0,
+        phase3Guesses: [],
+        actorWrongReaction: { type: "emoji", data: "✕" },
+        actorCorrectReaction: { type: "emoji", data: "✓" },
+        typeWrongReaction: { type: "emoji", data: "✕" },
+        typeCorrectReaction: { type: "emoji", data: "✓" },
+        categoryWrongReaction: { type: "emoji", data: "✕" },
+        categoryCorrectReaction: { type: "emoji", data: "✓" },
+        phase1Completed: false,
+        phase2Completed: false,
+        phase3Completed: false,
+        gameFullyCompleted: false,
+      };
+      if (mode === "surprise") entry.lockedNotificationId = notification.id;
+      state.notifications.push(notification);
+    }
+    state.entries.push(entry);
+    if (typeof normalizeState === "function") state = normalizeState(state);
+    activateTestScenarioUser(actor.id);
+    if (typeof makeDraft === "function") draft = makeDraft();
+    if (typeof saveState === "function") saveState();
+    if (typeof render === "function") render();
+    return { entry, summary: testScenarioSummary(), stateSnapshot: state };
+  }
+
+  function hydrateTestScenarioState(nextState, simUserIndex) {
+    if (!nextState) return false;
+    state = typeof normalizeState === "function" ? normalizeState(nextState) : nextState;
+    const index = Number(simUserIndex || testScenarioUserIndexFromUrl() || 0);
+    if (index) activateTestScenarioUserByIndex(index);
     else activateTestScenarioUser(state.signedInUserId || state.activeUserId);
+    if (typeof makeDraft === "function") draft = makeDraft();
+    if (typeof saveState === "function") saveState();
+    if (typeof render === "function") render();
     return true;
   }
 
@@ -857,6 +1048,10 @@
   root.applyTestScenarioAuthBypass = applyTestScenarioAuthBypass;
   root.ensureTestScenarioState = ensureTestScenarioState;
   root.initTestScenario = initTestScenario;
+  root.testScenarioUserIndexFromUrl = testScenarioUserIndexFromUrl;
+  root.testScenarioSummary = testScenarioSummary;
+  root.testScenarioAddSimEntry = testScenarioAddSimEntry;
+  root.hydrateTestScenarioState = hydrateTestScenarioState;
 
   if (typeof render === "function" && !root.__kasamTestScenarioRenderWrapped) {
     const baseRender = render;
@@ -922,6 +1117,50 @@
     };
   }
 
+  if (typeof root.addEventListener === "function" && !root.__kasamSimulatorBridgeBound) {
+    root.__kasamSimulatorBridgeBound = true;
+    root.addEventListener("message", (event) => {
+      const message = event.data || {};
+      if (message.source !== "kasam-simulator") return;
+      const requestId = message.requestId || "";
+      try {
+        const selector = testScenarioSelectorFromUrl() || message.selector || state?.testScenarioSelector || "1";
+        ensureTestScenarioState(selector);
+        let result = null;
+        if (message.action === "add-entry") {
+          result = testScenarioAddSimEntry(message.payload || {});
+        } else if (message.action === "hydrate-state") {
+          hydrateTestScenarioState(message.stateSnapshot, message.simUser);
+          result = { summary: testScenarioSummary() };
+        } else if (message.action === "get-summary") {
+          result = { summary: testScenarioSummary() };
+        } else {
+          return;
+        }
+        if (event.source && typeof event.source.postMessage === "function") {
+          event.source.postMessage({
+            source: "kasam-app",
+            action: `${message.action}:result`,
+            requestId,
+            ok: true,
+            simUser: testScenarioUserIndexFromUrl(),
+            result,
+          }, "*");
+        }
+      } catch (error) {
+        if (event.source && typeof event.source.postMessage === "function") {
+          event.source.postMessage({
+            source: "kasam-app",
+            action: `${message.action || "unknown"}:result`,
+            requestId,
+            ok: false,
+            error: error.message,
+          }, "*");
+        }
+      }
+    });
+  }
+
   if (typeof module !== "undefined" && module.exports) {
     module.exports = {
       TEST_SCENARIO_VERSION,
@@ -930,6 +1169,8 @@
       buildKasamTestScenarioState,
       applyTestScenarioAuthBypass,
       ensureTestScenarioState,
+      testScenarioUserIndexFromUrl,
+      testScenarioSummary,
     };
   }
 })(typeof window !== "undefined" ? window : globalThis);

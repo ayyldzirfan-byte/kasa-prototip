@@ -495,7 +495,7 @@ async function cloudPushState() {
     }
 
     state.cloudSyncAt = new Date().toISOString();
-    setCloudStatus("Bulut senkron");
+    setCloudStatus("Senkron tamam");
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } finally {
     cloudSyncBusy = false;

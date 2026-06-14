@@ -1,6 +1,6 @@
 # Kasam screenshot test raporu
 
-Tarih: 13.06.2026 19:17:34
+Tarih: 13.06.2026 20:13:39
 
 ## Kontroller
 - PASS: Onboarding ekrani acildi

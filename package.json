@@ -1,0 +1,13 @@
+{
+  "name": "kasam-pwa",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "lint:rules": "node kasam-lint.cjs",
+    "pretest": "node kasam-lint.cjs",
+    "test": "node test-kasa-e2e.cjs && node test-game-v2.cjs && node test-ui-fixes.cjs && node test-simulator.cjs",
+    "test:browser": "node test-testscenario-auth-bypass.cjs",
+    "prebuild": "node kasam-lint.cjs",
+    "build": "node test-kasa-e2e.cjs"
+  }
+}

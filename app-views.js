@@ -58,11 +58,11 @@ function renderHome() {
 
     <section class="grid-2">
       <article class="stat-card">
-        <p class="stat-label">Giren</p>
+        <p class="stat-label">Gelir</p>
         <p class="stat-value positive">${money(totals.income)}</p>
       </article>
       <article class="stat-card">
-        <p class="stat-label">Çıkan</p>
+        <p class="stat-label">Gider</p>
         <p class="stat-value warning">${money(totals.expense)}</p>
       </article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable">
@@ -335,11 +335,11 @@ function renderMovements() {
       </div>
       <div class="grid-2 compact-stats">
         <article class="stat-card small">
-          <p class="stat-label">Giren</p>
+          <p class="stat-label">Gelir</p>
           <p class="stat-value positive">${money(totals.income)}</p>
         </article>
         <article class="stat-card small">
-          <p class="stat-label">Çıkan</p>
+          <p class="stat-label">Gider</p>
           <p class="stat-value warning">${money(totals.expense)}</p>
         </article>
       </div>
@@ -424,17 +424,17 @@ function renderReport() {
       <div class="section-head">
         <div>
           <h2>${label} raporu</h2>
-          <p>Giren ${money(totals.income)}, çıkan ${money(totals.expense)}, net ${money(totals.actual)}.</p>
+          <p>Gelir ${money(totals.income)}, çıkan ${money(totals.expense)}, net ${money(totals.actual)}.</p>
         </div>
         <span class="quick-pill">${entries.length} kayıt</span>
       </div>
       <div class="grid-2 compact-stats">
         <article class="stat-card small">
-          <p class="stat-label">Giren</p>
+          <p class="stat-label">Gelir</p>
           <p class="stat-value positive">${money(totals.income)}</p>
         </article>
         <article class="stat-card small">
-          <p class="stat-label">Çıkan</p>
+          <p class="stat-label">Gider</p>
           <p class="stat-value warning">${money(totals.expense)}</p>
         </article>
         <article class="stat-card small">

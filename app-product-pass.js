@@ -29,7 +29,7 @@ function renderHome() {
         ${memberAvatarHtml(user, activeProject(), "member-avatar")}
         <div>
           <strong>${profileLabel(user) || "Kasa"}</strong>
-          <p>${state.cloudSyncAt ? `Bulut senkron: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : "Kendi paran ve bağlı bütçeler tek yerde."}</p>
+          <p>${state.cloudSyncAt ? `Senkron tamam: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : "Kendi paran ve bağlı bütçeler tek yerde."}</p>
         </div>
       </div>
       <div class="account-actions">
@@ -55,8 +55,8 @@ function renderHome() {
     </section>
 
     <section class="grid-2">
-      <article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-      <article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable"><p class="stat-label">Beklenen</p><p class="stat-value">${money(totals.receivable)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="payable"><p class="stat-label">Yaklaşan</p><p class="stat-value">${money(totals.payable)}</p></article>
     </section>
@@ -450,7 +450,7 @@ function renderReport() {
     <section class="card">
       <div class="section-head"><div><h2>Rapor</h2><p>${periodTitle(period)} ile ${periodTitle(period, -1)} karşılaştırılır.</p></div><button class="share-button compact-share" data-action="share-receipt" type="button">Fişi paylaş</button></div>
       <div class="segmented"><button class="segment ${period === "day" ? "active" : ""}" data-period="day" type="button">Gün</button><button class="segment ${period === "week" ? "active" : ""}" data-period="week" type="button">Hafta</button><button class="segment ${period === "month" ? "active" : ""}" data-period="month" type="button">Ay</button></div>
-      <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
+      <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${label} net fark. Pozitif değer geçen döneme göre kasada daha iyi net alan demek.</span></div>
     </section>
     <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasam.app</p></section>
@@ -792,7 +792,7 @@ function renderHome() {
         ${memberAvatarHtml(user, activeProject(), "member-avatar")}
         <span>
           <strong>${profileLabel(user) || "Kasa"}</strong>
-          <small>${state.cloudSyncAt ? `Bulut senkron: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : "Profil ve ayarlar"}</small>
+          <small>${state.cloudSyncAt ? `Senkron tamam: ${new Date(state.cloudSyncAt).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}` : "Profil ve ayarlar"}</small>
         </span>
       </button>
       <div class="account-actions">
@@ -818,8 +818,8 @@ function renderHome() {
     </section>
 
     <section class="grid-2">
-      <article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article>
-      <article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article>
+      <article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="receivable"><p class="stat-label">Beklenen</p><p class="stat-value">${money(totals.receivable)}</p></article>
       <article class="stat-card" data-action="show-pending-detail" data-detail="payable"><p class="stat-label">Yaklaşan</p><p class="stat-value">${money(totals.payable)}</p></article>
     </section>
@@ -1281,7 +1281,7 @@ function renderReport() {
     <section class="card">
       <div class="section-head"><div><h2>Rapor</h2><p>${period === "all" ? "Tüm kişisel kasa etkisi." : `${reportPeriodTitle(period)} ile ${reportPeriodTitle(period, -1)} karşılaştırılır.`}</p></div><button class="share-button compact-share" data-action="share-receipt" type="button">Fişi paylaş</button></div>
       <div class="segmented segmented-four"><button class="segment ${period === "day" ? "active" : ""}" data-period="day" type="button">Gün</button><button class="segment ${period === "week" ? "active" : ""}" data-period="week" type="button">Hafta</button><button class="segment ${period === "month" ? "active" : ""}" data-period="month" type="button">Ay</button><button class="segment ${period === "all" ? "active" : ""}" data-period="all" type="button">Genel</button></div>
-      <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Giren</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Çıkan</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
+      <div class="grid-2 report-grid"><article class="stat-card"><p class="stat-label">Gelir</p><p class="stat-value positive">${money(totals.income)}</p></article><article class="stat-card"><p class="stat-label">Gider</p><p class="stat-value warning">${money(totals.expense)}</p></article></div>
       <div class="report-compare-card ${diff >= 0 ? "positive-soft" : "warning-soft"}"><strong>${diff >= 0 ? "+" : ""}${money(diff)}</strong><span>${period === "all" ? "Toplam net etki." : `${label} net fark.`}</span></div>
     </section>
     <section class="card receipt-card" id="receiptCard"><div class="receipt-header receipt-header-stacked"><strong>KASAM FİŞİ</strong><span>${new Date().toLocaleDateString("tr-TR")}</span></div>${reportRows(currentEntries)}${projectBreakdownRows(currentEntries)}${exchangeReceiptLines(currentEntries)}<div class="receipt-line total"><span>Net</span><strong>${money(totals.actual)}</strong></div><p class="receipt-watermark">kasam.app</p></section>
@@ -1293,7 +1293,7 @@ async function shareReceipt() {
   const entries = selectReportEntries(personalLedgerEntries().filter((entry) => entry.status === "done" && entryConfirmed(entry)), period);
   const totals = calculateTotals(entries);
   const label = period === "day" ? "Bugün" : period === "week" ? "Bu hafta" : period === "month" ? "Bu ay" : "Genel";
-  const text = `KASAM FİŞİ\n${label}\nGiren: ${money(totals.income)}\nÇıkan: ${money(totals.expense)}\nNet: ${money(totals.actual)}\nHareket: ${entries.length}`;
+  const text = `KASAM FİŞİ\n${label}\nGelir: ${money(totals.income)}\nGider: ${money(totals.expense)}\nNet: ${money(totals.actual)}\nHareket: ${entries.length}`;
   try {
     if (navigator.share) await navigator.share({ title: "Kasam Fişi", text });
     else {

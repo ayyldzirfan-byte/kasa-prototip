@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kasam Simulator</title>
+  <style>
+    :root {
+      --color-bg: #11110f;
+      --color-panel: #1d1d1a;
+      --color-panel-2: #292925;
+      --color-text: #f4f1eb;
+      --color-muted: #a8a59e;
+      --color-border: #3e3e38;
+      --color-success: #2d6a4f;
+      --color-error: #c0392b;
+      --color-warning: #e8c547;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-base: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-base);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(320px, 30%) 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      border-right: 1px solid var(--color-border);
+      background: var(--color-panel);
+      padding: var(--space-5);
+      overflow: auto;
+    }
+
+    main {
+      padding: var(--space-4);
+      overflow: hidden;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 var(--space-3);
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    h2 {
+      font-size: 16px;
+      margin-top: var(--space-5);
+    }
+
+    label {
+      display: grid;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+      color: var(--color-muted);
+      font-size: 13px;
+    }
+
+    input, select, button {
+      min-height: 40px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-panel-2);
+      color: var(--color-text);
+      font: inherit;
+      padding: 0 var(--space-3);
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: var(--color-warning);
+      color: var(--color-bg);
+      border-color: var(--color-warning);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2);
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .buttons button.active {
+      background: var(--color-warning);
+      color: var(--color-bg);
+    }
+
+    .frames {
+      display: grid;
+      grid-template-columns: repeat(var(--frame-columns, 2), minmax(240px, 1fr));
+      gap: var(--space-4);
+      height: calc(100vh - 32px);
+    }
+
+    .frame-card {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--color-panel);
+    }
+
+    .frame-meta {
+      display: grid;
+      gap: 4px;
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      font-size: 12px;
+      color: var(--color-muted);
+    }
+
+    .frame-meta strong {
+      color: var(--color-text);
+      font-size: 14px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: var(--color-bg);
+    }
+
+    .log {
+      height: 220px;
+      overflow: auto;
+      padding: var(--space-3);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+    }
+
+    .ok { color: #7ddf9b; }
+    .fail { color: #ff8a80; }
+    .warn { color: #ffd76a; }
+    .muted { color: var(--color-muted); }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        height: 80vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <h1>Kasam Simulator</h1>
+      <p class="muted">Çok kullanıcı, bildirim ve ortak kasa akışını yan yana test eder.</p>
+
+      <h2>Simülasyon Ayarları</h2>
+      <label>
+        Senaryo
+        <select id="scenario">
+          <option value="1">1 — Yılmaz Ailesi</option>
+          <option value="2">2 — Kerem & Deniz</option>
+          <option value="3">3 — Nişantaşı Evi</option>
+          <option value="4">4 — Şahin Yuvası</option>
+          <option value="5">5 — Kara Ailesi</option>
+          <option value="6">6 — Tatil Kumbarası</option>
+          <option value="7">7 — PlayStation Kumbarası</option>
+          <option value="8">8 — Yeni Araç</option>
+        </select>
+      </label>
+      <label>
+        Uygulama URL
+        <input id="baseUrl" value="">
+      </label>
+      <div class="buttons" id="userCountButtons">
+        <button type="button" data-count="2">2 kullanıcı</button>
+        <button type="button" data-count="3">3 kullanıcı</button>
+        <button type="button" data-count="4" class="active">4 kullanıcı</button>
+      </div>
+      <button class="primary" id="start" type="button">Simülasyonu Başlat</button>
+
+      <h2>Hızlı Aksiyon</h2>
+      <div class="row">
+        <label>
+          Kullanıcı
+          <select id="actor">
+            <option value="1">Kullanıcı 1</option>
+            <option value="2">Kullanıcı 2</option>
+            <option value="3">Kullanıcı 3</option>
+            <option value="4">Kullanıcı 4</option>
+          </select>
+        </label>
+        <label>
+          Tip
+          <select id="type">
+            <option value="expense">Gider</option>
+            <option value="income">Gelir</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label>
+          Tutar
+          <input id="amount" type="number" min="1" value="5000">
+        </label>
+        <label>
+          Mod
+          <select id="mode">
+            <option value="open">Açık</option>
+            <option value="surprise">Sürpriz</option>
+            <option value="silent">Sessiz</option>
+          </select>
+        </label>
+      </div>
+      <label>
+        Başlık
+        <input id="heading" value="Market">
+      </label>
+      <button id="send" type="button">Gönder</button>
+
+      <h2>Otomatik Testler</h2>
+      <div class="buttons">
+        <button id="gameTest" type="button">Tahmin Oyunu Başlat</button>
+        <button id="sharedTest" type="button">Ortak Kasa Testi</button>
+        <button id="autoPlay" type="button">Senaryoyu Otomatik Oynat</button>
+      </div>
+
+      <h2>Log</h2>
+      <div class="buttons">
+        <button id="clearLog" type="button">Log'u temizle</button>
+        <button id="downloadLog" type="button">Log'u indir</button>
+        <button id="report" type="button">Rapor oluştur</button>
+      </div>
+      <div class="log" id="log"></div>
+    </aside>
+
+    <main>
+      <div class="frames" id="frames"></div>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      userCount: 4,
+      frames: [],
+      logs: [],
+      lastSnapshot: null,
+      requestSeq: 0,
+      startedAt: Date.now(),
+    };
+
+    const els = {
+      scenario: document.getElementById("scenario"),
+      baseUrl: document.getElementById("baseUrl"),
+      userCountButtons: document.getElementById("userCountButtons"),
+      actor: document.getElementById("actor"),
+      type: document.getElementById("type"),
+      amount: document.getElementById("amount"),
+      mode: document.getElementById("mode"),
+      heading: document.getElementById("heading"),
+      start: document.getElementById("start"),
+      send: document.getElementById("send"),
+      frames: document.getElementById("frames"),
+      log: document.getElementById("log"),
+      gameTest: document.getElementById("gameTest"),
+      sharedTest: document.getElementById("sharedTest"),
+      autoPlay: document.getElementById("autoPlay"),
+      clearLog: document.getElementById("clearLog"),
+      downloadLog: document.getElementById("downloadLog"),
+      report: document.getElementById("report"),
+    };
+
+    els.baseUrl.value = new URLSearchParams(location.search).get("base")
+      || (location.protocol.startsWith("http") ? `${location.origin}/index.html` : "https://kasa-prototip.vercel.app/index.html");
+
+    function now() {
+      return new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    }
+
+    function log(message, level = "muted") {
+      const line = `[${now()}] ${message}`;
+      state.logs.push(line);
+      const item = document.createElement("div");
+      item.className = level;
+      item.textContent = line;
+      els.log.appendChild(item);
+      els.log.scrollTop = els.log.scrollHeight;
+    }
+
+    function appUrl(simUser) {
+      const url = new URL(els.baseUrl.value || "https://kasa-prototip.vercel.app/index.html");
+      url.searchParams.set("testScenario", els.scenario.value);
+      url.searchParams.set("simUser", String(simUser));
+      url.searchParams.set("simTs", String(Date.now()));
+      return url.toString();
+    }
+
+    function startSimulation() {
+      els.frames.style.setProperty("--frame-columns", state.userCount > 2 ? 2 : state.userCount);
+      els.frames.innerHTML = "";
+      state.frames = [];
+      state.lastSnapshot = null;
+      for (let i = 1; i <= state.userCount; i += 1) {
+        const card = document.createElement("section");
+        card.className = "frame-card";
+        card.innerHTML = `
+          <div class="frame-meta" id="meta-${i}">
+            <strong>Kullanıcı ${i}</strong>
+            <span>Yükleniyor...</span>
+          </div>
+          <iframe title="Kasam kullanıcı ${i}" src="${appUrl(i)}"></iframe>
+        `;
+        els.frames.appendChild(card);
+        state.frames.push({ index: i, iframe: card.querySelector("iframe"), meta: card.querySelector(`#meta-${i}`), summary: null });
+      }
+      log(`Senaryo ${els.scenario.value} başlatıldı, kullanıcı sayısı: ${state.userCount}`, "ok");
+      setTimeout(pollSummaries, 2500);
+    }
+
+    function postToFrame(index, action, payload = {}) {
+      const target = state.frames.find((frame) => frame.index === Number(index));
+      if (!target) return;
+      const requestId = `req-${++state.requestSeq}`;
+      target.iframe.contentWindow.postMessage({
+        source: "kasam-simulator",
+        selector: els.scenario.value,
+        action,
+        requestId,
+        payload,
+      }, "*");
+      log(`Kullanıcı ${index} → ${action}`, "muted");
+    }
+
+    function broadcastHydrate(snapshot) {
+      if (!snapshot) return;
+      state.frames.forEach((frame) => {
+        frame.iframe.contentWindow.postMessage({
+          source: "kasam-simulator",
+          action: "hydrate-state",
+          requestId: `hydrate-${++state.requestSeq}`,
+          stateSnapshot: snapshot,
+          simUser: frame.index,
+        }, "*");
+      });
+      log("State tüm iframe'lere yayıldı", "ok");
+      setTimeout(pollSummaries, 700);
+    }
+
+    function pollSummaries() {
+      state.frames.forEach((frame) => postToFrame(frame.index, "get-summary"));
+    }
+
+    function updateMeta(frame, summary) {
+      frame.summary = summary;
+      frame.meta.innerHTML = `
+        <strong>${summary.userName || `Kullanıcı ${frame.index}`}</strong>
+        <span>${summary.userEmail || ""}</span>
+        <span>${summary.projectName || ""} · hareket: ${summary.entryCount || 0} · bildirim: ${summary.unread || 0}</span>
+        <span>Kasa net: ${Math.round(summary.net || 0).toLocaleString("tr-TR")} TL</span>
+        <span>Kişisel pay: ${Math.round(summary.personalNet || 0).toLocaleString("tr-TR")} TL</span>
+      `;
+    }
+
+    function sendQuickAction(modeOverride) {
+      const actor = Number(els.actor.value || 1);
+      postToFrame(actor, "add-entry", {
+        simUser: actor,
+        type: els.type.value,
+        amount: Number(els.amount.value || 0),
+        heading: els.heading.value || "Test",
+        title: els.heading.value || "Test",
+        mode: modeOverride || els.mode.value,
+      });
+    }
+
+    window.addEventListener("message", (event) => {
+      const message = event.data || {};
+      if (message.source !== "kasam-app") return;
+      if (!message.ok) {
+        log(`${message.action} FAIL — ${message.error || "hata"}`, "fail");
+        return;
+      }
+      const result = message.result || {};
+      if (result.summary) {
+        const frame = state.frames.find((item) => item.index === Number(message.simUser));
+        if (frame) updateMeta(frame, result.summary);
+      }
+      if (result.stateSnapshot) {
+        state.lastSnapshot = result.stateSnapshot;
+        broadcastHydrate(result.stateSnapshot);
+      }
+      log(`${message.action} PASS`, "ok");
+    });
+
+    els.userCountButtons.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-count]");
+      if (!button) return;
+      state.userCount = Number(button.dataset.count);
+      els.userCountButtons.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item === button));
+    });
+
+    els.start.addEventListener("click", startSimulation);
+    els.send.addEventListener("click", () => sendQuickAction());
+    els.gameTest.addEventListener("click", () => {
+      els.type.value = "expense";
+      els.mode.value = "surprise";
+      els.amount.value = "1847";
+      els.heading.value = "Market";
+      sendQuickAction("surprise");
+      log("Tahmin oyunu testi: sürpriz hareket gönderildi", "warn");
+    });
+    els.sharedTest.addEventListener("click", () => {
+      els.type.value = "expense";
+      els.mode.value = "open";
+      els.amount.value = "5000";
+      els.heading.value = "Ortak test";
+      sendQuickAction("open");
+      setTimeout(pollSummaries, 1500);
+      log("Ortak kasa testi: 5.000 TL açık hareket gönderildi", "warn");
+    });
+    els.autoPlay.addEventListener("click", () => {
+      const actions = [
+        { user: 1, type: "income", amount: 12000, heading: "Maaş", mode: "open" },
+        { user: 2, type: "expense", amount: 1600, heading: "Market", mode: "open" },
+        { user: 1, type: "expense", amount: 900, heading: "Fatura", mode: "surprise" },
+      ];
+      actions.forEach((action, index) => {
+        setTimeout(() => {
+          els.actor.value = String(Math.min(action.user, state.userCount));
+          els.type.value = action.type;
+          els.amount.value = String(action.amount);
+          els.heading.value = action.heading;
+          els.mode.value = action.mode;
+          sendQuickAction(action.mode);
+        }, index * 1800);
+      });
+      log("Otomatik oynatma başladı", "warn");
+    });
+    els.clearLog.addEventListener("click", () => {
+      state.logs = [];
+      els.log.textContent = "";
+    });
+    els.downloadLog.addEventListener("click", () => {
+      const blob = new Blob([state.logs.join("\n")], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `kasam-simulator-log-${Date.now()}.txt`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+    els.report.addEventListener("click", () => {
+      const summaries = state.frames.map((frame) => frame.summary).filter(Boolean);
+      const report = [
+        "# Kasam Simulator Raporu",
+        `Tarih: ${new Date().toLocaleString("tr-TR")}`,
+        `Senaryo: ${els.scenario.value}`,
+        `Kullanıcı sayısı: ${state.userCount}`,
+        "",
+        ...summaries.map((summary) => `- ${summary.userName}: hareket ${summary.entryCount}, bildirim ${summary.unread}, kasa net ${Math.round(summary.net).toLocaleString("tr-TR")} TL, kişisel pay ${Math.round(summary.personalNet || 0).toLocaleString("tr-TR")} TL`),
+        "",
+        "## Log",
+        ...state.logs,
+      ].join("\n");
+      const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `kasam-simulator-report-${Date.now()}.txt`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+      log("Rapor indirildi", "ok");
+    });
+
+    startSimulation();
+  </script>
+</body>
+</html>

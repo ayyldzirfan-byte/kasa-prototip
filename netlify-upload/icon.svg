@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Kasam">
+  <rect width="512" height="512" rx="112" fill="#1A1A18"/>
+  <path d="M154 116h76v112l110-112h94L314 238l126 158h-98l-82-104-30 31v73h-76V116Z" fill="#F4F1EB"/>
+  <rect x="96" y="374" width="320" height="34" rx="17" fill="#F4F1EB" opacity=".92"/>
+  <circle cx="390" cy="130" r="22" fill="#E8C547"/>
+</svg>
