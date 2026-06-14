@@ -1,4 +1,4 @@
-﻿const KASAM_CRITICAL_VERSION = "14.06.2026 20:35";
+﻿const KASAM_CRITICAL_VERSION = "14.06.2026 21:15";
 
 if (typeof KASAM_EMPTY === "object" && KASAM_EMPTY) {
   KASAM_EMPTY.notifications = "Sessizlik...";
@@ -711,7 +711,7 @@ if (typeof bindScreen === "function") {
       if (button.dataset.forgotBound) return;
       button.dataset.forgotBound = "1";
       button.addEventListener("click", async () => {
-        const email = document.querySelector("input[name='email'], #loginEmail")?.value || window.prompt("E-posta adresin");
+        const email = document.querySelector("input[name='loginEmail'], input[name='email'], #loginEmail")?.value || window.prompt("E-posta adresin");
         if (!email) return;
         try {
           await cloudDb().auth.resetPasswordForEmail(String(email).trim().toLowerCase(), { redirectTo: kasamCriticalPasswordRedirectUrl() });
@@ -823,4 +823,5 @@ document.addEventListener("DOMContentLoaded", () => {
   const stamp = document.querySelector(".update-stamp");
   if (stamp) stamp.textContent = `Güncellendi ${KASAM_CRITICAL_VERSION}`;
 });
+
 

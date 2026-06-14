@@ -23,6 +23,32 @@ function cloudIsPasswordRecoveryUrl() {
   return query.get("authAction") === "reset-password" || query.get("type") === "recovery" || hash.get("type") === "recovery";
 }
 
+function cloudHasTestScenarioUrl() {
+  try {
+    return new URLSearchParams(location.search || "").has("testScenario");
+  } catch {
+    return false;
+  }
+}
+
+function cloudClearLocalAuthState() {
+  if (cloudHasTestScenarioUrl()) return;
+  state.signedInUserId = "";
+  state.activeUserId = "";
+  state.pendingLoginUserId = "";
+  state.pendingLoginEmail = "";
+  state.testScenarioMode = false;
+  state.testScenarioSelector = "";
+  state.testScenarioActiveEmail = "";
+}
+
+function cloudEnterPasswordResetMode(message = "Mail linki doğrulandı. Yeni şifreni oluştur.") {
+  cloudClearLocalAuthState();
+  state.authMode = "reset-password";
+  state.activeView = "home";
+  setCloudStatus(message);
+}
+
 function cloudRedirectLegacyHost() {
   if (typeof location === "undefined" || !String(location.protocol || "").startsWith("http")) return;
   const host = String(location.hostname || "").toLowerCase();
@@ -86,9 +112,7 @@ async function initCloudSession() {
       if (!session?.user) return;
       applyCloudUser(session.user).then(() => {
         if (_event === "PASSWORD_RECOVERY" || cloudIsPasswordRecoveryUrl()) {
-          state.authMode = "reset-password";
-          state.activeView = "home";
-          state.cloudStatus = "Mail linki doğrulandı. Yeni şifreni oluştur.";
+          cloudEnterPasswordResetMode();
         }
         saveState();
         render();
@@ -97,7 +121,14 @@ async function initCloudSession() {
     cloudAuthSubscribed = true;
   }
 
-  const { data, error } = await client.auth.getSession();
+  let { data, error } = await client.auth.getSession();
+  const query = new URLSearchParams(location.search || "");
+  const code = query.get("code");
+  if (!data.session?.user && code && cloudIsPasswordRecoveryUrl() && typeof client.auth.exchangeCodeForSession === "function") {
+    const exchanged = await client.auth.exchangeCodeForSession(code);
+    if (exchanged.error) error = exchanged.error;
+    else data = exchanged.data || data;
+  }
   if (error) {
     setCloudStatus(friendlyCloudError(error));
     return;
@@ -106,9 +137,7 @@ async function initCloudSession() {
   if (data.session?.user) {
     await applyCloudUser(data.session.user);
     if (cloudIsPasswordRecoveryUrl()) {
-      state.authMode = "reset-password";
-      state.activeView = "home";
-      setCloudStatus("Mail linki doğrulandı. Yeni şifreni oluştur.");
+      cloudEnterPasswordResetMode();
       saveState();
       return;
     }
@@ -116,6 +145,8 @@ async function initCloudSession() {
     await ensureCloudStarterProject();
     setCloudStatus("Bulut bağlı");
   } else {
+    cloudClearLocalAuthState();
+    state.authMode = "login";
     setCloudStatus("Bulut hazır");
   }
 }

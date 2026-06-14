@@ -39,6 +39,7 @@ const tests = [
   ["RESET 4 - Supabase PASSWORD_RECOVERY reset modunu acar", () => {
     assert.ok(appCloud.includes('PASSWORD_RECOVERY'));
     assert.ok(appCloud.includes('state.authMode = "reset-password"'));
+    assert.ok(appCloud.includes("cloudEnterPasswordResetMode()"));
   }],
   ["RESET 5 - reset-password state normalize tarafinda korunur", () => {
     assert.ok(appCore.includes('["signup", "reset-password"].includes(source.authMode)'));
@@ -49,9 +50,24 @@ const tests = [
     assert.ok(critical.includes('auth.updateUser({ password })'));
     assert.ok(critical.includes('Şifre güncellendi.'));
   }],
+  ["RESET 6b - Sifremi unuttum login e-posta alanini okur", () => {
+    assert.ok(critical.includes("input[name='loginEmail']"));
+    assert.ok(critical.includes("resetPasswordForEmail"));
+  }],
   ["RESET 7 - Davet linki eski Netlify fallback kullanmaz", () => {
     assert.ok(appModel.includes("window.KASA_CLOUD_CONFIG?.appUrl"));
     assert.ok(!appModel.includes("kasa-prototip.netlify.app"));
+  }],
+  ["RESET 8 - Reset ve canli mod eski test kullanicisini temizler", () => {
+    assert.ok(appCloud.includes("function cloudClearLocalAuthState()"));
+    assert.ok(appCloud.includes('state.testScenarioMode = false'));
+    assert.ok(appCloud.includes('state.signedInUserId = ""'));
+    assert.ok(appCloud.includes('state.activeUserId = ""'));
+    assert.ok(appCloud.includes("cloudClearLocalAuthState();"));
+  }],
+  ["RESET 9 - PKCE reset kodu session'a cevrilir", () => {
+    assert.ok(appCloud.includes("exchangeCodeForSession"));
+    assert.ok(appCloud.includes("code && cloudIsPasswordRecoveryUrl()"));
   }],
 ];
 
