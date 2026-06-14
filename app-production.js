@@ -1,6 +1,6 @@
 /* Kasam production layer: brand, security, offline sync, onboarding, statements, insights and KVKK. */
 
-var KASAM_UPDATED_AT = "13.06.2026 20:12";
+var KASAM_UPDATED_AT = "14.06.2026 15:05";
 var KASAM_BRAND = {
   name: "Kasam",
   slogan: "Paranın nereye gittiğini bil.",
@@ -1072,6 +1072,8 @@ async function handleEntrySubmit(form) {
     note: "",
     photoName: media.photoName,
     photoData: media.photoData,
+    mediaEmoji: media.emoji || "",
+    gif: media.gif || "",
     ocrRawText: null,
     ocrParsedAmount: null,
     installmentGroupId,

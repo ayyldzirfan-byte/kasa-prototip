@@ -412,3 +412,181 @@ document.addEventListener("click", (event) => {
     document.querySelector(".image-modal-overlay")?.remove();
   }
 });
+
+var kasamEntrySubmitBusy = false;
+
+function kasamEntrySubmitDuplicate(form) {
+  const data = new FormData(form);
+  const enteredAmount = parseAmount(data.get("amount"));
+  const currency = String(data.get("currency") || "TRY").toUpperCase();
+  const exchangeRate = currency === "TRY" ? 1 : parseAmount(data.get("exchangeRate"));
+  const amount = enteredAmount * exchangeRate;
+  const headingName = kasamCleanText(data.get("headingName"));
+  const projectId = String(data.get("projectId") || state.activeProjectId || "");
+  const userId = currentUser()?.id || String(data.get("userId") || "");
+  const type = draft.type === "income" ? "income" : "expense";
+  const date = String(data.get("date") || todayKey()).slice(0, 10);
+  if (!enteredAmount || !headingName || !projectId || !userId) return null;
+  const now = Date.now();
+  return (state.entries || []).find((entry) => {
+    const created = Date.parse(entry.createdAt || entry.updatedAt || "");
+    const recent = Number.isFinite(created) && now - created < 20000;
+    return recent
+      && entry.projectId === projectId
+      && entry.userId === userId
+      && entry.type === type
+      && String(entry.date || "").slice(0, 10) === date
+      && Math.abs(Number(entry.amount || 0) - amount) < 0.01
+      && normalize(entryTitle(entry)) === normalize(headingName);
+  }) || null;
+}
+
+var kasamUiFinalBaseHandleEntrySubmit = handleEntrySubmit;
+handleEntrySubmit = async function handleEntrySubmitGuarded(form) {
+  if (kasamEntrySubmitBusy) {
+    kasamToast("Kaydediliyor.");
+    return null;
+  }
+  const duplicate = kasamEntrySubmitDuplicate(form);
+  if (duplicate) {
+    kasamToast("Bu hareket zaten kaydedildi.");
+    state.activeView = "home";
+    saveState();
+    render();
+    return duplicate;
+  }
+  const submitButton = form?.querySelector("[data-action='save-entry'], button[type='submit']");
+  const oldText = submitButton?.textContent || "";
+  kasamEntrySubmitBusy = true;
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = "Kaydediliyor...";
+  }
+  try {
+    return await kasamUiFinalBaseHandleEntrySubmit(form);
+  } finally {
+    kasamEntrySubmitBusy = false;
+    if (submitButton?.isConnected) {
+      submitButton.disabled = false;
+      submitButton.textContent = oldText || "Kaydet";
+    }
+  }
+};
+
+function kasamNotificationForEntry(entry) {
+  return (state.notifications || []).find((notification) => notification.entryId === entry?.id) || null;
+}
+
+function kasamEntryDisplayMedia(entry) {
+  const notification = kasamNotificationForEntry(entry);
+  return {
+    photoData: notification?.photoData || entry?.photoData || "",
+    photoName: notification?.photoName || entry?.photoName || "",
+    gif: notification?.gif || entry?.gif || "",
+    emoji: notification?.emoji || entry?.mediaEmoji || entry?.emoji || "",
+  };
+}
+
+function kasamHasDisplayMedia(media) {
+  return Boolean(media?.photoData || media?.gif || media?.emoji);
+}
+
+function kasamMovementThumb(media, fallback) {
+  if (media?.photoData || media?.gif) return `<span class="movement-media-thumb">${mediaPreviewHtml(media, fallback)}</span>`;
+  return `<span class="emoji-dot system-icon-dot">${media?.emoji ? kasamSafe(media.emoji, 24) : fallback}</span>`;
+}
+
+function kasamShowMovementMedia(media, title = "Hareket", meta = "") {
+  if (!kasamHasDisplayMedia(media)) return kasamToast("Bu harekette medya yok.");
+  document.querySelector(".movement-media-overlay")?.remove();
+  const overlay = document.createElement("div");
+  overlay.className = "movement-media-overlay";
+  overlay.innerHTML = `
+    <button class="movement-media-close" data-action="close-movement-media" type="button" aria-label="Kapat">${kasamIcon("x", "icon-neutral")}</button>
+    <div class="movement-media-card">
+      <p class="eyebrow">${kasamSafe(meta || "Kasam")}</p>
+      <h2>${kasamSafe(title)}</h2>
+      <div class="movement-media-large">${mediaPreviewHtml(media, "✓")}</div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+entrySummaryRow = function entrySummaryRowFinal(entry) {
+  const isIncome = entry.type === "income" || entry.type === "receivable";
+  const locked = entry.lockedNotificationId && !entryConfirmed(entry);
+  const project = kasamProjectForEntry(entry);
+  const media = locked ? null : kasamEntryDisplayMedia(entry);
+  const thumb = locked ? `<span class="emoji-dot system-icon-dot">${kasamMovementIcon(entry)}</span>` : kasamMovementThumb(media, kasamMovementIcon(entry));
+  return `
+    <div class="expense-row movement-card-row" data-action="open-entry-media" data-id="${entry.id}" role="button" tabindex="0">
+      ${thumb}
+      <div class="expense-main"><p class="expense-title">${locked ? "?? Hareket" : entryTitle(entry)}</p><p class="expense-meta">${entryProjectName(entry)} · ${formatShortDate(entry.date)}${entry.status === "pending" ? " · planlandı" : ""}</p>${locked ? `<p class="expense-note">Detaylar oyun bitince açılır.</p>` : `<p class="expense-note">${kasamEntrySplitText(entry, true)}</p>`}</div>
+      <strong class="expense-price ${isIncome ? "price-positive" : "price-negative"}">${locked ? "?? TL" : `${isIncome ? "+" : "-"}${money(kasamOriginalAmount(entry))}`}</strong>
+      <button class="entry-project-arrow" data-action="entry-project-open" data-id="${project?.id || entry.projectId}" type="button" aria-label="Kasaya git">${kasamIcon("chevron-right", "icon-neutral")}</button>
+    </div>
+  `;
+};
+
+var kasamUiFinalBaseNotificationRow = notificationRow;
+notificationRow = function notificationRowFinal(notification) {
+  if (notification?.notificationType === "entry" && notification.mode !== "surprise") {
+    const actor = state.users.find((user) => user.id === notification.actorId);
+    const typeLabel = notification.actualType === "income" ? "gelir" : notification.actualType === "expense" ? "gider" : "hareket";
+    const media = notificationMedia(notification);
+    return `
+      <div class="notification-card" data-action="open-notification-media" data-id="${notification.id}" role="button" tabindex="0">
+        <div class="notification-hero">${mediaPreviewHtml(media)}</div>
+        <div class="expense-main">
+          <p class="expense-title">${projectUserLabel(actor)} ${typeLabel} ekledi</p>
+          <p class="expense-meta">${notification.title} · ${money(notification.amount)} · ${relativeDate(notification.createdAt)}</p>
+        </div>
+      </div>
+    `;
+  }
+  return kasamUiFinalBaseNotificationRow(notification);
+};
+
+var kasamUiFinalBaseBindScreen = bindScreen;
+bindScreen = function bindScreenMediaFinal() {
+  kasamUiFinalBaseBindScreen();
+  app.querySelectorAll("[data-action='open-entry-media']").forEach((row) => {
+    if (row.dataset.entryMediaBound) return;
+    row.dataset.entryMediaBound = "1";
+    const open = (event) => {
+      if (event?.target?.closest("[data-action='entry-project-open'], .reaction-button, button, a, input, select, textarea")) return;
+      const entry = (state.entries || []).find((item) => item.id === row.dataset.id);
+      if (!entry) return;
+      if (entry.lockedNotificationId && !entryConfirmed(entry)) return kasamToast("Detaylar oyun bitince açılır.");
+      kasamShowMovementMedia(kasamEntryDisplayMedia(entry), entryTitle(entry), `${entryProjectName(entry)} · ${money(kasamOriginalAmount(entry))}`);
+    };
+    row.addEventListener("click", open);
+    row.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open(event);
+      }
+    });
+  });
+  app.querySelectorAll("[data-action='open-notification-media']").forEach((row) => {
+    if (row.dataset.notificationMediaBound) return;
+    row.dataset.notificationMediaBound = "1";
+    const open = () => {
+      const notification = (state.notifications || []).find((item) => item.id === row.dataset.id);
+      if (notification) kasamShowMovementMedia(notificationMedia(notification), notification.title || "Hareket", money(notification.amount || 0));
+    };
+    row.addEventListener("click", open);
+    row.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open();
+      }
+    });
+  });
+};
+
+document.addEventListener("click", (event) => {
+  if (event.target.closest("[data-action='close-movement-media']") || event.target.classList?.contains("movement-media-overlay")) {
+    document.querySelector(".movement-media-overlay")?.remove();
+  }
+});
