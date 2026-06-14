@@ -8,6 +8,6 @@
     "test": "node test-kasa-e2e.cjs && node test-game-v2.cjs && node test-ui-fixes.cjs && node test-simulator.cjs",
     "test:browser": "node test-testscenario-auth-bypass.cjs",
     "prebuild": "node kasam-lint.cjs",
-    "build": "node test-kasa-e2e.cjs"
+    "build": "node test-kasa-e2e.cjs && node build-public.cjs"
   }
 }
