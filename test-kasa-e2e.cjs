@@ -16,6 +16,7 @@ const files = [
   "app-sounds.js",
   "app-game-v2.js",
   "app-ui-fixes.js",
+  "app-critical-fixes.js",
 ];
 
 const sandbox = {
@@ -580,6 +581,55 @@ const tests = [
     const html = appEval(`entrySummaryRow(state.entries.find((entry) => entry.id === "e_rent"));`);
     assert.ok(html.includes(`data-action="entry-project-open"`));
     assert.ok(html.includes(`data-id="p_shared"`));
+  }],
+  ["GRUP 8.15 - Ekleyen kullanici hareketi silebilir", () => {
+    seedBaseState();
+    appEval(`
+      state.notifications.push({ id: "n_delete", entryId: "e_market", actorId: "u_owner", recipients: ["u_partner"], mode: "open", createdAt: kasamNow() });
+      state.reactions.push({ id: "r_delete", entryId: "e_market", userId: "u_partner", emoji: "🔥", createdAt: kasamNow() });
+      kasamDeleteEntryLocally("e_market");
+    `);
+    assert.equal(appEval(`state.entries.some((entry) => entry.id === "e_market");`), false);
+    assert.equal(appEval(`state.notifications.some((item) => item.entryId === "e_market");`), false);
+    assert.equal(appEval(`state.reactions.some((item) => item.entryId === "e_market");`), false);
+    assert.equal(Math.round(ownerNet()), 36000);
+  }],
+  ["GRUP 8.16 - Baska kullanicinin hareketi silinemez", () => {
+    seedBaseState();
+    appEval(`
+      state.entries.push({
+        id: "e_partner_private",
+        projectId: "p_shared",
+        type: "expense",
+        amount: 500,
+        enteredAmount: 500,
+        currency: "TRY",
+        exchangeRate: 1,
+        headingId: "h_market",
+        userId: "u_partner",
+        paidById: "u_partner",
+        splitWith: ["u_partner"],
+        splitRatio: [1],
+        date: "2026-06-10",
+        status: "done",
+        lockedNotificationId: null,
+        createdAt: kasamNow(),
+        updatedAt: kasamNow()
+      });
+    `);
+    assert.throws(() => appEval(`kasamDeleteEntryLocally("e_partner_private");`), /sadece ekleyen/);
+    assert.equal(appEval(`state.entries.some((entry) => entry.id === "e_partner_private");`), true);
+  }],
+  ["GRUP 8.17 - Silme butonu sadece kendi hareketinde gorunur", () => {
+    seedBaseState();
+    const ownHtml = appEval(`entrySummaryRow(state.entries.find((entry) => entry.id === "e_market"));`);
+    assert.ok(ownHtml.includes(`data-action="delete-entry"`));
+    const otherHtml = appEval(`
+      state.signedInUserId = "u_partner";
+      state.activeUserId = "u_partner";
+      entrySummaryRow(state.entries.find((entry) => entry.id === "e_market"));
+    `);
+    assert.equal(otherHtml.includes(`data-action="delete-entry"`), false);
   }],
 ];
 

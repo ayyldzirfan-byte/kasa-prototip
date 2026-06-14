@@ -8,6 +8,31 @@ function cloudConfig() {
   return window.KASA_CLOUD_CONFIG || {};
 }
 
+function cloudCanonicalAppUrl() {
+  const configured = String(cloudConfig().appUrl || "https://kasa-prototip.vercel.app").trim();
+  return (configured || "https://kasa-prototip.vercel.app").replace(/\/+$/, "");
+}
+
+function cloudPasswordResetRedirectUrl() {
+  return `${cloudCanonicalAppUrl()}/index.html?authAction=reset-password`;
+}
+
+function cloudIsPasswordRecoveryUrl() {
+  const query = new URLSearchParams(location.search || "");
+  const hash = new URLSearchParams(String(location.hash || "").replace(/^#/, ""));
+  return query.get("authAction") === "reset-password" || query.get("type") === "recovery" || hash.get("type") === "recovery";
+}
+
+function cloudRedirectLegacyHost() {
+  if (typeof location === "undefined" || !String(location.protocol || "").startsWith("http")) return;
+  const host = String(location.hostname || "").toLowerCase();
+  if (!host.endsWith("netlify.app")) return;
+  const target = new URL(`${location.pathname || "/index.html"}${location.search || ""}${location.hash || ""}`, cloudCanonicalAppUrl());
+  location.replace(target.toString());
+}
+
+cloudRedirectLegacyHost();
+
 function isCloudReady() {
   const config = cloudConfig();
   return Boolean(window.supabase?.createClient && config.supabaseUrl && config.supabaseAnonKey);
@@ -60,6 +85,11 @@ async function initCloudSession() {
     client.auth.onAuthStateChange((_event, session) => {
       if (!session?.user) return;
       applyCloudUser(session.user).then(() => {
+        if (_event === "PASSWORD_RECOVERY" || cloudIsPasswordRecoveryUrl()) {
+          state.authMode = "reset-password";
+          state.activeView = "home";
+          state.cloudStatus = "Mail linki doğrulandı. Yeni şifreni oluştur.";
+        }
         saveState();
         render();
       });
@@ -75,6 +105,13 @@ async function initCloudSession() {
 
   if (data.session?.user) {
     await applyCloudUser(data.session.user);
+    if (cloudIsPasswordRecoveryUrl()) {
+      state.authMode = "reset-password";
+      state.activeView = "home";
+      setCloudStatus("Mail linki doğrulandı. Yeni şifreni oluştur.");
+      saveState();
+      return;
+    }
     await loadCloudData();
     await ensureCloudStarterProject();
     setCloudStatus("Bulut bağlı");
@@ -541,4 +578,18 @@ async function cloudAddMemberByEmail(email) {
   await loadCloudData();
   saveState();
   return data;
+}
+
+async function cloudDeleteEntry(entryId) {
+  const client = cloudDb();
+  if (!client || !entryId) return;
+
+  const notificationResult = await client.from("kasa_notifications").delete().eq("entry_id", entryId);
+  if (notificationResult.error) logError?.(notificationResult.error, "cloud-delete-entry-notifications");
+
+  const reactionResult = await client.from("kasa_reactions").delete().eq("entry_id", entryId);
+  if (reactionResult.error) logError?.(reactionResult.error, "cloud-delete-entry-reactions");
+
+  const { error } = await client.from("kasa_entries").delete().eq("id", entryId);
+  if (error) throw error;
 }

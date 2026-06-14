@@ -5,7 +5,7 @@
   "scripts": {
     "lint:rules": "node kasam-lint.cjs",
     "pretest": "node kasam-lint.cjs",
-    "test": "node test-kasa-e2e.cjs && node test-game-v2.cjs && node test-ui-fixes.cjs && node test-simulator.cjs",
+    "test": "node test-kasa-e2e.cjs && node test-game-v2.cjs && node test-ui-fixes.cjs && node test-simulator.cjs && node test-password-reset.cjs",
     "test:browser": "node test-testscenario-auth-bypass.cjs",
     "prebuild": "node kasam-lint.cjs",
     "build": "node test-kasa-e2e.cjs && node build-public.cjs"

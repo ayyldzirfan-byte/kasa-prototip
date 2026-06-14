@@ -83,3 +83,11 @@ Tarih: 2026-06-14
 1. Production linkinde simulator üzerinden `Ortak Kasa Testi` ve `Tahmin Oyunu Başlat` çalıştırılarak cloud/realtime gecikmeleri gözlenmeli.
 2. Gerçek Supabase tablolarında `kasa_entries` ve `kasa_notifications` insert kayıtları iki farklı kullanıcıyla doğrulanmalı.
 3. Medya seçici ve bildirim oyunu iPhone üzerinde UX olarak tekrar incelenmeli.
+
+## Son G?ncelleme: Canonical Reset ve Hareket Silme
+- ?ifre s?f?rlama linki art?k canonical Vercel adresine gider: https://kasa-prototip.vercel.app/index.html?authAction=reset-password.
+- Supabase PASSWORD_RECOVERY event'i uygulama i?inde Yeni ?ifre olu?tur ekran?na y?nlenir.
+- Yeni ?ifre kaydedilince oturum kapat?l?r ve kullan?c? yeni ?ifreyle giri? ekran?na d?ner.
+- Davet linkleri eski Netlify fallback yerine cloud-config.js appUrl de?erini kullan?r.
+- Hareketi ekleyen kullan?c? kendi hareketini silebilir; ilgili bildirim ve tepki kay?tlar? da temizlenir.
+- Yeni test: test-password-reset.cjs.

@@ -230,3 +230,15 @@ Her görev sonunda şu kontrol yapılır:
    - `Kontrol: [otomatik veya manuel test]`
    - `Eklendi: [tarih] — [görev adı]`
 5. Görev sonucu raporunda yeni kural yoksa açıkça `Yeni kural: yok` yazılır.
+
+## KURAL-036: Hareket Silme Sahiplik Kontroll? Olur
+- Kural: Bir hareketi sadece hareketi ekleyen kullan?c? silebilir. Silme, ilgili bildirim ve tepki kay?tlar?n? da temizler.
+- Sebep: Hatal? veya yanl??l?kla ?oklu eklenen hareketler d?zeltilebilmeli, ancak ba?ka kullan?c?n?n kayd? izinsiz silinmemeli.
+- Kontrol: Silme butonu sadece entry.userId === activeUserId ise g?r?n?r; test-kasa-e2e.cjs silme ak???n? kontrol eder.
+- Eklendi: 2026-06-14 ? Hareket silme
+
+## KURAL-037: Auth Redirect Tek Canonical Uygulamaya Gider
+- Kural: ?ifre s?f?rlama, davet ve payla??m linkleri tek production adrese gider: https://kasa-prototip.vercel.app. Eski Netlify veya eski prototip hostu link ?retmez.
+- Sebep: ?ki farkl? prototip kullan?c?n?n eski s?r?me veya yanl?? profile d??mesine sebep olur.
+- Kontrol: cloud-config.js appUrl alan? kullan?l?r; test-password-reset.cjs reset redirect, Netlify y?nlendirme ve invite link fallback kontrol? yapar.
+- Eklendi: 2026-06-14 ? Canonical auth redirect

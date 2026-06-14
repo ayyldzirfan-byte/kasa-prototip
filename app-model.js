@@ -158,7 +158,8 @@ function normalizeCode(value) {
 }
 
 function inviteLink(project = activeProject()) {
-  const base = location.origin === "null" ? "https://kasa-prototip.netlify.app" : `${location.origin}${location.pathname}`;
+  const configured = window.KASA_CLOUD_CONFIG?.appUrl || "https://kasa-prototip.vercel.app";
+  const base = configured.replace(/\/+$/, "") + "/index.html";
   return `${base}?project=${encodeURIComponent(projectCode(project))}`;
 }
 

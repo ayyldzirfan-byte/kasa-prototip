@@ -1,7 +1,17 @@
-﻿const KASAM_CRITICAL_VERSION = "14.06.2026 19:05";
+﻿const KASAM_CRITICAL_VERSION = "14.06.2026 20:35";
 
 if (typeof KASAM_EMPTY === "object" && KASAM_EMPTY) {
   KASAM_EMPTY.notifications = "Sessizlik...";
+}
+
+function kasamCriticalPasswordRedirectUrl() {
+  if (typeof cloudPasswordResetRedirectUrl === "function") return cloudPasswordResetRedirectUrl();
+  const configured = String(window.KASA_CLOUD_CONFIG?.appUrl || "https://kasa-prototip.vercel.app").replace(/\/+$/, "");
+  return `${configured}/index.html?authAction=reset-password`;
+}
+
+function kasamCriticalIsPasswordResetMode() {
+  return state?.authMode === "reset-password" || (typeof cloudIsPasswordRecoveryUrl === "function" && cloudIsPasswordRecoveryUrl());
 }
 
 function kasamCriticalUserImpact(entry, userId = currentUser()?.id) {
@@ -134,6 +144,69 @@ function kasamCriticalMediaThumb(media, icon) {
   return `<span class="emoji-dot system-icon-dot">${media?.emoji ? kasamSafe(media.emoji, 24) : icon}</span>`;
 }
 
+function kasamCanDeleteEntry(entry, userId = currentUser()?.id) {
+  return Boolean(entry?.id && userId && entry.userId === userId);
+}
+
+function kasamEntryDeleteButton(entry) {
+  if (!kasamCanDeleteEntry(entry)) return "";
+  return `<button class="entry-delete-button" data-action="delete-entry" data-id="${entry.id}" type="button" aria-label="Hareketi sil">${kasamIcon("trash-2", "icon-expense")}</button>`;
+}
+
+function kasamDeleteEntryLocally(entryId) {
+  const entry = (state.entries || []).find((item) => item.id === entryId);
+  if (!entry) return null;
+  if (!kasamCanDeleteEntry(entry)) throw new Error("Bu hareketi sadece ekleyen silebilir.");
+  const notificationIds = (state.notifications || []).filter((item) => item.entryId === entryId).map((item) => item.id);
+  state.entries = (state.entries || []).filter((item) => item.id !== entryId);
+  state.notifications = (state.notifications || []).filter((item) => item.entryId !== entryId && item.id !== entry.lockedNotificationId);
+  state.reactions = (state.reactions || []).filter((item) => item.entryId !== entryId);
+  state.settlements = (state.settlements || []).filter((item) => item.entryId !== entryId);
+  if (notificationIds.length) {
+    state.entries.forEach((item) => {
+      if (notificationIds.includes(item.lockedNotificationId)) item.lockedNotificationId = "";
+    });
+  }
+  saveState();
+  return entry;
+}
+
+async function kasamDeleteEntry(entryId) {
+  const entry = (state.entries || []).find((item) => item.id === entryId);
+  if (!entry) {
+    kasamToast("Hareket bulunamadı.");
+    return false;
+  }
+  if (!kasamCanDeleteEntry(entry)) {
+    kasamToast("Bu hareketi sadece ekleyen silebilir.");
+    return false;
+  }
+  const ok = typeof window.confirm === "function" ? window.confirm("Bu hareket silinsin mi?") : true;
+  if (!ok) return false;
+  document.body.classList.add("is-deleting-entry");
+  document.body.insertAdjacentHTML("beforeend", `<div class="entry-saving-overlay" data-entry-delete-overlay><div>${kasamIcon("trash-2", "icon-expense")}<strong>Siliniyor</strong><p>Hareket kasadan kaldırılıyor.</p></div></div>`);
+  try {
+    if (typeof isCloudReady === "function" && isCloudReady() && typeof cloudDeleteEntry === "function") {
+      await cloudDeleteEntry(entryId);
+      kasamDeleteEntryLocally(entryId);
+      if (typeof kasamRefreshCloudData === "function") await kasamRefreshCloudData("entry-delete");
+      else if (typeof loadCloudData === "function") await loadCloudData();
+    } else {
+      kasamDeleteEntryLocally(entryId);
+    }
+    kasamToast("Silindi.");
+    render();
+    return true;
+  } catch (error) {
+    logError?.(error, "delete-entry");
+    kasamToast(friendlyCloudError?.(error) || "Hareket silinemedi.");
+    return false;
+  } finally {
+    document.body.classList.remove("is-deleting-entry");
+    document.querySelector("[data-entry-delete-overlay]")?.remove();
+  }
+}
+
 if (typeof entrySummaryRow === "function") {
   entrySummaryRow = function entrySummaryRowCritical(entry) {
     const isIncome = entry.type === "income" || entry.type === "receivable";
@@ -150,6 +223,7 @@ if (typeof entrySummaryRow === "function") {
         ${thumb}
         <div class="expense-main"><p class="expense-title">${title}</p><p class="expense-meta">${meta}</p>${note ? `<p class="expense-note">${note}</p>` : ""}</div>
         <strong class="expense-price ${impact >= 0 ? "price-positive" : "price-negative"}">${locked ? "?? TL" : kasamCriticalFxLabel(entry, impact)}</strong>
+        ${kasamEntryDeleteButton(entry)}
         <button class="entry-project-arrow" data-action="entry-project-open" data-id="${project?.id || entry.projectId}" type="button" aria-label="Kasaya git">${kasamIcon("chevron-right", "icon-neutral")}</button>
       </div>
     `;
@@ -173,6 +247,7 @@ function kasamCriticalProjectMovementRows(project) {
           <p class="expense-note">${splitText}</p>
         </div>
         <strong class="expense-price ${isIncome ? "price-positive" : "price-negative"}">${locked ? "?? TL" : `${isIncome ? "+" : "-"}${money(kasamOriginalAmount(entry))}`}</strong>
+        ${kasamEntryDeleteButton(entry)}
       </div>
     `;
   }).join("");
@@ -639,11 +714,70 @@ if (typeof bindScreen === "function") {
         const email = document.querySelector("input[name='email'], #loginEmail")?.value || window.prompt("E-posta adresin");
         if (!email) return;
         try {
-          await cloudDb().auth.resetPasswordForEmail(String(email).trim().toLowerCase(), { redirectTo: `${location.origin}${location.pathname}` });
+          await cloudDb().auth.resetPasswordForEmail(String(email).trim().toLowerCase(), { redirectTo: kasamCriticalPasswordRedirectUrl() });
           kasamToast("Şifre sıfırlama bağlantısı gönderildi.");
         } catch (error) {
           kasamToast(friendlyCloudError(error));
         }
+      });
+    });
+    const resetForm = document.querySelector("#passwordResetForm");
+    if (resetForm && !resetForm.dataset.resetBound) {
+      resetForm.dataset.resetBound = "1";
+      resetForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(resetForm);
+        const password = String(data.get("newPassword") || "");
+        const confirm = String(data.get("confirmPassword") || "");
+        if (password.length < 6) {
+          kasamToast("Şifre en az 6 karakter olmalı.");
+          return;
+        }
+        if (password !== confirm) {
+          kasamToast("Şifreler aynı değil.");
+          return;
+        }
+        resetForm.querySelectorAll("button").forEach((item) => { item.disabled = true; });
+        try {
+          const { error } = await cloudDb().auth.updateUser({ password });
+          if (error) throw error;
+          await cloudDb().auth.signOut();
+          state.signedInUserId = "";
+          state.activeUserId = "";
+          state.authMode = "login";
+          state.cloudStatus = "Şifre güncellendi. Yeni şifrenle giriş yap.";
+          const cleanUrl = new URL(kasamCriticalPasswordRedirectUrl());
+          history.replaceState({}, "", `${cleanUrl.pathname}`);
+          saveState();
+          render();
+          kasamToast("Şifre güncellendi.");
+        } catch (error) {
+          resetForm.querySelectorAll("button").forEach((item) => { item.disabled = false; });
+          kasamToast(friendlyCloudError(error));
+        }
+      });
+    }
+    app.querySelectorAll("[data-action='cancel-password-reset']").forEach((button) => {
+      if (button.dataset.cancelResetBound) return;
+      button.dataset.cancelResetBound = "1";
+      button.addEventListener("click", async () => {
+        try {
+          if (typeof cloudDb === "function" && cloudDb()) await cloudDb().auth.signOut();
+        } catch (_error) {}
+        state.signedInUserId = "";
+        state.activeUserId = "";
+        state.authMode = "login";
+        saveState();
+        render();
+      });
+    });
+    app.querySelectorAll("[data-action='delete-entry']").forEach((button) => {
+      if (button.dataset.deleteBound) return;
+      button.dataset.deleteBound = "1";
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        kasamDeleteEntry(button.dataset.id);
       });
     });
   };
@@ -652,6 +786,31 @@ if (typeof bindScreen === "function") {
 if (typeof renderAuth === "function") {
   const kasamCriticalRenderAuthBase = renderAuth;
   renderAuth = function renderAuthCritical() {
+    if (kasamCriticalIsPasswordResetMode()) {
+      return `
+        <section class="auth-card form-grid onboarding-card password-reset-card">
+          <div class="brand-lockup">
+            <img src="./icon.svg" alt="" />
+            <p class="eyebrow">Paranın nereye gittiğini bil.</p>
+            <h2>Yeni şifre oluştur</h2>
+            <p>Mail linki doğrulandı. Yeni şifreni yaz, sonra giriş ekranına dön.</p>
+            ${state.cloudStatus ? `<span class="field-help">${kasamSafe(state.cloudStatus)}</span>` : ""}
+          </div>
+          <form class="form-grid" id="passwordResetForm">
+            <label>
+              <span class="field-label">Yeni şifre</span>
+              <input class="text-input" name="newPassword" type="password" autocomplete="new-password" minlength="6" placeholder="En az 6 karakter" />
+            </label>
+            <label>
+              <span class="field-label">Yeni şifre tekrar</span>
+              <input class="text-input" name="confirmPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Şifreyi tekrar yaz" />
+            </label>
+            <button class="primary-button" type="submit">Şifreyi güncelle</button>
+            <button class="ghost-button" data-action="cancel-password-reset" type="button">Giriş ekranına dön</button>
+          </form>
+        </section>
+      `;
+    }
     let html = kasamCriticalRenderAuthBase();
     if (!html.includes('data-action="forgot-password"')) {
       html = html.replace(/(<button[^>]*type="submit"[^>]*>[^<]*(?:Giriş|Gir)[^<]*<\/button>)/, `$1<button class="ghost-button forgot-password-button" data-action="forgot-password" type="button">Şifremi unuttum</button>`);

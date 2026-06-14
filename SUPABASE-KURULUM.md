@@ -76,3 +76,28 @@ Migration sonrası şunu kontrol et:
 3. Kolonlar arasında "game_phase" görünüyor mu?
    Görünüyorsa migration başarılı.
    Görünmüyorsa SQL Editor'da tekrar çalıştır.
+
+## Tek Uygulama ve ?ifre S?f?rlama Redirect
+
+?ifre s?f?rlama e-postas? eski prototipe gitmemeli. Supabase taraf?nda tek ana uygulama adresi Vercel olmal?.
+
+### Supabase URL Configuration
+1. Supabase Dashboard'a gir.
+2. Sol men?den Authentication b?l?m?n? a?.
+3. URL Configuration ekran?na gir.
+4. Site URL alan?n? ?u yap: https://kasa-prototip.vercel.app
+5. Redirect URLs alan?nda ?u adresler kals?n:
+   - https://kasa-prototip.vercel.app/*
+   - https://kasa-prototip.vercel.app/index.html
+6. Eski Netlify veya eski prototip URL'leri varsa kald?r:
+   - radiant-squirrel...netlify.app
+   - kasa-prototip.netlify.app
+7. Save changes butonuna bas.
+
+### Beklenen ?ifre Ak???
+1. Kullan?c? giri? ekran?nda ?ifremi unuttum der.
+2. Supabase mail g?nderir.
+3. Maildeki link Vercel ?zerindeki Kasam reset ekran?n? a?ar.
+4. Kullan?c? yeni ?ifreyi yazar.
+5. Uygulama oturumu kapat?r ve giri? ekran?na d?ner.
+6. Kullan?c? yeni ?ifreyle giri? yapar.

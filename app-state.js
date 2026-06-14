@@ -234,7 +234,7 @@ async function initApp() {
 
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     navigator.serviceWorker
-      .register("./sw.js?v=20260614-1505")
+      .register("./sw.js?v=20260614-2035")
       .then((registration) => {
         registration.update().catch(() => {});
         if (registration.waiting) registration.waiting.postMessage({ type: "SKIP_WAITING" });

@@ -198,7 +198,7 @@ function normalizeState(saved) {
     signedInUserId,
     pendingLoginUserId,
     pendingLoginEmail: source.pendingLoginEmail || "",
-    authMode: source.authMode === "signup" ? "signup" : "login",
+    authMode: ["signup", "reset-password"].includes(source.authMode) ? source.authMode : "login",
     cloudEnabled: Boolean(source.cloudEnabled),
     cloudStatus: source.cloudStatus || "",
     cloudUserId: source.cloudUserId || "",
@@ -231,7 +231,8 @@ function saveState() {
 }
 
 function render() {
-  const needsAuth = !currentUser();
+  const passwordResetActive = state.authMode === "reset-password";
+  const needsAuth = !currentUser() || passwordResetActive;
   const needsProject = !needsAuth && !activeProject();
 
   document.body.dataset.view = needsAuth || needsProject ? "onboarding" : state.activeView;

@@ -100,3 +100,9 @@ Bu alanlar eksikse ortak kasa hareketi diğer kullanıcıda görünse bile kişi
 
 ## Bilinen Risk
 Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `playwright-core` eksikse çalışmayabilir. Bu durumda Node tabanlı testler yine çalıştırılır, tarayıcı testi “bağımlılık eksik” olarak raporlanır.
+
+## Canonical Uygulama Adresi
+- Tek production uygulamas? https://kasa-prototip.vercel.app.
+- Supabase Auth Site URL ve Redirect URLs bu adrese gitmelidir.
+- Eski Netlify prototipleri sadece y?nlendirme/arsiv ama?l?d?r; ?ifre s?f?rlama, davet linki ve payla??m linki eski host ?retmemelidir.
+- Kod taraf?nda canonical adres cloud-config.js i?indeki appUrl alan?ndan okunur.
