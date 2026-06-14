@@ -106,3 +106,9 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `playwright-co
 - Supabase Auth Site URL ve Redirect URLs bu adrese gitmelidir.
 - Eski Netlify prototipleri sadece y?nlendirme/arsiv ama?l?d?r; ?ifre s?f?rlama, davet linki ve payla??m linki eski host ?retmemelidir.
 - Kod taraf?nda canonical adres cloud-config.js i?indeki appUrl alan?ndan okunur.
+
+## Kullanici Gorevi Raporlama
+- Her degisiklikten sonra final cevapta "Senin yapman gerekenler" ayri yazilir.
+- Kullanici tarafinda is yoksa "Su an senin yapman gereken bir is yok" denir.
+- Kullanici tarafinda panel, telefon, Supabase, Vercel veya mail testi gibi is varsa once ozetlenir ve "Hazir misin?" diye sorulur.
+- Kullanici "evet" demeden adim adim anlatima gecilmez.

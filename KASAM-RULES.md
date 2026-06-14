@@ -242,3 +242,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: ?ki farkl? prototip kullan?c?n?n eski s?r?me veya yanl?? profile d??mesine sebep olur.
 - Kontrol: cloud-config.js appUrl alan? kullan?l?r; test-password-reset.cjs reset redirect, Netlify y?nlendirme ve invite link fallback kontrol? yapar.
 - Eklendi: 2026-06-14 ? Canonical auth redirect
+
+## KURAL-038: Degisiklik Sonunda Kullanici Gorevi Ayrilir
+- Kural: Her kod, ayar, deploy veya Supabase/Vercel/Auth degisikliginden sonra cevapta once "Senin yapman gerekenler" basligi acilir. Kullanici tarafinda yapilacak is yoksa acikca "Su an senin yapman gereken bir is yok" yazilir. Kullanici tarafinda adim gerekiyorsa once ozetlenir ve "Hazir misin?" diye sorulur. Kullanici "evet" demeden adim adim anlatima gecilmez.
+- Sebep: Kod tarafinda biten is ile kullanicinin panel, telefon, Supabase veya Vercel tarafinda yapmasi gereken isler karismamali.
+- Kontrol: Final cevaplarda degisiklik ozeti ile kullanici aksiyonu ayri basliklarda verilir; kullanici aksiyonu varsa adim adim anlatim icin onay beklenir.
+- Eklendi: 2026-06-14 - Kullanici gorevi raporlama protokolu

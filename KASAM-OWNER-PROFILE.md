@@ -100,3 +100,9 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 | Simulator | 2026-06-14 | Çok kullanıcı hataları iframe simülasyonuyla yakalanacak | Ortak kasa ve bildirim iddiaları simulator kanıtı gerektirir |
 | Kritik kayıt ve ortak kasa düzeltmeleri | 2026-06-14 | Kayıt akışı idempotent olmalı, aktör kendi sürprizini bekleyen olarak görmemeli | Kişisel satır sadece kişisel etkiyi, ortak kasa detayı paylaşımı göstermeli |
 | Cloud senkron ve simulator doğrulaması | 2026-06-14 | `paidById/splitWith/splitRatio` gibi ortak kasa alanları cloud’a eksiksiz taşınmalı | “Komut çalıştı” yeterli değil; diğer kullanıcıya hareket, bildirim ve pay sonucu kanıtlanmalı |
+
+## Gorev Sonu Kullanici Aksiyonu Tercihi
+- Her degisiklikten sonra kullanicinin yapmasi gerekenler ayri yazilmali.
+- Kullanici tarafinda is yoksa bu acikca belirtilmeli.
+- Kullanici tarafinda panel, telefon, Supabase, Vercel veya mail testi gibi is varsa once "Hazir misin?" diye sorulmali.
+- Kullanici "evet" demeden adim adim anlatima gecilmemeli.
