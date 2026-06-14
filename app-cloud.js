@@ -234,6 +234,8 @@ async function loadCloudData() {
         code: project.code,
         createdAt: project.created_at,
         createdBy: project.created_by,
+        photoName: project.photo_name || "",
+        photoData: project.photo_data || "",
         memberIds: projectMembers.map((member) => member.user_id),
         memberAliases: Object.fromEntries(projectMembers.filter((member) => member.alias).map((member) => [member.user_id, member.alias])),
         memberSince: Object.fromEntries(projectMembers.filter((member) => member.member_since).map((member) => [member.user_id, String(member.member_since).slice(0, 10)])),
@@ -265,10 +267,16 @@ async function loadCloudData() {
       note: entry.note || "",
       photoName: entry.photo_name || "",
       photoData: entry.photo_data || "",
+      paidById: entry.paid_by_id || entry.user_id,
+      splitWith: Array.isArray(entry.split_with) ? entry.split_with : [],
+      splitRatio: Array.isArray(entry.split_ratio) ? entry.split_ratio.map(Number) : [],
+      autoRevealAt: entry.auto_reveal_at || "",
+      rateLockedAt: entry.rate_locked_at || entry.created_at || new Date().toISOString(),
       lockedNotificationId: entry.locked_notification_id || "",
       settlement: Boolean(entry.settlement),
       status: entry.status,
       createdAt: entry.created_at,
+      updatedAt: entry.updated_at || entry.created_at,
     }));
 
     state.notifications = notifications.map((notification) => ({
@@ -377,6 +385,8 @@ async function cloudPushState() {
           purpose: project.purpose,
           code: projectCode(project),
           created_by: project.createdBy,
+          photo_name: project.photoName || "",
+          photo_data: project.photoData || "",
           created_at: project.createdAt || new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })),
@@ -433,10 +443,16 @@ async function cloudPushState() {
         note: entry.note || "",
         photo_name: entry.photoName || "",
         photo_data: entry.photoData || "",
+        paid_by_id: entry.paidById || entry.userId,
+        split_with: Array.isArray(entry.splitWith) ? entry.splitWith : [entry.userId].filter(Boolean),
+        split_ratio: Array.isArray(entry.splitRatio) ? entry.splitRatio.map(Number) : [1],
+        auto_reveal_at: entry.autoRevealAt || null,
+        rate_locked_at: entry.rateLockedAt || entry.createdAt || new Date().toISOString(),
         locked_notification_id: entry.lockedNotificationId || null,
         settlement: Boolean(entry.settlement),
         status: entry.status,
         created_at: entry.createdAt || new Date().toISOString(),
+        updated_at: entry.updatedAt || new Date().toISOString(),
       }));
     if (entryRows.length) {
       const { error } = await client.from("kasa_entries").upsert(entryRows, { onConflict: "id" });

@@ -1,0 +1,436 @@
+:root {
+  --color-accent: #d6cfbf;
+  --color-accent-hover: #c7beaa;
+  --color-pending: #9a835f;
+  --color-warning-bg: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface));
+}
+
+.topbar .update-stamp {
+  max-width: min(260px, 52vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabbar {
+  overflow: visible;
+}
+
+.tab,
+.tab.active {
+  color: var(--color-text-primary);
+}
+
+.tab:not(.active) {
+  color: var(--color-text-secondary);
+}
+
+.tab svg,
+.tab span {
+  color: currentColor;
+  opacity: 1;
+}
+
+.tab.active {
+  background: color-mix(in srgb, var(--color-surface-2) 88%, var(--color-text-primary) 12%);
+}
+
+:root[data-theme="dark"] .tab.active {
+  color: var(--color-text-primary);
+  background: color-mix(in srgb, var(--color-surface-2) 78%, var(--color-on-dark) 8%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .tab.active {
+    color: var(--color-text-primary);
+    background: color-mix(in srgb, var(--color-surface-2) 78%, var(--color-on-dark) 8%);
+  }
+}
+
+.secondary-button,
+.quick-pill,
+.badge,
+.member-count-badge,
+.calendar-add-button,
+.rhythm-status-pill,
+.primary-share-action {
+  background: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+.rhythm-status-pill {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-primary);
+  display: inline-grid;
+  min-height: 40px;
+  align-items: center;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-full);
+  font-weight: var(--weight-bold);
+}
+
+.account-strip.clean-strip {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.profile-open-button small {
+  max-width: 100%;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  line-height: var(--leading-normal);
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.notification-button {
+  min-height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-surface) 82%, var(--color-text-primary) 7%);
+  color: var(--color-text-primary);
+}
+
+.profile-logout-row {
+  margin-top: var(--space-4);
+  display: flex;
+}
+
+.critical-budget-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  text-align: left;
+}
+
+.critical-member-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 6px;
+}
+
+.critical-member-list span {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}
+
+.mini-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.compact-entry-row,
+.project-movement-row {
+  align-items: center;
+}
+
+.compact-entry-row .expense-note,
+.project-movement-row .expense-note {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.split-picker-card {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-2);
+}
+
+.split-picker-card p {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.split-toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.split-toggle {
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.split-toggle.selected {
+  border-color: var(--color-income);
+  color: var(--color-text-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-income) 20%, transparent);
+}
+
+.split-toggle input {
+  width: 18px;
+  height: 18px;
+}
+
+.split-toggle span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amount-input-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  border-bottom: 2px solid var(--color-border-strong);
+  background: var(--color-surface-2);
+}
+
+.amount-input-wrap .amount-input {
+  width: 100%;
+  border: 0;
+  border-bottom: 0;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.amount-currency-suffix {
+  padding: 0 var(--space-4) var(--space-4) 0;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+}
+
+.movement-form .date-field,
+.movement-form .date-field input,
+.movement-form input[type="date"],
+.movement-form .select-input,
+.movement-form .text-input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.movement-form,
+.movement-form > *,
+.movement-form label,
+.movement-form .form-card,
+.movement-form .input-card {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.movement-form input[type="date"] {
+  display: block;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: left;
+  padding-inline: var(--space-4);
+}
+
+.media-sheet.critical-media-sheet {
+  max-height: min(70dvh, 620px);
+  overflow: hidden;
+}
+
+.media-sheet-panel.active {
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.game-gif-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.gif-result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 118px;
+  align-content: start;
+  grid-auto-flow: row;
+  gap: var(--space-2);
+  max-height: min(40dvh, 330px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: var(--space-5);
+}
+
+.gif-result-button {
+  width: 100%;
+  height: 118px;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+
+.gif-result-button img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.sticker-grid {
+  max-height: min(42dvh, 360px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.critical-game-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  overflow: hidden;
+}
+
+.critical-game-card .notification-copy h3 {
+  margin: var(--space-1) 0;
+  font-size: var(--text-xl);
+}
+
+.critical-game-form {
+  width: 100%;
+  min-width: 0;
+}
+
+.game-member-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.game-member-grid button {
+  display: grid;
+  min-width: 0;
+  min-height: 92px;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-text-primary);
+}
+
+.game-member-grid span {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  text-align: center;
+  text-overflow: clip;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.passive-history-card {
+  opacity: 0.74;
+}
+
+.notifications-page-card .empty-state {
+  min-height: 88px;
+}
+
+.share-invite-box {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.share-invite-box p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.entry-saving-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background: color-mix(in srgb, var(--color-primary) 76%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.entry-saving-overlay > div {
+  display: grid;
+  min-width: 220px;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.entry-saving-overlay svg {
+  width: 28px;
+  height: 28px;
+  animation: kasamSpin 850ms linear infinite;
+}
+
+@keyframes kasamSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.forgot-password-button {
+  width: 100%;
+  justify-content: center;
+}
+
+.toast {
+  background: var(--color-text-primary);
+  color: var(--color-on-dark);
+}
+
+@media (max-width: 390px) {
+  .account-strip.clean-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .account-actions {
+    justify-content: flex-start;
+  }
+
+  .split-toggle-grid,
+  .game-member-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .share-invite-box {
+    grid-template-columns: 1fr;
+  }
+}

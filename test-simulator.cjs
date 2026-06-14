@@ -53,6 +53,20 @@ test("App test senaryosu simulator icin state ozeti dondurur", () => {
   assert.ok(simulator.includes("Kişisel pay"));
 });
 
+test("Simulator ortak kasa sonucunu gercek PASS/FAIL kontrolleriyle dogrular", () => {
+  assert.ok(simulator.includes("function validateSharedBudgetCheck"));
+  assert.ok(simulator.includes("Ortak hareket tüm kullanıcılara düştü"));
+  assert.ok(simulator.includes("Bildirim alıcılara düştü"));
+  assert.ok(simulator.includes("Kişisel kasa payları güncellendi"));
+});
+
+test("Simulator tahmin oyununda aktor ve alici davranisini dogrular", () => {
+  assert.ok(simulator.includes("function validateGameCheck"));
+  assert.ok(simulator.includes("Sürpriz bildirimi alıcılara düştü"));
+  assert.ok(simulator.includes("Sürprizi oluşturan kişiye bekleyen oyun gösterilmedi"));
+  assert.ok(simulator.includes("Oyun bitmeden bakiye gizli kaldı"));
+});
+
 let passed = 0;
 for (const item of tests) {
   try {

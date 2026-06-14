@@ -6,6 +6,7 @@ const appFiles = [
   "index.html",
   "styles.css",
   "kasam-ui-fixes.css",
+  "kasam-critical-fixes.css",
   "app-state.js",
   "app-core.js",
   "app-views.js",
@@ -18,6 +19,7 @@ const appFiles = [
   "app-sounds.js",
   "app-game-v2.js",
   "app-ui-fixes.js",
+  "app-critical-fixes.js",
   "app-test-scenarios.js",
   "app-init.js",
 ].filter((file) => fs.existsSync(path.join(root, file)));
@@ -53,7 +55,7 @@ function sourceLine(file, index) {
 
 function checkRule001() {
   const failures = [];
-  ["styles.css", "kasam-ui-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).forEach((file) => {
+  ["styles.css", "kasam-ui-fixes.css", "kasam-critical-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).forEach((file) => {
     const css = read(file);
     const blockRegex = /([^{]+)\{([^{}]*)\}/g;
     let match;
@@ -68,7 +70,7 @@ function checkRule001() {
 }
 
 function checkRule002() {
-  const css = ["styles.css", "kasam-ui-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).map(read).join("\n");
+  const css = ["styles.css", "kasam-ui-fixes.css", "kasam-critical-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).map(read).join("\n");
   const blocks = cssBlocks(css, ".toast");
   const ok = blocks.some((block) => /background:\s*var\(--color-text-primary\)/.test(block) && /color:\s*(var\(--color-on-dark\)|#fff|#FFFFFF|white)/i.test(block));
   return ok ? [] : [fail("styles.css", 1, "Toast koyu zemin ve beyaz yazı kuralını karşılamıyor.")];
@@ -76,7 +78,7 @@ function checkRule002() {
 
 function checkRule003() {
   const failures = [];
-  ["styles.css", "kasam-ui-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).forEach((file) => {
+  ["styles.css", "kasam-ui-fixes.css", "kasam-critical-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).forEach((file) => {
     let rootDepth = 0;
     let pendingRoot = false;
     lines(file).forEach((line, index) => {
@@ -99,7 +101,7 @@ function checkRule003() {
 }
 
 function checkRule004() {
-  const css = ["styles.css", "kasam-ui-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).map(read).join("\n");
+  const css = ["styles.css", "kasam-ui-fixes.css", "kasam-critical-fixes.css"].filter((file) => fs.existsSync(path.join(root, file))).map(read).join("\n");
   const required = ["--color-income", "--color-expense", "--color-pending"];
   return required.every((token) => css.includes(token)) ? [] : [fail("styles.css", 1, "Gelir/gider/bekleyen renk tokenları eksik.")];
 }

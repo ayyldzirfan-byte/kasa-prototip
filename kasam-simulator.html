@@ -278,6 +278,8 @@
       frames: [],
       logs: [],
       lastSnapshot: null,
+      sharedCheck: null,
+      gameCheck: null,
       requestSeq: 0,
       startedAt: Date.now(),
     };
@@ -333,6 +335,8 @@
       els.frames.innerHTML = "";
       state.frames = [];
       state.lastSnapshot = null;
+      state.sharedCheck = null;
+      state.gameCheck = null;
       for (let i = 1; i <= state.userCount; i += 1) {
         const card = document.createElement("section");
         card.className = "frame-card";
@@ -383,6 +387,104 @@
       state.frames.forEach((frame) => postToFrame(frame.index, "get-summary"));
     }
 
+    function summaryMap() {
+      return new Map(state.frames.filter((frame) => frame.summary).map((frame) => [frame.index, frame.summary]));
+    }
+
+    function captureBaseline() {
+      return new Map(state.frames.map((frame) => [frame.index, {
+        entryCount: Number(frame.summary?.entryCount || 0),
+        notificationCount: Number(frame.summary?.notificationCount || 0),
+        unread: Number(frame.summary?.unread || 0),
+        personalNet: Number(frame.summary?.personalNet || 0),
+      }]));
+    }
+
+    function logCheck(label, passed, detail = "") {
+      log(`${label} ${passed ? "PASS" : "FAIL"}${detail ? ` — ${detail}` : ""}`, passed ? "ok" : "fail");
+      return passed;
+    }
+
+    function validateSharedBudgetCheck() {
+      const check = state.sharedCheck;
+      if (!check || check.done) return;
+      const summaries = summaryMap();
+      if (summaries.size < state.userCount) {
+        logCheck("Ortak kasa senkron özeti", false, `${summaries.size}/${state.userCount} kullanıcıdan özet geldi`);
+        return;
+      }
+      const actor = Number(check.actor);
+      const allGotEntry = state.frames.every((frame) => {
+        const before = check.baseline.get(frame.index) || {};
+        const after = summaries.get(frame.index) || {};
+        return Number(after.entryCount || 0) > Number(before.entryCount || 0);
+      });
+      const recipientsGotNotification = state.frames.filter((frame) => frame.index !== actor).every((frame) => {
+        const before = check.baseline.get(frame.index) || {};
+        const after = summaries.get(frame.index) || {};
+        return Number(after.notificationCount || 0) > Number(before.notificationCount || 0)
+          || Number(after.unread || 0) > Number(before.unread || 0);
+      });
+      const actorDidNotNeedUnread = (() => {
+        const before = check.baseline.get(actor) || {};
+        const after = summaries.get(actor) || {};
+        return Number(after.unread || 0) <= Number(before.unread || 0);
+      })();
+      const personalSharesChanged = state.frames.every((frame) => {
+        const before = check.baseline.get(frame.index) || {};
+        const after = summaries.get(frame.index) || {};
+        return Math.round(Number(after.personalNet || 0)) !== Math.round(Number(before.personalNet || 0));
+      });
+      check.done = true;
+      logCheck("Ortak hareket tüm kullanıcılara düştü", allGotEntry);
+      logCheck("Bildirim alıcılara düştü", recipientsGotNotification);
+      logCheck("Hareketi oluşturan kişide bekleyen bildirim zorlanmadı", actorDidNotNeedUnread);
+      logCheck("Kişisel kasa payları güncellendi", personalSharesChanged);
+      if (!(allGotEntry && recipientsGotNotification && actorDidNotNeedUnread && personalSharesChanged)) {
+        const details = state.frames.map((frame) => {
+          const before = check.baseline.get(frame.index) || {};
+          const after = summaries.get(frame.index) || {};
+          return `K${frame.index}: hareket ${before.entryCount}->${after.entryCount}, bildirim ${before.notificationCount}->${after.notificationCount}, okunmamış ${before.unread}->${after.unread}, pay ${Math.round(before.personalNet)}->${Math.round(after.personalNet)}`;
+        }).join(" | ");
+        log(`Mantıksal hata detayı: ${details}`, "fail");
+      }
+    }
+
+    function validateGameCheck() {
+      const check = state.gameCheck;
+      if (!check || check.done) return;
+      const summaries = summaryMap();
+      if (summaries.size < state.userCount) return;
+      const actor = Number(check.actor);
+      const actorNoPending = (() => {
+        const before = check.baseline.get(actor) || {};
+        const after = summaries.get(actor) || {};
+        return Number(after.unread || 0) <= Number(before.unread || 0);
+      })();
+      const recipientsHavePending = state.frames.filter((frame) => frame.index !== actor).every((frame) => {
+        const before = check.baseline.get(frame.index) || {};
+        const after = summaries.get(frame.index) || {};
+        return Number(after.unread || 0) > Number(before.unread || 0);
+      });
+      const hiddenUntilGame = state.frames.every((frame) => {
+        const before = check.baseline.get(frame.index) || {};
+        const after = summaries.get(frame.index) || {};
+        return Math.round(Number(after.personalNet || 0)) === Math.round(Number(before.personalNet || 0));
+      });
+      check.done = true;
+      logCheck("Sürpriz bildirimi alıcılara düştü", recipientsHavePending);
+      logCheck("Sürprizi oluşturan kişiye bekleyen oyun gösterilmedi", actorNoPending);
+      logCheck("Oyun bitmeden bakiye gizli kaldı", hiddenUntilGame);
+      if (!(recipientsHavePending && actorNoPending && hiddenUntilGame)) {
+        const details = state.frames.map((frame) => {
+          const before = check.baseline.get(frame.index) || {};
+          const after = summaries.get(frame.index) || {};
+          return `K${frame.index}: okunmamış ${before.unread}->${after.unread}, pay ${Math.round(before.personalNet)}->${Math.round(after.personalNet)}`;
+        }).join(" | ");
+        log(`Tahmin oyunu hata detayı: ${details}`, "fail");
+      }
+    }
+
     function updateMeta(frame, summary) {
       frame.summary = summary;
       frame.meta.innerHTML = `
@@ -417,6 +519,8 @@
       if (result.summary) {
         const frame = state.frames.find((item) => item.index === Number(message.simUser));
         if (frame) updateMeta(frame, result.summary);
+        validateSharedBudgetCheck();
+        validateGameCheck();
       }
       if (result.stateSnapshot) {
         state.lastSnapshot = result.stateSnapshot;
@@ -435,20 +539,27 @@
     els.start.addEventListener("click", startSimulation);
     els.send.addEventListener("click", () => sendQuickAction());
     els.gameTest.addEventListener("click", () => {
+      state.gameCheck = { actor: Number(els.actor.value || 1), baseline: captureBaseline(), done: false };
       els.type.value = "expense";
       els.mode.value = "surprise";
       els.amount.value = "1847";
       els.heading.value = "Market";
       sendQuickAction("surprise");
+      setTimeout(pollSummaries, 1200);
+      setTimeout(pollSummaries, 2600);
+      setTimeout(validateGameCheck, 3600);
       log("Tahmin oyunu testi: sürpriz hareket gönderildi", "warn");
     });
     els.sharedTest.addEventListener("click", () => {
+      state.sharedCheck = { actor: Number(els.actor.value || 1), baseline: captureBaseline(), done: false };
       els.type.value = "expense";
       els.mode.value = "open";
       els.amount.value = "5000";
       els.heading.value = "Ortak test";
       sendQuickAction("open");
       setTimeout(pollSummaries, 1500);
+      setTimeout(pollSummaries, 2600);
+      setTimeout(validateSharedBudgetCheck, 3800);
       log("Ortak kasa testi: 5.000 TL açık hareket gönderildi", "warn");
     });
     els.autoPlay.addEventListener("click", () => {

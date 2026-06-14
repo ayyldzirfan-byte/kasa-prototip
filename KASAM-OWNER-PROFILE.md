@@ -17,6 +17,8 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Örnek kullanıcı adlarını, örnek harcama başlıklarını veya sohbet içi şakaları uygulamanın sabit içeriğine koyma.
 - “Bulut senkron”, “Oturum”, “Onay modu” gibi kullanıcıya değer katmayan teknik ifadeleri görünür metin yapma.
 - Ortak kasa problemini sadece görsel testle geçti sayma; çok kullanıcı simülasyonu olmadan doğrulanmış kabul etme.
+- Kayıt butonuna tekrar basılabilecek, kullanıcının kayıt durumunu anlayamadığı akış bırakma.
+- Ana ekranda uzun paylaşım dökümü gösterme; kullanıcı kendi kasasına yansıyan net sonucu görmeli.
 
 ## Dil ve Ton Tercihleri
 
@@ -38,6 +40,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Bildirimlerin diğer kullanıcılara düşmesi.
 - Sürpriz/tahmin oyunu bitmeden detayların gizli kalması.
 - Açık hareket kaydının tek kez oluşması ve hareket listesinde görünmesi.
+- Ortak kasa ve bildirim için gerçek cloud/realtime davranışının simulator veya çok oturumlu testle kanıtlanması.
 
 ### Sonraya bunlar
 - Ekstre analizi.
@@ -59,6 +62,10 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 ## Tekrarlayan Hatalar
 - Ortak kasa hareketleri diğer kullanıcılara gitmedi — birden fazla görevde tekrarlandı.
 - Bildirimler diğer kullanıcılara düşmedi — birden fazla görevde tekrarlandı.
+- Hareket kaydı görsel kilit olmadan birden fazla kez oluşturuldu — kritik kayıt akışı hatası.
+- Ana ekran hareket satırlarında paylaşım listesi fazla uzun ve bağlam dışı göründü — kişisel/ortak kasa şablonları ayrılmalı.
+- Ortak hareket cloud alanları eksik taşındı — local çalışan komut gerçek cihazlar arası senkronu kanıtlamaz.
+- Simülatör başlangıçta sadece mesaj gönderimini PASS saydı — artık yayılım, bildirim ve kişisel pay değişimi ayrı doğrulanmalı.
 - Sarı zemin beyaz yazı kaldı — birden fazla UI düzeltmesinde tekrarlandı.
 - Tahmin oyunu detayları yanlış yerde veya fazla alanda gösterildi — birden fazla kez düzeltme istendi.
 - Test senaryoları gerçek uygulama state’ine bağlanmadan raporlandı — canlı test ihtiyacı tekrarlandı.
@@ -91,3 +98,5 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 | Test senaryoları | 2026-06 | Test verisi canlı uygulama state’ine yüklenmeli | Görsel rapor tek başına yeterli değil |
 | Kural sistemi | 2026-06-14 | Lint, profil, bağlam ve simülasyon dosyaları zorunlu | Tekrarlayan hatalar kuralla engellenecek |
 | Simulator | 2026-06-14 | Çok kullanıcı hataları iframe simülasyonuyla yakalanacak | Ortak kasa ve bildirim iddiaları simulator kanıtı gerektirir |
+| Kritik kayıt ve ortak kasa düzeltmeleri | 2026-06-14 | Kayıt akışı idempotent olmalı, aktör kendi sürprizini bekleyen olarak görmemeli | Kişisel satır sadece kişisel etkiyi, ortak kasa detayı paylaşımı göstermeli |
+| Cloud senkron ve simulator doğrulaması | 2026-06-14 | `paidById/splitWith/splitRatio` gibi ortak kasa alanları cloud’a eksiksiz taşınmalı | “Komut çalıştı” yeterli değil; diğer kullanıcıya hareket, bildirim ve pay sonucu kanıtlanmalı |
