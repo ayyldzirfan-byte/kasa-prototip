@@ -1,4 +1,4 @@
-﻿const KASAM_CRITICAL_VERSION = "14.06.2026 16:58";
+﻿const KASAM_CRITICAL_VERSION = "14.06.2026 19:05";
 
 if (typeof KASAM_EMPTY === "object" && KASAM_EMPTY) {
   KASAM_EMPTY.notifications = "Sessizlik...";
