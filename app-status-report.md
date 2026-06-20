@@ -16,6 +16,7 @@ Tarih: 2026-06-20
 | `app-test-scenarios.js` | Test senaryosu ve auth bypass | Calisiyor |
 | `kasam-simulator.html` | Cok kullanici iframe simulasyonu | Calisiyor, PASS/FAIL kontrolleri var |
 | `kasam-lint.cjs` | Proje kurallari lint denetimi | Calisiyor |
+| `scripts/cdp-test-harness.cjs` | Playwright bagimliligi olmadan gercek Chrome/CDP browser testleri | Calisiyor |
 | `vercel.json` | Vercel build/output ve header ayarlari | `npm run build` + `public` output ayarli |
 | `api/tcmb-rate.js` | Doviz hareketleri icin TCMB kur proxy endpoint'i | Syntax kontrolu gecti |
 | `build-public.cjs` | Deploy icin statik public klasoru uretimi | Calisiyor |
@@ -79,8 +80,8 @@ Tarih: 2026-06-20
 | `test-shared-budget-sync.cjs` | PASS |
 | `test-yilmaz-scenario-rhythm.cjs` | PASS |
 | `test-cloud-persistence-and-guess-flow.cjs` | PASS |
-| `test-entry-open-flow.cjs` | CALISMADI: local `playwright` modul eksik |
-| `test-shared-ledger.cjs` | CALISMADI: local `playwright` modul eksik |
+| `test-entry-open-flow.cjs` | PASS: Chrome/CDP ile tek kayit, tek bildirim, ortak pay ve GIF overlay dogrulandi |
+| `test-shared-ledger.cjs` | PASS: Chrome/CDP ile ortak gider/gelir split, kisisel pay ve bildirim dogrulandi |
 | `build-public.cjs` | PASS: public klasoru hazir |
 | `api/tcmb-rate.js` | PASS: syntax kontrolu |
 
@@ -89,7 +90,16 @@ Tarih: 2026-06-20
 - `test-ui-fixes.cjs` artik sadece eski `app-ui-fixes.js` dosyasini degil, production'da yuklenen `app-critical-fixes.js` ve `kasam-critical-fixes.css` katmanlarini da kontrol eder.
 - Ek kontroller: bos bildirim metni, aktore surpriz sayaci gizleme, tutar placeholder temizligi, TCMB kur proxy, cift kayit engeli, hareket silme, kisisel kasa tekillestirme, aktif/gecmis bildirim ayrimi.
 
-## Son Guncelleme: Bildirim Gecmisi ve Reel Gorsel Audit
+## Son Guncelleme: Eksik Istek Denetimi ve Browser Testleri
+- Playwright bagimliligi nedeniyle calismayan iki browser testi Chrome DevTools Protocol tabanli hale getirildi.
+- `test-entry-open-flow.cjs`: acik hareket ekleme, cift submit engeli, tek bildirim, ortak pay ve GIF overlay akisi gercek tarayicida dogrulandi.
+- `test-shared-ledger.cjs`: ortak kasaya gider ve gelir ekleme, `splitWith/splitRatio`, iki kullanici kisisel paylari ve bildirim alicisi gercek tarayicida dogrulandi.
+- LOCAL SIMULASYON: `kasam-lint.cjs`, `test-ui-fixes.cjs`, `test-kasa-e2e.cjs`, `test-game-v2.cjs`, `test-simulator.cjs`, `test-password-reset.cjs`, `test-shared-budget-sync.cjs`, `test-cloud-persistence-and-guess-flow.cjs`, `test-yilmaz-scenario-rhythm.cjs`, `test-entry-open-flow.cjs`, `test-shared-ledger.cjs`, `build-public.cjs` gecti.
+- GORSEL DOGRULAMA: 14 kontrol, 14 gecti, 0 basarisiz.
+- CLOUD TEST: canli Vercel stamp goruldu: `Guncellendi 14.06.2026 23:05`.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606202001` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
+
+## Onceki Guncelleme: Bildirim Gecmisi ve Reel Gorsel Audit
 - Aktif tahmin oyunu bildirimleri gecmis bildirimlerden ayrildi; aktif oyun karti ustte kalir, gecmis bildirimler acilir/kapanir gecmis alanina tasinir.
 - Bildirim gizlilik kontrolu artik tum sayfayi degil aktif oyun kartini denetler; eski acik bildirimler aktif surpriz gizliligi testini bozmaz.
 - Kisisel kasa listesinde ayni kullaniciya ait yinelenen kisisel kasa kartlari tekillestirildi.
@@ -98,7 +108,6 @@ Tarih: 2026-06-20
 - GORSEL DOGRULAMA: 14 kontrol, 14 gecti, 0 basarisiz.
 - CLOUD TEST: canli Vercel stamp goruldu: `Guncellendi 14.06.2026 23:05`.
 - Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606201910`.
-- Not: Playwright tabanli iki ek test local dependency olmadigi icin calismadi; ayni gorsel kapsam Chrome/CDP `scripts/visual-audit.cjs` ile dogrulandi.
 
 ## Sonraki Adimlar
 1. Gercek Supabase tablolarinda `kasa_entries` ve `kasa_notifications` insert kayitlari iki farkli kullaniciyla dogrulanmali.
