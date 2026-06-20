@@ -4,8 +4,13 @@ const path = require("node:path");
 
 const root = __dirname;
 const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
-const css = fs.readFileSync(path.join(root, "kasam-ui-fixes.css"), "utf8");
-const js = fs.readFileSync(path.join(root, "app-ui-fixes.js"), "utf8");
+const css = [
+  "kasam-ui-fixes.css",
+  "kasam-critical-fixes.css",
+].map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n");
+const uiJs = fs.readFileSync(path.join(root, "app-ui-fixes.js"), "utf8");
+const criticalJs = fs.readFileSync(path.join(root, "app-critical-fixes.js"), "utf8");
+const js = `${uiJs}\n${criticalJs}`;
 
 function runTest(name, fn) {
   try {
@@ -64,6 +69,46 @@ const tests = [
   ["8.12 - Hareket ekle ana butonu bind ediliyor", () => {
     assert.ok(js.includes("[data-action='go-add-movement']"));
     assert.ok(js.includes("state.activeView = \"add\""));
+  }],
+  ["8.13 - Bildirim bos durum metni sadece Sessizlik", () => {
+    assert.ok(criticalJs.includes('KASAM_EMPTY.notifications = "Sessizlik..."'));
+    assert.ok(!criticalJs.includes("Henüz sürpriz yok"));
+  }],
+  ["8.14 - Surpriz sayaci hareketi ekleyene gosterilmez", () => {
+    assert.ok(criticalJs.includes("notification.actorId === userId"));
+    assert.ok(criticalJs.includes("return false"));
+    assert.ok(criticalJs.includes("lockedSurpriseCountForUserCritical"));
+  }],
+  ["8.15 - Tutar alaninda ornek placeholder aktif katmanda kaldirilir", () => {
+    assert.ok(criticalJs.includes("kasamCriticalAmountShell"));
+    assert.ok(criticalJs.includes("data-amount-currency-suffix"));
+    assert.ok(criticalJs.includes('placeholder=""'));
+    assert.ok(criticalJs.includes('placeholder="1\\.000"') || criticalJs.includes("placeholder=\"1\\.000\""));
+  }],
+  ["8.16 - Doviz kuru TCMB proxy ile kilitlenir", () => {
+    assert.ok(criticalJs.includes("/api/tcmb-rate"));
+    assert.ok(criticalJs.includes("data-rate-source"));
+    assert.ok(criticalJs.includes("TCMB"));
+  }],
+  ["8.17 - Cift kayit engeli ve kaydediliyor overlay var", () => {
+    assert.ok(criticalJs.includes("kasamCriticalSaving"));
+    assert.ok(criticalJs.includes("Bu hareket kaydedildi."));
+    assert.ok(criticalJs.includes("Kaydediliyor"));
+    assert.ok(css.includes("entry-saving-overlay"));
+  }],
+  ["8.18 - Hareket silme akisi var", () => {
+    assert.ok(criticalJs.includes("kasamDeleteEntry"));
+    assert.ok(criticalJs.includes("data-action='delete-entry'"));
+    assert.ok(criticalJs.includes("Bu hareket silinsin mi?"));
+  }],
+  ["8.19 - Kisisel kasa kartlari tekillestirilir", () => {
+    assert.ok(criticalJs.includes("personalShown"));
+    assert.ok(criticalJs.includes("kasamCriticalProjectRows"));
+  }],
+  ["8.20 - Aktif bildirim ile gecmis bildirim ayrilir", () => {
+    assert.ok(criticalJs.includes("active-notification-list"));
+    assert.ok(criticalJs.includes("notification-history"));
+    assert.ok(css.includes("passive-notification-list"));
   }],
 ];
 

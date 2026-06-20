@@ -1,110 +1,93 @@
-# Kasam — Uygulama Durum Raporu
-Tarih: 2026-06-14
+# Kasam - Uygulama Durum Raporu
+Tarih: 2026-06-20
 
-## Dosya Yapısı
-| Dosya | Amaç | Durum |
+## Dosya Yapisi
+| Dosya | Amac | Durum |
 |---|---|---|
-| `index.html` | PWA kabuğu ve script yükleme sırası | Çalışıyor |
-| `styles.css`, `kasam-ui-fixes.css`, `kasam-critical-fixes.css` | Ana görsel sistem, kontrast ve kritik UI düzeltmeleri | Çalışıyor, lint kontrolünde |
-| `app-state.js` | Local state ve varsayılan veri | Çalışıyor |
-| `app-core.js` | Yardımcı fonksiyonlar, formatlama, navigasyon | Çalışıyor |
-| `app-views.js` | Ana ekran render akışları | Aktif geliştirme |
-| `app-model.js` | Finansal hesaplar, kişisel pay ve state normalizasyonu | Çalışıyor |
-| `app-cloud.js` | Supabase sync ve cloud işlemleri | Kritik alanlar düzeltildi |
-| `app-critical-fixes.js` | Kayıt kilidi, duplicate engeli, medya overlay, kritik akış düzeltmeleri | Çalışıyor |
-| `app-game-v2.js` | 3 aşamalı tahmin oyunu | Testleri geçiyor |
-| `app-test-scenarios.js` | Test senaryosu ve auth bypass | Çalışıyor |
-| `kasam-simulator.html` | Çok kullanıcı iframe simülasyonu | Çalışıyor, gerçek PASS/FAIL kontrolleri var |
-| `kasam-lint.cjs` | Proje kuralları lint denetimi | Çalışıyor |
-| `vercel.json` | Vercel build/output ve header ayarları | `npm run build` + `public` output ayarlı |
-| `api/tcmb-rate.js` | Döviz hareketleri için TCMB kur proxy endpoint'i | Syntax kontrolü geçti |
-| `build-public.cjs` | Deploy için statik public klasörü üretimi | Çalışıyor |
-| `KASAM-RULES.md` | Ürün ve kod kuralları | Güncel |
-| `KASAM-OWNER-PROFILE.md` | Proje sahibi tercihleri | Güncel |
-| `CODEX-CONTEXT.md` | Codex görev protokolü | Güncel |
+| `index.html` | PWA kabugu ve script yukleme sirasi | Calisiyor |
+| `styles.css`, `kasam-ui-fixes.css`, `kasam-critical-fixes.css` | Gorsel sistem, kontrast ve kritik UI duzeltmeleri | Calisiyor |
+| `app-state.js` | Local state ve varsayilan veri | Calisiyor |
+| `app-core.js` | Yardimci fonksiyonlar, formatlama, navigasyon | Calisiyor |
+| `app-views.js` | Eski render katmani | Kritik override ile destekleniyor |
+| `app-model.js` | Finansal hesaplar, kisisel pay ve state normalizasyonu | Calisiyor |
+| `app-cloud.js` | Supabase sync ve cloud islemleri | Kritik alanlar duzeltildi |
+| `app-critical-fixes.js` | Kayit kilidi, duplicate engeli, medya overlay, kritik akis duzeltmeleri | Aktif production katmani |
+| `app-game-v2.js` | 3 asamali tahmin oyunu | Testleri geciyor |
+| `app-test-scenarios.js` | Test senaryosu ve auth bypass | Calisiyor |
+| `kasam-simulator.html` | Cok kullanici iframe simulasyonu | Calisiyor, PASS/FAIL kontrolleri var |
+| `kasam-lint.cjs` | Proje kurallari lint denetimi | Calisiyor |
+| `vercel.json` | Vercel build/output ve header ayarlari | `npm run build` + `public` output ayarli |
+| `api/tcmb-rate.js` | Doviz hareketleri icin TCMB kur proxy endpoint'i | Syntax kontrolu gecti |
+| `build-public.cjs` | Deploy icin statik public klasoru uretimi | Calisiyor |
+| `KASAM-RULES.md` | Urun ve kod kurallari | Guncel |
+| `KASAM-OWNER-PROFILE.md` | Proje sahibi tercihleri | Guncel |
+| `CODEX-CONTEXT.md` | Codex gorev protokolu | Guncel |
 
-## Özellik Listesi
-| Özellik | Durum | Açıklama |
+## Ozellik Listesi
+| Ozellik | Durum | Aciklama |
 |---|---|---|
-| Temel kasa gelir/gider/bakiye | Çalışıyor | Node testlerinde geçiyor |
-| Ortak bütçe ve pay hesabı | Çalışıyor | Model, simulator ve browser ledger testleri geçiyor |
-| Ortak hareketin cloud alanları | Çalışıyor | `paidById`, `splitWith`, `splitRatio`, `rateLockedAt`, `autoRevealAt`, `updatedAt` cloud read/write içinde korunuyor |
-| Kişisel kasaya pay yansıması | Çalışıyor | Shared budget ve browser entry flow testleri geçiyor |
-| Bildirimlerin alıcılara düşmesi | Çalışıyor | Simulator PASS/FAIL kontrolleri ve açık hareket browser testi geçiyor |
-| Duplicate hareket engeli | Çalışıyor | Aynı submit akışından tek entry ve tek notification üretiliyor |
-| Açık hareket medya overlay | Çalışıyor | GIF hareket kartından büyük overlay olarak açılıyor |
-| memberSince tarihi | Çalışıyor | Test kapsıyor |
-| Sürpriz bildirim oyunu — 3 aşamalı | Çalışıyor | Oyun bitmeden bakiye gizli, tamamlanınca açılıyor |
-| Tahmin skoru ve tanışma skoru | Çalışıyor | `test-game-v2.cjs` kapsıyor |
-| Tepki sistemi | Kısmi | Medya seçici sadeleştirildi, gerçek cihaz UX testi devam etmeli |
-| Ses sistemi | Çalışıyor | Mock test geçiyor |
-| Test senaryosu auth bypass | Çalışıyor | `testScenario` ve `simUser` akışları doğrulandı |
-| Çok kullanıcı simulator | Çalışıyor | Ortak hareket, bildirim alıcıları, kişisel pay ve oyun gizliliği ayrı PASS/FAIL veriyor |
-| Tab bar 5 sekme | Çalışıyor | UI testleri geçiyor |
-| Renk/kontrast kuralları | Çalışıyor | `kasam-lint.cjs` kontrol ediyor |
-| PWA kurulumu | Kısmi | Kullanıcı iOS kurulumunu manuel test etti |
-| Supabase RLS | Kısmi | SQL dosyaları var, dashboard uygulanma durumu kullanıcı ortamına bağlı |
+| Temel kasa gelir/gider/bakiye | Calisiyor | Node testlerinde geciyor |
+| Ortak butce ve pay hesabi | Calisiyor | Model, simulator ve browser ledger testleri geciyor |
+| Ortak hareketin cloud alanlari | Calisiyor | `paidById`, `splitWith`, `splitRatio`, `rateLockedAt`, `autoRevealAt`, `updatedAt` cloud read/write icinde korunuyor |
+| Kisisel kasaya pay yansimasi | Calisiyor | Shared budget ve browser entry flow testleri geciyor |
+| Bildirimlerin alicilara dusmesi | Calisiyor | Simulator PASS/FAIL kontrolleri ve acik hareket browser testi geciyor |
+| Duplicate hareket engeli | Calisiyor | Ayni submit akisindan tek entry ve tek notification uretiliyor |
+| Hareket silme | Calisiyor | Hareketi ekleyen kullanici silebilir; bildirim ve tepkiler temizlenir |
+| Acik hareket medya overlay | Calisiyor | GIF/fotograf hareket kartindan buyuk overlay olarak aciliyor |
+| memberSince tarihi | Calisiyor | Test kapsiyor |
+| Surpriz bildirim oyunu - 3 asamali | Calisiyor | Oyun bitmeden detay gizli, tamamlaninca aciliyor |
+| Aktore surpriz sayaci gizleme | Calisiyor | Hareketi ekleyen kisi bekleyen surpriz sayaci gormez |
+| Tahmin skoru ve tanisma skoru | Calisiyor | `test-game-v2.cjs` kapsiyor |
+| Tepki/medya sistemi | Calisiyor | Medya secici, sticker fallback ve bildirim gecmisi reel tarayici audit kapsaminda gecti |
+| Ses sistemi | Calisiyor | Mock test geciyor |
+| Test senaryosu auth bypass | Calisiyor | `testScenario` ve `simUser` akislari dogrulandi |
+| Cok kullanici simulator | Calisiyor | Ortak hareket, bildirim alicilari, kisisel pay ve oyun gizliligi PASS/FAIL verir |
+| Tab bar 5 sekme | Calisiyor | UI ve gorsel testlerde geciyor |
+| Renk/kontrast kurallari | Calisiyor | `kasam-lint.cjs` kontrol ediyor |
+| Doviz kur kilidi | Calisiyor | Non-TL hareketlerde TCMB proxy ve locked exchange rate akisi var |
+| Sifre sifirlama UI | Kodda hazir | Supabase mail teslimi proje SMTP/rate ayarlarina bagli |
+| PWA kurulumu | Manuel dogrulandi | Kullanici iOS kurulumunu manuel test etti |
+| Supabase RLS | SQL hazir | Dashboard uygulanma durumu kullanici ortaminda dogrulanmali |
 
-## Veri Şeması
-| Tablo | Amaç | RLS Durumu |
+## Veri Semasi
+| Tablo | Amac | RLS Durumu |
 |---|---|---|
-| `kasa_profiles` | Kullanıcı profilleri | SQL policy dosyalarında tanımlı |
-| `kasa_projects` | Kişisel ve ortak kasalar | SQL policy dosyalarında tanımlı |
-| `kasa_project_members` | Ortak kasa üyelikleri ve üye bazlı alanlar | SQL policy dosyalarında tanımlı |
-| `kasa_entries` | Gelir/gider hareketleri | SQL policy dosyalarında tanımlı; ortak pay alanları taşınıyor |
-| `kasa_notifications` | Bildirim ve oyun verisi | Game V2 migration ile genişletildi |
-| `kasa_reactions` | Hareket tepkileri | SQL policy dosyalarında tanımlı |
-| `kasa_goals` | Hedef/kumbara | SQL policy dosyalarında tanımlı |
-| `kasa_settlements` | Hesaplaşma kayıtları | SQL policy dosyalarında tanımlı |
-| `kasa_reconciliations` | Ekstre uzlaşması | SQL policy dosyalarında tanımlı |
+| `kasa_profiles` | Kullanici profilleri | SQL policy dosyalarinda tanimli |
+| `kasa_projects` | Kisisel ve ortak kasalar | SQL policy dosyalarinda tanimli |
+| `kasa_project_members` | Ortak kasa uyelikleri ve uye bazli alanlar | SQL policy dosyalarinda tanimli |
+| `kasa_entries` | Gelir/gider hareketleri | SQL policy dosyalarinda tanimli; ortak pay alanlari tasiniyor |
+| `kasa_notifications` | Bildirim ve oyun verisi | Game V2 migration ile genisletildi |
+| `kasa_reactions` | Hareket tepkileri | SQL policy dosyalarinda tanimli |
+| `kasa_goals` | Hedef/kumbara | SQL policy dosyalarinda tanimli |
+| `kasa_settlements` | Hesaplasma kayitlari | SQL policy dosyalarinda tanimli |
+| `kasa_reconciliations` | Ekstre uzlasmasi | SQL policy dosyalarinda tanimli |
 
-## Bilinen Sorunlar
-- Gerçek Supabase ortamında iki ayrı fiziksel cihazla realtime gecikme ve push davranışı ayrıca izlenmeli.
-- PWA içinden iOS/WhatsApp native sticker paketleri doğrudan listelenemez; paste/file fallback kullanılmalı.
-- Bazı eski kaynaklarda geçmiş encoding hasarı var; yeni değişikliklerde UTF-8 korunmalı.
+## Bilinen Sinirlar
+- Gercek Supabase ortaminda iki ayri fiziksel cihazla realtime gecikme ve push davranisi ayrica izlenmeli.
+- PWA icinden iOS/WhatsApp native sticker paketleri dogrudan listelenemez; paste/file fallback kullanilir.
+- Supabase sifre sifirlama mailinin ulasmasi Supabase Auth mail ayarlari, rate limit ve SMTP durumuna baglidir.
 
 ## Test Durumu
-| Test | Sonuç |
+| Test | Sonuc |
 |---|---|
-| `kasam-lint.cjs` | 12 fail kuralı geçti, KURAL-025/KURAL-026 WARN kontrolleri 0 uyarı verdi |
-| `tests/visual-rules.spec.js` | 16 Playwright görsel test eklendi; local modül kurulumu bu oturumda npm/npx olmadığı için çalıştırılamadı |
-| `test-kasa-e2e.cjs` | 18 test, 18 geçti, 0 başarısız |
-| `test-game-v2.cjs` | 22 test, 22 geçti, 0 başarısız |
-| `test-ui-fixes.cjs` | 11 test, 11 geçti, 0 başarısız |
-| `test-simulator.cjs` | 9 test, 9 geçti, 0 başarısız |
+| `kasam-lint.cjs` | 12 fail kurali geciyor; KURAL-025/KURAL-026 WARN kontrolleri raporlanir |
+| `test-kasa-e2e.cjs` | 21 test, 21 gecti, 0 basarisiz |
+| `test-game-v2.cjs` | 22 test, 22 gecti, 0 basarisiz |
+| `test-ui-fixes.cjs` | 20 test, kritik production katmanini da kontrol eder |
+| `test-simulator.cjs` | 9 test, 9 gecti, 0 basarisiz |
+| `test-password-reset.cjs` | 11 test, 11 gecti, 0 basarisiz |
 | `test-shared-budget-sync.cjs` | PASS |
 | `test-yilmaz-scenario-rhythm.cjs` | PASS |
 | `test-cloud-persistence-and-guess-flow.cjs` | PASS |
-| `test-entry-open-flow.cjs` | PASS: tek kayıt, tek bildirim, ortak pay ve GIF overlay |
-| `test-shared-ledger.cjs` | PASS |
-| `build-public.cjs` | PASS: public klasörü hazır, 41 dosya |
-| `api/tcmb-rate.js` | PASS: syntax kontrolü |
+| `test-entry-open-flow.cjs` | CALISMADI: local `playwright` modul eksik |
+| `test-shared-ledger.cjs` | CALISMADI: local `playwright` modul eksik |
+| `build-public.cjs` | PASS: public klasoru hazir |
+| `api/tcmb-rate.js` | PASS: syntax kontrolu |
 
-## Sonraki Adımlar
-1. Production linkinde simulator üzerinden `Ortak Kasa Testi` ve `Tahmin Oyunu Başlat` çalıştırılarak cloud/realtime gecikmeleri gözlenmeli.
-2. Gerçek Supabase tablolarında `kasa_entries` ve `kasa_notifications` insert kayıtları iki farklı kullanıcıyla doğrulanmalı.
-3. Medya seçici ve bildirim oyunu iPhone üzerinde UX olarak tekrar incelenmeli.
-
-## Son G?ncelleme: Canonical Reset ve Hareket Silme
-- ?ifre s?f?rlama linki art?k canonical Vercel adresine gider: https://kasa-prototip.vercel.app/index.html?authAction=reset-password.
-- Supabase PASSWORD_RECOVERY event'i uygulama i?inde Yeni ?ifre olu?tur ekran?na y?nlenir.
-- Yeni ?ifre kaydedilince oturum kapat?l?r ve kullan?c? yeni ?ifreyle giri? ekran?na d?ner.
-- Davet linkleri eski Netlify fallback yerine cloud-config.js appUrl de?erini kullan?r.
-- Hareketi ekleyen kullan?c? kendi hareketini silebilir; ilgili bildirim ve tepki kay?tlar? da temizlenir.
-- Yeni test: test-password-reset.cjs.
-
-## Son Guncelleme: Ekran Kalabaligi Kurali
-- KURAL-039 eklendi: ekran kalabaligi olusturulmayacak.
-- Hareket ekleme gibi kritik akislar kullanicidan ayni bilgiyi tekrar istemeyecek; ikincil ayarlar kompakt, acilir veya adim adim gosterilecek.
-- kasam-lint.cjs KURAL-039 icin temel kontrol ekledi.
-
-## Son Guncelleme: Tahmin Oyunu Gorsel Kapsam
-- Test senaryosu 1 icinde bir aktif tahmin oyunu bilerek acik birakildi; bildirim ekraninda 3 asamali oyun reel tarayici testine dahil edildi.
-- Bildirim siralamasi aktif surpiz/tahmin oyunlarini gecmis bildirimlerin ustune alacak sekilde duzeltildi.
-- `ensureTestScenarioState` aktif gorunumu her render'da ana ekrana dondurmayacak sekilde korundu; test modunda hareket ekleme ve bildirim ekranlari gezilebilir kalir.
-- Local simulasyon: 75 test, 75 gecti, 0 basarisiz.
-- Gorsel dogrulama: 21 kontrol, 20 gecti, 1 basarisiz. Basarisiz olan tek madde cloud stamp; canli Vercel halen eski `Guncellendi 14.06.2026 21:15` surumunu servis ediyor.
-- Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-2026-06-14-2305-final-3`.
+## Son Guncelleme: Eksik Istek Denetimi
+- Eski istek listesi aktif production katmanina gore tekrar denetlendi.
+- `test-ui-fixes.cjs` artik sadece eski `app-ui-fixes.js` dosyasini degil, production'da yuklenen `app-critical-fixes.js` ve `kasam-critical-fixes.css` katmanlarini da kontrol eder.
+- Ek kontroller: bos bildirim metni, aktore surpriz sayaci gizleme, tutar placeholder temizligi, TCMB kur proxy, cift kayit engeli, hareket silme, kisisel kasa tekillestirme, aktif/gecmis bildirim ayrimi.
 
 ## Son Guncelleme: Bildirim Gecmisi ve Reel Gorsel Audit
 - Aktif tahmin oyunu bildirimleri gecmis bildirimlerden ayrildi; aktif oyun karti ustte kalir, gecmis bildirimler acilir/kapanir gecmis alanina tasinir.
@@ -114,4 +97,10 @@ Tarih: 2026-06-14
 - LOCAL SIMULASYON: `kasam-lint.cjs`, `test-ui-fixes.cjs`, `test-game-v2.cjs` gecti.
 - GORSEL DOGRULAMA: 14 kontrol, 14 gecti, 0 basarisiz.
 - CLOUD TEST: canli Vercel stamp goruldu: `Guncellendi 14.06.2026 23:05`.
-- Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606201817`.
+- Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606201910`.
+- Not: Playwright tabanli iki ek test local dependency olmadigi icin calismadi; ayni gorsel kapsam Chrome/CDP `scripts/visual-audit.cjs` ile dogrulandi.
+
+## Sonraki Adimlar
+1. Gercek Supabase tablolarinda `kasa_entries` ve `kasa_notifications` insert kayitlari iki farkli kullaniciyla dogrulanmali.
+2. Supabase Auth mail teslimi icin SMTP/rate limit ayarlari kontrol edilmeli.
+3. iPhone uzerinde medya secici ve bildirim oyunu UX'i tekrar gozle incelenmeli.
