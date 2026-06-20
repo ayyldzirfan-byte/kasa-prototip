@@ -114,4 +114,4 @@ Tarih: 2026-06-14
 - LOCAL SIMULASYON: `kasam-lint.cjs`, `test-ui-fixes.cjs`, `test-game-v2.cjs` gecti.
 - GORSEL DOGRULAMA: 14 kontrol, 14 gecti, 0 basarisiz.
 - CLOUD TEST: canli Vercel stamp goruldu: `Guncellendi 14.06.2026 23:05`.
-- Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606201805`.
+- Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606201817`.
