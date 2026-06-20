@@ -617,28 +617,69 @@ if (typeof handleEntrySubmit === "function") {
 
 let kasamCriticalRealtimeChannel = null;
 let kasamCriticalRealtimeTimer = null;
+let kasamCriticalRealtimeUserId = "";
+let kasamCriticalCloudRefreshBusy = false;
+
+function kasamCriticalStopRealtime() {
+  if (!kasamCriticalRealtimeChannel) return;
+  try {
+    const client = typeof cloudDb === "function" ? cloudDb() : null;
+    if (client?.removeChannel) client.removeChannel(kasamCriticalRealtimeChannel);
+    else kasamCriticalRealtimeChannel.unsubscribe?.();
+  } catch (error) {
+    logError?.(error, "critical-realtime-stop");
+  }
+  kasamCriticalRealtimeChannel = null;
+  kasamCriticalRealtimeUserId = "";
+}
+
+async function kasamCriticalRefreshFromCloud(reason = "cloud-refresh", renderAfter = true) {
+  if (kasamCriticalCloudRefreshBusy) return false;
+  if (!(typeof isCloudReady === "function" && isCloudReady()) || !state.signedInUserId) return false;
+  kasamCriticalCloudRefreshBusy = true;
+  try {
+    if (typeof kasamRefreshCloudData === "function") await kasamRefreshCloudData(reason);
+    else if (typeof loadCloudData === "function") await loadCloudData();
+    if (renderAfter && typeof render === "function") render();
+    return true;
+  } catch (error) {
+    logError?.(error, reason);
+    setCloudStatus?.("Senkron bekliyor");
+    return false;
+  } finally {
+    kasamCriticalCloudRefreshBusy = false;
+  }
+}
 
 function kasamCriticalStartRealtime() {
   if (!(typeof isCloudReady === "function" && isCloudReady()) || !state.signedInUserId || !window.supabase) return;
-  if (kasamCriticalRealtimeChannel) return;
+  if (kasamCriticalRealtimeChannel && kasamCriticalRealtimeUserId === state.signedInUserId) return;
+  kasamCriticalStopRealtime();
   const client = cloudDb();
+  kasamCriticalRealtimeUserId = state.signedInUserId;
   kasamCriticalRealtimeChannel = client.channel(`kasam-live-${state.signedInUserId}`);
   ["kasa_entries", "kasa_notifications", "kasa_projects", "kasa_project_members", "kasa_profiles"].forEach((table) => {
     kasamCriticalRealtimeChannel.on("postgres_changes", { event: "*", schema: "public", table }, () => {
       clearTimeout(kasamCriticalRealtimeTimer);
-      kasamCriticalRealtimeTimer = setTimeout(async () => {
-        try {
-          if (typeof kasamRefreshCloudData === "function") await kasamRefreshCloudData("realtime");
-          else if (typeof loadCloudData === "function") await loadCloudData();
-          render();
-        } catch (error) {
-          logError(error, "critical-realtime-refresh");
-        }
-      }, 450);
+      kasamCriticalRealtimeTimer = setTimeout(() => kasamCriticalRefreshFromCloud("realtime"), 450);
     });
   });
-  kasamCriticalRealtimeChannel.subscribe();
+  kasamCriticalRealtimeChannel.subscribe((status) => {
+    if (status === "SUBSCRIBED") setCloudStatus?.("Canlı senkron açık");
+    if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setCloudStatus?.("Canlı senkron yeniden denenecek");
+  });
 }
+
+window.addEventListener("online", () => {
+  kasamCriticalStartRealtime();
+  kasamCriticalRefreshFromCloud("online");
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) return;
+  kasamCriticalStartRealtime();
+  kasamCriticalRefreshFromCloud("visibility");
+});
 
 if (typeof cloudSignIn === "function") {
   const kasamCriticalCloudSignInBase = cloudSignIn;
@@ -646,6 +687,14 @@ if (typeof cloudSignIn === "function") {
     const result = await kasamCriticalCloudSignInBase(args);
     kasamCriticalStartRealtime();
     return result;
+  };
+}
+
+if (typeof cloudSignOut === "function") {
+  const kasamCriticalCloudSignOutBase = cloudSignOut;
+  cloudSignOut = async function cloudSignOutCritical() {
+    kasamCriticalStopRealtime();
+    return kasamCriticalCloudSignOutBase();
   };
 }
 

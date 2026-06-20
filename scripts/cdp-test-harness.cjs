@@ -48,15 +48,20 @@ function startServer(root, port) {
   return new Promise((resolve) => server.listen(port, "127.0.0.1", () => resolve(server)));
 }
 
-async function waitForCdp(cdpPort) {
-  for (let index = 0; index < 80; index += 1) {
+async function waitForCdp(cdpPort, chrome, stderrBuffer) {
+  for (let index = 0; index < 160; index += 1) {
+    if (chrome.exitCode !== null) {
+      const stderr = stderrBuffer.join("").slice(-1200);
+      throw new Error(`Chrome erken kapandi. code=${chrome.exitCode} ${stderr}`);
+    }
     try {
       const response = await fetch(`http://127.0.0.1:${cdpPort}/json/version`);
       if (response.ok) return response.json();
     } catch (_error) {}
     await sleep(250);
   }
-  throw new Error("Chrome DevTools endpoint acilmadi.");
+  const stderr = stderrBuffer.join("").slice(-1200);
+  throw new Error(`Chrome DevTools endpoint acilmadi. ${stderr}`);
 }
 
 class CdpPage {
@@ -199,8 +204,10 @@ async function runCdpTest(options, fn) {
   const cdpPort = options.cdpPort;
   const localBase = `http://127.0.0.1:${port}`;
   const profileDir = path.join(root, `.tmp-cdp-${cdpPort}`);
+  fs.rmSync(profileDir, { recursive: true, force: true });
   fs.mkdirSync(profileDir, { recursive: true });
   const server = await startServer(root, port);
+  const stderrBuffer = [];
   const chrome = spawn(chromePath, [
     "--headless=new",
     `--remote-debugging-port=${cdpPort}`,
@@ -209,9 +216,10 @@ async function runCdpTest(options, fn) {
     "--no-default-browser-check",
     `--user-data-dir=${profileDir}`,
     "about:blank",
-  ], { stdio: "ignore" });
+  ], { stdio: ["ignore", "ignore", "pipe"] });
+  chrome.stderr?.on("data", (chunk) => stderrBuffer.push(String(chunk)));
   try {
-    await waitForCdp(cdpPort);
+    await waitForCdp(cdpPort, chrome, stderrBuffer);
     const page = await createPage(cdpPort, `${localBase}/index.html`);
     try {
       await fn({ page, localBase });

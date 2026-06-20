@@ -11,7 +11,7 @@ Tarih: 2026-06-20
 | `app-views.js` | Eski render katmani | Kritik override ile destekleniyor |
 | `app-model.js` | Finansal hesaplar, kisisel pay ve state normalizasyonu | Calisiyor |
 | `app-cloud.js` | Supabase sync ve cloud islemleri | Kritik alanlar duzeltildi |
-| `app-critical-fixes.js` | Kayit kilidi, duplicate engeli, medya overlay, kritik akis duzeltmeleri | Aktif production katmani |
+| `app-critical-fixes.js` | Kayit kilidi, duplicate engeli, medya overlay, realtime refresh ve kritik akis duzeltmeleri | Aktif production katmani |
 | `app-game-v2.js` | 3 asamali tahmin oyunu | Testleri geciyor |
 | `app-test-scenarios.js` | Test senaryosu ve auth bypass | Calisiyor |
 | `kasam-simulator.html` | Cok kullanici iframe simulasyonu | Calisiyor, PASS/FAIL kontrolleri var |
@@ -32,6 +32,7 @@ Tarih: 2026-06-20
 | Ortak hareketin cloud alanlari | Calisiyor | `paidById`, `splitWith`, `splitRatio`, `rateLockedAt`, `autoRevealAt`, `updatedAt` cloud read/write icinde korunuyor |
 | Kisisel kasaya pay yansimasi | Calisiyor | Shared budget ve browser entry flow testleri geciyor |
 | Bildirimlerin alicilara dusmesi | Calisiyor | Simulator PASS/FAIL kontrolleri ve acik hareket browser testi geciyor |
+| Realtime cloud yenileme | Calisiyor | Kullanici degisiminde eski kanal kapanir; realtime, online ve uygulamaya geri donus refresh tetikler |
 | Duplicate hareket engeli | Calisiyor | Ayni submit akisindan tek entry ve tek notification uretiliyor |
 | Hareket silme | Calisiyor | Hareketi ekleyen kullanici silebilir; bildirim ve tepkiler temizlenir |
 | Acik hareket medya overlay | Calisiyor | GIF/fotograf hareket kartindan buyuk overlay olarak aciliyor |
@@ -64,7 +65,7 @@ Tarih: 2026-06-20
 | `kasa_reconciliations` | Ekstre uzlasmasi | SQL policy dosyalarinda tanimli |
 
 ## Bilinen Sinirlar
-- Gercek Supabase ortaminda iki ayri fiziksel cihazla realtime gecikme ve push davranisi ayrica izlenmeli.
+- Kod tarafinda realtime abonelik, kullanici degisimi kanal temizligi ve online/visibility fallback refresh eklendi; gercek Supabase ortaminda iki ayri fiziksel cihazla gecikme/push davranisi yine ayrica izlenmeli.
 - PWA icinden iOS/WhatsApp native sticker paketleri dogrudan listelenemez; paste/file fallback kullanilir.
 - Supabase sifre sifirlama mailinin ulasmasi Supabase Auth mail ayarlari, rate limit ve SMTP durumuna baglidir.
 
@@ -74,7 +75,7 @@ Tarih: 2026-06-20
 | `kasam-lint.cjs` | 12 fail kurali geciyor; KURAL-025/KURAL-026 WARN kontrolleri raporlanir |
 | `test-kasa-e2e.cjs` | 21 test, 21 gecti, 0 basarisiz |
 | `test-game-v2.cjs` | 22 test, 22 gecti, 0 basarisiz |
-| `test-ui-fixes.cjs` | 20 test, kritik production katmanini da kontrol eder |
+| `test-ui-fixes.cjs` | 22 test, kritik production katmanini ve realtime refresh fallback akisini kontrol eder |
 | `test-simulator.cjs` | 9 test, 9 gecti, 0 basarisiz |
 | `test-password-reset.cjs` | 11 test, 11 gecti, 0 basarisiz |
 | `test-shared-budget-sync.cjs` | PASS |
@@ -84,6 +85,16 @@ Tarih: 2026-06-20
 | `test-shared-ledger.cjs` | PASS: Chrome/CDP ile ortak gider/gelir split, kisisel pay ve bildirim dogrulandi |
 | `build-public.cjs` | PASS: public klasoru hazir |
 | `api/tcmb-rate.js` | PASS: syntax kontrolu |
+
+## Son Guncelleme: Realtime Refresh Eksiklerinin Kapatilmasi
+- Eksik istek listesi icinde kalan ortak kasa senkronu yeniden denetlendi.
+- `app-critical-fixes.js` icinde realtime kanali aktif kullaniciya baglandi; kullanici degisince eski kanal kapatilir.
+- `kasa_entries`, `kasa_notifications`, `kasa_projects`, `kasa_project_members`, `kasa_profiles` degisiklikleri artik tek refresh kuyruguna duser; ayni anda gelen olaylar state'i tekrar tekrar ezmez.
+- Uygulama tekrar internete geldiginde ve arka plandan one dondugunde cloud verisi yeniden yuklenir.
+- LOCAL SIMULASYON: `kasam-lint.cjs`, `test-ui-fixes.cjs`, `test-kasa-e2e.cjs`, `test-game-v2.cjs`, `test-simulator.cjs`, `test-password-reset.cjs`, `test-shared-budget-sync.cjs`, `test-cloud-persistence-and-guess-flow.cjs`, `test-yilmaz-scenario-rhythm.cjs`, `test-entry-open-flow.cjs`, `test-shared-ledger.cjs`, `build-public.cjs` gecti.
+- GORSEL DOGRULAMA: 14 kontrol, 14 gecti, 0 basarisiz.
+- CLOUD TEST: canli Vercel stamp goruldu: `Guncellendi 14.06.2026 23:05`.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606202031` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
 
 ## Son Guncelleme: Eksik Istek Denetimi
 - Eski istek listesi aktif production katmanina gore tekrar denetlendi.

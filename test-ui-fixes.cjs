@@ -110,6 +110,19 @@ const tests = [
     assert.ok(criticalJs.includes("notification-history"));
     assert.ok(css.includes("passive-notification-list"));
   }],
+  ["8.21 - Cloud realtime kullanici bazli acilir ve yenilenir", () => {
+    assert.ok(criticalJs.includes("kasamCriticalStartRealtime"));
+    assert.ok(criticalJs.includes("postgres_changes"));
+    assert.ok(criticalJs.includes("kasamCriticalRealtimeUserId === state.signedInUserId"));
+    assert.ok(criticalJs.includes("kasamCriticalStopRealtime"));
+    assert.ok(criticalJs.includes("kasamCriticalRefreshFromCloud(\"realtime\")"));
+  }],
+  ["8.22 - Online ve uygulamaya geri donuste cloud refresh tetiklenir", () => {
+    assert.ok(criticalJs.includes('window.addEventListener("online"'));
+    assert.ok(criticalJs.includes('document.addEventListener("visibilitychange"'));
+    assert.ok(criticalJs.includes('kasamCriticalRefreshFromCloud("online")'));
+    assert.ok(criticalJs.includes('kasamCriticalRefreshFromCloud("visibility")'));
+  }],
 ];
 
 const results = tests.map(([name, fn]) => runTest(name, fn));
