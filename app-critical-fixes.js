@@ -64,7 +64,15 @@ function kasamCriticalCompactDate(value) {
 
 function kasamCriticalProjectRows() {
   const user = currentUser();
-  const projects = typeof kasamVisibleProjects === "function" ? kasamVisibleProjects() : state.projects || [];
+  const rawProjects = typeof kasamVisibleProjects === "function" ? kasamVisibleProjects() : state.projects || [];
+  let personalShown = false;
+  const projects = rawProjects.filter((project) => {
+    const personal = typeof kasamIsPersonalProject === "function" && kasamIsPersonalProject(project);
+    if (!personal) return true;
+    if (personalShown) return false;
+    personalShown = true;
+    return true;
+  });
   if (!user || !projects.length) return `<div class="empty-state">Bütçe yok. Kendi kasanı oluştur veya birine katıl.</div>`;
   return projects.map((project) => {
     const personal = typeof kasamIsPersonalProject === "function" && kasamIsPersonalProject(project);
@@ -340,12 +348,16 @@ if (typeof renderGroup === "function") {
   const kasamCriticalRenderGroupBase = renderGroup;
   renderGroup = function renderGroupCritical() {
     let html = kasamCriticalRenderGroupBase();
+    const project = activeProject();
+    const personal = project && typeof kasamIsPersonalProject === "function" && kasamIsPersonalProject(project);
     html = html.replace(/<div class="invite-box"><div><span class="field-label">Kod<\/span><strong>[^<]*<\/strong><p>[^<]*<\/p><\/div><button class="mini-action" data-action="copy-project-link" type="button">Kopyala<\/button><\/div>/g, () => {
-      const project = activeProject();
       const link = project ? inviteLink(project) : "";
       return `<div class="invite-box share-invite-box"><div><span class="field-label">Paylaşım bağlantısı</span><strong>Bu kasaya davet et</strong><p>${kasamSafe(link)}</p></div><button class="mini-action primary-share-action" data-action="share-project-link" type="button">${kasamIcon("share-2", "icon-neutral")} Paylaş</button><button class="mini-action" data-action="copy-project-link" type="button">Kopyala</button></div>`;
     });
-    html = html.replace(/<section class="card"><h2>Katılma talepleri<\/h2><div class="expense-list"><div class="empty-state">Bekleyen katılma talebi yok\.<\/div><\/div><\/section>/g, "");
+    if (personal) {
+      html = html.replace(/<section class="card">\s*<div class="section-head"><div><h2>Erişim<\/h2>[^]*?<\/section>/g, "");
+      html = html.replace(/<section class="card"><h2>Katılma talepleri<\/h2><div class="expense-list"><div class="empty-state">Bekleyen katılma talebi yok\.<\/div><\/div><\/section>/g, "");
+    }
     return html;
   };
 }
@@ -367,7 +379,7 @@ if (typeof notificationRow === "function") {
           </form>
         `;
       return `
-        <article class="notification-card critical-game-card">
+        <article class="notification-card critical-game-card" data-current-game="1">
           <div class="notification-copy">
             <p class="eyebrow">Yeni tahmin var</p>
             <p>Detaylar oyun bitene kadar kapalı.</p>
@@ -391,10 +403,22 @@ if (typeof notificationRow === "function") {
 if (typeof renderNotifications === "function") {
   renderNotifications = function renderNotificationsCritical() {
     const notifications = notificationEntries();
+    const user = currentUser();
+    const active = notifications.filter((item) => kasamCriticalIsPendingSurprise(item, user?.id));
+    const history = notifications.filter((item) => !kasamCriticalIsPendingSurprise(item, user?.id));
+    const historyRows = history.slice(0, 12).map(notificationRow).join("");
     return `
       <section class="card notifications-page-card">
         <div class="section-head"><div><h2>Bildirimler</h2><p>Yeni tahminler, tepkiler ve kasa hareketleri.</p></div></div>
-        <div class="expense-list">${notifications.length ? notifications.map(notificationRow).join("") : `<div class="empty-state">${KASAM_EMPTY.notifications}</div>`}</div>
+        ${notifications.length ? `
+          ${active.length ? `<div class="expense-list active-notification-list" data-active-notifications>${active.map(notificationRow).join("")}</div>` : ""}
+          ${history.length ? `
+            <details class="notification-history" ${active.length ? "" : "open"}>
+              <summary>Geçmiş bildirimler <span>${history.length}</span></summary>
+              <div class="expense-list passive-notification-list">${historyRows}</div>
+            </details>
+          ` : ""}
+        ` : `<div class="empty-state">${KASAM_EMPTY.notifications}</div>`}
       </section>
     `;
   };

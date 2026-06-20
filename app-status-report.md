@@ -105,3 +105,13 @@ Tarih: 2026-06-14
 - Local simulasyon: 75 test, 75 gecti, 0 basarisiz.
 - Gorsel dogrulama: 21 kontrol, 20 gecti, 1 basarisiz. Basarisiz olan tek madde cloud stamp; canli Vercel halen eski `Guncellendi 14.06.2026 21:15` surumunu servis ediyor.
 - Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-2026-06-14-2305-final-3`.
+
+## Son Guncelleme: Bildirim Gecmisi ve Reel Gorsel Audit
+- Aktif tahmin oyunu bildirimleri gecmis bildirimlerden ayrildi; aktif oyun karti ustte kalir, gecmis bildirimler acilir/kapanir gecmis alanina tasinir.
+- Bildirim gizlilik kontrolu artik tum sayfayi degil aktif oyun kartini denetler; eski acik bildirimler aktif surpriz gizliligi testini bozmaz.
+- Kisisel kasa listesinde ayni kullaniciya ait yinelenen kisisel kasa kartlari tekillestirildi.
+- Kisisel kasa detayinda erisim/katilma talebi bolumleri gizlenir; ortak kasada paylasim ve katilma talebi akisi korunur.
+- LOCAL SIMULASYON: `kasam-lint.cjs`, `test-ui-fixes.cjs`, `test-game-v2.cjs` gecti.
+- GORSEL DOGRULAMA: 14 kontrol, 14 gecti, 0 basarisiz.
+- CLOUD TEST: canli Vercel stamp goruldu: `Guncellendi 14.06.2026 23:05`.
+- Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606201805`.

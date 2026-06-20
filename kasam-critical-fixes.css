@@ -391,6 +391,48 @@
   opacity: 0.74;
 }
 
+.notification-history {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+}
+
+.notification-history summary {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  list-style: none;
+}
+
+.notification-history summary::-webkit-details-marker {
+  display: none;
+}
+
+.notification-history summary span {
+  display: inline-grid;
+  min-width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-2);
+  color: var(--color-text-primary);
+  font-size: var(--text-xs);
+}
+
+.passive-notification-list {
+  margin-top: var(--space-2);
+}
+
+.active-notification-list + .notification-history:not([open]) {
+  margin-bottom: 0;
+}
+
 .notifications-page-card .empty-state {
   min-height: 88px;
 }
