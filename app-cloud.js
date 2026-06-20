@@ -23,6 +23,36 @@ function cloudIsPasswordRecoveryUrl() {
   return query.get("authAction") === "reset-password" || query.get("type") === "recovery" || hash.get("type") === "recovery";
 }
 
+async function cloudEnsurePasswordRecoverySession() {
+  const client = cloudDb();
+  if (!client) throw new Error("Bulut ayarı yok.");
+  const query = new URLSearchParams(location.search || "");
+  const hash = new URLSearchParams(String(location.hash || "").replace(/^#/, ""));
+  const code = query.get("code");
+  const accessToken = hash.get("access_token") || query.get("access_token");
+  const refreshToken = hash.get("refresh_token") || query.get("refresh_token");
+
+  if (code && typeof client.auth.exchangeCodeForSession === "function") {
+    const exchanged = await client.auth.exchangeCodeForSession(code);
+    if (exchanged.error) throw exchanged.error;
+    if (exchanged.data?.session) return exchanged.data.session;
+  }
+
+  if (accessToken && refreshToken && typeof client.auth.setSession === "function") {
+    const sessionResult = await client.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+    if (sessionResult.error) throw sessionResult.error;
+    if (sessionResult.data?.session) return sessionResult.data.session;
+  }
+
+  const { data, error } = await client.auth.getSession();
+  if (error) throw error;
+  if (data?.session) return data.session;
+  throw new Error("Şifre bağlantısı doğrulanamadı. Maildeki bağlantıyı yeniden aç.");
+}
+
 function cloudHasTestScenarioUrl() {
   try {
     return new URLSearchParams(location.search || "").has("testScenario");
@@ -122,12 +152,14 @@ async function initCloudSession() {
   }
 
   let { data, error } = await client.auth.getSession();
-  const query = new URLSearchParams(location.search || "");
-  const code = query.get("code");
-  if (!data.session?.user && code && cloudIsPasswordRecoveryUrl() && typeof client.auth.exchangeCodeForSession === "function") {
-    const exchanged = await client.auth.exchangeCodeForSession(code);
-    if (exchanged.error) error = exchanged.error;
-    else data = exchanged.data || data;
+  if (cloudIsPasswordRecoveryUrl()) {
+    try {
+      const session = await cloudEnsurePasswordRecoverySession();
+      data = { ...(data || {}), session };
+      error = null;
+    } catch (sessionError) {
+      error = sessionError;
+    }
   }
   if (error) {
     setCloudStatus(friendlyCloudError(error));

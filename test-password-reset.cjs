@@ -66,8 +66,13 @@ const tests = [
     assert.ok(appCloud.includes("cloudClearLocalAuthState();"));
   }],
   ["RESET 9 - PKCE reset kodu session'a cevrilir", () => {
+    assert.ok(appCloud.includes("cloudEnsurePasswordRecoverySession"));
     assert.ok(appCloud.includes("exchangeCodeForSession"));
-    assert.ok(appCloud.includes("code && cloudIsPasswordRecoveryUrl()"));
+    assert.ok(appCloud.includes("setSession"));
+  }],
+  ["RESET 10 - Sifre guncellemeden once recovery session hazirlanir", () => {
+    assert.ok(critical.includes("cloudEnsurePasswordRecoverySession"));
+    assert.ok(critical.includes("auth.updateUser({ password })"));
   }],
 ];
 

@@ -61,6 +61,10 @@ const tests = [
     assert.ok(index.includes("kasam-ui-fixes.css"));
     assert.ok(index.includes("app-ui-fixes.js"));
   }],
+  ["8.12 - Hareket ekle ana butonu bind ediliyor", () => {
+    assert.ok(js.includes("[data-action='go-add-movement']"));
+    assert.ok(js.includes("state.activeView = \"add\""));
+  }],
 ];
 
 const results = tests.map(([name, fn]) => runTest(name, fn));

@@ -419,7 +419,7 @@
     const game1 = ctx.entry({ date: "2026-06-14", type: "expense", amount: 1847, heading: "Market", title: "Market alışverişi", user: "fatma", paidBy: "mehmet", splitWith: members, splitRatio: equal });
     const game2 = ctx.entry({ date: "2026-06-18", type: "expense", amount: 380, heading: "Yemek", title: "Arkadaş yemeği", user: "burak", paidBy: "burak", splitWith: members, splitRatio: burakOnly });
     ctx.game(game1, { options: ["Market", "Temizlik", "Fatura", "Yakıt"] });
-    ctx.game(game2, { options: ["Yemek", "Kafe", "Ulaşım", "Okul"] });
+    ctx.game(game2, { options: ["Yemek", "Kafe", "Ulaşım", "Okul"], completed: false, deadline: "2026-06-30" });
     ctx.reaction(game1, "mehmet", "👀");
     ctx.reconciliation({ user: "mehmet", month: "2026-06", bankName: "Ziraat", statementTotal: 50796, kasaTotal: 50796, diff: 0 });
     ctx.insight({ user: "mehmet", type: "monthly", period: "2026-06", message: "Haziran aile bütçesinde market ve eğitim kalemleri arttı.", actionSuggestion: "Market alışverişini haftalık listeyle takip et." });
@@ -844,8 +844,16 @@
     if (!hasMatchingState) initTestScenario(selector, { render: false });
     else {
       const simUserIndex = testScenarioUserIndexFromUrl();
-      if (simUserIndex) activateTestScenarioUserByIndex(simUserIndex);
-      else activateTestScenarioUser(state.signedInUserId || state.activeUserId);
+      const users = testScenarioUsers();
+      const targetUser = simUserIndex ? users[Math.max(0, simUserIndex - 1)] : state.users.find((item) => item.id === (state.signedInUserId || state.activeUserId));
+      if (targetUser && state.signedInUserId !== targetUser.id) {
+        activateTestScenarioUser(targetUser.id);
+      } else if (targetUser) {
+        state.signedInUserId = targetUser.id;
+        state.activeUserId = targetUser.id;
+        state.testScenarioActiveEmail = targetUser.email || "";
+        state.testScenarioMode = true;
+      }
     }
     return true;
   }

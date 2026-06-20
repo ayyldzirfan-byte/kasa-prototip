@@ -1,4 +1,4 @@
-﻿const KASAM_CRITICAL_VERSION = "14.06.2026 21:15";
+﻿const KASAM_CRITICAL_VERSION = "14.06.2026 23:05";
 
 if (typeof KASAM_EMPTY === "object" && KASAM_EMPTY) {
   KASAM_EMPTY.notifications = "Sessizlik...";
@@ -125,7 +125,12 @@ if (typeof notificationEntries === "function") {
         }
         return isRecipient || isActor;
       })
-      .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+      .sort((a, b) => {
+        const aPending = a.mode === "surprise" && !a.isCompleted && !a.revealedAt && !a.gameFullyCompleted;
+        const bPending = b.mode === "surprise" && !b.isCompleted && !b.revealedAt && !b.gameFullyCompleted;
+        if (aPending !== bPending) return aPending ? -1 : 1;
+        return String(b.createdAt).localeCompare(String(a.createdAt));
+      });
   };
 }
 
@@ -352,18 +357,22 @@ if (typeof notificationRow === "function") {
     if (notification?.mode === "surprise" && kasamCriticalIsPendingSurprise(notification, user?.id)) {
       const project = (state.projects || []).find((item) => item.id === notification.projectId);
       const members = (state.users || []).filter((member) => (project?.memberIds || []).includes(member.id));
-      return `
-        <article class="notification-card critical-game-card">
-          <div class="notification-copy">
-            <p class="eyebrow">Yeni tahmin var</p>
-            <h3>Bu hareketi kim ekledi?</h3>
-            <p>Detaylar oyun bitene kadar kapalı.</p>
-          </div>
+      const gameForm = notification.gameVersion === "v2" && typeof kasamGameV2NotificationForm === "function"
+        ? kasamGameV2NotificationForm(notification)
+        : `
           <form class="game-guess-form critical-game-form" data-id="${notification.id}" data-step="actor">
             <div class="game-member-grid">
               ${members.map((member) => `<button name="predictedActorId" value="${member.id}" type="submit">${memberAvatarHtml(member, project, "member-avatar")}<span>${kasamSafe(projectUserLabel(member, project))}</span></button>`).join("")}
             </div>
           </form>
+        `;
+      return `
+        <article class="notification-card critical-game-card">
+          <div class="notification-copy">
+            <p class="eyebrow">Yeni tahmin var</p>
+            <p>Detaylar oyun bitene kadar kapalı.</p>
+          </div>
+          ${gameForm}
         </article>
       `;
     }
@@ -739,6 +748,7 @@ if (typeof bindScreen === "function") {
         }
         resetForm.querySelectorAll("button").forEach((item) => { item.disabled = true; });
         try {
+          if (typeof cloudEnsurePasswordRecoverySession === "function") await cloudEnsurePasswordRecoverySession();
           const { error } = await cloudDb().auth.updateUser({ password });
           if (error) throw error;
           await cloudDb().auth.signOut();
@@ -823,5 +833,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const stamp = document.querySelector(".update-stamp");
   if (stamp) stamp.textContent = `Güncellendi ${KASAM_CRITICAL_VERSION}`;
 });
+
 
 

@@ -368,6 +368,20 @@ var kasamUiBaseBindScreen = bindScreen;
 bindScreen = function bindScreenUi() {
   kasamUiBaseBindScreen();
   kasamStripCloudStatusText();
+  app.querySelectorAll("[data-action='go-add-movement']").forEach((button) => {
+    if (button.dataset.addMovementBound) return;
+    button.dataset.addMovementBound = "1";
+    button.addEventListener("click", () => {
+      draft.type = draft.type === "income" ? "income" : "expense";
+      draft.userId = currentUser()?.id || activeMembers()[0]?.id || state.users[0]?.id;
+      draft.date = todayKey();
+      draft.amountInput = "";
+      state.previousView = state.activeView || "home";
+      state.activeView = "add";
+      saveState();
+      render();
+    });
+  });
   app.querySelectorAll("[data-action='calendar-add-entry']").forEach((button) => {
     if (button.dataset.calendarAddBound) return;
     button.dataset.calendarAddBound = "1";

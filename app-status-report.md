@@ -97,3 +97,11 @@ Tarih: 2026-06-14
 - KURAL-039 eklendi: ekran kalabaligi olusturulmayacak.
 - Hareket ekleme gibi kritik akislar kullanicidan ayni bilgiyi tekrar istemeyecek; ikincil ayarlar kompakt, acilir veya adim adim gosterilecek.
 - kasam-lint.cjs KURAL-039 icin temel kontrol ekledi.
+
+## Son Guncelleme: Tahmin Oyunu Gorsel Kapsam
+- Test senaryosu 1 icinde bir aktif tahmin oyunu bilerek acik birakildi; bildirim ekraninda 3 asamali oyun reel tarayici testine dahil edildi.
+- Bildirim siralamasi aktif surpiz/tahmin oyunlarini gecmis bildirimlerin ustune alacak sekilde duzeltildi.
+- `ensureTestScenarioState` aktif gorunumu her render'da ana ekrana dondurmayacak sekilde korundu; test modunda hareket ekleme ve bildirim ekranlari gezilebilir kalir.
+- Local simulasyon: 75 test, 75 gecti, 0 basarisiz.
+- Gorsel dogrulama: 21 kontrol, 20 gecti, 1 basarisiz. Basarisiz olan tek madde cloud stamp; canli Vercel halen eski `Guncellendi 14.06.2026 21:15` surumunu servis ediyor.
+- Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-2026-06-14-2305-final-3`.
