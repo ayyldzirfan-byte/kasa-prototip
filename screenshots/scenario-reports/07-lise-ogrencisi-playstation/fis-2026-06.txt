@@ -1,0 +1,23 @@
+KASAM FİŞİ
+2026-06
+
+Kasa: PlayStation Kumbarası
+Kod: ARDA-PS5-1
+--------------------------------
+Kasa toplamı: Gelir 3.650 TL | Gider 1.424 TL | Net 2.226 TL
+
+HAREKETLER
+- 2026-06-01 | Gelir | Aylık harçlık | 2.000 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-06 | Gelir | Komşu yardımı | 500 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-06 | Gelir | Komşu yardımı ek gelir | 500 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-10 | Gider | Okul kantini | 460 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-10 | Gider | Kantin tost ayran | 85 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-12 | Gider | Ulaşım | 400 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-18 | Gider | Arkadaş aktivitesi | 280 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-20 | Gider | Telefon aboneliği | 199 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+- 2026-06-28 | Gelir | PS5 kumbarası | 650 TL | Ekleyen: Arda Koçak | Ödeyen: Arda Koçak
+
+PAY DAĞILIMI
+- Arda Koçak: +3.650 TL / -1.424 TL / net 2.226 TL
+
+kasam.app

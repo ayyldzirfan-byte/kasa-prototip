@@ -1,0 +1,112 @@
+Üniversite Ev Arkadaşları - Haftalık Rapor
+
+Kasa: Kerem & Deniz Evi (KEREM-DENIZ-1)
+
+
+
+## Hafta başlangıcı 2026-03-30
+Hafta: Gelir 12.700 TL | Gider 12.000 TL | Net 700 TL
+- 2026-04-01 | Gelir | Kerem burs ve part-time | 8.500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-04-01 | Gelir | Deniz burs | 4.200 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-04-02 | Gider | Kira | 12.000 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +8.500 TL / -6.000 TL / net 2.500 TL
+- Deniz Kaya: +4.200 TL / -6.000 TL / net -1.800 TL
+
+## Hafta başlangıcı 2026-04-06
+Hafta: Gelir 0 TL | Gider 1.350 TL | Net -1.350 TL
+- 2026-04-08 | Gider | Elektrik su internet | 1.350 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -675 TL / net -675 TL
+- Deniz Kaya: +0 TL / -675 TL / net -675 TL
+
+## Hafta başlangıcı 2026-04-13
+Hafta: Gelir 0 TL | Gider 4.600 TL | Net -4.600 TL
+- 2026-04-13 | Gider | Ortak market | 3.200 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-04-16 | Gider | Kerem ulaşım | 800 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-04-17 | Gider | Deniz ulaşım | 600 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -2.400 TL / net -2.400 TL
+- Deniz Kaya: +0 TL / -2.200 TL / net -2.200 TL
+
+## Hafta başlangıcı 2026-04-20
+Hafta: Gelir 0 TL | Gider 1.720 TL | Net -1.720 TL
+- 2026-04-20 | Gider | Kerem kurs | 500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-04-21 | Gider | Deniz kafe | 420 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-04-22 | Gider | Kerem oyun abonelik | 300 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-04-24 | Gider | Deniz kıyafet | 500 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -800 TL / net -800 TL
+- Deniz Kaya: +0 TL / -920 TL / net -920 TL
+
+## Hafta başlangıcı 2026-04-27
+Hafta: Gelir 12.700 TL | Gider 12.000 TL | Net 700 TL
+- 2026-05-01 | Gelir | Kerem burs ve part-time | 8.500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-05-01 | Gelir | Deniz burs | 4.200 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-05-02 | Gider | Kira | 12.000 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +8.500 TL / -6.000 TL / net 2.500 TL
+- Deniz Kaya: +4.200 TL / -6.000 TL / net -1.800 TL
+
+## Hafta başlangıcı 2026-05-04
+Hafta: Gelir 0 TL | Gider 1.420 TL | Net -1.420 TL
+- 2026-05-08 | Gider | Elektrik su internet | 1.420 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -710 TL / net -710 TL
+- Deniz Kaya: +0 TL / -710 TL / net -710 TL
+
+## Hafta başlangıcı 2026-05-11
+Hafta: Gelir 0 TL | Gider 5.300 TL | Net -5.300 TL
+- 2026-05-13 | Gider | Ortak market | 3.900 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-05-16 | Gider | Kerem ulaşım | 800 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-05-17 | Gider | Deniz ulaşım | 600 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -2.750 TL / net -2.750 TL
+- Deniz Kaya: +0 TL / -2.550 TL / net -2.550 TL
+
+## Hafta başlangıcı 2026-05-18
+Hafta: Gelir 0 TL | Gider 2.128 TL | Net -2.128 TL
+- 2026-05-20 | Gider | Kerem kurs | 500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-05-21 | Gider | Deniz kafe | 380 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-05-22 | Gider | Kerem oyun abonelik | 299 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-05-22 | Gider | Steam oyunu | 299 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-05-24 | Gider | Deniz kıyafet | 650 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -1.098 TL / net -1.098 TL
+- Deniz Kaya: +0 TL / -1.030 TL / net -1.030 TL
+
+## Hafta başlangıcı 2026-06-01
+Hafta: Gelir 12.700 TL | Gider 12.000 TL | Net 700 TL
+- 2026-06-01 | Gelir | Kerem burs ve part-time | 8.500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-01 | Gelir | Deniz burs | 4.200 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-02 | Gider | Kira | 12.000 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +8.500 TL / -6.000 TL / net 2.500 TL
+- Deniz Kaya: +4.200 TL / -6.000 TL / net -1.800 TL
+
+## Hafta başlangıcı 2026-06-08
+Hafta: Gelir 0 TL | Gider 5.780 TL | Net -5.780 TL
+- 2026-06-08 | Gider | Elektrik su internet | 1.480 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-13 | Gider | Ortak market | 4.300 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -2.890 TL / net -2.890 TL
+- Deniz Kaya: +0 TL / -2.890 TL / net -2.890 TL
+
+## Hafta başlangıcı 2026-06-15
+Hafta: Gelir 0 TL | Gider 2.350 TL | Net -2.350 TL
+- 2026-06-16 | Gider | Kerem ulaşım | 800 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-17 | Gider | Deniz ulaşım | 600 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-20 | Gider | Kerem kurs | 500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-21 | Gider | Deniz kafe | 450 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -1.300 TL / net -1.300 TL
+- Deniz Kaya: +0 TL / -1.050 TL / net -1.050 TL
+
+## Hafta başlangıcı 2026-06-22
+Hafta: Gelir 1.500 TL | Gider 890 TL | Net 610 TL
+- 2026-06-22 | Gider | Kerem oyun abonelik | 350 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-24 | Gider | Deniz kıyafet | 540 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-27 | Gelir | Part-time iş ödemesi | 1.500 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -350 TL / net -350 TL
+- Deniz Kaya: +1.500 TL / -540 TL / net 960 TL

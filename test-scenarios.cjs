@@ -5,7 +5,19 @@ const os = require("node:os");
 
 const { REPORT_DATE, kasamScenarioMoney, buildKasamTestScenarioState } = require("./app-test-scenarios.js");
 
-const outputRoot = path.join(os.homedir(), "Desktop", "kasam-test");
+function resolveOutputRoot() {
+  const preferred = path.join(os.homedir(), "Desktop", "kasam-test", "scenario-reports");
+  try {
+    fs.mkdirSync(preferred, { recursive: true });
+    return preferred;
+  } catch (_error) {
+    const fallback = path.join(process.cwd(), "screenshots", "scenario-reports");
+    fs.mkdirSync(fallback, { recursive: true });
+    return fallback;
+  }
+}
+
+const outputRoot = resolveOutputRoot();
 const state = buildKasamTestScenarioState("all");
 const usersById = new Map(state.users.map((user) => [user.id, user]));
 const projectsById = new Map(state.projects.map((project) => [project.id, project]));
@@ -332,6 +344,14 @@ function runGlobalCheck(name, fn) {
   }
 }
 
+const safeOutputSuffixes = [
+  path.join("kasam-test", "scenario-reports"),
+  path.join("screenshots", "scenario-reports")
+];
+
+if (!safeOutputSuffixes.some((suffix) => outputRoot.endsWith(suffix))) {
+  throw new Error(`Güvensiz çıktı klasörü: ${outputRoot}`);
+}
 fs.rmSync(outputRoot, { recursive: true, force: true });
 fs.mkdirSync(outputRoot, { recursive: true });
 

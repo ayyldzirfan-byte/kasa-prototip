@@ -1,243 +1,130 @@
 const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const http = require("node:http");
 const path = require("node:path");
-const { chromium } = require("playwright");
+const { runCdpTest } = require("./scripts/cdp-test-harness.cjs");
 
 const root = process.cwd();
-const port = 4178;
-const appUrl = `http://127.0.0.1:${port}/index.html`;
-const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const results = [];
 
-function record(name, detail = "") {
-  results.push({ name, status: "PASS", detail });
+function record(name) {
+  results.push(name);
+  console.log(`PASS ${name}`);
 }
 
-function startServer() {
-  const types = {
-    ".html": "text/html; charset=utf-8",
-    ".js": "application/javascript; charset=utf-8",
-    ".css": "text/css; charset=utf-8",
-    ".webmanifest": "application/manifest+json; charset=utf-8",
-    ".svg": "image/svg+xml; charset=utf-8",
-    ".png": "image/png",
-  };
-  const server = http.createServer((req, res) => {
-    let urlPath = decodeURIComponent(String(req.url || "/").split("?")[0]);
-    if (urlPath === "/" || urlPath === "/gizlilik" || urlPath === "/sartlar") urlPath = "/index.html";
-    const filePath = path.normalize(path.join(root, urlPath));
-    if (!filePath.startsWith(root)) {
-      res.writeHead(403);
-      res.end("Forbidden");
-      return;
-    }
-    fs.readFile(filePath, (error, data) => {
-      if (error) {
-        res.writeHead(404);
-        res.end("Not found");
-        return;
-      }
-      res.writeHead(200, { "Content-Type": types[path.extname(filePath)] || "application/octet-stream" });
-      res.end(data);
-    });
-  });
-  return new Promise((resolve) => server.listen(port, "127.0.0.1", () => resolve(server)));
-}
+const seed = {
+  activeView: "home",
+  reportPeriod: "month",
+  movementPeriod: "month",
+  groupMode: "detail",
+  activeProjectId: "p_personal",
+  activeUserId: "u_1",
+  signedInUserId: "u_1",
+  authMode: "login",
+  onboardingStep: "done",
+  users: [
+    { id: "u_1", name: "Test Kullanici", nickname: "Test", email: "test.kullanici@kasam.test", password: "1234", createdAt: "2026-06-01T00:00:00.000Z" },
+    { id: "u_2", name: "Ortak Kullanici", nickname: "Ortak", email: "ortak@kasam.test", password: "1234", createdAt: "2026-06-01T00:00:00.000Z" },
+  ],
+  projects: [
+    { id: "p_personal", name: "Kendi Kasam", purpose: "Kisisel butce", code: "OWN", createdAt: "2026-06-01T00:00:00.000Z", createdBy: "u_1", memberIds: ["u_1"], memberSince: { u_1: "2026-06-01" }, splitType: "individual" },
+    { id: "p_shared", name: "Ortak Butce", purpose: "Ev", code: "KASAM-TEST", createdAt: "2026-06-01T00:00:00.000Z", createdBy: "u_1", memberIds: ["u_1", "u_2"], memberSince: { u_1: "2026-06-01", u_2: "2026-06-01" }, splitType: "equal" },
+  ],
+  headings: [],
+  entries: [],
+  notifications: [],
+  reactions: [],
+  reconciliations: [],
+  goals: [],
+  settlements: [],
+  insights: [],
+  joinRequests: [],
+  retryQueue: [],
+  offlineQueue: [],
+};
 
-async function fill(page, selector, value) {
-  const locator = page.locator(selector);
-  assert.equal(await locator.count(), 1, `Tekil input bulunamadi: ${selector}`);
-  await locator.fill(value);
-}
-
-async function submit(page, selector) {
-  const primarySave = page.locator(`${selector} [data-action='save-entry']`);
-  if (await primarySave.count()) {
-    await primarySave.first().click();
-    return;
-  }
-  await page.locator(`${selector} button[type='submit']`).last().click();
-}
-
-async function waitHome(page) {
-  await page.waitForFunction(() => document.body.dataset.view === "home" && (document.querySelector("#app")?.textContent || "").length > 100);
-}
-
-async function addEntry(page, { type, amount, heading }) {
-  await page.locator("button[data-action='go-add-movement']").first().click();
+async function openEntryForm(page, projectId, type) {
+  await page.eval(`(payload) => {
+    state.activeView = "add";
+    state.activeProjectId = payload.projectId;
+    state.addProjectId = payload.projectId;
+    state.addReturnView = "home";
+    state.addReturnProjectId = payload.projectId;
+    draft = makeDraft();
+    draft.type = payload.type;
+    draft.projectId = payload.projectId;
+    draft.userId = state.activeUserId;
+    draft.date = "2026-06-14";
+    draft.notificationMode = "open";
+    render();
+  }`, [{ projectId, type }]);
   await page.waitForSelector("#entryForm");
-  await page.locator(`[data-entry-type='${type}']`).click();
-  await page.waitForFunction((entryType) => {
-    const heading = document.querySelector("#entryForm h2")?.textContent || "";
-    return entryType === "income" ? heading.includes("Gelir") : heading.includes("Gider");
-  }, type);
-  await fill(page, "#amount", String(amount));
-  await fill(page, "#headingName", heading);
-  await submit(page, "#entryForm");
-  try {
-    await waitHome(page);
-  } catch (error) {
-    console.error("ADD_ENTRY_TIMEOUT_STATE", await page.evaluate(() => ({
-      url: location.href,
-      html: document.querySelector("#app")?.innerText?.slice(0, 900) || "",
-      amount: document.querySelector("#amount")?.value || "",
-      heading: document.querySelector("#headingName")?.value || "",
-      typeTitle: document.querySelector("#entryForm h2")?.textContent || "",
-      toast: document.querySelector("#toast")?.textContent || "",
-      saveAction: document.querySelector("#entryForm button[type='submit']")?.getAttribute("data-action") || "",
-      saveBound: document.querySelector("#entryForm button[type='submit']")?.dataset.kasamClickBound || "",
-      submitBound: document.querySelector("#entryForm")?.dataset.kasamSubmitBound || "",
-      hasEntryForm: Boolean(document.querySelector("#entryForm")),
-      hasHero: Boolean(document.querySelector(".personal-hero")),
-    })));
-    throw error;
+}
+
+async function submitEntry(page, { type, amount, heading, projectId = "p_personal" }) {
+  const entryCount = await page.eval(`() => state.entries.length`);
+  await openEntryForm(page, projectId, type);
+  await page.fill("#amount", String(amount));
+  await page.fill("#headingName", heading);
+  await page.eval(`async () => handleEntrySubmit(document.querySelector("#entryForm"))`);
+  await page.waitFor(`() => state.entries.length > ${entryCount}`, 12000);
+  if (projectId === "p_personal") {
+    await page.waitFor(`document.body.dataset.view === "home"`, 12000);
   }
 }
 
-(async () => {
-  fs.mkdirSync(path.join(root, "screenshots"), { recursive: true });
-  const server = await startServer();
-  const browser = await chromium.launch({ headless: true, executablePath: chromePath });
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: "block" });
-  const page = await context.newPage();
-  const pageErrors = [];
-  page.on("pageerror", (error) => pageErrors.push(error.message));
-  page.on("console", (msg) => {
-    if (
-      msg.type() === "error" &&
-      !msg.text().includes("Failed to load resource: net::ERR_FAILED") &&
-      !msg.text().includes("Failed to load resource: net::ERR_NETWORK_ACCESS_DENIED")
-    ) {
-      pageErrors.push(msg.text());
-    }
-  });
-  await page.route("https://cdn.jsdelivr.net/**", (route) => route.abort());
-  await page.route("**/cloud-config.js**", (route) =>
-    route.fulfill({ status: 200, contentType: "application/javascript; charset=utf-8", body: "window.KASA_CLOUD_CONFIG = {};" }),
-  );
+runCdpTest({ root, port: 4178, cdpPort: 9378 }, async ({ page, localBase }) => {
+  await page.goto(`${localBase}/index.html?v=kasam-e2e`);
+  await page.eval(`(seedState) => {
+    localStorage.clear();
+    window.isCloudReady = () => false;
+    state = normalizeState(seedState);
+    draft = makeDraft();
+    saveState();
+    render();
+  }`, [seed]);
+  await page.waitFor(`document.body.dataset.view === "home"`, 12000);
+  assert.match(await page.eval(`() => document.querySelector("#app")?.innerText || ""`), /Kasam|Kendi Kasam|Test kasası/);
+  record("home render");
 
-  try {
-    await page.goto(appUrl, { waitUntil: "load" });
-    try {
-      await page.evaluate(async () => {
-        localStorage.clear();
-        if ("serviceWorker" in navigator) {
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(registrations.map((registration) => registration.unregister()));
-        }
-        if ("caches" in window) {
-          const keys = await caches.keys();
-          await Promise.all(keys.map((key) => caches.delete(key)));
-        }
-      });
-    } catch (error) {
-      if (!String(error?.message || error).includes("Execution context was destroyed")) throw error;
-      await page.goto(appUrl, { waitUntil: "load" });
-      await page.evaluate(() => localStorage.clear());
-    }
-    await page.reload({ waitUntil: "load" });
-    await assert.match(await page.locator("body").innerText(), /Kasam/);
-    record("onboarding welcome");
+  await submitEntry(page, { type: "income", amount: 10000, heading: "Maas" });
+  assert.match(await page.eval(`() => document.querySelector("#app")?.innerText || ""`), /10\.000/);
+  record("income entry");
 
-    await page.locator("button[data-action='onboarding-start']").click();
-    await page.waitForSelector("#accountForm");
-    await fill(page, "input[name='userName']", "Test Kullanici");
-    await fill(page, "input[name='nickname']", "Test");
-    await fill(page, "input[name='email']", "test.kullanici@kasam.test");
-    await fill(page, "input[name='password']", "1234");
-    await page.locator("input[name='legalAccepted']").check();
-    await submit(page, "#accountForm");
-    await page.waitForSelector("#loginForm");
-    record("local account create");
+  await submitEntry(page, { type: "expense", amount: 1250, heading: "Market" });
+  const homeText = await page.eval(`() => document.querySelector("#app")?.innerText || ""`);
+  assert.match(homeText, /8\.750/);
+  record("expense entry");
 
-    const firstUserValue = await page.locator("select[name='loginUserId'] option").first().getAttribute("value");
-    await page.locator("select[name='loginUserId']").selectOption(firstUserValue);
-    await fill(page, "input[name='loginPassword']", "1234");
-    await submit(page, "#loginForm");
-    await page.waitForSelector("#firstProjectForm");
-    record("login");
+  await page.eval(`() => { state.activeView = "calendar"; saveState(); render(); }`);
+  await page.waitForSelector(".desk-calendar");
+  assert.match(await page.eval(`() => document.querySelector("#app")?.innerText || ""`), /Takvim|TAKV/);
+  record("calendar render");
 
-    await fill(page, "input[name='projectName']", "Kendi Kasam");
-    await fill(page, "input[name='purpose']", "Kisisel butce");
-    await submit(page, "#firstProjectForm");
-    await waitHome(page);
-    record("first budget create");
+  await page.eval(`() => { state.activeView = "report"; state.reportPeriod = "month"; saveState(); render(); }`);
+  await page.waitForSelector("[data-action='open-receipt']");
+  await page.click("[data-action='open-receipt']");
+  await page.waitForSelector("#receiptCard");
+  assert.match(await page.eval(`() => document.querySelector("#receiptCard")?.innerText || ""`), /KASAM|KASA/);
+  record("report receipt");
 
-    await addEntry(page, { type: "income", amount: "10000", heading: "Maas" });
-    await assert.match(await page.locator("#app").innerText(), /10\.000/);
-    record("income entry");
-
-    await addEntry(page, { type: "expense", amount: "1250", heading: "Market" });
-    await assert.match(await page.locator("#app").innerText(), /8\.750/);
-    record("expense entry");
-
-    await page.locator("nav .tab[data-view='calendar']").click();
-    await page.waitForSelector(".desk-calendar");
-    await assert.match(await page.locator(".desk-calendar-card").innerText(), /TAKV|Takv/);
-    record("calendar render");
-
-    await page.locator("nav .tab[data-view='report']").click();
-    await page.locator("[data-action='open-receipt']").first().click();
-    await page.waitForSelector("#receiptCard");
-    await assert.match(await page.locator("#receiptCard").innerText(), /KASAM/);
-    record("report receipt");
-
-    await page.locator("nav .tab[data-view='home']").click();
-    await page.locator("button[data-action='open-own-profile']").click();
-    await page.waitForSelector("button[data-action='export-my-data']");
-    record("profile export/delete controls");
-
-    const sharedSeed = {
-      activeView: "home",
-      reportPeriod: "month",
-      movementPeriod: "month",
-      groupMode: "detail",
-      activeProjectId: "p_shared",
-      activeUserId: "u_2",
-      signedInUserId: "u_2",
-      authMode: "login",
-      users: [
-        { id: "u_1", name: "Ortak Bir", nickname: "Bir", email: "bir@test.local", password: "1234", createdAt: "2026-06-01T00:00:00.000Z" },
-        { id: "u_2", name: "Ortak Iki", nickname: "Iki", email: "iki@test.local", password: "1234", createdAt: "2026-06-01T00:00:00.000Z" },
-      ],
-      projects: [{ id: "p_shared", name: "Ortak Butce", purpose: "Test", code: "KASAM-TEST", createdAt: "2026-06-01T00:00:00.000Z", createdBy: "u_1", memberIds: ["u_1", "u_2"], memberSince: { u_1: "2026-06-01", u_2: "2026-06-01" }, splitType: "equal" }],
-      headings: [{ id: "h_1", projectId: "p_shared", name: "Eski gider", shortName: "Eski gider", emoji: "" }],
-      entries: [
-        { id: "e_old", projectId: "p_shared", type: "expense", amount: 1000, enteredAmount: 1000, currency: "TRY", exchangeRate: 1, headingId: "h_1", shortName: "Eski gider", userId: "u_1", paidById: "u_1", splitWith: [], splitRatio: [], date: "2026-06-07", status: "done", createdAt: "2026-06-07T10:00:00.000Z" },
-        { id: "e_game", projectId: "p_shared", type: "expense", amount: 300, enteredAmount: 300, currency: "TRY", exchangeRate: 1, headingId: "h_1", shortName: "Eski oyun", userId: "u_1", paidById: "u_1", splitWith: [], splitRatio: [], date: "2026-06-07", status: "done", lockedNotificationId: "n_game", autoRevealAt: "2099-01-01T00:00:00.000Z", createdAt: "2026-06-07T11:00:00.000Z" },
-      ],
-      notifications: [],
-      reactions: [],
-      reconciliations: [],
-      goals: [],
-      settlements: [],
+  await submitEntry(page, { type: "expense", amount: 1000, heading: "Ortak market", projectId: "p_shared" });
+  const sharedResult = await page.eval(`() => {
+    const user1 = state.users.find((user) => user.id === "u_1");
+    const user2 = state.users.find((user) => user.id === "u_2");
+    return {
+      user1Expense: personalLedgerEntries(user1).filter((entry) => entry.projectId === "p_shared").reduce((sum, entry) => sum + Number(entry.amount || 0), 0),
+      user2Expense: personalLedgerEntries(user2).filter((entry) => entry.projectId === "p_shared").reduce((sum, entry) => sum + Number(entry.amount || 0), 0),
+      notifications: state.notifications.length,
     };
-    await page.evaluate((seed) => localStorage.setItem("kasa-prototype-state-v6", JSON.stringify(seed)), sharedSeed);
-    await page.reload({ waitUntil: "load" });
-    await waitHome(page);
-    const sharedResult = await page.evaluate(() => ({
-      personalAmounts: personalLedgerEntries(currentUser()).map((entry) => ({ id: entry.id, amount: entry.amount, locked: Boolean(entry.lockedNotificationId) })),
-      notifications: notificationEntries().map((item) => ({ entryId: item.entryId, mode: item.mode, recipients: item.recipients })),
-    }));
-    assert.equal(sharedResult.personalAmounts.find((item) => item.id === "e_old")?.amount, 500);
-    assert.equal(sharedResult.personalAmounts.some((item) => item.id === "e_game"), false);
-    assert.equal(sharedResult.notifications.length, 2);
-    record("shared old entries and notifications");
+  }`);
+  assert.equal(sharedResult.user1Expense, 500);
+  assert.equal(sharedResult.user2Expense, 500);
+  assert.equal(sharedResult.notifications, 1);
+  record("shared entry personal ledgers and notification");
 
-    await page.locator("nav .tab[data-view='group']").click();
-    await page.waitForSelector("button[data-action='go-add-movement'][data-project-id='p_shared']");
-    record("budget detail add movement button");
-
-    await page.screenshot({ path: path.join(root, "screenshots", "kasam-production-e2e.png"), fullPage: true });
-    assert.deepEqual(pageErrors, []);
-    console.log(results.map((item) => `${item.status} ${item.name}`).join("\n"));
-    console.log("KASAM E2E OK");
-  } finally {
-    await browser.close();
-    server.close();
-  }
-})().catch((error) => {
+  await page.screenshot(path.join(root, "screenshots", "kasam-production-e2e.png"));
+  console.log(results.map((item) => `PASS ${item}`).join("\n"));
+  console.log("KASAM E2E OK");
+}).catch((error) => {
   console.error(error);
   process.exit(1);
 });

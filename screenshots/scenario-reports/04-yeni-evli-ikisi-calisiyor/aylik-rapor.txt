@@ -1,0 +1,73 @@
+Yeni Evli İkisi de Çalışıyor - Aylık Rapor
+
+Kasa: Şahin Yuvası (SAHIN-1)
+
+
+
+## 2026-04
+Ay: Gelir 98.000 TL | Gider 47.500 TL | Net 50.500 TL
+- 2026-04-01 | Gelir | Hakan maaş | 52.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-04-01 | Gelir | Elif maaş | 38.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-04-02 | Gider | Kira mortgage | 22.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-04-07 | Gider | Faturalar | 2.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-04-08 | Gider | Aidat | 1.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-04-13 | Gider | Market | 7.200 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-04-15 | Gider | Akaryakıt | 3.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-04-17 | Gider | Ev eşyası dekorasyon | 3.600 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-04-20 | Gider | Restoran kafe | 3.300 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-04-21 | Gider | Giyim | 2.200 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-04-23 | Gider | Hakan spor | 1.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-04-24 | Gider | Elif bakım | 1.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-04-25 | Gelir | Tatil kumbarası katkı | 8.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +56.000 TL / -25.000 TL / net 31.000 TL
+- Elif Şahin: +42.000 TL / -22.500 TL / net 19.500 TL
+
+## 2026-05
+Ay: Gelir 102.000 TL | Gider 54.000 TL | Net 48.000 TL
+- 2026-05-01 | Gelir | Hakan maaş | 52.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-01 | Gelir | Elif maaş | 38.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-02 | Gider | Kira mortgage | 22.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-07 | Gider | Faturalar | 2.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-08 | Gider | Aidat | 1.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-13 | Gider | Market | 8.700 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-15 | Gider | Akaryakıt | 3.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-17 | Gider | Ev eşyası dekorasyon | 6.400 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-20 | Gider | Restoran kafe | 4.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-21 | Gider | Giyim | 3.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-23 | Gider | Hakan spor | 1.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-24 | Gider | Elif bakım | 1.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-25 | Gelir | Tatil kumbarası katkı | 12.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +58.000 TL / -28.250 TL / net 29.750 TL
+- Elif Şahin: +44.000 TL / -25.750 TL / net 18.250 TL
+
+## 2026-06
+Ay: Gelir 120.000 TL | Gider 58.650 TL | Net 61.350 TL
+- 2026-06-01 | Gelir | Hakan maaş | 52.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-01 | Gelir | Elif maaş | 38.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-02 | Gider | Kira mortgage | 22.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-07 | Gider | Faturalar | 2.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-08 | Gider | Aidat | 1.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-13 | Gider | Market | 9.800 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-15 | Gider | Akaryakıt | 3.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-17 | Gider | Ev eşyası dekorasyon | 7.900 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-20 | Gider | Restoran kafe | 5.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-21 | Gider | Giyim | 2.900 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-23 | Gider | Hakan spor | 1.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-24 | Gider | Elif bakım | 1.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-24 | Gider | Güzellik bakımı | 1.850 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-25 | Gelir | Tatil kumbarası katkı | 15.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-28 | Gelir | Hakan ikramiye | 15.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +74.500 TL / -29.650 TL / net 44.850 TL
+- Elif Şahin: +45.500 TL / -29.000 TL / net 16.500 TL
+
+
+
+## Kümülatif
+
+Toplam: Gelir 320.000 TL | Gider 164.350 TL | Net 155.650 TL
+
+- Hakan Şahin: +188.500 TL / -85.000 TL / net 103.500 TL
+- Elif Şahin: +131.500 TL / -79.350 TL / net 52.150 TL

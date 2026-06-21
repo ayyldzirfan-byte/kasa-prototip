@@ -1,0 +1,17 @@
+Oyun: Güzellik bakımı
+Ekleyen: Elif Şahin
+Alıcılar: Hakan Şahin
+Tutar: 1.850 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Hakan Şahin: doğru
+Aşama 2 tip: Hakan Şahin: doğru
+Aşama 3 kategori: Hakan Şahin: doğru
+
+Oyun: Hakan ikramiye
+Ekleyen: Hakan Şahin
+Alıcılar: Elif Şahin
+Tutar: 15.000 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Elif Şahin: doğru
+Aşama 2 tip: Elif Şahin: doğru
+Aşama 3 kategori: Elif Şahin: doğru

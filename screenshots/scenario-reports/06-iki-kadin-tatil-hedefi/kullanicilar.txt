@@ -1,0 +1,7 @@
+İki Kadın Arkadaş Tatil Hedefi
+Kasa: Tatil Kumbarası
+Kod: TATIL-1
+
+Kullanıcılar
+- Selin Koç | 27 | Avukat | Gelir: 55.000 TL | E-posta: selin.s6@kasam.test | Şifre: Test1234
+- Buse Yıldız | 26 | Hemşire | Gelir: 32.000 TL | E-posta: buse.s6@kasam.test | Şifre: Test1234

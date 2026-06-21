@@ -1,0 +1,7 @@
+Üniversite Ev Arkadaşları
+Kasa: Kerem & Deniz Evi
+Kod: KEREM-DENIZ-1
+
+Kullanıcılar
+- Kerem Arslan | 23 | Bilgisayar mühendisliği öğrencisi | Gelir: 8.500 TL | E-posta: kerem.s2@kasam.test | Şifre: Test1234
+- Deniz Kaya | 22 | İşletme öğrencisi | Gelir: 4.200 TL | E-posta: deniz.s2@kasam.test | Şifre: Test1234

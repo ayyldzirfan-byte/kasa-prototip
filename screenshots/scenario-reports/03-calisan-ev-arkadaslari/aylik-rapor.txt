@@ -1,0 +1,77 @@
+Çalışan Ev Arkadaşları - Aylık Rapor
+
+Kasa: Nişantaşı Evi (NISANTASI-1)
+
+
+
+## 2026-04
+Ay: Gelir 103.000 TL | Gider 43.400 TL | Net 59.600 TL
+- 2026-04-01 | Gelir | Ayşe maaş | 24.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-04-01 | Gelir | Merve maaş | 28.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-04-01 | Gelir | Can maaş | 45.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-04-02 | Gider | Kira | 25.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-04-08 | Gider | Faturalar | 1.900 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-04-13 | Gider | Ortak market | 6.200 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-04-15 | Gider | Temizlikçi | 2.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-04-18 | Gider | Dışarı yemek | 3.300 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-04-20 | Gider | Sinema konser | 1.800 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-04-21 | Gider | Ayşe ulaşım | 1.200 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-04-22 | Gider | Can spor salonu | 1.200 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-04-23 | Gider | Can abonelik | 800 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-04-25 | Gelir | Merve freelance | 6.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +24.000 TL / -11.250 TL / net 12.750 TL
+- Merve Çelik: +34.000 TL / -14.070 TL / net 19.930 TL
+- Can Öztürk: +45.000 TL / -18.080 TL / net 26.920 TL
+
+## 2026-05
+Ay: Gelir 109.000 TL | Gider 47.150 TL | Net 61.850 TL
+- 2026-05-01 | Gelir | Ayşe maaş | 24.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-01 | Gelir | Merve maaş | 28.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-05-01 | Gelir | Can maaş | 45.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-02 | Gider | Kira | 25.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-08 | Gider | Faturalar | 2.050 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-13 | Gider | Ortak market | 7.600 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-05-15 | Gider | Temizlikçi | 2.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-18 | Gider | Dışarı yemek | 4.700 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-20 | Gider | Sinema konser | 2.600 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-05-21 | Gider | Ayşe ulaşım | 1.200 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-22 | Gider | Can spor salonu | 1.200 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-23 | Gider | Can abonelik | 800 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-25 | Gelir | Merve freelance | 12.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +24.000 TL / -12.188 TL / net 11.813 TL
+- Merve Çelik: +40.000 TL / -15.383 TL / net 24.618 TL
+- Can Öztürk: +45.000 TL / -19.580 TL / net 25.420 TL
+
+## 2026-06
+Ay: Gelir 121.000 TL | Gider 53.500 TL | Net 67.500 TL
+- 2026-06-01 | Gelir | Ayşe maaş | 24.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-06-01 | Gelir | Merve maaş | 28.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-06-01 | Gelir | Can maaş | 45.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-06-02 | Gider | Kira | 25.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-06-08 | Gider | Faturalar | 2.150 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-06-13 | Gider | Ortak market | 8.900 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-06-15 | Gider | Temizlikçi | 2.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-06-18 | Gider | Dışarı yemek | 5.600 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-06-20 | Gider | Sinema konser | 3.800 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-06-21 | Gider | Ayşe ulaşım | 1.200 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-06-22 | Gider | Can spor salonu | 1.200 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-06-23 | Gider | Can abonelik | 800 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-06-25 | Gelir | Merve freelance | 9.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-06-25 | Gelir | Logo işi ödemesi | 15.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-06-26 | Gider | Mekanik klavye | 2.850 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +24.000 TL / -13.063 TL / net 10.938 TL
+- Merve Çelik: +52.000 TL / -16.608 TL / net 35.393 TL
+- Can Öztürk: +45.000 TL / -23.830 TL / net 21.170 TL
+
+
+
+## Kümülatif
+
+Toplam: Gelir 333.000 TL | Gider 144.050 TL | Net 188.950 TL
+
+- Ayşe Demir: +72.000 TL / -36.500 TL / net 35.500 TL
+- Merve Çelik: +126.000 TL / -46.060 TL / net 79.940 TL
+- Can Öztürk: +135.000 TL / -61.490 TL / net 73.510 TL

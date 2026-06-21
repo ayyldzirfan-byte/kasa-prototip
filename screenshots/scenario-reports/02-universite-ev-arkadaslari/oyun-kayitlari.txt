@@ -1,0 +1,17 @@
+Oyun: Steam oyunu
+Ekleyen: Kerem Arslan
+Alıcılar: Deniz Kaya
+Tutar: 299 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Deniz Kaya: doğru
+Aşama 2 tip: Deniz Kaya: doğru
+Aşama 3 kategori: Deniz Kaya: doğru
+
+Oyun: Part-time iş ödemesi
+Ekleyen: Deniz Kaya
+Alıcılar: Kerem Arslan
+Tutar: 1.500 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Kerem Arslan: doğru
+Aşama 2 tip: Kerem Arslan: doğru
+Aşama 3 kategori: Kerem Arslan: doğru

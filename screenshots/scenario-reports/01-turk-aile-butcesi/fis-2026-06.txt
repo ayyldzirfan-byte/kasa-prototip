@@ -1,0 +1,37 @@
+KASAM FİŞİ
+2026-06
+
+Kasa: Yılmaz Ailesi
+Kod: YILMAZ-EV-1
+--------------------------------
+Kasa toplamı: Gelir 37.000 TL | Gider 45.096 TL | Net -8.096 TL
+
+HAREKETLER
+- 2026-06-01 | Gelir | Mehmet maaş | 32.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-01 | Gider | Kira | 18.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-05 | Gelir | Burak burs | 3.500 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+- 2026-06-06 | Gelir | Selin harçlık | 1.500 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+- 2026-06-08 | Gider | Elektrik faturası | 1.250 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-09 | Gider | Doğalgaz faturası | 850 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-10 | Gider | Su faturası | 400 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-11 | Gider | İnternet | 599 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-12 | Gider | Aidat | 750 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-13 | Gider | Aylık market | 11.600 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-14 | Gider | Market alışverişi | 1.847 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-15 | Gider | Mehmet ulaşım | 2.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-16 | Gider | Burak ulaşım | 600 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+- 2026-06-17 | Gider | Selin ulaşım | 400 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+- 2026-06-18 | Gider | Arkadaş yemeği | 380 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+- 2026-06-20 | Gider | Sağlık masrafı | 520 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-22 | Gider | Giyim | 1.700 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-24 | Gider | Aile dışarı yemeği | 2.800 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-26 | Gider | Burak okul masrafı | 900 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+- 2026-06-27 | Gider | Selin okul masrafı | 500 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+
+PAY DAĞILIMI
+- Mehmet Yılmaz: +32.000 TL / -12.079 TL / net 19.921 TL
+- Fatma Yılmaz: +0 TL / -10.079 TL / net -10.079 TL
+- Burak Yılmaz: +3.500 TL / -11.959 TL / net -8.459 TL
+- Selin Yılmaz: +1.500 TL / -10.979 TL / net -9.479 TL
+
+kasam.app

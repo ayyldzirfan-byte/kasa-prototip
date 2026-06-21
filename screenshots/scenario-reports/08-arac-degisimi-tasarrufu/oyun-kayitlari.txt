@@ -1,0 +1,17 @@
+Oyun: Büyük prim
+Ekleyen: Serkan Başaran
+Alıcılar: Kendi kendine test
+Tutar: 50.000 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: tahmin yok
+Aşama 2 tip: tahmin yok
+Aşama 3 kategori: tahmin yok
+
+Oyun: Yeni araç ödemesi
+Ekleyen: Serkan Başaran
+Alıcılar: Kendi kendine test
+Tutar: 800.000 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: tahmin yok
+Aşama 2 tip: tahmin yok
+Aşama 3 kategori: tahmin yok

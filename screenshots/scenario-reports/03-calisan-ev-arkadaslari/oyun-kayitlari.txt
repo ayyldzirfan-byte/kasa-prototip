@@ -1,0 +1,17 @@
+Oyun: Logo işi ödemesi
+Ekleyen: Merve Çelik
+Alıcılar: Ayşe Demir, Can Öztürk
+Tutar: 15.000 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Ayşe Demir: doğru, Can Öztürk: yanlış
+Aşama 2 tip: Ayşe Demir: doğru, Can Öztürk: doğru
+Aşama 3 kategori: Ayşe Demir: doğru, Can Öztürk: yanlış
+
+Oyun: Mekanik klavye
+Ekleyen: Can Öztürk
+Alıcılar: Ayşe Demir, Merve Çelik
+Tutar: 2.850 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Ayşe Demir: doğru, Merve Çelik: yanlış
+Aşama 2 tip: Ayşe Demir: doğru, Merve Çelik: doğru
+Aşama 3 kategori: Ayşe Demir: doğru, Merve Çelik: yanlış

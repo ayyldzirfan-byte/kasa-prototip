@@ -1,0 +1,827 @@
+Türk Aile Bütçesi - Günlük Rapor
+
+Kasa: Yılmaz Ailesi (YILMAZ-EV-1)
+
+
+
+## 2026-04-01
+Gün: Gelir 32.000 TL | Gider 18.000 TL | Net 14.000 TL
+- 2026-04-01 | Gelir | Mehmet maaş | 32.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-01 | Gider | Kira | 18.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +32.000 TL / -4.500 TL / net 27.500 TL
+- Fatma Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+- Burak Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+- Selin Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+
+## 2026-04-02
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-05
+Gün: Gelir 3.500 TL | Gider 0 TL | Net 3.500 TL
+- 2026-04-05 | Gelir | Burak burs | 3.500 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +3.500 TL / -0 TL / net 3.500 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-06
+Gün: Gelir 1.500 TL | Gider 0 TL | Net 1.500 TL
+- 2026-04-06 | Gelir | Selin harçlık | 1.500 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +1.500 TL / -0 TL / net 1.500 TL
+
+## 2026-04-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-08
+Gün: Gelir 0 TL | Gider 1.750 TL | Net -1.750 TL
+- 2026-04-08 | Gider | Elektrik faturası | 1.750 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -438 TL / net -437 TL
+- Fatma Yılmaz: +0 TL / -438 TL / net -437 TL
+- Burak Yılmaz: +0 TL / -438 TL / net -437 TL
+- Selin Yılmaz: +0 TL / -438 TL / net -437 TL
+
+## 2026-04-09
+Gün: Gelir 0 TL | Gider 2.300 TL | Net -2.300 TL
+- 2026-04-09 | Gider | Doğalgaz faturası | 2.300 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -575 TL / net -575 TL
+- Fatma Yılmaz: +0 TL / -575 TL / net -575 TL
+- Burak Yılmaz: +0 TL / -575 TL / net -575 TL
+- Selin Yılmaz: +0 TL / -575 TL / net -575 TL
+
+## 2026-04-10
+Gün: Gelir 0 TL | Gider 400 TL | Net -400 TL
+- 2026-04-10 | Gider | Su faturası | 400 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -100 TL / net -100 TL
+- Fatma Yılmaz: +0 TL / -100 TL / net -100 TL
+- Burak Yılmaz: +0 TL / -100 TL / net -100 TL
+- Selin Yılmaz: +0 TL / -100 TL / net -100 TL
+
+## 2026-04-11
+Gün: Gelir 0 TL | Gider 599 TL | Net -599 TL
+- 2026-04-11 | Gider | İnternet | 599 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -150 TL / net -150 TL
+- Fatma Yılmaz: +0 TL / -150 TL / net -150 TL
+- Burak Yılmaz: +0 TL / -150 TL / net -150 TL
+- Selin Yılmaz: +0 TL / -150 TL / net -150 TL
+
+## 2026-04-12
+Gün: Gelir 0 TL | Gider 750 TL | Net -750 TL
+- 2026-04-12 | Gider | Aidat | 750 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -188 TL / net -187 TL
+- Fatma Yılmaz: +0 TL / -188 TL / net -187 TL
+- Burak Yılmaz: +0 TL / -188 TL / net -187 TL
+- Selin Yılmaz: +0 TL / -188 TL / net -187 TL
+
+## 2026-04-13
+Gün: Gelir 0 TL | Gider 9.600 TL | Net -9.600 TL
+- 2026-04-13 | Gider | Aylık market | 9.600 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -2.400 TL / net -2.400 TL
+- Fatma Yılmaz: +0 TL / -2.400 TL / net -2.400 TL
+- Burak Yılmaz: +0 TL / -2.400 TL / net -2.400 TL
+- Selin Yılmaz: +0 TL / -2.400 TL / net -2.400 TL
+
+## 2026-04-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-15
+Gün: Gelir 0 TL | Gider 2.000 TL | Net -2.000 TL
+- 2026-04-15 | Gider | Mehmet ulaşım | 2.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -2.000 TL / net -2.000 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-16
+Gün: Gelir 0 TL | Gider 600 TL | Net -600 TL
+- 2026-04-16 | Gider | Burak ulaşım | 600 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -600 TL / net -600 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-17
+Gün: Gelir 0 TL | Gider 400 TL | Net -400 TL
+- 2026-04-17 | Gider | Selin ulaşım | 400 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -400 TL / net -400 TL
+
+## 2026-04-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-20
+Gün: Gelir 0 TL | Gider 700 TL | Net -700 TL
+- 2026-04-20 | Gider | Sağlık masrafı | 700 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -175 TL / net -175 TL
+- Fatma Yılmaz: +0 TL / -175 TL / net -175 TL
+- Burak Yılmaz: +0 TL / -175 TL / net -175 TL
+- Selin Yılmaz: +0 TL / -175 TL / net -175 TL
+
+## 2026-04-21
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-22
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-04-22 | Gider | Giyim | 1.200 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -300 TL / net -300 TL
+- Fatma Yılmaz: +0 TL / -300 TL / net -300 TL
+- Burak Yılmaz: +0 TL / -300 TL / net -300 TL
+- Selin Yılmaz: +0 TL / -300 TL / net -300 TL
+
+## 2026-04-23
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-24
+Gün: Gelir 0 TL | Gider 1.800 TL | Net -1.800 TL
+- 2026-04-24 | Gider | Aile dışarı yemeği | 1.800 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -450 TL / net -450 TL
+- Fatma Yılmaz: +0 TL / -450 TL / net -450 TL
+- Burak Yılmaz: +0 TL / -450 TL / net -450 TL
+- Selin Yılmaz: +0 TL / -450 TL / net -450 TL
+
+## 2026-04-25
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-26
+Gün: Gelir 0 TL | Gider 750 TL | Net -750 TL
+- 2026-04-26 | Gider | Burak okul masrafı | 750 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -750 TL / net -750 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-27
+Gün: Gelir 0 TL | Gider 350 TL | Net -350 TL
+- 2026-04-27 | Gider | Selin okul masrafı | 350 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -350 TL / net -350 TL
+
+## 2026-04-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-01
+Gün: Gelir 32.000 TL | Gider 18.000 TL | Net 14.000 TL
+- 2026-05-01 | Gelir | Mehmet maaş | 32.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-05-01 | Gider | Kira | 18.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +32.000 TL / -4.500 TL / net 27.500 TL
+- Fatma Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+- Burak Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+- Selin Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+
+## 2026-05-02
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-05
+Gün: Gelir 3.500 TL | Gider 0 TL | Net 3.500 TL
+- 2026-05-05 | Gelir | Burak burs | 3.500 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +3.500 TL / -0 TL / net 3.500 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-06
+Gün: Gelir 1.500 TL | Gider 0 TL | Net 1.500 TL
+- 2026-05-06 | Gelir | Selin harçlık | 1.500 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +1.500 TL / -0 TL / net 1.500 TL
+
+## 2026-05-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-08
+Gün: Gelir 0 TL | Gider 1.450 TL | Net -1.450 TL
+- 2026-05-08 | Gider | Elektrik faturası | 1.450 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -363 TL / net -362 TL
+- Fatma Yılmaz: +0 TL / -363 TL / net -362 TL
+- Burak Yılmaz: +0 TL / -363 TL / net -362 TL
+- Selin Yılmaz: +0 TL / -363 TL / net -362 TL
+
+## 2026-05-09
+Gün: Gelir 0 TL | Gider 1.500 TL | Net -1.500 TL
+- 2026-05-09 | Gider | Doğalgaz faturası | 1.500 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -375 TL / net -375 TL
+- Fatma Yılmaz: +0 TL / -375 TL / net -375 TL
+- Burak Yılmaz: +0 TL / -375 TL / net -375 TL
+- Selin Yılmaz: +0 TL / -375 TL / net -375 TL
+
+## 2026-05-10
+Gün: Gelir 0 TL | Gider 400 TL | Net -400 TL
+- 2026-05-10 | Gider | Su faturası | 400 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -100 TL / net -100 TL
+- Fatma Yılmaz: +0 TL / -100 TL / net -100 TL
+- Burak Yılmaz: +0 TL / -100 TL / net -100 TL
+- Selin Yılmaz: +0 TL / -100 TL / net -100 TL
+
+## 2026-05-11
+Gün: Gelir 0 TL | Gider 599 TL | Net -599 TL
+- 2026-05-11 | Gider | İnternet | 599 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -150 TL / net -150 TL
+- Fatma Yılmaz: +0 TL / -150 TL / net -150 TL
+- Burak Yılmaz: +0 TL / -150 TL / net -150 TL
+- Selin Yılmaz: +0 TL / -150 TL / net -150 TL
+
+## 2026-05-12
+Gün: Gelir 0 TL | Gider 750 TL | Net -750 TL
+- 2026-05-12 | Gider | Aidat | 750 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -188 TL / net -187 TL
+- Fatma Yılmaz: +0 TL / -188 TL / net -187 TL
+- Burak Yılmaz: +0 TL / -188 TL / net -187 TL
+- Selin Yılmaz: +0 TL / -188 TL / net -187 TL
+
+## 2026-05-13
+Gün: Gelir 0 TL | Gider 10.800 TL | Net -10.800 TL
+- 2026-05-13 | Gider | Aylık market | 10.800 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -2.700 TL / net -2.700 TL
+- Fatma Yılmaz: +0 TL / -2.700 TL / net -2.700 TL
+- Burak Yılmaz: +0 TL / -2.700 TL / net -2.700 TL
+- Selin Yılmaz: +0 TL / -2.700 TL / net -2.700 TL
+
+## 2026-05-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-15
+Gün: Gelir 0 TL | Gider 2.000 TL | Net -2.000 TL
+- 2026-05-15 | Gider | Mehmet ulaşım | 2.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -2.000 TL / net -2.000 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-16
+Gün: Gelir 0 TL | Gider 600 TL | Net -600 TL
+- 2026-05-16 | Gider | Burak ulaşım | 600 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -600 TL / net -600 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-17
+Gün: Gelir 0 TL | Gider 400 TL | Net -400 TL
+- 2026-05-17 | Gider | Selin ulaşım | 400 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -400 TL / net -400 TL
+
+## 2026-05-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-20
+Gün: Gelir 0 TL | Gider 1.800 TL | Net -1.800 TL
+- 2026-05-20 | Gider | Sağlık masrafı | 1.800 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -450 TL / net -450 TL
+- Fatma Yılmaz: +0 TL / -450 TL / net -450 TL
+- Burak Yılmaz: +0 TL / -450 TL / net -450 TL
+- Selin Yılmaz: +0 TL / -450 TL / net -450 TL
+
+## 2026-05-21
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-22
+Gün: Gelir 0 TL | Gider 2.600 TL | Net -2.600 TL
+- 2026-05-22 | Gider | Giyim | 2.600 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -650 TL / net -650 TL
+- Fatma Yılmaz: +0 TL / -650 TL / net -650 TL
+- Burak Yılmaz: +0 TL / -650 TL / net -650 TL
+- Selin Yılmaz: +0 TL / -650 TL / net -650 TL
+
+## 2026-05-23
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-24
+Gün: Gelir 0 TL | Gider 2.450 TL | Net -2.450 TL
+- 2026-05-24 | Gider | Aile dışarı yemeği | 2.450 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -613 TL / net -612 TL
+- Fatma Yılmaz: +0 TL / -613 TL / net -612 TL
+- Burak Yılmaz: +0 TL / -613 TL / net -612 TL
+- Selin Yılmaz: +0 TL / -613 TL / net -612 TL
+
+## 2026-05-25
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-26
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-05-26 | Gider | Burak okul masrafı | 1.200 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -1.200 TL / net -1.200 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-27
+Gün: Gelir 0 TL | Gider 650 TL | Net -650 TL
+- 2026-05-27 | Gider | Selin okul masrafı | 650 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -650 TL / net -650 TL
+
+## 2026-05-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-31
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-01
+Gün: Gelir 32.000 TL | Gider 18.000 TL | Net 14.000 TL
+- 2026-06-01 | Gelir | Mehmet maaş | 32.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-06-01 | Gider | Kira | 18.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +32.000 TL / -4.500 TL / net 27.500 TL
+- Fatma Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+- Burak Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+- Selin Yılmaz: +0 TL / -4.500 TL / net -4.500 TL
+
+## 2026-06-02
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-05
+Gün: Gelir 3.500 TL | Gider 0 TL | Net 3.500 TL
+- 2026-06-05 | Gelir | Burak burs | 3.500 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +3.500 TL / -0 TL / net 3.500 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-06
+Gün: Gelir 1.500 TL | Gider 0 TL | Net 1.500 TL
+- 2026-06-06 | Gelir | Selin harçlık | 1.500 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +1.500 TL / -0 TL / net 1.500 TL
+
+## 2026-06-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-08
+Gün: Gelir 0 TL | Gider 1.250 TL | Net -1.250 TL
+- 2026-06-08 | Gider | Elektrik faturası | 1.250 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -313 TL / net -312 TL
+- Fatma Yılmaz: +0 TL / -313 TL / net -312 TL
+- Burak Yılmaz: +0 TL / -313 TL / net -312 TL
+- Selin Yılmaz: +0 TL / -313 TL / net -312 TL
+
+## 2026-06-09
+Gün: Gelir 0 TL | Gider 850 TL | Net -850 TL
+- 2026-06-09 | Gider | Doğalgaz faturası | 850 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -213 TL / net -212 TL
+- Fatma Yılmaz: +0 TL / -213 TL / net -212 TL
+- Burak Yılmaz: +0 TL / -213 TL / net -212 TL
+- Selin Yılmaz: +0 TL / -213 TL / net -212 TL
+
+## 2026-06-10
+Gün: Gelir 0 TL | Gider 400 TL | Net -400 TL
+- 2026-06-10 | Gider | Su faturası | 400 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -100 TL / net -100 TL
+- Fatma Yılmaz: +0 TL / -100 TL / net -100 TL
+- Burak Yılmaz: +0 TL / -100 TL / net -100 TL
+- Selin Yılmaz: +0 TL / -100 TL / net -100 TL
+
+## 2026-06-11
+Gün: Gelir 0 TL | Gider 599 TL | Net -599 TL
+- 2026-06-11 | Gider | İnternet | 599 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -150 TL / net -150 TL
+- Fatma Yılmaz: +0 TL / -150 TL / net -150 TL
+- Burak Yılmaz: +0 TL / -150 TL / net -150 TL
+- Selin Yılmaz: +0 TL / -150 TL / net -150 TL
+
+## 2026-06-12
+Gün: Gelir 0 TL | Gider 750 TL | Net -750 TL
+- 2026-06-12 | Gider | Aidat | 750 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -188 TL / net -187 TL
+- Fatma Yılmaz: +0 TL / -188 TL / net -187 TL
+- Burak Yılmaz: +0 TL / -188 TL / net -187 TL
+- Selin Yılmaz: +0 TL / -188 TL / net -187 TL
+
+## 2026-06-13
+Gün: Gelir 0 TL | Gider 11.600 TL | Net -11.600 TL
+- 2026-06-13 | Gider | Aylık market | 11.600 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -2.900 TL / net -2.900 TL
+- Fatma Yılmaz: +0 TL / -2.900 TL / net -2.900 TL
+- Burak Yılmaz: +0 TL / -2.900 TL / net -2.900 TL
+- Selin Yılmaz: +0 TL / -2.900 TL / net -2.900 TL
+
+## 2026-06-14
+Gün: Gelir 0 TL | Gider 1.847 TL | Net -1.847 TL
+- 2026-06-14 | Gider | Market alışverişi | 1.847 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -462 TL / net -462 TL
+- Fatma Yılmaz: +0 TL / -462 TL / net -462 TL
+- Burak Yılmaz: +0 TL / -462 TL / net -462 TL
+- Selin Yılmaz: +0 TL / -462 TL / net -462 TL
+
+## 2026-06-15
+Gün: Gelir 0 TL | Gider 2.000 TL | Net -2.000 TL
+- 2026-06-15 | Gider | Mehmet ulaşım | 2.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -2.000 TL / net -2.000 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-16
+Gün: Gelir 0 TL | Gider 600 TL | Net -600 TL
+- 2026-06-16 | Gider | Burak ulaşım | 600 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -600 TL / net -600 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-17
+Gün: Gelir 0 TL | Gider 400 TL | Net -400 TL
+- 2026-06-17 | Gider | Selin ulaşım | 400 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -400 TL / net -400 TL
+
+## 2026-06-18
+Gün: Gelir 0 TL | Gider 380 TL | Net -380 TL
+- 2026-06-18 | Gider | Arkadaş yemeği | 380 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -380 TL / net -380 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-20
+Gün: Gelir 0 TL | Gider 520 TL | Net -520 TL
+- 2026-06-20 | Gider | Sağlık masrafı | 520 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -130 TL / net -130 TL
+- Fatma Yılmaz: +0 TL / -130 TL / net -130 TL
+- Burak Yılmaz: +0 TL / -130 TL / net -130 TL
+- Selin Yılmaz: +0 TL / -130 TL / net -130 TL
+
+## 2026-06-21
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-22
+Gün: Gelir 0 TL | Gider 1.700 TL | Net -1.700 TL
+- 2026-06-22 | Gider | Giyim | 1.700 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -425 TL / net -425 TL
+- Fatma Yılmaz: +0 TL / -425 TL / net -425 TL
+- Burak Yılmaz: +0 TL / -425 TL / net -425 TL
+- Selin Yılmaz: +0 TL / -425 TL / net -425 TL
+
+## 2026-06-23
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-24
+Gün: Gelir 0 TL | Gider 2.800 TL | Net -2.800 TL
+- 2026-06-24 | Gider | Aile dışarı yemeği | 2.800 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -700 TL / net -700 TL
+- Fatma Yılmaz: +0 TL / -700 TL / net -700 TL
+- Burak Yılmaz: +0 TL / -700 TL / net -700 TL
+- Selin Yılmaz: +0 TL / -700 TL / net -700 TL
+
+## 2026-06-25
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-26
+Gün: Gelir 0 TL | Gider 900 TL | Net -900 TL
+- 2026-06-26 | Gider | Burak okul masrafı | 900 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -900 TL / net -900 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-27
+Gün: Gelir 0 TL | Gider 500 TL | Net -500 TL
+- 2026-06-27 | Gider | Selin okul masrafı | 500 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -500 TL / net -500 TL
+
+## 2026-06-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Mehmet Yılmaz: +0 TL / -0 TL / net 0 TL
+- Fatma Yılmaz: +0 TL / -0 TL / net 0 TL
+- Burak Yılmaz: +0 TL / -0 TL / net 0 TL
+- Selin Yılmaz: +0 TL / -0 TL / net 0 TL

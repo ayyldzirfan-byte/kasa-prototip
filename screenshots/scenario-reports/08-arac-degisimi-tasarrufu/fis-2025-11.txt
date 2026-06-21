@@ -1,0 +1,18 @@
+KASAM FİŞİ
+2025-11
+
+Kasa: Yeni Araç
+Kod: SERKAN-ARAC-1
+--------------------------------
+Kasa toplamı: Gelir 97.000 TL | Gider 28.500 TL | Net 68.500 TL
+
+HAREKETLER
+- 2025-11-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-11-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-11-09 | Gider | Aylık yaşam gideri | 10.500 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-11-25 | Gelir | Araç hedef birikimi | 29.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+
+PAY DAĞILIMI
+- Serkan Başaran: +97.000 TL / -28.500 TL / net 68.500 TL
+
+kasam.app

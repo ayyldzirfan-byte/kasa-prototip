@@ -1,0 +1,7 @@
+Yeni Evli Tek Gelir
+Kasa: Kara Ailesi
+Kod: KARA-1
+
+Kullanıcılar
+- Murat Kara | 34 | Muhasebeci | Gelir: 38.000 TL | E-posta: murat.s5@kasam.test | Şifre: Test1234
+- Zeynep Kara | 31 | Ev hanımı | Gelir: 0 TL | E-posta: zeynep.s5@kasam.test | Şifre: Test1234

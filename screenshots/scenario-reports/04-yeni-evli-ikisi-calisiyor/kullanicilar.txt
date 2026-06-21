@@ -1,0 +1,7 @@
+Yeni Evli İkisi de Çalışıyor
+Kasa: Şahin Yuvası
+Kod: SAHIN-1
+
+Kullanıcılar
+- Hakan Şahin | 31 | Mühendis | Gelir: 52.000 TL | E-posta: hakan.s4@kasam.test | Şifre: Test1234
+- Elif Şahin | 29 | Pazarlama uzmanı | Gelir: 38.000 TL | E-posta: elif.s4@kasam.test | Şifre: Test1234

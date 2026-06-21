@@ -23,7 +23,7 @@ function mime(file) {
   }[ext] || "application/octet-stream";
 }
 
-function startServer(root, port) {
+function createServer(root, port) {
   const base = `http://127.0.0.1:${port}`;
   const server = http.createServer((req, res) => {
     const url = new URL(req.url || "/", base);
@@ -45,7 +45,27 @@ function startServer(root, port) {
       res.end(data);
     });
   });
-  return new Promise((resolve) => server.listen(port, "127.0.0.1", () => resolve(server)));
+  return server;
+}
+
+function startServer(root, port) {
+  return new Promise((resolve, reject) => {
+    let attempt = 0;
+    const tryListen = () => {
+      const nextPort = port + attempt;
+      const server = createServer(root, nextPort);
+      server.once("error", (error) => {
+        if (error.code === "EADDRINUSE" && attempt < 25) {
+          attempt += 1;
+          tryListen();
+          return;
+        }
+        reject(error);
+      });
+      server.listen(nextPort, "127.0.0.1", () => resolve({ server, port: nextPort }));
+    };
+    tryListen();
+  });
 }
 
 async function waitForCdp(cdpPort, chrome, stderrBuffer) {
@@ -159,6 +179,34 @@ class CdpPage {
     return this.waitFor(`Boolean(document.querySelector(${JSON.stringify(selector)}))`, timeout);
   }
 
+  async screenshot(filePath, fullPage = true) {
+    if (fullPage) {
+      const metrics = await this.send("Page.getLayoutMetrics");
+      const content = metrics.cssContentSize || metrics.contentSize;
+      if (content?.width && content?.height) {
+        await this.send("Emulation.setDeviceMetricsOverride", {
+          width: Math.ceil(content.width),
+          height: Math.ceil(content.height),
+          deviceScaleFactor: 2,
+          mobile: true,
+          screenWidth: Math.ceil(content.width),
+          screenHeight: Math.ceil(content.height),
+        });
+      }
+    }
+    const shot = await this.send("Page.captureScreenshot", { format: "png", fromSurface: true });
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    fs.writeFileSync(filePath, Buffer.from(shot.data, "base64"));
+    await this.send("Emulation.setDeviceMetricsOverride", {
+      width: 390,
+      height: 844,
+      deviceScaleFactor: 2,
+      mobile: true,
+      screenWidth: 390,
+      screenHeight: 844,
+    });
+  }
+
   async click(selector, index = 0) {
     return this.eval(`(selector, index) => {
       const el = Array.from(document.querySelectorAll(selector))[index];
@@ -202,16 +250,17 @@ async function runCdpTest(options, fn) {
   const root = options.root || process.cwd();
   const port = options.port;
   const cdpPort = options.cdpPort;
-  const localBase = `http://127.0.0.1:${port}`;
-  const profileDir = path.join(root, `.tmp-cdp-${cdpPort}`);
+  const profileDir = path.join(root, `.tmp-cdp-${cdpPort}-${process.pid}-${Date.now()}`);
   fs.rmSync(profileDir, { recursive: true, force: true });
   fs.mkdirSync(profileDir, { recursive: true });
-  const server = await startServer(root, port);
+  const { server, port: actualPort } = await startServer(root, port);
+  const localBase = `http://127.0.0.1:${actualPort}`;
   const stderrBuffer = [];
   const chrome = spawn(chromePath, [
     "--headless=new",
+    "--single-process",
     `--remote-debugging-port=${cdpPort}`,
-    "--disable-gpu",
+    "--no-sandbox",
     "--no-first-run",
     "--no-default-browser-check",
     `--user-data-dir=${profileDir}`,
@@ -227,8 +276,13 @@ async function runCdpTest(options, fn) {
       page.close();
     }
   } finally {
-    server.close();
-    chrome.kill();
+    await new Promise((resolve) => server.close(resolve));
+    if (chrome.exitCode === null) chrome.kill();
+    await Promise.race([
+      new Promise((resolve) => chrome.once("exit", resolve)),
+      sleep(2500),
+    ]);
+    await sleep(250);
     try {
       fs.rmSync(profileDir, { recursive: true, force: true });
     } catch (_error) {}

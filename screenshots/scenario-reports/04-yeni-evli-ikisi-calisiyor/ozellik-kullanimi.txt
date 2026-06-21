@@ -1,0 +1,10 @@
+PASS - Gelir/gider
+PASS - Ortak kasa
+PASS - Paylaştırma
+PASS - Tahmin oyunu
+SKIP - Tepki
+PASS - Hedef/kumbara
+SKIP - Ekstre
+SKIP - Hesaplaşma
+PASS - Planlı ödeme
+PASS - Koç/insight

@@ -1,0 +1,74 @@
+İki Kadın Arkadaş Tatil Hedefi - Haftalık Rapor
+
+Kasa: Tatil Kumbarası (TATIL-1)
+
+
+
+## Hafta başlangıcı 2026-02-23
+Hafta: Gelir 25.000 TL | Gider 0 TL | Net 25.000 TL
+- 2026-03-01 | Gelir | Selin katkı | 15.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+- 2026-03-01 | Gelir | Buse katkı | 10.000 TL | Ekleyen: Buse Yıldız | Ödeyen: Buse Yıldız
+Kişisel yansıma
+- Selin Koç: +15.000 TL / -0 TL / net 15.000 TL
+- Buse Yıldız: +10.000 TL / -0 TL / net 10.000 TL
+
+## Hafta başlangıcı 2026-03-09
+Hafta: Gelir 0 TL | Gider 76.000 TL | Net -76.000 TL
+- 2026-03-12 | Gider | Bali uçak bileti | 38.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+- 2026-03-12 | Gider | Bilet ödemesi | 38.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+Kişisel yansıma
+- Selin Koç: +0 TL / -45.600 TL / net -45.600 TL
+- Buse Yıldız: +0 TL / -30.400 TL / net -30.400 TL
+
+## Hafta başlangıcı 2026-03-30
+Hafta: Gelir 25.000 TL | Gider 0 TL | Net 25.000 TL
+- 2026-04-01 | Gelir | Selin katkı | 15.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+- 2026-04-01 | Gelir | Buse katkı | 10.000 TL | Ekleyen: Buse Yıldız | Ödeyen: Buse Yıldız
+Kişisel yansıma
+- Selin Koç: +15.000 TL / -0 TL / net 15.000 TL
+- Buse Yıldız: +10.000 TL / -0 TL / net 10.000 TL
+
+## Hafta başlangıcı 2026-04-06
+Hafta: Gelir 0 TL | Gider 25.000 TL | Net -25.000 TL
+- 2026-04-10 | Gider | Otel ön ödemesi | 25.000 TL | Ekleyen: Buse Yıldız | Ödeyen: Buse Yıldız
+Kişisel yansıma
+- Selin Koç: +0 TL / -15.000 TL / net -15.000 TL
+- Buse Yıldız: +0 TL / -10.000 TL / net -10.000 TL
+
+## Hafta başlangıcı 2026-04-27
+Hafta: Gelir 25.000 TL | Gider 0 TL | Net 25.000 TL
+- 2026-05-01 | Gelir | Selin katkı | 15.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+- 2026-05-01 | Gelir | Buse katkı | 10.000 TL | Ekleyen: Buse Yıldız | Ödeyen: Buse Yıldız
+Kişisel yansıma
+- Selin Koç: +15.000 TL / -0 TL / net 15.000 TL
+- Buse Yıldız: +10.000 TL / -0 TL / net 10.000 TL
+
+## Hafta başlangıcı 2026-05-04
+Hafta: Gelir 0 TL | Gider 6.000 TL | Net -6.000 TL
+- 2026-05-08 | Gider | Vize masrafı | 6.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+Kişisel yansıma
+- Selin Koç: +0 TL / -3.600 TL / net -3.600 TL
+- Buse Yıldız: +0 TL / -2.400 TL / net -2.400 TL
+
+## Hafta başlangıcı 2026-06-01
+Hafta: Gelir 25.000 TL | Gider 0 TL | Net 25.000 TL
+- 2026-06-01 | Gelir | Selin katkı | 15.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+- 2026-06-01 | Gelir | Buse katkı | 10.000 TL | Ekleyen: Buse Yıldız | Ödeyen: Buse Yıldız
+Kişisel yansıma
+- Selin Koç: +15.000 TL / -0 TL / net 15.000 TL
+- Buse Yıldız: +10.000 TL / -0 TL / net 10.000 TL
+
+## Hafta başlangıcı 2026-06-15
+Hafta: Gelir 4.500 TL | Gider 8.000 TL | Net -3.500 TL
+- 2026-06-15 | Gider | Tatil alışverişi | 8.000 TL | Ekleyen: Buse Yıldız | Ödeyen: Buse Yıldız
+- 2026-06-20 | Gelir | Ek vardiya ödemesi | 4.500 TL | Ekleyen: Buse Yıldız | Ödeyen: Buse Yıldız
+Kişisel yansıma
+- Selin Koç: +0 TL / -4.800 TL / net -4.800 TL
+- Buse Yıldız: +4.500 TL / -3.200 TL / net 1.300 TL
+
+## Hafta başlangıcı 2026-06-22
+Hafta: Gelir 5.000 TL | Gider 0 TL | Net 5.000 TL
+- 2026-06-25 | Gelir | Acil fon rezerv | 5.000 TL | Ekleyen: Selin Koç | Ödeyen: Selin Koç
+Kişisel yansıma
+- Selin Koç: +3.000 TL / -0 TL / net 3.000 TL
+- Buse Yıldız: +2.000 TL / -0 TL / net 2.000 TL

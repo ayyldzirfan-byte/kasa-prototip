@@ -1,0 +1,8 @@
+Çalışan Ev Arkadaşları
+Kasa: Nişantaşı Evi
+Kod: NISANTASI-1
+
+Kullanıcılar
+- Ayşe Demir | 28 | Öğretmen | Gelir: 24.000 TL | E-posta: ayse.s3@kasam.test | Şifre: Test1234
+- Merve Çelik | 26 | Grafik tasarımcı | Gelir: 28.000 TL | E-posta: merve.s3@kasam.test | Şifre: Test1234
+- Can Öztürk | 29 | Yazılımcı | Gelir: 45.000 TL | E-posta: can.s3@kasam.test | Şifre: Test1234

@@ -1,0 +1,740 @@
+Çalışan Ev Arkadaşları - Günlük Rapor
+
+Kasa: Nişantaşı Evi (NISANTASI-1)
+
+
+
+## 2026-04-01
+Gün: Gelir 97.000 TL | Gider 0 TL | Net 97.000 TL
+- 2026-04-01 | Gelir | Ayşe maaş | 24.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-04-01 | Gelir | Merve maaş | 28.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-04-01 | Gelir | Can maaş | 45.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +24.000 TL / -0 TL / net 24.000 TL
+- Merve Çelik: +28.000 TL / -0 TL / net 28.000 TL
+- Can Öztürk: +45.000 TL / -0 TL / net 45.000 TL
+
+## 2026-04-02
+Gün: Gelir 0 TL | Gider 25.000 TL | Net -25.000 TL
+- 2026-04-02 | Gider | Kira | 25.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -6.250 TL / net -6.250 TL
+- Merve Çelik: +0 TL / -8.750 TL / net -8.750 TL
+- Can Öztürk: +0 TL / -10.000 TL / net -10.000 TL
+
+## 2026-04-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-08
+Gün: Gelir 0 TL | Gider 1.900 TL | Net -1.900 TL
+- 2026-04-08 | Gider | Faturalar | 1.900 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -475 TL / net -475 TL
+- Merve Çelik: +0 TL / -665 TL / net -665 TL
+- Can Öztürk: +0 TL / -760 TL / net -760 TL
+
+## 2026-04-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-13
+Gün: Gelir 0 TL | Gider 6.200 TL | Net -6.200 TL
+- 2026-04-13 | Gider | Ortak market | 6.200 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -1.550 TL / net -1.550 TL
+- Merve Çelik: +0 TL / -2.170 TL / net -2.170 TL
+- Can Öztürk: +0 TL / -2.480 TL / net -2.480 TL
+
+## 2026-04-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-15
+Gün: Gelir 0 TL | Gider 2.000 TL | Net -2.000 TL
+- 2026-04-15 | Gider | Temizlikçi | 2.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -500 TL / net -500 TL
+- Merve Çelik: +0 TL / -700 TL / net -700 TL
+- Can Öztürk: +0 TL / -800 TL / net -800 TL
+
+## 2026-04-16
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-17
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-18
+Gün: Gelir 0 TL | Gider 3.300 TL | Net -3.300 TL
+- 2026-04-18 | Gider | Dışarı yemek | 3.300 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -825 TL / net -825 TL
+- Merve Çelik: +0 TL / -1.155 TL / net -1.155 TL
+- Can Öztürk: +0 TL / -1.320 TL / net -1.320 TL
+
+## 2026-04-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-20
+Gün: Gelir 0 TL | Gider 1.800 TL | Net -1.800 TL
+- 2026-04-20 | Gider | Sinema konser | 1.800 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -450 TL / net -450 TL
+- Merve Çelik: +0 TL / -630 TL / net -630 TL
+- Can Öztürk: +0 TL / -720 TL / net -720 TL
+
+## 2026-04-21
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-04-21 | Gider | Ayşe ulaşım | 1.200 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -1.200 TL / net -1.200 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-22
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-04-22 | Gider | Can spor salonu | 1.200 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -1.200 TL / net -1.200 TL
+
+## 2026-04-23
+Gün: Gelir 0 TL | Gider 800 TL | Net -800 TL
+- 2026-04-23 | Gider | Can abonelik | 800 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -800 TL / net -800 TL
+
+## 2026-04-24
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-25
+Gün: Gelir 6.000 TL | Gider 0 TL | Net 6.000 TL
+- 2026-04-25 | Gelir | Merve freelance | 6.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +6.000 TL / -0 TL / net 6.000 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-01
+Gün: Gelir 97.000 TL | Gider 0 TL | Net 97.000 TL
+- 2026-05-01 | Gelir | Ayşe maaş | 24.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-01 | Gelir | Merve maaş | 28.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-05-01 | Gelir | Can maaş | 45.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +24.000 TL / -0 TL / net 24.000 TL
+- Merve Çelik: +28.000 TL / -0 TL / net 28.000 TL
+- Can Öztürk: +45.000 TL / -0 TL / net 45.000 TL
+
+## 2026-05-02
+Gün: Gelir 0 TL | Gider 25.000 TL | Net -25.000 TL
+- 2026-05-02 | Gider | Kira | 25.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -6.250 TL / net -6.250 TL
+- Merve Çelik: +0 TL / -8.750 TL / net -8.750 TL
+- Can Öztürk: +0 TL / -10.000 TL / net -10.000 TL
+
+## 2026-05-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-08
+Gün: Gelir 0 TL | Gider 2.050 TL | Net -2.050 TL
+- 2026-05-08 | Gider | Faturalar | 2.050 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -513 TL / net -512 TL
+- Merve Çelik: +0 TL / -718 TL / net -717 TL
+- Can Öztürk: +0 TL / -820 TL / net -820 TL
+
+## 2026-05-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-13
+Gün: Gelir 0 TL | Gider 7.600 TL | Net -7.600 TL
+- 2026-05-13 | Gider | Ortak market | 7.600 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -1.900 TL / net -1.900 TL
+- Merve Çelik: +0 TL / -2.660 TL / net -2.660 TL
+- Can Öztürk: +0 TL / -3.040 TL / net -3.040 TL
+
+## 2026-05-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-15
+Gün: Gelir 0 TL | Gider 2.000 TL | Net -2.000 TL
+- 2026-05-15 | Gider | Temizlikçi | 2.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -500 TL / net -500 TL
+- Merve Çelik: +0 TL / -700 TL / net -700 TL
+- Can Öztürk: +0 TL / -800 TL / net -800 TL
+
+## 2026-05-16
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-17
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-18
+Gün: Gelir 0 TL | Gider 4.700 TL | Net -4.700 TL
+- 2026-05-18 | Gider | Dışarı yemek | 4.700 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -1.175 TL / net -1.175 TL
+- Merve Çelik: +0 TL / -1.645 TL / net -1.645 TL
+- Can Öztürk: +0 TL / -1.880 TL / net -1.880 TL
+
+## 2026-05-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-20
+Gün: Gelir 0 TL | Gider 2.600 TL | Net -2.600 TL
+- 2026-05-20 | Gider | Sinema konser | 2.600 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -650 TL / net -650 TL
+- Merve Çelik: +0 TL / -910 TL / net -910 TL
+- Can Öztürk: +0 TL / -1.040 TL / net -1.040 TL
+
+## 2026-05-21
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-05-21 | Gider | Ayşe ulaşım | 1.200 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -1.200 TL / net -1.200 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-22
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-05-22 | Gider | Can spor salonu | 1.200 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -1.200 TL / net -1.200 TL
+
+## 2026-05-23
+Gün: Gelir 0 TL | Gider 800 TL | Net -800 TL
+- 2026-05-23 | Gider | Can abonelik | 800 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -800 TL / net -800 TL
+
+## 2026-05-24
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-25
+Gün: Gelir 12.000 TL | Gider 0 TL | Net 12.000 TL
+- 2026-05-25 | Gelir | Merve freelance | 12.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +12.000 TL / -0 TL / net 12.000 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-31
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-01
+Gün: Gelir 97.000 TL | Gider 0 TL | Net 97.000 TL
+- 2026-06-01 | Gelir | Ayşe maaş | 24.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-06-01 | Gelir | Merve maaş | 28.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-06-01 | Gelir | Can maaş | 45.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +24.000 TL / -0 TL / net 24.000 TL
+- Merve Çelik: +28.000 TL / -0 TL / net 28.000 TL
+- Can Öztürk: +45.000 TL / -0 TL / net 45.000 TL
+
+## 2026-06-02
+Gün: Gelir 0 TL | Gider 25.000 TL | Net -25.000 TL
+- 2026-06-02 | Gider | Kira | 25.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -6.250 TL / net -6.250 TL
+- Merve Çelik: +0 TL / -8.750 TL / net -8.750 TL
+- Can Öztürk: +0 TL / -10.000 TL / net -10.000 TL
+
+## 2026-06-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-08
+Gün: Gelir 0 TL | Gider 2.150 TL | Net -2.150 TL
+- 2026-06-08 | Gider | Faturalar | 2.150 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -538 TL / net -537 TL
+- Merve Çelik: +0 TL / -753 TL / net -752 TL
+- Can Öztürk: +0 TL / -860 TL / net -860 TL
+
+## 2026-06-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-13
+Gün: Gelir 0 TL | Gider 8.900 TL | Net -8.900 TL
+- 2026-06-13 | Gider | Ortak market | 8.900 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -2.225 TL / net -2.225 TL
+- Merve Çelik: +0 TL / -3.115 TL / net -3.115 TL
+- Can Öztürk: +0 TL / -3.560 TL / net -3.560 TL
+
+## 2026-06-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-15
+Gün: Gelir 0 TL | Gider 2.000 TL | Net -2.000 TL
+- 2026-06-15 | Gider | Temizlikçi | 2.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -500 TL / net -500 TL
+- Merve Çelik: +0 TL / -700 TL / net -700 TL
+- Can Öztürk: +0 TL / -800 TL / net -800 TL
+
+## 2026-06-16
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-17
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-18
+Gün: Gelir 0 TL | Gider 5.600 TL | Net -5.600 TL
+- 2026-06-18 | Gider | Dışarı yemek | 5.600 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -1.400 TL / net -1.400 TL
+- Merve Çelik: +0 TL / -1.960 TL / net -1.960 TL
+- Can Öztürk: +0 TL / -2.240 TL / net -2.240 TL
+
+## 2026-06-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-20
+Gün: Gelir 0 TL | Gider 3.800 TL | Net -3.800 TL
+- 2026-06-20 | Gider | Sinema konser | 3.800 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -950 TL / net -950 TL
+- Merve Çelik: +0 TL / -1.330 TL / net -1.330 TL
+- Can Öztürk: +0 TL / -1.520 TL / net -1.520 TL
+
+## 2026-06-21
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-06-21 | Gider | Ayşe ulaşım | 1.200 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -1.200 TL / net -1.200 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-22
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-06-22 | Gider | Can spor salonu | 1.200 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -1.200 TL / net -1.200 TL
+
+## 2026-06-23
+Gün: Gelir 0 TL | Gider 800 TL | Net -800 TL
+- 2026-06-23 | Gider | Can abonelik | 800 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -800 TL / net -800 TL
+
+## 2026-06-24
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-25
+Gün: Gelir 24.000 TL | Gider 0 TL | Net 24.000 TL
+- 2026-06-25 | Gelir | Merve freelance | 9.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-06-25 | Gelir | Logo işi ödemesi | 15.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +24.000 TL / -0 TL / net 24.000 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-26
+Gün: Gelir 0 TL | Gider 2.850 TL | Net -2.850 TL
+- 2026-06-26 | Gider | Mekanik klavye | 2.850 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -2.850 TL / net -2.850 TL
+
+## 2026-06-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Ayşe Demir: +0 TL / -0 TL / net 0 TL
+- Merve Çelik: +0 TL / -0 TL / net 0 TL
+- Can Öztürk: +0 TL / -0 TL / net 0 TL

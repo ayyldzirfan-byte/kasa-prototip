@@ -1,142 +1,92 @@
 const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const http = require("node:http");
-const path = require("node:path");
-const { chromium } = require("playwright");
+const { runCdpTest } = require("./scripts/cdp-test-harness.cjs");
 
-const root = process.cwd();
-const port = 4184;
 const storageKey = "kasa-prototype-state-v6";
-const appUrl = `http://127.0.0.1:${port}/index.html?v=20260613-1952&testScenario=1`;
-const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const results = [];
 
 function record(name, detail = "") {
   results.push({ name, status: "PASS", detail });
-  console.log(`✓ ${name}${detail ? ` — ${detail}` : ""}`);
+  console.log(`PASS ${name}${detail ? ` - ${detail}` : ""}`);
 }
 
-function startServer() {
-  const types = {
-    ".html": "text/html; charset=utf-8",
-    ".js": "application/javascript; charset=utf-8",
-    ".css": "text/css; charset=utf-8",
-    ".webmanifest": "application/manifest+json; charset=utf-8",
-    ".svg": "image/svg+xml; charset=utf-8",
-    ".png": "image/png",
-  };
-  const server = http.createServer((req, res) => {
-    let urlPath = decodeURIComponent(String(req.url || "/").split("?")[0]);
-    if (urlPath === "/") urlPath = "/index.html";
-    const filePath = path.normalize(path.join(root, urlPath));
-    if (!filePath.startsWith(root)) {
-      res.writeHead(403);
-      res.end("Forbidden");
-      return;
-    }
-    fs.readFile(filePath, (error, data) => {
-      if (error) {
-        res.writeHead(404);
-        res.end("Not found");
-        return;
-      }
-      res.writeHead(200, { "Content-Type": types[path.extname(filePath)] || "application/octet-stream" });
-      res.end(data);
-    });
-  });
-  return new Promise((resolve) => server.listen(port, "127.0.0.1", () => resolve(server)));
-}
+runCdpTest({ root: __dirname, port: 4184, cdpPort: 9384 }, async ({ page, localBase }) => {
+  await page.goto(`${localBase}/index.html?v=20260613-1952&testScenario=1`);
+  await page.waitFor(`Boolean(localStorage.getItem(${JSON.stringify(storageKey)}))`, 12000);
+  await page.waitFor(`document.body.dataset.view === "home"`, 12000);
 
-(async () => {
-  const server = await startServer();
-  const browser = await chromium.launch({ headless: true, executablePath: chromePath });
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: "block" });
-  await context.addInitScript((key) => {
-    localStorage.removeItem(key);
-  }, storageKey);
-  const page = await context.newPage();
-  const errors = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  page.on("console", (msg) => {
-    if (msg.type() === "error" && !msg.text().includes("Failed to load resource")) errors.push(msg.text());
-  });
+  const result = await page.eval(`(key) => {
+    const state = JSON.parse(localStorage.getItem(key));
+    const activeUser = state.users.find((user) => user.id === state.activeUserId);
+    return {
+      testMode: window.KASAM_TEST_MODE === true,
+      cloudReady: typeof isCloudReady === "function" ? isCloudReady() : null,
+      activeView: state.activeView,
+      activeUserEmail: activeUser?.email || "",
+      signedInMatches: state.signedInUserId === state.activeUserId,
+      pendingLoginEmail: state.pendingLoginEmail || "",
+      testScenarioActiveEmail: state.testScenarioActiveEmail || "",
+      cloudEnabled: state.cloudEnabled,
+      cloudStatus: state.cloudStatus,
+      projectName: state.projects.find((project) => project.id === state.activeProjectId)?.name || "",
+      appText: document.querySelector("#app")?.innerText || "",
+    };
+  }`, [storageKey]);
 
-  try {
-    await page.goto(appUrl, { waitUntil: "load", timeout: 60000 });
-    await page.waitForFunction((key) => Boolean(localStorage.getItem(key)), storageKey);
-    await page.waitForFunction(() => document.body.dataset.view === "home");
+  assert.equal(result.testMode, true);
+  record("test modu bayragi aktif");
+  assert.equal(result.cloudReady, false);
+  record("Supabase auth/cloud bypass aktif");
+  assert.equal(result.activeView, "home");
+  record("auth ekrani atlandi ve ana ekran acildi");
+  assert.equal(result.activeUserEmail, "mehmet.s1@kasam.test");
+  assert.equal(result.pendingLoginEmail, "mehmet.s1@kasam.test");
+  assert.equal(result.testScenarioActiveEmail, "mehmet.s1@kasam.test");
+  assert.equal(result.signedInMatches, true);
+  assert.equal(result.cloudEnabled, false);
+  assert.equal(result.cloudStatus, "Test modu");
+  assert.match(result.projectName, /Yılmaz Ailesi/);
+  assert.match(result.appText, /Mehmet|Yılmaz Ailesi/);
+  record("localStorage aktif kullanici Mehmet olarak yuklendi", result.activeUserEmail);
 
-    const result = await page.evaluate((key) => {
-      const state = JSON.parse(localStorage.getItem(key));
-      const activeUser = state.users.find((user) => user.id === state.activeUserId);
-      return {
-        testMode: window.KASAM_TEST_MODE === true,
-        cloudReady: typeof isCloudReady === "function" ? isCloudReady() : null,
-        activeView: state.activeView,
-        activeUserEmail: activeUser?.email || "",
-        signedInMatches: state.signedInUserId === state.activeUserId,
-        pendingLoginEmail: state.pendingLoginEmail || "",
-        testScenarioActiveEmail: state.testScenarioActiveEmail || "",
-        cloudEnabled: state.cloudEnabled,
-        cloudStatus: state.cloudStatus,
-        projectName: state.projects.find((project) => project.id === state.activeProjectId)?.name || "",
-        appText: document.querySelector("#app")?.innerText || "",
-      };
-    }, storageKey);
+  const bannerText = await page.eval(`() => document.querySelector("[data-testid='test-mode-banner']")?.innerText || ""`);
+  assert.match(bannerText, /Test modu/);
+  assert.match(bannerText, /Senaryo 1: Yılmaz Ailesi/);
+  record("test modu banneri senaryo adini gosteriyor");
 
-    assert.equal(result.testMode, true);
-    record("test modu bayrağı aktif");
-    assert.equal(result.cloudReady, false);
-    record("Supabase auth/cloud bypass aktif");
-    assert.equal(result.activeView, "home");
-    record("auth ekranı atlandı ve ana ekran açıldı");
-    assert.equal(result.activeUserEmail, "mehmet.s1@kasam.test");
-    assert.equal(result.pendingLoginEmail, "mehmet.s1@kasam.test");
-    assert.equal(result.testScenarioActiveEmail, "mehmet.s1@kasam.test");
-    assert.equal(result.signedInMatches, true);
-    assert.equal(result.cloudEnabled, false);
-    assert.equal(result.cloudStatus, "Test modu");
-    assert.match(result.projectName, /Yılmaz Ailesi/);
-    assert.match(result.appText, /Mehmet|Yılmaz Ailesi/);
-    record("localStorage aktif kullanıcı Mehmet olarak yüklendi", result.activeUserEmail);
-
-    const bannerText = await page.locator("[data-testid='test-mode-banner']").innerText();
-    assert.match(bannerText, /Test modu/);
-    assert.match(bannerText, /Senaryo 1: Yılmaz Ailesi/);
-    record("test modu bannerı senaryo adını gösteriyor");
-
-    const secondUserId = await page.locator("[data-action='test-user-switch'] option").nth(1).getAttribute("value");
-    await page.locator("[data-action='test-user-switch']").selectOption(secondUserId);
-    await page.waitForFunction((key) => {
-      const state = JSON.parse(localStorage.getItem(key));
-      const user = state.users.find((item) => item.id === state.activeUserId);
+  await page.eval(`() => {
+    const select = document.querySelector("[data-action='test-user-switch']");
+    select.value = select.options[1].value;
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+  }`);
+  await page.waitFor(`() => {
+    try {
+      const raw = localStorage.getItem(${JSON.stringify(storageKey)});
+      if (!raw) return false;
+      const state = JSON.parse(raw);
+      const user = Array.isArray(state.users) ? state.users.find((item) => item.id === state.activeUserId) : null;
       return user?.email === "fatma.s1@kasam.test";
-    }, storageKey);
-    const switched = await page.evaluate((key) => {
-      const state = JSON.parse(localStorage.getItem(key));
-      const user = state.users.find((item) => item.id === state.activeUserId);
-      return { email: user?.email, signedInMatches: state.signedInUserId === state.activeUserId };
-    }, storageKey);
-    assert.equal(switched.email, "fatma.s1@kasam.test");
-    assert.equal(switched.signedInMatches, true);
-    record("test modu kullanıcı değiştiriyor", switched.email);
+    } catch (_error) {
+      return false;
+    }
+  }`, 12000);
+  const switched = await page.eval(`(key) => {
+    const state = JSON.parse(localStorage.getItem(key));
+    const user = state.users.find((item) => item.id === state.activeUserId);
+    return { email: user?.email, signedInMatches: state.signedInUserId === state.activeUserId };
+  }`, [storageKey]);
+  assert.equal(switched.email, "fatma.s1@kasam.test");
+  assert.equal(switched.signedInMatches, true);
+  record("test modu kullanici degistiriyor", switched.email);
 
-    await page.locator("[data-action='exit-test-mode']").click();
-    await page.waitForFunction(() => !location.search.includes("testScenario"));
-    await page.waitForFunction((key) => !localStorage.getItem(key), storageKey);
-    assert.ok(!page.url().includes("testScenario"));
-    record("test modundan çıkış parametreyi ve localStorage state'i temizliyor");
+  await page.click("[data-action='exit-test-mode']");
+  await page.waitFor(`!location.search.includes("testScenario")`, 12000);
+  await page.waitFor(`!localStorage.getItem(${JSON.stringify(storageKey)})`, 12000);
+  assert.ok(!(await page.eval(`() => location.href`)).includes("testScenario"));
+  record("test modundan cikis parametreyi ve localStorage state'i temizliyor");
 
-    if (errors.length) throw new Error(errors.join("\n"));
-    console.log(`Toplam: ${results.length} test, ${results.length} geçti, 0 başarısız`);
-    await browser.close();
-    server.close();
-    process.exit(0);
-  } catch (error) {
-    console.error(`✗ testScenario auth bypass başarısız`);
-    console.error(error.stack || error.message);
-    await browser.close();
-    server.close();
-    process.exit(1);
-  }
-})();
+  console.log(`Toplam: ${results.length} test, ${results.length} gecti, 0 basarisiz`);
+}).catch((error) => {
+  console.error("FAIL testScenario auth bypass");
+  console.error(error.stack || error.message);
+  process.exit(1);
+});

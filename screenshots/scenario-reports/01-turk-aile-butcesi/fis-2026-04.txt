@@ -1,0 +1,35 @@
+KASAM FİŞİ
+2026-04
+
+Kasa: Yılmaz Ailesi
+Kod: YILMAZ-EV-1
+--------------------------------
+Kasa toplamı: Gelir 37.000 TL | Gider 41.199 TL | Net -4.199 TL
+
+HAREKETLER
+- 2026-04-01 | Gelir | Mehmet maaş | 32.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-01 | Gider | Kira | 18.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-05 | Gelir | Burak burs | 3.500 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+- 2026-04-06 | Gelir | Selin harçlık | 1.500 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+- 2026-04-08 | Gider | Elektrik faturası | 1.750 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-09 | Gider | Doğalgaz faturası | 2.300 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-10 | Gider | Su faturası | 400 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-11 | Gider | İnternet | 599 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-12 | Gider | Aidat | 750 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-13 | Gider | Aylık market | 9.600 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-15 | Gider | Mehmet ulaşım | 2.000 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-16 | Gider | Burak ulaşım | 600 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+- 2026-04-17 | Gider | Selin ulaşım | 400 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+- 2026-04-20 | Gider | Sağlık masrafı | 700 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-22 | Gider | Giyim | 1.200 TL | Ekleyen: Fatma Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-24 | Gider | Aile dışarı yemeği | 1.800 TL | Ekleyen: Mehmet Yılmaz | Ödeyen: Mehmet Yılmaz
+- 2026-04-26 | Gider | Burak okul masrafı | 750 TL | Ekleyen: Burak Yılmaz | Ödeyen: Burak Yılmaz
+- 2026-04-27 | Gider | Selin okul masrafı | 350 TL | Ekleyen: Selin Yılmaz | Ödeyen: Selin Yılmaz
+
+PAY DAĞILIMI
+- Mehmet Yılmaz: +32.000 TL / -11.275 TL / net 20.725 TL
+- Fatma Yılmaz: +0 TL / -9.275 TL / net -9.275 TL
+- Burak Yılmaz: +3.500 TL / -10.625 TL / net -7.125 TL
+- Selin Yılmaz: +1.500 TL / -10.025 TL / net -8.525 TL
+
+kasam.app

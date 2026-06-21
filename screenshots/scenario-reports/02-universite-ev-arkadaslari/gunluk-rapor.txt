@@ -1,0 +1,646 @@
+Üniversite Ev Arkadaşları - Günlük Rapor
+
+Kasa: Kerem & Deniz Evi (KEREM-DENIZ-1)
+
+
+
+## 2026-04-01
+Gün: Gelir 12.700 TL | Gider 0 TL | Net 12.700 TL
+- 2026-04-01 | Gelir | Kerem burs ve part-time | 8.500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-04-01 | Gelir | Deniz burs | 4.200 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +8.500 TL / -0 TL / net 8.500 TL
+- Deniz Kaya: +4.200 TL / -0 TL / net 4.200 TL
+
+## 2026-04-02
+Gün: Gelir 0 TL | Gider 12.000 TL | Net -12.000 TL
+- 2026-04-02 | Gider | Kira | 12.000 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -6.000 TL / net -6.000 TL
+- Deniz Kaya: +0 TL / -6.000 TL / net -6.000 TL
+
+## 2026-04-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-08
+Gün: Gelir 0 TL | Gider 1.350 TL | Net -1.350 TL
+- 2026-04-08 | Gider | Elektrik su internet | 1.350 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -675 TL / net -675 TL
+- Deniz Kaya: +0 TL / -675 TL / net -675 TL
+
+## 2026-04-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-13
+Gün: Gelir 0 TL | Gider 3.200 TL | Net -3.200 TL
+- 2026-04-13 | Gider | Ortak market | 3.200 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -1.600 TL / net -1.600 TL
+- Deniz Kaya: +0 TL / -1.600 TL / net -1.600 TL
+
+## 2026-04-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-15
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-16
+Gün: Gelir 0 TL | Gider 800 TL | Net -800 TL
+- 2026-04-16 | Gider | Kerem ulaşım | 800 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -800 TL / net -800 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-17
+Gün: Gelir 0 TL | Gider 600 TL | Net -600 TL
+- 2026-04-17 | Gider | Deniz ulaşım | 600 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -600 TL / net -600 TL
+
+## 2026-04-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-20
+Gün: Gelir 0 TL | Gider 500 TL | Net -500 TL
+- 2026-04-20 | Gider | Kerem kurs | 500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -500 TL / net -500 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-21
+Gün: Gelir 0 TL | Gider 420 TL | Net -420 TL
+- 2026-04-21 | Gider | Deniz kafe | 420 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -420 TL / net -420 TL
+
+## 2026-04-22
+Gün: Gelir 0 TL | Gider 300 TL | Net -300 TL
+- 2026-04-22 | Gider | Kerem oyun abonelik | 300 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -300 TL / net -300 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-23
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-24
+Gün: Gelir 0 TL | Gider 500 TL | Net -500 TL
+- 2026-04-24 | Gider | Deniz kıyafet | 500 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -500 TL / net -500 TL
+
+## 2026-04-25
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-01
+Gün: Gelir 12.700 TL | Gider 0 TL | Net 12.700 TL
+- 2026-05-01 | Gelir | Kerem burs ve part-time | 8.500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-05-01 | Gelir | Deniz burs | 4.200 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +8.500 TL / -0 TL / net 8.500 TL
+- Deniz Kaya: +4.200 TL / -0 TL / net 4.200 TL
+
+## 2026-05-02
+Gün: Gelir 0 TL | Gider 12.000 TL | Net -12.000 TL
+- 2026-05-02 | Gider | Kira | 12.000 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -6.000 TL / net -6.000 TL
+- Deniz Kaya: +0 TL / -6.000 TL / net -6.000 TL
+
+## 2026-05-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-08
+Gün: Gelir 0 TL | Gider 1.420 TL | Net -1.420 TL
+- 2026-05-08 | Gider | Elektrik su internet | 1.420 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -710 TL / net -710 TL
+- Deniz Kaya: +0 TL / -710 TL / net -710 TL
+
+## 2026-05-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-13
+Gün: Gelir 0 TL | Gider 3.900 TL | Net -3.900 TL
+- 2026-05-13 | Gider | Ortak market | 3.900 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -1.950 TL / net -1.950 TL
+- Deniz Kaya: +0 TL / -1.950 TL / net -1.950 TL
+
+## 2026-05-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-15
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-16
+Gün: Gelir 0 TL | Gider 800 TL | Net -800 TL
+- 2026-05-16 | Gider | Kerem ulaşım | 800 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -800 TL / net -800 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-17
+Gün: Gelir 0 TL | Gider 600 TL | Net -600 TL
+- 2026-05-17 | Gider | Deniz ulaşım | 600 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -600 TL / net -600 TL
+
+## 2026-05-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-20
+Gün: Gelir 0 TL | Gider 500 TL | Net -500 TL
+- 2026-05-20 | Gider | Kerem kurs | 500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -500 TL / net -500 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-21
+Gün: Gelir 0 TL | Gider 380 TL | Net -380 TL
+- 2026-05-21 | Gider | Deniz kafe | 380 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -380 TL / net -380 TL
+
+## 2026-05-22
+Gün: Gelir 0 TL | Gider 598 TL | Net -598 TL
+- 2026-05-22 | Gider | Kerem oyun abonelik | 299 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-05-22 | Gider | Steam oyunu | 299 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -598 TL / net -598 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-23
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-24
+Gün: Gelir 0 TL | Gider 650 TL | Net -650 TL
+- 2026-05-24 | Gider | Deniz kıyafet | 650 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -650 TL / net -650 TL
+
+## 2026-05-25
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-31
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-01
+Gün: Gelir 12.700 TL | Gider 0 TL | Net 12.700 TL
+- 2026-06-01 | Gelir | Kerem burs ve part-time | 8.500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-01 | Gelir | Deniz burs | 4.200 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +8.500 TL / -0 TL / net 8.500 TL
+- Deniz Kaya: +4.200 TL / -0 TL / net 4.200 TL
+
+## 2026-06-02
+Gün: Gelir 0 TL | Gider 12.000 TL | Net -12.000 TL
+- 2026-06-02 | Gider | Kira | 12.000 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -6.000 TL / net -6.000 TL
+- Deniz Kaya: +0 TL / -6.000 TL / net -6.000 TL
+
+## 2026-06-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-07
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-08
+Gün: Gelir 0 TL | Gider 1.480 TL | Net -1.480 TL
+- 2026-06-08 | Gider | Elektrik su internet | 1.480 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -740 TL / net -740 TL
+- Deniz Kaya: +0 TL / -740 TL / net -740 TL
+
+## 2026-06-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-13
+Gün: Gelir 0 TL | Gider 4.300 TL | Net -4.300 TL
+- 2026-06-13 | Gider | Ortak market | 4.300 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -2.150 TL / net -2.150 TL
+- Deniz Kaya: +0 TL / -2.150 TL / net -2.150 TL
+
+## 2026-06-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-15
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-16
+Gün: Gelir 0 TL | Gider 800 TL | Net -800 TL
+- 2026-06-16 | Gider | Kerem ulaşım | 800 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -800 TL / net -800 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-17
+Gün: Gelir 0 TL | Gider 600 TL | Net -600 TL
+- 2026-06-17 | Gider | Deniz ulaşım | 600 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -600 TL / net -600 TL
+
+## 2026-06-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-20
+Gün: Gelir 0 TL | Gider 500 TL | Net -500 TL
+- 2026-06-20 | Gider | Kerem kurs | 500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -500 TL / net -500 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-21
+Gün: Gelir 0 TL | Gider 450 TL | Net -450 TL
+- 2026-06-21 | Gider | Deniz kafe | 450 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -450 TL / net -450 TL
+
+## 2026-06-22
+Gün: Gelir 0 TL | Gider 350 TL | Net -350 TL
+- 2026-06-22 | Gider | Kerem oyun abonelik | 350 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -350 TL / net -350 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-23
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-24
+Gün: Gelir 0 TL | Gider 540 TL | Net -540 TL
+- 2026-06-24 | Gider | Deniz kıyafet | 540 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -540 TL / net -540 TL
+
+## 2026-06-25
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-27
+Gün: Gelir 1.500 TL | Gider 0 TL | Net 1.500 TL
+- 2026-06-27 | Gelir | Part-time iş ödemesi | 1.500 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +1.500 TL / -0 TL / net 1.500 TL
+
+## 2026-06-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Kerem Arslan: +0 TL / -0 TL / net 0 TL
+- Deniz Kaya: +0 TL / -0 TL / net 0 TL

@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const http = require("http");
+const os = require("os");
 const { spawn } = require("child_process");
 
 const root = path.resolve(__dirname, "..", "public");
@@ -9,7 +10,19 @@ const cdpPort = Number(process.env.KASAM_CDP_PORT || 9387);
 const chromePath = process.env.CHROME_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const desktop = "C:\\Users\\İRFAN AYYILDIZ\\Desktop\\kasam-test";
 const stamp = new Date().toISOString().replace(/[-:T]/g, "").slice(0, 12);
-const outDir = path.join(desktop, `visual-test-${stamp}`);
+function resolveOutDir() {
+  const preferred = path.join(os.homedir(), "Desktop", "kasam-test", `visual-test-${stamp}`);
+  const fallback = path.resolve(__dirname, "..", "screenshots", `visual-test-${stamp}`);
+  try {
+    fs.mkdirSync(preferred, { recursive: true });
+    return preferred;
+  } catch (_error) {
+    fs.mkdirSync(fallback, { recursive: true });
+    return fallback;
+  }
+}
+
+const outDir = resolveOutDir();
 const cacheKey = `visual-${stamp}`;
 const liveBase = "https://kasa-prototip.vercel.app";
 const localBase = `http://127.0.0.1:${port}`;
@@ -179,8 +192,9 @@ async function run() {
   const server = await startServer();
   const chrome = spawn(chromePath, [
     "--headless=new",
+    "--single-process",
     `--remote-debugging-port=${cdpPort}`,
-    "--disable-gpu",
+    "--no-sandbox",
     "--no-first-run",
     "--no-default-browser-check",
     `--user-data-dir=${path.join(outDir, "chrome-profile")}`,

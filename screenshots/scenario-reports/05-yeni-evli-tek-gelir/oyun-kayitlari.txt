@@ -1,0 +1,17 @@
+Oyun: Bebek kıyafeti
+Ekleyen: Zeynep Kara
+Alıcılar: Murat Kara
+Tutar: 1.320 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Murat Kara: doğru
+Aşama 2 tip: Murat Kara: doğru
+Aşama 3 kategori: Murat Kara: doğru
+
+Oyun: Araba bakım
+Ekleyen: Murat Kara
+Alıcılar: Zeynep Kara
+Tutar: 4.500 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Zeynep Kara: doğru
+Aşama 2 tip: Zeynep Kara: doğru
+Aşama 3 kategori: Zeynep Kara: doğru

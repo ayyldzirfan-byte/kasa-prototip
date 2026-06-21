@@ -1,0 +1,58 @@
+Yeni Evli Tek Gelir - Aylık Rapor
+
+Kasa: Kara Ailesi (KARA-1)
+
+
+
+## 2026-04
+Ay: Gelir 43.000 TL | Gider 28.050 TL | Net 14.950 TL
+- 2026-04-01 | Gelir | Murat maaş | 38.000 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-04-02 | Gider | Kira | 14.500 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-04-07 | Gider | Faturalar | 2.200 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-04-13 | Gider | Market | 7.600 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-04-15 | Gider | Bez mama | 2.400 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-04-18 | Gider | Doktor ilaç | 600 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-04-20 | Gider | Bebek oyuncak giysi | 750 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-04-26 | Gelir | Araç değişimi birikimi | 5.000 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+Kişisel yansıma
+- Murat Kara: +43.000 TL / -28.050 TL / net 14.950 TL
+- Zeynep Kara: +0 TL / -0 TL / net 0 TL
+
+## 2026-05
+Ay: Gelir 44.500 TL | Gider 30.650 TL | Net 13.850 TL
+- 2026-05-01 | Gelir | Murat maaş | 38.000 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-05-02 | Gider | Kira | 14.500 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-05-07 | Gider | Faturalar | 2.100 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-05-13 | Gider | Market | 8.200 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-05-15 | Gider | Bez mama | 2.800 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-05-18 | Gider | Doktor ilaç | 1.800 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-05-20 | Gider | Bebek oyuncak giysi | 1.250 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-05-26 | Gelir | Araç değişimi birikimi | 6.500 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+Kişisel yansıma
+- Murat Kara: +44.500 TL / -30.650 TL / net 13.850 TL
+- Zeynep Kara: +0 TL / -0 TL / net 0 TL
+
+## 2026-06
+Ay: Gelir 45.200 TL | Gider 37.170 TL | Net 8.030 TL
+- 2026-06-01 | Gelir | Murat maaş | 38.000 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-02 | Gider | Kira | 14.500 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-07 | Gider | Faturalar | 2.400 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-13 | Gider | Market | 9.100 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-15 | Gider | Bez mama | 3.000 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-18 | Gider | Doktor ilaç | 950 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-20 | Gider | Bebek oyuncak giysi | 1.400 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-20 | Gider | Bebek kıyafeti | 1.320 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-23 | Gider | Araba bakım | 4.500 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-26 | Gelir | Araç değişimi birikimi | 7.200 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+Kişisel yansıma
+- Murat Kara: +45.200 TL / -37.170 TL / net 8.030 TL
+- Zeynep Kara: +0 TL / -0 TL / net 0 TL
+
+
+
+## Kümülatif
+
+Toplam: Gelir 132.700 TL | Gider 95.870 TL | Net 36.830 TL
+
+- Murat Kara: +132.700 TL / -95.870 TL / net 36.830 TL
+- Zeynep Kara: +0 TL / -0 TL / net 0 TL

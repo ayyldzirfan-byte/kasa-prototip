@@ -1,0 +1,17 @@
+Oyun: Bilet ödemesi
+Ekleyen: Selin Koç
+Alıcılar: Buse Yıldız
+Tutar: 38.000 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Buse Yıldız: doğru
+Aşama 2 tip: Buse Yıldız: doğru
+Aşama 3 kategori: Buse Yıldız: doğru
+
+Oyun: Ek vardiya ödemesi
+Ekleyen: Buse Yıldız
+Alıcılar: Selin Koç
+Tutar: 4.500 TL
+Durum: tamamlandı
+Aşama 1 kim ekledi: Selin Koç: doğru
+Aşama 2 tip: Selin Koç: doğru
+Aşama 3 kategori: Selin Koç: doğru

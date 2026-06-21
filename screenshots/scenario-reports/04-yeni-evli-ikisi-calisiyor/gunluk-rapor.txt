@@ -1,0 +1,646 @@
+Yeni Evli İkisi de Çalışıyor - Günlük Rapor
+
+Kasa: Şahin Yuvası (SAHIN-1)
+
+
+
+## 2026-04-01
+Gün: Gelir 90.000 TL | Gider 0 TL | Net 90.000 TL
+- 2026-04-01 | Gelir | Hakan maaş | 52.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-04-01 | Gelir | Elif maaş | 38.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +52.000 TL / -0 TL / net 52.000 TL
+- Elif Şahin: +38.000 TL / -0 TL / net 38.000 TL
+
+## 2026-04-02
+Gün: Gelir 0 TL | Gider 22.000 TL | Net -22.000 TL
+- 2026-04-02 | Gider | Kira mortgage | 22.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -11.000 TL / net -11.000 TL
+- Elif Şahin: +0 TL / -11.000 TL / net -11.000 TL
+
+## 2026-04-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-07
+Gün: Gelir 0 TL | Gider 2.500 TL | Net -2.500 TL
+- 2026-04-07 | Gider | Faturalar | 2.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.250 TL / net -1.250 TL
+- Elif Şahin: +0 TL / -1.250 TL / net -1.250 TL
+
+## 2026-04-08
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-04-08 | Gider | Aidat | 1.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -600 TL / net -600 TL
+- Elif Şahin: +0 TL / -600 TL / net -600 TL
+
+## 2026-04-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-13
+Gün: Gelir 0 TL | Gider 7.200 TL | Net -7.200 TL
+- 2026-04-13 | Gider | Market | 7.200 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -3.600 TL / net -3.600 TL
+- Elif Şahin: +0 TL / -3.600 TL / net -3.600 TL
+
+## 2026-04-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-15
+Gün: Gelir 0 TL | Gider 3.000 TL | Net -3.000 TL
+- 2026-04-15 | Gider | Akaryakıt | 3.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -3.000 TL / net -3.000 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-16
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-17
+Gün: Gelir 0 TL | Gider 3.600 TL | Net -3.600 TL
+- 2026-04-17 | Gider | Ev eşyası dekorasyon | 3.600 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.800 TL / net -1.800 TL
+- Elif Şahin: +0 TL / -1.800 TL / net -1.800 TL
+
+## 2026-04-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-20
+Gün: Gelir 0 TL | Gider 3.300 TL | Net -3.300 TL
+- 2026-04-20 | Gider | Restoran kafe | 3.300 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.650 TL / net -1.650 TL
+- Elif Şahin: +0 TL / -1.650 TL / net -1.650 TL
+
+## 2026-04-21
+Gün: Gelir 0 TL | Gider 2.200 TL | Net -2.200 TL
+- 2026-04-21 | Gider | Giyim | 2.200 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.100 TL / net -1.100 TL
+- Elif Şahin: +0 TL / -1.100 TL / net -1.100 TL
+
+## 2026-04-22
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-23
+Gün: Gelir 0 TL | Gider 1.000 TL | Net -1.000 TL
+- 2026-04-23 | Gider | Hakan spor | 1.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.000 TL / net -1.000 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-24
+Gün: Gelir 0 TL | Gider 1.500 TL | Net -1.500 TL
+- 2026-04-24 | Gider | Elif bakım | 1.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -1.500 TL / net -1.500 TL
+
+## 2026-04-25
+Gün: Gelir 8.000 TL | Gider 0 TL | Net 8.000 TL
+- 2026-04-25 | Gelir | Tatil kumbarası katkı | 8.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +4.000 TL / -0 TL / net 4.000 TL
+- Elif Şahin: +4.000 TL / -0 TL / net 4.000 TL
+
+## 2026-04-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-04-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-01
+Gün: Gelir 90.000 TL | Gider 0 TL | Net 90.000 TL
+- 2026-05-01 | Gelir | Hakan maaş | 52.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-01 | Gelir | Elif maaş | 38.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +52.000 TL / -0 TL / net 52.000 TL
+- Elif Şahin: +38.000 TL / -0 TL / net 38.000 TL
+
+## 2026-05-02
+Gün: Gelir 0 TL | Gider 22.000 TL | Net -22.000 TL
+- 2026-05-02 | Gider | Kira mortgage | 22.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -11.000 TL / net -11.000 TL
+- Elif Şahin: +0 TL / -11.000 TL / net -11.000 TL
+
+## 2026-05-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-07
+Gün: Gelir 0 TL | Gider 2.500 TL | Net -2.500 TL
+- 2026-05-07 | Gider | Faturalar | 2.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.250 TL / net -1.250 TL
+- Elif Şahin: +0 TL / -1.250 TL / net -1.250 TL
+
+## 2026-05-08
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-05-08 | Gider | Aidat | 1.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -600 TL / net -600 TL
+- Elif Şahin: +0 TL / -600 TL / net -600 TL
+
+## 2026-05-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-13
+Gün: Gelir 0 TL | Gider 8.700 TL | Net -8.700 TL
+- 2026-05-13 | Gider | Market | 8.700 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -4.350 TL / net -4.350 TL
+- Elif Şahin: +0 TL / -4.350 TL / net -4.350 TL
+
+## 2026-05-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-15
+Gün: Gelir 0 TL | Gider 3.000 TL | Net -3.000 TL
+- 2026-05-15 | Gider | Akaryakıt | 3.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -3.000 TL / net -3.000 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-16
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-17
+Gün: Gelir 0 TL | Gider 6.400 TL | Net -6.400 TL
+- 2026-05-17 | Gider | Ev eşyası dekorasyon | 6.400 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -3.200 TL / net -3.200 TL
+- Elif Şahin: +0 TL / -3.200 TL / net -3.200 TL
+
+## 2026-05-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-20
+Gün: Gelir 0 TL | Gider 4.200 TL | Net -4.200 TL
+- 2026-05-20 | Gider | Restoran kafe | 4.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -2.100 TL / net -2.100 TL
+- Elif Şahin: +0 TL / -2.100 TL / net -2.100 TL
+
+## 2026-05-21
+Gün: Gelir 0 TL | Gider 3.500 TL | Net -3.500 TL
+- 2026-05-21 | Gider | Giyim | 3.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.750 TL / net -1.750 TL
+- Elif Şahin: +0 TL / -1.750 TL / net -1.750 TL
+
+## 2026-05-22
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-23
+Gün: Gelir 0 TL | Gider 1.000 TL | Net -1.000 TL
+- 2026-05-23 | Gider | Hakan spor | 1.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.000 TL / net -1.000 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-24
+Gün: Gelir 0 TL | Gider 1.500 TL | Net -1.500 TL
+- 2026-05-24 | Gider | Elif bakım | 1.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -1.500 TL / net -1.500 TL
+
+## 2026-05-25
+Gün: Gelir 12.000 TL | Gider 0 TL | Net 12.000 TL
+- 2026-05-25 | Gelir | Tatil kumbarası katkı | 12.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +6.000 TL / -0 TL / net 6.000 TL
+- Elif Şahin: +6.000 TL / -0 TL / net 6.000 TL
+
+## 2026-05-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-28
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-05-31
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-01
+Gün: Gelir 90.000 TL | Gider 0 TL | Net 90.000 TL
+- 2026-06-01 | Gelir | Hakan maaş | 52.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-06-01 | Gelir | Elif maaş | 38.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +52.000 TL / -0 TL / net 52.000 TL
+- Elif Şahin: +38.000 TL / -0 TL / net 38.000 TL
+
+## 2026-06-02
+Gün: Gelir 0 TL | Gider 22.000 TL | Net -22.000 TL
+- 2026-06-02 | Gider | Kira mortgage | 22.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -11.000 TL / net -11.000 TL
+- Elif Şahin: +0 TL / -11.000 TL / net -11.000 TL
+
+## 2026-06-03
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-04
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-05
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-06
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-07
+Gün: Gelir 0 TL | Gider 2.500 TL | Net -2.500 TL
+- 2026-06-07 | Gider | Faturalar | 2.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.250 TL / net -1.250 TL
+- Elif Şahin: +0 TL / -1.250 TL / net -1.250 TL
+
+## 2026-06-08
+Gün: Gelir 0 TL | Gider 1.200 TL | Net -1.200 TL
+- 2026-06-08 | Gider | Aidat | 1.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -600 TL / net -600 TL
+- Elif Şahin: +0 TL / -600 TL / net -600 TL
+
+## 2026-06-09
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-10
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-11
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-12
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-13
+Gün: Gelir 0 TL | Gider 9.800 TL | Net -9.800 TL
+- 2026-06-13 | Gider | Market | 9.800 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -4.900 TL / net -4.900 TL
+- Elif Şahin: +0 TL / -4.900 TL / net -4.900 TL
+
+## 2026-06-14
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-15
+Gün: Gelir 0 TL | Gider 3.000 TL | Net -3.000 TL
+- 2026-06-15 | Gider | Akaryakıt | 3.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -3.000 TL / net -3.000 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-16
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-17
+Gün: Gelir 0 TL | Gider 7.900 TL | Net -7.900 TL
+- 2026-06-17 | Gider | Ev eşyası dekorasyon | 7.900 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -3.950 TL / net -3.950 TL
+- Elif Şahin: +0 TL / -3.950 TL / net -3.950 TL
+
+## 2026-06-18
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-19
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-20
+Gün: Gelir 0 TL | Gider 5.000 TL | Net -5.000 TL
+- 2026-06-20 | Gider | Restoran kafe | 5.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -2.500 TL / net -2.500 TL
+- Elif Şahin: +0 TL / -2.500 TL / net -2.500 TL
+
+## 2026-06-21
+Gün: Gelir 0 TL | Gider 2.900 TL | Net -2.900 TL
+- 2026-06-21 | Gider | Giyim | 2.900 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.450 TL / net -1.450 TL
+- Elif Şahin: +0 TL / -1.450 TL / net -1.450 TL
+
+## 2026-06-22
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-23
+Gün: Gelir 0 TL | Gider 1.000 TL | Net -1.000 TL
+- 2026-06-23 | Gider | Hakan spor | 1.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -1.000 TL / net -1.000 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-24
+Gün: Gelir 0 TL | Gider 3.350 TL | Net -3.350 TL
+- 2026-06-24 | Gider | Elif bakım | 1.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-06-24 | Gider | Güzellik bakımı | 1.850 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -3.350 TL / net -3.350 TL
+
+## 2026-06-25
+Gün: Gelir 15.000 TL | Gider 0 TL | Net 15.000 TL
+- 2026-06-25 | Gelir | Tatil kumbarası katkı | 15.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +7.500 TL / -0 TL / net 7.500 TL
+- Elif Şahin: +7.500 TL / -0 TL / net 7.500 TL
+
+## 2026-06-26
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-27
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-28
+Gün: Gelir 15.000 TL | Gider 0 TL | Net 15.000 TL
+- 2026-06-28 | Gelir | Hakan ikramiye | 15.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+Kişisel yansıma
+- Hakan Şahin: +15.000 TL / -0 TL / net 15.000 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-29
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL
+
+## 2026-06-30
+Gün: Gelir 0 TL | Gider 0 TL | Net 0 TL
+Hareket yok.
+Kişisel yansıma
+- Hakan Şahin: +0 TL / -0 TL / net 0 TL
+- Elif Şahin: +0 TL / -0 TL / net 0 TL

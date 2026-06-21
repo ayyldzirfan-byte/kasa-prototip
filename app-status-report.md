@@ -124,3 +124,15 @@ Tarih: 2026-06-20
 1. Gercek Supabase tablolarinda `kasa_entries` ve `kasa_notifications` insert kayitlari iki farkli kullaniciyla dogrulanmali.
 2. Supabase Auth mail teslimi icin SMTP/rate limit ayarlari kontrol edilmeli.
 3. iPhone uzerinde medya secici ve bildirim oyunu UX'i tekrar gozle incelenmeli.
+
+## Son Guncelleme: Eksik Istek Testlerinin Stabilize Edilmesi - 2026-06-21
+- Eksik istek listesinden kalan test borclari yeniden denetlendi.
+- `entriesForPeriod()` tarih filtresi yerel gun anahtariyla hizalandi; gunluk/haftalik/aylik raporlarda UTC kaynakli gun kaymasi kapatildi.
+- `scripts/cdp-test-harness.cjs` Chrome/CDP testleri icin stabil `--single-process --no-sandbox` profile guncellendi; port doluysa sonraki bos porta dusuyor.
+- `test-scenarios.cjs` ve `scripts/visual-audit.cjs` Desktop klasorune yazamadiginda workspace icindeki `screenshots/` altina guvenli fallback kullaniyor.
+- Browser tabanli testler Playwright paketine bagimli olmadan CDP ile calisacak hale getirildi.
+- LOCAL SIMULASYON: Tum `test-*.cjs` dosyalari calistirildi: 27 test dosyasi, 27 gecti, 0 basarisiz.
+- LOCAL SIMULASYON EK: `kasam-lint.cjs` 12/12 gecti; `build-public.cjs` 41 dosyalik `public` klasorunu uretmeyi basardi.
+- GORSEL DOGRULAMA: `scripts/visual-audit.cjs` yerel 13 UI kontrolunu gecti ve ekran goruntulerini olusturdu.
+- CLOUD TEST: Canli Vercel stamp kontrolu bu turda basarisiz; beklenen `Guncellendi 14.06.2026 23:05` canli sayfada gorunmedi. Bu commit push edilip Vercel deploy tamamlandiktan sonra tekrar dogrulanacak.
+- Gorseller: `screenshots/visual-test-202606210059/` ve `screenshots/kasam-senaryo-testleri/`.

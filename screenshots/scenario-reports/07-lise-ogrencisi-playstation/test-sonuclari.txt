@@ -1,0 +1,6 @@
+PASS - Kasa kodu var ve tekil
+PASS - Hareket var
+PASS - En az 2 tahmin oyunu var
+PASS - Tahmin oyunları entry ile bağlı
+PASS - Split oranları 1.0 ediyor
+PASS - Rapor dosyaları yazıldı

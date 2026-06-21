@@ -1,0 +1,25 @@
+KASAM FİŞİ
+2026-06
+
+Kasa: Kara Ailesi
+Kod: KARA-1
+--------------------------------
+Kasa toplamı: Gelir 45.200 TL | Gider 37.170 TL | Net 8.030 TL
+
+HAREKETLER
+- 2026-06-01 | Gelir | Murat maaş | 38.000 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-02 | Gider | Kira | 14.500 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-07 | Gider | Faturalar | 2.400 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-13 | Gider | Market | 9.100 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-15 | Gider | Bez mama | 3.000 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-18 | Gider | Doktor ilaç | 950 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-20 | Gider | Bebek oyuncak giysi | 1.400 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-20 | Gider | Bebek kıyafeti | 1.320 TL | Ekleyen: Zeynep Kara | Ödeyen: Murat Kara
+- 2026-06-23 | Gider | Araba bakım | 4.500 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+- 2026-06-26 | Gelir | Araç değişimi birikimi | 7.200 TL | Ekleyen: Murat Kara | Ödeyen: Murat Kara
+
+PAY DAĞILIMI
+- Murat Kara: +45.200 TL / -37.170 TL / net 8.030 TL
+- Zeynep Kara: +0 TL / -0 TL / net 0 TL
+
+kasam.app

@@ -1,0 +1,27 @@
+KASAM FİŞİ
+2026-06
+
+Kasa: Kerem & Deniz Evi
+Kod: KEREM-DENIZ-1
+--------------------------------
+Kasa toplamı: Gelir 14.200 TL | Gider 21.020 TL | Net -6.820 TL
+
+HAREKETLER
+- 2026-06-01 | Gelir | Kerem burs ve part-time | 8.500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-01 | Gelir | Deniz burs | 4.200 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-02 | Gider | Kira | 12.000 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-08 | Gider | Elektrik su internet | 1.480 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-13 | Gider | Ortak market | 4.300 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-16 | Gider | Kerem ulaşım | 800 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-17 | Gider | Deniz ulaşım | 600 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-20 | Gider | Kerem kurs | 500 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-21 | Gider | Deniz kafe | 450 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-22 | Gider | Kerem oyun abonelik | 350 TL | Ekleyen: Kerem Arslan | Ödeyen: Kerem Arslan
+- 2026-06-24 | Gider | Deniz kıyafet | 540 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+- 2026-06-27 | Gelir | Part-time iş ödemesi | 1.500 TL | Ekleyen: Deniz Kaya | Ödeyen: Deniz Kaya
+
+PAY DAĞILIMI
+- Kerem Arslan: +8.500 TL / -10.540 TL / net -2.040 TL
+- Deniz Kaya: +5.700 TL / -10.480 TL / net -4.780 TL
+
+kasam.app

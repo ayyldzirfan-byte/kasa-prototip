@@ -1,0 +1,29 @@
+KASAM FİŞİ
+2026-05
+
+Kasa: Nişantaşı Evi
+Kod: NISANTASI-1
+--------------------------------
+Kasa toplamı: Gelir 109.000 TL | Gider 47.150 TL | Net 61.850 TL
+
+HAREKETLER
+- 2026-05-01 | Gelir | Ayşe maaş | 24.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-01 | Gelir | Merve maaş | 28.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-05-01 | Gelir | Can maaş | 45.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-02 | Gider | Kira | 25.000 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-08 | Gider | Faturalar | 2.050 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-13 | Gider | Ortak market | 7.600 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-05-15 | Gider | Temizlikçi | 2.000 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-18 | Gider | Dışarı yemek | 4.700 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-20 | Gider | Sinema konser | 2.600 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+- 2026-05-21 | Gider | Ayşe ulaşım | 1.200 TL | Ekleyen: Ayşe Demir | Ödeyen: Ayşe Demir
+- 2026-05-22 | Gider | Can spor salonu | 1.200 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-23 | Gider | Can abonelik | 800 TL | Ekleyen: Can Öztürk | Ödeyen: Can Öztürk
+- 2026-05-25 | Gelir | Merve freelance | 12.000 TL | Ekleyen: Merve Çelik | Ödeyen: Merve Çelik
+
+PAY DAĞILIMI
+- Ayşe Demir: +24.000 TL / -12.188 TL / net 11.813 TL
+- Merve Çelik: +40.000 TL / -15.383 TL / net 24.618 TL
+- Can Öztürk: +45.000 TL / -19.580 TL / net 25.420 TL
+
+kasam.app

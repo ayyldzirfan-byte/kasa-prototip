@@ -1,0 +1,266 @@
+Araç Değişimi Tasarrufu - Haftalık Rapor
+
+Kasa: Yeni Araç (SERKAN-ARAC-1)
+
+
+
+## Hafta başlangıcı 2025-06-30
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2025-07-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-07-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2025-07-07
+Hafta: Gelir 0 TL | Gider 9.200 TL | Net -9.200 TL
+- 2025-07-09 | Gider | Aylık yaşam gideri | 9.200 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -9.200 TL / net -9.200 TL
+
+## Hafta başlangıcı 2025-07-21
+Hafta: Gelir 26.000 TL | Gider 0 TL | Net 26.000 TL
+- 2025-07-25 | Gelir | Araç hedef birikimi | 26.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +26.000 TL / -0 TL / net 26.000 TL
+
+## Hafta başlangıcı 2025-07-28
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2025-08-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-08-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2025-08-04
+Hafta: Gelir 0 TL | Gider 9.600 TL | Net -9.600 TL
+- 2025-08-09 | Gider | Aylık yaşam gideri | 9.600 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -9.600 TL / net -9.600 TL
+
+## Hafta başlangıcı 2025-08-25
+Hafta: Gelir 27.500 TL | Gider 0 TL | Net 27.500 TL
+- 2025-08-25 | Gelir | Araç hedef birikimi | 27.500 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +27.500 TL / -0 TL / net 27.500 TL
+
+## Hafta başlangıcı 2025-09-01
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2025-09-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-09-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2025-09-08
+Hafta: Gelir 0 TL | Gider 10.100 TL | Net -10.100 TL
+- 2025-09-09 | Gider | Aylık yaşam gideri | 10.100 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -10.100 TL / net -10.100 TL
+
+## Hafta başlangıcı 2025-09-22
+Hafta: Gelir 25.000 TL | Gider 0 TL | Net 25.000 TL
+- 2025-09-25 | Gelir | Araç hedef birikimi | 25.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +25.000 TL / -0 TL / net 25.000 TL
+
+## Hafta başlangıcı 2025-09-29
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2025-10-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-10-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2025-10-06
+Hafta: Gelir 0 TL | Gider 9.800 TL | Net -9.800 TL
+- 2025-10-09 | Gider | Aylık yaşam gideri | 9.800 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -9.800 TL / net -9.800 TL
+
+## Hafta başlangıcı 2025-10-20
+Hafta: Gelir 56.000 TL | Gider 0 TL | Net 56.000 TL
+- 2025-10-20 | Gelir | Satış primi | 25.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-10-25 | Gelir | Araç hedef birikimi | 31.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +56.000 TL / -0 TL / net 56.000 TL
+
+## Hafta başlangıcı 2025-10-27
+Hafta: Gelir 68.000 TL | Gider 0 TL | Net 68.000 TL
+- 2025-11-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -0 TL / net 68.000 TL
+
+## Hafta başlangıcı 2025-11-03
+Hafta: Gelir 0 TL | Gider 28.500 TL | Net -28.500 TL
+- 2025-11-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-11-09 | Gider | Aylık yaşam gideri | 10.500 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -28.500 TL / net -28.500 TL
+
+## Hafta başlangıcı 2025-11-24
+Hafta: Gelir 29.000 TL | Gider 0 TL | Net 29.000 TL
+- 2025-11-25 | Gelir | Araç hedef birikimi | 29.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +29.000 TL / -0 TL / net 29.000 TL
+
+## Hafta başlangıcı 2025-12-01
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2025-12-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2025-12-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2025-12-08
+Hafta: Gelir 0 TL | Gider 11.200 TL | Net -11.200 TL
+- 2025-12-09 | Gider | Aylık yaşam gideri | 11.200 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -11.200 TL / net -11.200 TL
+
+## Hafta başlangıcı 2025-12-15
+Hafta: Gelir 0 TL | Gider 15.000 TL | Net -15.000 TL
+- 2025-12-18 | Gider | Kış tatili | 15.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -15.000 TL / net -15.000 TL
+
+## Hafta başlangıcı 2025-12-22
+Hafta: Gelir 28.000 TL | Gider 0 TL | Net 28.000 TL
+- 2025-12-25 | Gelir | Araç hedef birikimi | 28.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +28.000 TL / -0 TL / net 28.000 TL
+
+## Hafta başlangıcı 2025-12-29
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2026-01-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-01-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2026-01-05
+Hafta: Gelir 0 TL | Gider 10.800 TL | Net -10.800 TL
+- 2026-01-09 | Gider | Aylık yaşam gideri | 10.800 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -10.800 TL / net -10.800 TL
+
+## Hafta başlangıcı 2026-01-19
+Hafta: Gelir 32.000 TL | Gider 0 TL | Net 32.000 TL
+- 2026-01-25 | Gelir | Araç hedef birikimi | 32.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +32.000 TL / -0 TL / net 32.000 TL
+
+## Hafta başlangıcı 2026-01-26
+Hafta: Gelir 68.000 TL | Gider 0 TL | Net 68.000 TL
+- 2026-02-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -0 TL / net 68.000 TL
+
+## Hafta başlangıcı 2026-02-02
+Hafta: Gelir 0 TL | Gider 18.000 TL | Net -18.000 TL
+- 2026-02-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -18.000 TL / net -18.000 TL
+
+## Hafta başlangıcı 2026-02-09
+Hafta: Gelir 0 TL | Gider 9.900 TL | Net -9.900 TL
+- 2026-02-09 | Gider | Aylık yaşam gideri | 9.900 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -9.900 TL / net -9.900 TL
+
+## Hafta başlangıcı 2026-02-16
+Hafta: Gelir 100.000 TL | Gider 0 TL | Net 100.000 TL
+- 2026-02-20 | Gelir | Büyük satış primi | 50.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-02-20 | Gelir | Büyük prim | 50.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +100.000 TL / -0 TL / net 100.000 TL
+
+## Hafta başlangıcı 2026-02-23
+Hafta: Gelir 93.500 TL | Gider 0 TL | Net 93.500 TL
+- 2026-02-25 | Gelir | Araç hedef birikimi | 25.500 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-03-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +93.500 TL / -0 TL / net 93.500 TL
+
+## Hafta başlangıcı 2026-03-02
+Hafta: Gelir 0 TL | Gider 18.000 TL | Net -18.000 TL
+- 2026-03-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -18.000 TL / net -18.000 TL
+
+## Hafta başlangıcı 2026-03-09
+Hafta: Gelir 0 TL | Gider 10.300 TL | Net -10.300 TL
+- 2026-03-09 | Gider | Aylık yaşam gideri | 10.300 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -10.300 TL / net -10.300 TL
+
+## Hafta başlangıcı 2026-03-23
+Hafta: Gelir 30.000 TL | Gider 0 TL | Net 30.000 TL
+- 2026-03-25 | Gelir | Araç hedef birikimi | 30.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +30.000 TL / -0 TL / net 30.000 TL
+
+## Hafta başlangıcı 2026-03-30
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2026-04-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-04-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2026-04-06
+Hafta: Gelir 0 TL | Gider 11.000 TL | Net -11.000 TL
+- 2026-04-09 | Gider | Aylık yaşam gideri | 11.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -11.000 TL / net -11.000 TL
+
+## Hafta başlangıcı 2026-04-13
+Hafta: Gelir 0 TL | Gider 15.000 TL | Net -15.000 TL
+- 2026-04-14 | Gider | Araç arıza | 15.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -15.000 TL / net -15.000 TL
+
+## Hafta başlangıcı 2026-04-20
+Hafta: Gelir 27.000 TL | Gider 0 TL | Net 27.000 TL
+- 2026-04-25 | Gelir | Araç hedef birikimi | 27.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +27.000 TL / -0 TL / net 27.000 TL
+
+## Hafta başlangıcı 2026-04-27
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2026-05-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-05-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2026-05-04
+Hafta: Gelir 450.000 TL | Gider 11.500 TL | Net 438.500 TL
+- 2026-05-09 | Gider | Aylık yaşam gideri | 11.500 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-05-10 | Gelir | Mevcut araç satışı | 450.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +450.000 TL / -11.500 TL / net 438.500 TL
+
+## Hafta başlangıcı 2026-05-11
+Hafta: Gelir 0 TL | Gider 1.600.000 TL | Net -1.600.000 TL
+- 2026-05-12 | Gider | Yeni araç alımı | 800.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-05-12 | Gider | Yeni araç ödemesi | 800.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -1.600.000 TL / net -1.600.000 TL
+
+## Hafta başlangıcı 2026-05-25
+Hafta: Gelir 29.500 TL | Gider 0 TL | Net 29.500 TL
+- 2026-05-25 | Gelir | Araç hedef birikimi | 29.500 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +29.500 TL / -0 TL / net 29.500 TL
+
+## Hafta başlangıcı 2026-06-01
+Hafta: Gelir 68.000 TL | Gider 18.000 TL | Net 50.000 TL
+- 2026-06-01 | Gelir | Maaş | 68.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+- 2026-06-03 | Gider | Kira | 18.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +68.000 TL / -18.000 TL / net 50.000 TL
+
+## Hafta başlangıcı 2026-06-08
+Hafta: Gelir 0 TL | Gider 11.800 TL | Net -11.800 TL
+- 2026-06-09 | Gider | Aylık yaşam gideri | 11.800 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +0 TL / -11.800 TL / net -11.800 TL
+
+## Hafta başlangıcı 2026-06-22
+Hafta: Gelir 350.000 TL | Gider 0 TL | Net 350.000 TL
+- 2026-06-25 | Gelir | Araç hedef birikimi | 350.000 TL | Ekleyen: Serkan Başaran | Ödeyen: Serkan Başaran
+Kişisel yansıma
+- Serkan Başaran: +350.000 TL / -0 TL / net 350.000 TL

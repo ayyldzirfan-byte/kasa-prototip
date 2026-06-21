@@ -1,0 +1,28 @@
+KASAM FİŞİ
+2026-05
+
+Kasa: Şahin Yuvası
+Kod: SAHIN-1
+--------------------------------
+Kasa toplamı: Gelir 102.000 TL | Gider 54.000 TL | Net 48.000 TL
+
+HAREKETLER
+- 2026-05-01 | Gelir | Hakan maaş | 52.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-01 | Gelir | Elif maaş | 38.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-02 | Gider | Kira mortgage | 22.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-07 | Gider | Faturalar | 2.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-08 | Gider | Aidat | 1.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-13 | Gider | Market | 8.700 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-15 | Gider | Akaryakıt | 3.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-17 | Gider | Ev eşyası dekorasyon | 6.400 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-20 | Gider | Restoran kafe | 4.200 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-21 | Gider | Giyim | 3.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-23 | Gider | Hakan spor | 1.000 TL | Ekleyen: Hakan Şahin | Ödeyen: Hakan Şahin
+- 2026-05-24 | Gider | Elif bakım | 1.500 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+- 2026-05-25 | Gelir | Tatil kumbarası katkı | 12.000 TL | Ekleyen: Elif Şahin | Ödeyen: Elif Şahin
+
+PAY DAĞILIMI
+- Hakan Şahin: +58.000 TL / -28.250 TL / net 29.750 TL
+- Elif Şahin: +44.000 TL / -25.750 TL / net 18.250 TL
+
+kasam.app

@@ -1595,7 +1595,7 @@ function addPeriod(date, period, amount) {
 }
 
 function entriesForPeriod(entries, period, offset = 0) {
-  const start = addPeriod(periodStart(new Date(), period), period, offset);
+  const start = addPeriod(periodStart(dateFromKey(todayKey()), period), period, offset);
   const end = addPeriod(start, period, 1);
   return entries.filter((entry) => {
     const date = dateFromKey(entry.date);

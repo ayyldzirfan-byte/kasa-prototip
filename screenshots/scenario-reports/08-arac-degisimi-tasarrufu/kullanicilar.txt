@@ -1,0 +1,6 @@
+Araç Değişimi Tasarrufu
+Kasa: Yeni Araç
+Kod: SERKAN-ARAC-1
+
+Kullanıcılar
+- Serkan Başaran | 35 | Satış müdürü | Gelir: 68.000 TL | E-posta: serkan.s8@kasam.test | Şifre: Test1234

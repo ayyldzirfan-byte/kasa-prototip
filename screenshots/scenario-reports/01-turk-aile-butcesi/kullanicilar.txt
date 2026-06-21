@@ -1,0 +1,9 @@
+Türk Aile Bütçesi
+Kasa: Yılmaz Ailesi
+Kod: YILMAZ-EV-1
+
+Kullanıcılar
+- Mehmet Yılmaz | 48 | Fabrika ustabaşı | Gelir: 32.000 TL | E-posta: mehmet.s1@kasam.test | Şifre: Test1234
+- Fatma Yılmaz | 45 | Ev hanımı | Gelir: 0 TL | E-posta: fatma.s1@kasam.test | Şifre: Test1234
+- Burak Yılmaz | 22 | Üniversite öğrencisi | Gelir: 3.500 TL | E-posta: burak.s1@kasam.test | Şifre: Test1234
+- Selin Yılmaz | 17 | Lise öğrencisi | Gelir: 1.500 TL | E-posta: selin.s1@kasam.test | Şifre: Test1234
