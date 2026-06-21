@@ -270,3 +270,12 @@ Tarih: 2026-06-21
 - LOCAL SIMULASYON: Commercial Jest 14/14 gecti; TypeScript typecheck gecti; Next build gecti; `test-commercial-cloud-adapter.cjs` 5/5 gecti; `test-commercial-rebuild.cjs` 14/14 gecti; `kasam-lint.cjs` 14/14 gecti.
 - GORSEL DOGRULAMA: `commercial/tests/visual-rules.spec.ts` 5/5 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
 - CLOUD TEST: `npm.cmd run commercial:cloud-smoke:prompt` gercek Supabase service role ile calistirildi ve PASS verdi. Iki gecici Supabase auth kullanicisi olusturuldu; ortak proje ikinci kullanicida gorundu; ortak hareket ikinci kullanicida gorundu; `paid_by_id`, `split_with`, `split_ratio` korundu; bildirim ikinci kullaniciya dustu; gecici proje ve auth kullanicilari temizlendi. Commercial adapter smoke 6/6 gecti.
+
+## Son Guncelleme: Commercial Ayrı Vercel Project Hazırlığı - 2026-06-21
+- `commercial/vercel.json` eklendi. Commercial app ayri Vercel project olarak `Root Directory=commercial` ile deploy edilecek; framework `Next.js`, build `npm run build`, install `npm install`.
+- `COMMERCIAL-VERCEL-SETUP.md` eklendi. Vercel dashboard adimlari, env degiskenleri, Supabase redirect notlari ve deploy kontrol listesi yazildi.
+- `test-commercial-vercel-config.cjs` eklendi. Commercial Vercel config, root production PWA config ayrimi, env secret temizligi ve kurulum dokumani statik olarak denetlenir.
+- `commercial:deploy-ready` npm script'i eklendi. Config, cloud adapter, commercial Jest, typecheck ve Next build tek kapida calistirilir.
+- LOCAL SIMULASYON: `test-commercial-vercel-config.cjs` 4/4 gecti; `test-commercial-cloud-adapter.cjs` 6/6 gecti; Commercial Jest 14/14 gecti; TypeScript typecheck gecti; Next build gecti; `kasam-lint.cjs` 14/14 gecti.
+- GORSEL DOGRULAMA: Commercial Playwright 5/5 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
+- CLOUD TEST: Bir onceki commercial cloud smoke PASS sonucu korunuyor. Bu turda cloud verisine yeni yazim yapilmadi; deploy config ayrimi cloud semasini degistirmez.
