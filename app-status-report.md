@@ -250,3 +250,23 @@ Tarih: 2026-06-21
 - GORSEL DOGRULAMA: `scripts/visual-audit.cjs` yerel 13 UI kontrolunu gecti ve ekran goruntulerini olusturdu.
 - CLOUD TEST: Canli Vercel stamp kontrolu bu turda basarisiz; beklenen `Guncellendi 14.06.2026 23:05` canli sayfada gorunmedi. Bu commit push edilip Vercel deploy tamamlandiktan sonra tekrar dogrulanacak.
 - Gorseller: `screenshots/visual-test-202606210059/` ve `screenshots/kasam-senaryo-testleri/`.
+
+## Son Guncelleme: Ticari Rebuild V1 Izole Iskelet - 2026-06-21
+- `commercial/` altinda Next.js 15 + TypeScript + Tailwind v4 tabanli izole ticari app iskeleti eklendi.
+- Ticari PRD ve bilgi mimarisi `commercial/docs/PRD.md` ve `commercial/docs/INFORMATION-ARCHITECTURE.md` dosyalarina yazildi.
+- `commercial/src/lib/domain.ts` kisinin kendi kasasina etki, ortak kasa kumulatifi, surpriz gizliligi ve minimum transfer hesaplarini icerir.
+- `commercial/src/components/KasamCommercialApp.tsx` MVP+ ekranlarini icerir: Ana ekran, Hareketler, Butceler, Takvim, Rapor, hareket ekleme ve tahmin oyunu gizliligi.
+- Kok production Vercel build akisi degistirilmedi; ticari app izole gelistirilir.
+- LOCAL SIMULASYON: `test-commercial-rebuild.cjs` 14/14 gecti; `kasam-lint.cjs` 14/14 gecti; `commercial` Jest 10/10 gecti; `commercial` TypeScript typecheck gecti; `commercial` Next build gecti; `scripts/run-all-tests.cjs` 33/33 test dosyasini gecirdi; `build-public.cjs` mevcut production PWA icin `public` klasorunu uretti.
+- GORSEL DOGRULAMA: `commercial/tests/visual-rules.spec.ts` 5/5 gecti. Ekran goruntuleri `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual` klasorune yazilir; Playwright hata kanitlari `commercial/screenshots/commercial-playwright` altindadir.
+- CLOUD TEST: Yeni Next app henuz Supabase cloud smoke'a baglanmadi; mevcut production PWA cloud smoke kapisi korunur. Ticari app cloud kaniti icin commercial Supabase client ve Vercel root stratejisi sonraki bloktur.
+
+## Son Guncelleme: Ticari Rebuild Cloud Adapter - 2026-06-21
+- `commercial/src/lib/cloud-schema.ts` eklendi. Supabase `kasa_profiles`, `kasa_projects`, `kasa_project_members`, `kasa_entries`, `kasa_notifications` satirlari commercial `AppState` modeline cevrilir.
+- `commercial/src/lib/cloud-client.ts` eklendi. Commercial app icin `loadCommercialCloudState()` ve `createCommercialCloudEntry()` fonksiyonlari hazirlandi; frontend tarafina service role veya secret key yazilmaz.
+- `commercial/src/__tests__/cloud-schema.test.ts` eklendi. Cloud satirlarindan ortak kasa pay etkisi, aktore surpriz sayaci gizleme, aliciya bildirim gorunurlugu ve gizli hareketin bakiyeden dusmemesi test edildi.
+- `scripts/commercial-cloud-smoke.cjs` eklendi. Bu komut once mevcut gercek Supabase `cloud-live-smoke.cjs` kapisini, sonra commercial adapter smoke testini calistirir.
+- `commercial:cloud-smoke` npm script'i eklendi. Gercek cloud PASS icin iki test hesabi veya local-only service role key gerekir.
+- LOCAL SIMULASYON: Commercial Jest 14/14 gecti; TypeScript typecheck gecti; Next build gecti; `test-commercial-cloud-adapter.cjs` 5/5 gecti; `test-commercial-rebuild.cjs` 14/14 gecti; `kasam-lint.cjs` 14/14 gecti.
+- GORSEL DOGRULAMA: `commercial/tests/visual-rules.spec.ts` 5/5 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
+- CLOUD TEST: `npm.cmd run commercial:cloud-smoke:prompt` gercek Supabase service role ile calistirildi ve PASS verdi. Iki gecici Supabase auth kullanicisi olusturuldu; ortak proje ikinci kullanicida gorundu; ortak hareket ikinci kullanicida gorundu; `paid_by_id`, `split_with`, `split_ratio` korundu; bildirim ikinci kullaniciya dustu; gecici proje ve auth kullanicilari temizlendi. Commercial adapter smoke 6/6 gecti.

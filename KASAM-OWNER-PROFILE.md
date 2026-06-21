@@ -138,3 +138,9 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Nihai basari iddiasi icin `npm run test:final-live` veya `npm run test:final-live:prompt` raporu aranacak.
 - `NEEDS_INPUT` olan cloud veya reset maddeleri kullanici aksiyonu olarak net yazilacak.
 - Local/gorsel testler gecse bile cloud cok kullanici veya reset API eksikse "tam basarili" denmeyecek.
+
+## Ek Urun Karari: Ticari Rebuild
+- Ticari Kasam bireysel once olacak; ortak kasalar kullanicinin kendi parasina etkisiyle anlatilacak.
+- Freemium model tercih edildi.
+- Gorsel yon UltraHuman guclu olacak ama finans uygulamasi kadar okunabilir kalacak.
+- Tam yeniden yapim istenirken mevcut calisan production PWA bozulmayacak; yeni Next app once izole gelistirilecek.

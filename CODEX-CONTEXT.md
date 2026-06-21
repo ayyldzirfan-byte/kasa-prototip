@@ -161,3 +161,14 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 - Gerekli env: `KASAM_RESET_TEST_EMAIL`.
 - Readiness raporu `CLOUD PASSWORD RESET API` satirini ayri yazar.
 - API PASS olsa bile mail teslimi kanitlanmis sayilmaz; kullanici gelen kutusu ve spam klasorunu kontrol eder.
+
+## Ticari Rebuild Protokolu
+- Next.js 15 + TypeScript + Tailwind v4 tabanli yeni app `commercial/` altindadir.
+- `commercial/` mevcut production PWA icin kaynak degildir; ticari surum kanitlari tamamlaninca Vercel root/output stratejisi ayrica degistirilir.
+- KURAL-054: Ticari Next.js rebuild izole gelistirilir; mevcut production PWA kanali ticari app kanitlari tamamlanmadan bozulmaz.
+- Komutlar:
+  - `npm --prefix commercial run dev`
+  - `npm --prefix commercial test`
+  - `npm --prefix commercial run build`
+  - `npm --prefix commercial run test:visual`
+- Bu ortamda `npm` yoksa dosya duzeyi kanit olarak `test-commercial-rebuild.cjs` calistirilir; gercek Next build kullanici/Vercel ortaminda npm ile kosulur.

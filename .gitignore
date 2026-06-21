@@ -1,2 +1,8 @@
 public/
 kasam-local-server.*
+node_modules/
+commercial/node_modules/
+commercial/.next/
+commercial/out/
+commercial/coverage/
+commercial/tsconfig.tsbuildinfo

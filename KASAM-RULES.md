@@ -314,3 +314,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Production deploy ortami test kosucusu degildir. Tum testleri deploy build'e baglamak Vercel'in statik paketi uretmeden hata vermesine ve canli surumun eski kalmasina sebep olur.
 - Kontrol: `kasam-lint.cjs` `vercel.json` buildCommand alanini ve `package.json` `vercel-build` scriptini kontrol eder; Vercel build komutunda `run-all-tests`, `kasam-lint`, `test:` veya `check:ready` bulunursa FAIL verir.
 - Eklendi: 2026-06-21 - Vercel deploy build ayrimi
+
+## KURAL-054: Ticari Rebuild Izole Gelistirilir
+- Kural: Next.js tabanli ticari rebuild, mevcut production Vanilla PWA paketini bozmadan `commercial/` altinda gelistirilir. Vercel canonical production paketi degistirilmeden once ticari app icin local test, gorsel test ve veri uyumlulugu raporu ayri uretilir.
+- Sebep: Mevcut ortak kasa ve cloud senkronu calisirken, tam yeniden yapim ayni anda production akisini riske atmamalidir.
+- Kontrol: `commercial/package.json`, `commercial/src/app`, `commercial/src/lib` ve `test-commercial-rebuild.cjs` bulunur. Kok `vercel-build` komutu ticari app buildine cevrilmez; ticari build `npm --prefix commercial run build` ile ayridir.
+- Eklendi: 2026-06-21 - ticari urun rebuild
