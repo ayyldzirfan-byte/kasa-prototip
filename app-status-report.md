@@ -199,6 +199,13 @@ Tarih: 2026-06-21
 - GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210436`.
 - CLOUD TEST: Auth settings ve canli stamp PASS (`Guncellendi 14.06.2026 23:05`). Gercek cloud multi-user ve password reset API, test girdileri olmadigi icin `NEEDS_INPUT` durumunda. Readiness raporu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\readiness-202606210437`; final rapor: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\final-live-validation-202606210438`.
 
+## Son Guncelleme: Vercel Deploy Build Ayrimi - 2026-06-21
+- Vercel production build komutu `npm run vercel-build` olarak ayrildi.
+- `vercel-build` yalnizca `node build-public.cjs` calistirir ve `public` klasorunu uretir.
+- Local kalite kapilari korunur: `node kasam-lint.cjs`, `node scripts/run-all-tests.cjs`, `node scripts/visual-audit.cjs` ve gerekli cloud smoke testleri deploydan once ayri kosulur.
+- `KURAL-053` eklendi: Vercel build komutu local test/lint kapilarini calistirirsa `kasam-lint.cjs` FAIL verir.
+- Sebep: Son Vercel deploylari production build icinde tum test zinciri kosuldugu icin 5 saniyede Error'a dusuyordu ve canli surum eski kalma riski tasiyordu.
+
 ## Son Guncelleme: Kalite Kapilarinin Tek Komuta Baglanmasi - 2026-06-21
 - `scripts/run-all-tests.cjs` eklendi; artik `npm test` ve `npm run test:all` tum `test-*.cjs` dosyalarini calistirir.
 - `npm run test:visual` Playwright CLI yerine mevcut Chrome/CDP tabanli `scripts/visual-audit.cjs` auditini calistirir; Playwright ayrica `npm run test:playwright` olarak korunur.

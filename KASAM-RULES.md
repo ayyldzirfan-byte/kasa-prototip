@@ -308,3 +308,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Eski prototip kopyalari sifre sifirlama, cache, PWA ve kullanici algisinda iki farkli uygulama varmis gibi davranis uretir.
 - Kontrol: `kasam-lint.cjs` `netlify-upload`, `app.js`, `radiant-squirrel`, `kasa-prototip.netlify` ve build/cache icindeki `app.js` referanslarini FAIL yapar.
 - Eklendi: 2026-06-21 - eski prototip temizligi
+
+## KURAL-053: Vercel Build Sadece Paket Uretir
+- Kural: Vercel production build komutu `npm run vercel-build` olmalidir ve bu script sadece `node build-public.cjs` calistirmalidir. Local lint, unit, gorsel ve cloud test kapilari Vercel deploy build icinde calistirilmaz; deploy oncesi ayri kosulur ve ayri raporlanir.
+- Sebep: Production deploy ortami test kosucusu degildir. Tum testleri deploy build'e baglamak Vercel'in statik paketi uretmeden hata vermesine ve canli surumun eski kalmasina sebep olur.
+- Kontrol: `kasam-lint.cjs` `vercel.json` buildCommand alanini ve `package.json` `vercel-build` scriptini kontrol eder; Vercel build komutunda `run-all-tests`, `kasam-lint`, `test:` veya `check:ready` bulunursa FAIL verir.
+- Eklendi: 2026-06-21 - Vercel deploy build ayrimi

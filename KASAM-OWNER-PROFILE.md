@@ -31,6 +31,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - “Mükemmel”, “Harika”, “Tabii ki” gibi yapay destek dili kullanma.
 - Uzun plan metinlerini kullanıcı istemedikçe yazma.
 - “Oldu” deme; hangi testin geçtiğini söyle.
+- Vercel production deploy'unu local test koşucusuna çevirme; deploy sadece paket üretmeli, kalite kanıtı ayrı raporlanmalı.
 
 ## Özellik Öncelikleri
 
@@ -59,6 +60,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Onay noktaları: Kullanıcı “haydee” dediğinde beklemeden uygula; ara onay isteme.
 - Kontrol yöntemi: Test çıktısı, simülasyon logu ve gerektiğinde ekran görüntüsü.
 - “Dur bu olmadı” dediği durumlar: Ekran kalabalığı, sarı/beyaz kontrast, ortak kasa senkronunun çalışmaması, testin gerçek veriye dayanmaması.
+- Deploy kontrol yöntemi: Vercel build Ready olmadan canlı sürüm doğrulanmış sayılmaz; build Error ise önce deploy logu ve build komutu kontrol edilir.
 
 ## Tekrarlayan Hatalar
 - Ortak kasa hareketleri diğer kullanıcılara gitmedi — birden fazla görevde tekrarlandı.
@@ -66,6 +68,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Hareket kaydı görsel kilit olmadan birden fazla kez oluşturuldu — kritik kayıt akışı hatası.
 - Ana ekran hareket satırlarında paylaşım listesi fazla uzun ve bağlam dışı göründü — kişisel/ortak kasa şablonları ayrılmalı.
 - Ortak hareket cloud alanları eksik taşındı — local çalışan komut gerçek cihazlar arası senkronu kanıtlamaz.
+- Vercel build'e tüm test kapılarının bağlanması production deploy'u kırdı — local kalite kapısı ile deploy paketi ayrılmalı.
 - Simülatör başlangıçta sadece mesaj gönderimini PASS saydı — artık yayılım, bildirim ve kişisel pay değişimi ayrı doğrulanmalı.
 - Sarı zemin beyaz yazı kaldı — birden fazla UI düzeltmesinde tekrarlandı.
 - Tahmin oyunu detayları yanlış yerde veya fazla alanda gösterildi — birden fazla kez düzeltme istendi.
@@ -102,6 +105,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 | Simulator | 2026-06-14 | Çok kullanıcı hataları iframe simülasyonuyla yakalanacak | Ortak kasa ve bildirim iddiaları simulator kanıtı gerektirir |
 | Kritik kayıt ve ortak kasa düzeltmeleri | 2026-06-14 | Kayıt akışı idempotent olmalı, aktör kendi sürprizini bekleyen olarak görmemeli | Kişisel satır sadece kişisel etkiyi, ortak kasa detayı paylaşımı göstermeli |
 | Cloud senkron ve simulator doğrulaması | 2026-06-14 | `paidById/splitWith/splitRatio` gibi ortak kasa alanları cloud’a eksiksiz taşınmalı | “Komut çalıştı” yeterli değil; diğer kullanıcıya hareket, bildirim ve pay sonucu kanıtlanmalı |
+| Vercel deploy ayrımı | 2026-06-21 | Production build sadece `public` paketini üretir | Local test/lint/cloud doğrulaması deploy build'den ayrı raporlanır |
 
 ## Gorev Sonu Kullanici Aksiyonu Tercihi
 - Her degisiklikten sonra kullanicinin yapmasi gerekenler ayri yazilmali.

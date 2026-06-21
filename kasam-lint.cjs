@@ -222,6 +222,33 @@ function checkRule052() {
   return failures;
 }
 
+function checkRule053() {
+  const failures = [];
+  const vercelPath = path.join(root, "vercel.json");
+  const packagePath = path.join(root, "package.json");
+  if (!fs.existsSync(vercelPath)) {
+    failures.push(fail("vercel.json", 1, "Vercel build ayari bulunmali."));
+    return failures;
+  }
+  if (!fs.existsSync(packagePath)) {
+    failures.push(fail("package.json", 1, "Vercel build scriptleri package.json icinde bulunmali."));
+    return failures;
+  }
+  const vercel = JSON.parse(read("vercel.json"));
+  const pkg = JSON.parse(read("package.json"));
+  if (vercel.buildCommand !== "npm run vercel-build") {
+    failures.push(fail("vercel.json", 1, "Vercel production build sadece `npm run vercel-build` calistirmali."));
+  }
+  const script = pkg.scripts && pkg.scripts["vercel-build"];
+  if (script !== "node build-public.cjs") {
+    failures.push(fail("package.json", 1, "`vercel-build` sadece static public paketini uretmeli."));
+  }
+  if (/run-all-tests|kasam-lint|test:|check:ready/.test(String(script || ""))) {
+    failures.push(fail("package.json", 1, "Vercel deploy build komutu local test/lint kapilarini calistirmamali."));
+  }
+  return failures;
+}
+
 function listFilesRecursive(dir, predicate) {
   if (!fs.existsSync(dir)) return [];
   const result = [];
@@ -278,6 +305,7 @@ const checks = [
   ["KURAL-019", checkRule019],
   ["KURAL-039", checkRule039],
   ["KURAL-052", checkRule052],
+  ["KURAL-053", checkRule053],
 ];
 
 const warnChecks = [

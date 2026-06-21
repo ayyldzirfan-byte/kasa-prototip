@@ -14,9 +14,9 @@ Son güncelleme: 2026-06-14
 ## Teknoloji Stack
 - Frontend: Vanilla JS PWA, CSS custom properties.
 - Backend: Supabase Auth, Database, Realtime ve Storage yaklaşımı.
-- Deploy: Vercel.
+- Deploy: Vercel. Production build komutu `npm run vercel-build`; bu komut sadece statik public paketini uretir.
 - Test: Node.js `.cjs` dosyaları; toplu kapı `scripts/run-all-tests.cjs`.
-- Lint: `kasam-lint.cjs`; `pretest` ve `prebuild` öncesi çalışır.
+- Lint: `kasam-lint.cjs`; local `pretest` ve local `prebuild` öncesi çalışır. Vercel deploy build local test kapilarini calistirmaz.
 
 ## Dosya Yükleme Sırası
 Bu sıra değiştirilmez:
@@ -147,6 +147,13 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 - KURAL-050: Supabase email auth provider, signup ve auth health canli readiness kapisinda kontrol edilir.
 - KURAL-051: Nihai canli dogrulama auth settings, cloud cok kullanici ve reset API sonucunu tek raporda toplar.
 - KURAL-052: Tek canonical uygulama paketi korunur; eski Netlify/prototip kopyasi ve yuklenmeyen `app.js` bundle repoda/deployda tutulmaz.
+- KURAL-053: Vercel build sadece public paketini uretir; local test/lint/cloud kapilari production deploy build'e baglanmaz.
+
+## Vercel Build Protokolu
+- `vercel.json` buildCommand: `npm run vercel-build`.
+- `package.json` `vercel-build`: `node build-public.cjs`.
+- Local kalite kapilari deploydan once ayri kosulur: `node kasam-lint.cjs`, `node scripts/run-all-tests.cjs`, `node scripts/visual-audit.cjs`, gerekli ise final cloud testleri.
+- Vercel deploy logunda test komutlari degil, statik public paket uretimi gorunmelidir.
 
 ## Sifre Sifirlama Canli Kontrolu
 - Auth ayar kontrolu: `npm run test:auth-settings-live`.

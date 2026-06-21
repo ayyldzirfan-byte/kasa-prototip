@@ -19,7 +19,8 @@
     "test:final-live:prompt": "powershell -ExecutionPolicy Bypass -File scripts/final-live-validation.ps1",
     "check:ready": "node scripts/readiness-check.cjs",
     "prebuild": "node kasam-lint.cjs",
-    "build": "node scripts/run-all-tests.cjs && node build-public.cjs"
+    "build": "node scripts/run-all-tests.cjs && node build-public.cjs",
+    "vercel-build": "node build-public.cjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0",
