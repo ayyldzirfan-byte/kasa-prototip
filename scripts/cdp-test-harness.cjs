@@ -162,7 +162,11 @@ class CdpPage {
       ? callableExpression ? `(${expression})()` : expression
       : `(${expression})(...${JSON.stringify(args)})`;
     const result = await this.send("Runtime.evaluate", { expression: source, awaitPromise: true, returnByValue: true });
-    if (result.exceptionDetails) throw new Error(result.exceptionDetails.text || "Runtime exception");
+    if (result.exceptionDetails) {
+      const details = result.exceptionDetails;
+      const description = details.exception?.description || details.exception?.value || details.text || "Runtime exception";
+      throw new Error(String(description));
+    }
     return result.result ? result.result.value : undefined;
   }
 
