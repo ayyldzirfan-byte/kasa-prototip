@@ -290,3 +290,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Supabase reset API'si basarili donse bile SMTP, rate limit, spam filtresi veya alici kutusu nedeniyle mail teslimi ayri basarisiz olabilir.
 - Kontrol: `npm run test:password-reset-live` yalnizca `KASAM_RESET_TEST_EMAIL` verildiginde calisir. Eksik env durumunda exit code 2 ile durur ve PASS uretmez. Windows kullanici akisi icin `npm run test:password-reset-live:prompt` kullanilir.
 - Eklendi: 2026-06-21 - Sifre sifirlama cloud smoke ayrimi
+
+## KURAL-050: Auth Ayarlari Canli Kapida Kontrol Edilir
+- Kural: Supabase email auth provider, signup durumu ve GoTrue health canli endpointlerden kontrol edilir. Bu kontrol her readiness kosumunda `scripts/auth-settings-live-smoke.cjs` ile calisir.
+- Sebep: Sifre sifirlama ve yeni kullanici akisi, frontend kodundan once Supabase Auth ayarlarina baglidir.
+- Kontrol: `npm run test:auth-settings-live` email provider enabled, signup not disabled ve auth health version alanlarini dogrular. Bu kontrol SMTP inbox teslimini kanitlamaz.
+- Eklendi: 2026-06-21 - Supabase auth settings cloud kapisi

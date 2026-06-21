@@ -80,6 +80,7 @@ function summaryLine(item) {
   results.push(run("LOCAL tests", node, ["scripts/run-all-tests.cjs"]));
   results.push(run("LOCAL build-public", node, ["build-public.cjs"]));
   results.push(run("GORSEL visual-audit", node, ["scripts/visual-audit.cjs"]));
+  results.push(run("CLOUD auth settings", node, ["scripts/auth-settings-live-smoke.cjs"]));
 
   const live = await liveStamp();
   console.log(`${live.ok ? "PASS" : "FAIL"} ${live.name} - ${live.detail}`);
@@ -122,6 +123,7 @@ function summaryLine(item) {
 
   const localOk = results.filter((item) => item.name.startsWith("LOCAL")).every((item) => item.ok);
   const visualOk = results.filter((item) => item.name.startsWith("GORSEL")).every((item) => item.ok);
+  const authSettingsOk = results.find((item) => item.name === "CLOUD auth settings")?.ok === true;
   const cloudStampOk = live.ok;
   const cloudLiveOk = cloudResult.ok;
   const resetOk = resetResult.ok;
@@ -136,6 +138,7 @@ function summaryLine(item) {
     "",
     `- LOCAL SIMULASYON: ${localOk ? "PASS" : "FAIL"}`,
     `- GORSEL DOGRULAMA: ${visualOk ? "PASS" : "FAIL"}`,
+    `- CLOUD AUTH SETTINGS: ${authSettingsOk ? "PASS" : "FAIL"}`,
     `- CLOUD STAMP: ${cloudStampOk ? "PASS" : "FAIL"}`,
     `- CLOUD LIVE MULTI-USER: ${cloudLiveOk ? "PASS" : "ENV MISSING / FAIL"}`,
     `- CLOUD PASSWORD RESET API: ${resetOk ? "PASS" : "ENV MISSING / WARN"}`,
@@ -160,7 +163,7 @@ function summaryLine(item) {
   fs.writeFileSync(reportPath, report, "utf8");
   console.log(`REPORT ${reportPath}`);
 
-  if (!localOk || !visualOk || !cloudStampOk || resetBlockingFailure) {
+  if (!localOk || !visualOk || !authSettingsOk || !cloudStampOk || resetBlockingFailure) {
     process.exitCode = 1;
     return;
   }

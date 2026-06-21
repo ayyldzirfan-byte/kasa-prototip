@@ -10,6 +10,7 @@
     "test:browser": "node test-testscenario-auth-bypass.cjs",
     "test:visual": "node scripts/visual-audit.cjs",
     "test:playwright": "playwright test",
+    "test:auth-settings-live": "node scripts/auth-settings-live-smoke.cjs",
     "test:cloud-live": "node scripts/cloud-live-smoke.cjs",
     "test:cloud-live:prompt": "powershell -ExecutionPolicy Bypass -File scripts/cloud-live-smoke.ps1",
     "test:password-reset-live": "node scripts/password-reset-live-smoke.cjs",

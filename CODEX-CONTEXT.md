@@ -140,8 +140,10 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 ## Ek Kritik Kural
 - KURAL-039: Ekran kalabaligi yasak. Yeni UI veya akista kullanicinin zaten girdigi bilgi tekrar sorulmaz; ikincil ayarlar kompakt, acilir veya adim adim gosterilir. Her degisiklikte 375px mobil genislikte tasma, sikisma ve gereksiz tekrar kontrol edilir.
 - KURAL-049: Sifre sifirlama API kabulu ve mail teslimi ayri raporlanir. `npm run test:password-reset-live` sadece Supabase recover API kabulunu kanitlar; inbox/spam teslimi manuel kontrol edilir.
+- KURAL-050: Supabase email auth provider, signup ve auth health canli readiness kapisinda kontrol edilir.
 
 ## Sifre Sifirlama Canli Kontrolu
+- Auth ayar kontrolu: `npm run test:auth-settings-live`.
 - Komut: `npm run test:password-reset-live` veya `npm run test:password-reset-live:prompt`.
 - Gerekli env: `KASAM_RESET_TEST_EMAIL`.
 - Readiness raporu `CLOUD PASSWORD RESET API` satirini ayri yazar.

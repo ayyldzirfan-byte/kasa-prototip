@@ -11,6 +11,8 @@ assert.ok(source.includes("kasam-lint.cjs"), "readiness runs rules lint");
 assert.ok(source.includes("scripts/run-all-tests.cjs"), "readiness runs all local tests");
 assert.ok(source.includes("build-public.cjs"), "readiness builds public output");
 assert.ok(source.includes("scripts/visual-audit.cjs"), "readiness runs visual audit");
+assert.ok(source.includes("scripts/auth-settings-live-smoke.cjs"), "readiness runs Supabase auth settings smoke");
+assert.ok(source.includes("CLOUD AUTH SETTINGS"), "readiness reports auth settings cloud gate");
 assert.ok(source.includes("https://kasa-prototip.vercel.app/index.html"), "readiness checks live canonical app");
 assert.ok(source.includes("expectedStamp"), "readiness checks current live stamp");
 assert.ok(source.includes("scripts/cloud-live-smoke.cjs"), "readiness runs real cloud smoke when env exists");
