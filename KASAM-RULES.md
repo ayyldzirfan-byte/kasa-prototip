@@ -284,3 +284,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Kasam hizli veri girisi uygulamasidir. Kalabalik ekran yanlis kayit, tekrar tiklama, dikkat dagilmasi ve premium hissin bozulmasina sebep olur.
 - Kontrol: UI degisikliginde ayni ekranda tekrar eden baslik, ayar grubu veya kullanicidan tekrar istenen bilgi aranir. Hareket ekleme ekraninda oyun asamalari tekrar kurulmaz; oyun bilgisi hareketten turetilir. 375px mobil genislikte tasma, sikisma ve gereksiz kalabalik kontrol edilir.
 - Eklendi: 2026-06-14 - Ekran kalabaligi kurali
+
+## KURAL-049: Sifre Sifirlama API Kabulu ve Mail Teslimi Ayridir
+- Kural: Sifre sifirlama icin kod tarafinda iki ayri sonuc raporlanir. `scripts/password-reset-live-smoke.cjs` Supabase `/auth/v1/recover` isteginin kabul edildigini kanitlar. Bu sonuc mailin gelen kutusuna dustugunu kanitlamaz; inbox/spam teslimi kullanici tarafindan manuel kontrol edilir.
+- Sebep: Supabase reset API'si basarili donse bile SMTP, rate limit, spam filtresi veya alici kutusu nedeniyle mail teslimi ayri basarisiz olabilir.
+- Kontrol: `npm run test:password-reset-live` yalnizca `KASAM_RESET_TEST_EMAIL` verildiginde calisir. Eksik env durumunda exit code 2 ile durur ve PASS uretmez. Windows kullanici akisi icin `npm run test:password-reset-live:prompt` kullanilir.
+- Eklendi: 2026-06-21 - Sifre sifirlama cloud smoke ayrimi

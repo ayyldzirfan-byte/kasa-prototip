@@ -122,3 +122,8 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Tekrarlayan hata: "Yaptim/PASS dedi ama gercekte olmamis" birden fazla kez yasandi; cozum KURAL-025 ve KURAL-028.
 - Kontrol yontemi: ekran goruntusu birincil, test ciktisi ikincildir.
 - Yeterli kriteri: gozle gorulunce yeterli; sadece test gecince yeterli sayilmaz.
+
+## Ek Kontrol Kurali: Sifre Sifirlama
+- "Sifre sifirlama calisiyor" ifadesi tek sonuc olarak kullanilmayacak.
+- Supabase API kabul etti mi ve mail gelen kutusuna dustu mu ayri raporlanacak.
+- API testi otomatik yapilir; inbox/spam teslimi kullanici aksiyonu olarak ayrica istenir.

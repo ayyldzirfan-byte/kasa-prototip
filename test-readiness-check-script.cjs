@@ -14,9 +14,12 @@ assert.ok(source.includes("scripts/visual-audit.cjs"), "readiness runs visual au
 assert.ok(source.includes("https://kasa-prototip.vercel.app/index.html"), "readiness checks live canonical app");
 assert.ok(source.includes("expectedStamp"), "readiness checks current live stamp");
 assert.ok(source.includes("scripts/cloud-live-smoke.cjs"), "readiness runs real cloud smoke when env exists");
+assert.ok(source.includes("scripts/password-reset-live-smoke.cjs"), "readiness runs password reset API smoke when env exists");
 assert.ok(source.includes("KASAM_CLOUD_EMAIL_A"), "readiness requires cloud owner email env");
 assert.ok(source.includes("KASAM_CLOUD_PASSWORD_B"), "readiness requires cloud member password env");
 assert.ok(source.includes("KASAM_SUPABASE_SERVICE_ROLE_KEY"), "readiness also accepts local service role self-provisioning");
+assert.ok(source.includes("KASAM_RESET_TEST_EMAIL"), "readiness accepts password reset live email env");
+assert.ok(source.includes("CLOUD PASSWORD RESET API"), "readiness reports password reset cloud API separately");
 assert.ok(source.includes("process.exitCode = 2"), "readiness exits distinctly when only cloud live proof is missing");
 assert.ok(source.includes("readiness-report.md"), "readiness writes a report");
 

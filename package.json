@@ -12,6 +12,8 @@
     "test:playwright": "playwright test",
     "test:cloud-live": "node scripts/cloud-live-smoke.cjs",
     "test:cloud-live:prompt": "powershell -ExecutionPolicy Bypass -File scripts/cloud-live-smoke.ps1",
+    "test:password-reset-live": "node scripts/password-reset-live-smoke.cjs",
+    "test:password-reset-live:prompt": "powershell -ExecutionPolicy Bypass -File scripts/password-reset-live-smoke.ps1",
     "check:ready": "node scripts/readiness-check.cjs",
     "prebuild": "node kasam-lint.cjs",
     "build": "node scripts/run-all-tests.cjs && node build-public.cjs"

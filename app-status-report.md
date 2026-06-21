@@ -159,6 +159,18 @@ Tarih: 2026-06-21
 2. Supabase Auth mail teslimi icin SMTP/rate limit ayarlari kontrol edilmeli.
 3. iPhone uzerinde medya secici ve bildirim oyunu UX'i tekrar gozle incelenmeli.
 
+## Son Guncelleme: Sifre Sifirlama Canli API Kapisi - 2026-06-21
+- `scripts/password-reset-live-smoke.cjs` eklendi. Bu script `KASAM_RESET_TEST_EMAIL` ile Supabase `/auth/v1/recover` isteginin canonical Vercel reset redirect'iyle kabul edilip edilmedigini kontrol eder.
+- `scripts/password-reset-live-smoke.ps1` eklendi. Windows kullanicisindan test e-postasini prompt ile alir, env'e gecici yazar ve testi calistirir.
+- `npm run test:password-reset-live` ve `npm run test:password-reset-live:prompt` komutlari eklendi.
+- `scripts/readiness-check.cjs` artik `CLOUD PASSWORD RESET API` satirini ayri raporlar. E-posta env eksikse WARN yazar; env verilip API hata verirse readiness FAIL olur.
+- Onemli ayrim: API kabulu mail teslimi demek degildir. Inbox/spam kontrolu kullanici tarafindan yapilir.
+- LOCAL SIMULASYON: `kasam-lint.cjs`, `test-password-reset-live-smoke-script.cjs`, `test-readiness-check-script.cjs`, `scripts/run-all-tests.cjs` gecti. Son kosum: 30 test dosyasi, 30 gecti, 0 basarisiz; `build-public.cjs` 41 dosya uretti.
+- GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 gecti.
+- CLOUD TEST: Canli Vercel stamp dogrulandi: `Guncellendi 14.06.2026 23:05`. `KASAM_SUPABASE_SERVICE_ROLE_KEY` veya iki gercek test hesabi env'i olmadigi icin `CLOUD LIVE MULTI-USER` PASS uretemedi. `KASAM_RESET_TEST_EMAIL` olmadigi icin `CLOUD PASSWORD RESET API` WARN olarak raporlandi.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210326`.
+- Readiness raporu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\readiness-202606210326`.
+
 ## Son Guncelleme: Kalite Kapilarinin Tek Komuta Baglanmasi - 2026-06-21
 - `scripts/run-all-tests.cjs` eklendi; artik `npm test` ve `npm run test:all` tum `test-*.cjs` dosyalarini calistirir.
 - `npm run test:visual` Playwright CLI yerine mevcut Chrome/CDP tabanli `scripts/visual-audit.cjs` auditini calistirir; Playwright ayrica `npm run test:playwright` olarak korunur.

@@ -14,6 +14,7 @@ const requiredCloudEnv = [
   "KASAM_CLOUD_PASSWORD_B",
 ];
 const serviceRoleEnv = ["KASAM_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"];
+const resetEmailEnv = "KASAM_RESET_TEST_EMAIL";
 
 function outputDir() {
   const preferred = path.join(os.homedir(), "Desktop", "kasam-test", `readiness-${stamp}`);
@@ -67,7 +68,7 @@ async function liveStamp() {
 }
 
 function summaryLine(item) {
-  const marker = item.ok ? "PASS" : "FAIL";
+  const marker = item.ok ? "PASS" : item.warningOnly ? "WARN" : "FAIL";
   return `| ${item.name} | ${marker} | ${item.status ?? ""} | ${(item.detail || "").replace(/\|/g, "/")} |`;
 }
 
@@ -102,10 +103,29 @@ function summaryLine(item) {
   }
   results.push(cloudResult);
 
+  let resetResult;
+  if (!process.env[resetEmailEnv]) {
+    resetResult = {
+      name: "CLOUD password reset API",
+      ok: false,
+      status: 2,
+      warningOnly: true,
+      detail: `missing env: ${resetEmailEnv}`,
+    };
+    console.log(`SKIP ${resetResult.name} - ${resetResult.detail}`);
+  } else {
+    resetResult = run("CLOUD password reset API", node, ["scripts/password-reset-live-smoke.cjs"]);
+    resetResult.warningOnly = false;
+    resetResult.detail = resetResult.ok ? "Supabase recover API accepted reset request" : "Supabase recover API failed";
+  }
+  results.push(resetResult);
+
   const localOk = results.filter((item) => item.name.startsWith("LOCAL")).every((item) => item.ok);
   const visualOk = results.filter((item) => item.name.startsWith("GORSEL")).every((item) => item.ok);
   const cloudStampOk = live.ok;
   const cloudLiveOk = cloudResult.ok;
+  const resetOk = resetResult.ok;
+  const resetBlockingFailure = !resetResult.warningOnly && !resetOk;
 
   const report = [
     "# Kasam Readiness Check",
@@ -118,6 +138,7 @@ function summaryLine(item) {
     `- GORSEL DOGRULAMA: ${visualOk ? "PASS" : "FAIL"}`,
     `- CLOUD STAMP: ${cloudStampOk ? "PASS" : "FAIL"}`,
     `- CLOUD LIVE MULTI-USER: ${cloudLiveOk ? "PASS" : "ENV MISSING / FAIL"}`,
+    `- CLOUD PASSWORD RESET API: ${resetOk ? "PASS" : "ENV MISSING / WARN"}`,
     "",
     "## Detay",
     "",
@@ -129,6 +150,9 @@ function summaryLine(item) {
     "",
     "Cloud live multi-user PASS olmadan gercek iki kullanici/telefon davranisi tam kanitlanmis sayilmaz.",
     "Eksik env varsa su komut kullanilir: `npm run test:cloud-live:prompt`.",
+    "Password reset API PASS olmadan Supabase reset istegi otomatik kanitlanmis sayilmaz.",
+    "Eksik reset e-posta env varsa su komut kullanilir: `npm run test:password-reset-live:prompt`.",
+    "Password reset API PASS olsa bile inbox teslimi manuel olarak kontrol edilir.",
     "",
   ].join("\n");
 
@@ -136,7 +160,7 @@ function summaryLine(item) {
   fs.writeFileSync(reportPath, report, "utf8");
   console.log(`REPORT ${reportPath}`);
 
-  if (!localOk || !visualOk || !cloudStampOk) {
+  if (!localOk || !visualOk || !cloudStampOk || resetBlockingFailure) {
     process.exitCode = 1;
     return;
   }
