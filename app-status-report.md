@@ -18,6 +18,7 @@ Tarih: 2026-06-20
 | `kasam-lint.cjs` | Proje kurallari lint denetimi | Calisiyor |
 | `scripts/run-all-tests.cjs` | Tum `test-*.cjs` dosyalarini tek komutla sirali calistirir | Calisiyor |
 | `scripts/cloud-live-smoke.cjs` | Iki gercek Supabase kullanicisiyle ortak proje, hareket ve bildirim cloud smoke testi | Env gerektirir |
+| `scripts/cloud-live-smoke.ps1` | Windows'ta iki test hesabi bilgisini guvenli prompt ile alip cloud live smoke testini calistirir | Hazir |
 | `scripts/cdp-test-harness.cjs` | Playwright bagimliligi olmadan gercek Chrome/CDP browser testleri | Calisiyor |
 | `vercel.json` | Vercel build/output ve header ayarlari | `npm run build` + `public` output ayarli |
 | `api/tcmb-rate.js` | Doviz hareketleri icin TCMB kur proxy endpoint'i | Syntax kontrolu gecti |
@@ -152,6 +153,15 @@ Tarih: 2026-06-20
 - GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 kontrolu gecti.
 - CLOUD TEST: Canli Vercel stamp dogrulandi: `Guncellendi 14.06.2026 23:05`. Gercek iki hesapli Supabase yaz/oku testi env hesaplari verilmedigi icin henuz calistirilmadi.
 - Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210206` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
+
+## Son Guncelleme: Cloud Live Smoke Prompt Runner - 2026-06-21
+- `scripts/cloud-live-smoke.ps1` eklendi. Windows kullanicisindan iki test hesabi e-posta/sifresini guvenli prompt ile alir, env degiskenlerine gecici yazar ve `scripts/cloud-live-smoke.cjs` testini calistirir.
+- `npm run test:cloud-live:prompt` komutu eklendi. Bu komut sifreyi repoya, terminal gecmisine veya dokumana yazmayi gerektirmez.
+- LOCAL SIMULASYON: `test-cloud-live-smoke-script.cjs` prompt runner'in secure prompt kullandigini ve hardcoded test credential icermedigini kontrol eder.
+- CLOUD TEST: Prompt runner hazir; gercek iki hesapla calistirma kullanici tarafinda yapilacak.
+- SON KOSUM: `kasam-lint.cjs` 12/12 gecti; `scripts/run-all-tests.cjs` 28/28 gecti; `build-public.cjs` 41 dosya uretti; `scripts/visual-audit.cjs` 14/14 gecti.
+- SON CLOUD DURUMU: Canli Vercel stamp dogrulandi: `Guncellendi 14.06.2026 23:05`; gercek iki hesapli cloud smoke test env olmadigi icin bilincli olarak PASS uretmedi.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210221` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
 
 ## Son Guncelleme: Eksik Istek Testlerinin Stabilize Edilmesi - 2026-06-21
 - Eksik istek listesinden kalan test borclari yeniden denetlendi.

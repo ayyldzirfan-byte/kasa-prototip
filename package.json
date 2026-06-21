@@ -11,6 +11,7 @@
     "test:visual": "node scripts/visual-audit.cjs",
     "test:playwright": "playwright test",
     "test:cloud-live": "node scripts/cloud-live-smoke.cjs",
+    "test:cloud-live:prompt": "powershell -ExecutionPolicy Bypass -File scripts/cloud-live-smoke.ps1",
     "prebuild": "node kasam-lint.cjs",
     "build": "node scripts/run-all-tests.cjs && node build-public.cjs"
   },

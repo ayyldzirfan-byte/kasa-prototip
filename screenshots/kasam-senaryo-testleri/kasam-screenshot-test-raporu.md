@@ -1,6 +1,6 @@
 # Kasam screenshot test raporu
 
-Tarih: 21.06.2026 05:05:32
+Tarih: 21.06.2026 05:20:46
 
 ## Kontroller
 - PASS: Ana ekran test senaryosu ile acildi
