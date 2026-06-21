@@ -135,6 +135,8 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Finansal hesaplar AI modeline birakilmayacak; once deterministik kural motoru hesaplayacak, gerekirse AI sadece metni daha dogal anlatacak.
 - Oneriler ekran kalabaligi yapmayacak; ana ekranda kompakt kart, detayda rapor/fiş mantigi ile acilacak.
 - Ekstre, market fisi, hedef/kumbara ve ortak kasa etkileri bu zeka motorunun veri kaynaklari olarak dusunulecek.
+- Sinirsiz ortak kasa premium degeri guclu bulunmadi; premium deger gelismis rapor, fis, oyun, hedef, doviz/taksit, ekstre ve akilli yonlendirme uzerinden kurulacak.
+- Ticari/reklam fikri ancak acik izinle ve segment seviyesinde dusunulecek. Ham fis, kisisel hareket listesi veya finans gecmisi satilmayacak/aktarilmayacak.
 
 ## Ek Kontrol Kurali: Sifre Sifirlama
 - "Sifre sifirlama calisiyor" ifadesi tek sonuc olarak kullanilmayacak.

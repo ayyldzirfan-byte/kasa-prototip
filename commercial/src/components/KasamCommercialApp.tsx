@@ -31,7 +31,7 @@ import {
   weekSummary
 } from "@/lib/domain";
 import { money, signedMoney } from "@/lib/money";
-import { generateInsightDeck, type Insight } from "@/lib/insights";
+import { generateGuidancePlan, generateInsightDeck, type Insight } from "@/lib/insights";
 import { createCommercialCloudEntry, ensureCommercialStarterData, loadCommercialCloudState } from "@/lib/cloud-client";
 import type { AppState, Entry, EntryType, Profile, Project } from "@/lib/types";
 
@@ -245,6 +245,19 @@ export function KasamCommercialApp() {
   const month = user ? monthSummary(state, user.id, now) : today;
   const rhythm = rhythmScore(month);
   const insightDeck = user ? generateInsightDeck(state, user.id, now) : [];
+  const guidancePlan = user
+    ? generateGuidancePlan(
+        state,
+        user.id,
+        now,
+        [
+          { name: "Tavuk" },
+          { name: "Pirinç" },
+          { name: "Yoğurt" }
+        ],
+        false
+      )
+    : null;
   const recentEntries = user
     ? [...state.entries]
         .filter((entry) => personalEntryImpact(state, entry, user.id, now) !== 0 || entry.userId === user.id)
@@ -651,6 +664,44 @@ export function KasamCommercialApp() {
                 ))}
               </div>
             ) : null}
+          </section>
+        ) : null}
+
+        {guidancePlan ? (
+          <section className="card guidance-card">
+            <div className="row-between">
+              <div>
+                <p className="eyebrow">Akıllı yönlendirme</p>
+                <h2>Kasam ne yapabileceğini söyler</h2>
+              </div>
+              <Sparkles size={22} />
+            </div>
+            <div className="guidance-grid">
+              <article className="guidance-item">
+                <span className="tiny muted">Hedef</span>
+                <strong>{guidancePlan.acceleration[0]?.title ?? "Hedef için yeterli veri yok"}</strong>
+                <p className="muted tiny">
+                  {guidancePlan.acceleration[0]?.message ?? "Harcama düzeni oluşunca hedefi öne çekme planı burada görünür."}
+                </p>
+              </article>
+              <article className="guidance-item">
+                <span className="tiny muted">Fişten yemek fikri</span>
+                <strong>{guidancePlan.mealIdeas[0]?.title ?? "Sepet okununca öneri gelir"}</strong>
+                <p className="muted tiny">
+                  {guidancePlan.mealIdeas[0]?.reason ?? "Market fişi ürünleri yemeğe çevrilebilir sinyal verirse öneri üretilir."}
+                </p>
+              </article>
+              <article className="guidance-item">
+                <span className="tiny muted">Ticari sinyal</span>
+                <strong>{guidancePlan.commerceSignals[0]?.allowed ? guidancePlan.commerceSignals[0].segment : "İzin olmadan kapalı"}</strong>
+                <p className="muted tiny">{guidancePlan.commerceSignals[0]?.reason}</p>
+              </article>
+            </div>
+            <div className="premium-strip" aria-label="Premium özellik adayları">
+              {guidancePlan.premiumHooks.slice(0, 4).map((hook) => (
+                <span key={hook}>{hook}</span>
+              ))}
+            </div>
           </section>
         ) : null}
 

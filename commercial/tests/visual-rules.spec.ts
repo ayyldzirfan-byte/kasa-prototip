@@ -16,6 +16,8 @@ test.describe("Kasam commercial visual rules", () => {
     await page.goto(visualUrl);
     await expect(page.getByText("Finansal ritim")).toBeVisible();
     await expect(page.getByText("Kasam öneriyor")).toBeVisible();
+    await expect(page.getByText("Akıllı yönlendirme")).toBeVisible();
+    await expect(page.getByText("Fişten yemek fikri")).toBeVisible();
     await expect(page.getByText("Ana ekran")).toBeVisible();
     await expect(page.getByText("Allah verdi")).toHaveCount(0);
     await expect(page.locator(".entry-title", { hasText: "Ev Ortak Kasası" })).toBeVisible();
@@ -59,7 +61,7 @@ test.describe("Kasam commercial visual rules", () => {
 
   test("receipt report", async ({ page }) => {
     await page.goto(visualUrl);
-    await page.getByText("Rapor").click();
+    await page.getByRole("button", { name: "Rapor" }).click();
     await expect(page.getByText("KASAM FİŞİ")).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-report.png"), fullPage: true });
   });

@@ -11,7 +11,7 @@ export default defineConfig({
     video: "retain-on-failure"
   },
   webServer: {
-    command: "node ./node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port 3100",
+    command: `"${process.execPath}" ./node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port 3100`,
     url: "http://127.0.0.1:3100",
     reuseExistingServer: true,
     timeout: 120000

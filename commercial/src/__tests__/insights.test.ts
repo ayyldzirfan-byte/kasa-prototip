@@ -1,4 +1,13 @@
-import { calculateGoalDelayDays, generateInsightDeck, requiredDailySaving } from "@/lib/insights";
+import {
+  calculateGoalAdvanceDays,
+  calculateGoalDelayDays,
+  generateCommerceSignals,
+  generateGoalAccelerationSuggestions,
+  generateGuidancePlan,
+  generateInsightDeck,
+  generateMealIdeasFromReceipt,
+  requiredDailySaving
+} from "@/lib/insights";
 import { demoState } from "@/lib/seed";
 import type { AppState, Goal } from "@/lib/types";
 
@@ -9,6 +18,7 @@ describe("Kasam commercial insight engine", () => {
     expect(calculateGoalDelayDays(2000, 500)).toBe(4);
     expect(calculateGoalDelayDays(0, 500)).toBe(0);
     expect(calculateGoalDelayDays(2000, 0)).toBe(0);
+    expect(calculateGoalAdvanceDays(1500, 500)).toBe(3);
   });
 
   test("required daily saving follows remaining target and deadline", () => {
@@ -65,5 +75,56 @@ describe("Kasam commercial insight engine", () => {
     };
     const insights = generateInsightDeck(pressureState, "u-irfan", now);
     expect(insights.some((insight) => insight.type === "cashflow")).toBe(true);
+  });
+
+  test("goal acceleration suggestions turn spending categories into action", () => {
+    const suggestions = generateGoalAccelerationSuggestions(demoState, "u-irfan", now);
+    expect(suggestions.length).toBeGreaterThan(0);
+    expect(suggestions[0].type).toBe("goal-advance");
+    expect(suggestions[0].message).toContain("öne");
+  });
+
+  test("receipt basket can produce meal ideas without AI math", () => {
+    const ideas = generateMealIdeasFromReceipt([{ name: "Tavuk" }, { name: "Pirinç" }, { name: "Yoğurt" }]);
+    expect(ideas[0].title).toBe("Tavuklu pilav");
+    expect(ideas[0].uses).toContain("Tavuk");
+  });
+
+  test("commerce signals require consent and stay segment based", () => {
+    const signalState: AppState = {
+      ...demoState,
+      entries: [
+        ...demoState.entries,
+        {
+          id: "e-market-signal",
+          projectId: "p-home",
+          userId: "u-havva",
+          paidById: "u-havva",
+          type: "expense",
+          title: "Market",
+          amount: 1200,
+          currency: "TL",
+          exchangeRate: 1,
+          rateLockedAt: "2026-06-20T12:00:00.000Z",
+          date: "2026-06-20T12:00:00.000Z",
+          status: "done",
+          splitWith: ["u-irfan", "u-havva"],
+          splitRatio: [0.5, 0.5],
+          createdAt: "2026-06-20T12:00:00.000Z",
+          updatedAt: "2026-06-20T12:00:00.000Z"
+        }
+      ]
+    };
+    const closed = generateCommerceSignals(signalState, "u-irfan", now, false);
+    expect(closed[0].allowed).toBe(false);
+    const open = generateCommerceSignals(signalState, "u-irfan", now, true);
+    expect(open.every((signal) => signal.allowed)).toBe(true);
+    expect(open.some((signal) => signal.segment === "market")).toBe(true);
+  });
+
+  test("guidance plan excludes unlimited shared budget as a premium hook", () => {
+    const plan = generateGuidancePlan(demoState, "u-irfan", now, [{ name: "Makarna" }, { name: "Domates" }], false);
+    expect(plan.premiumHooks.join(" ").toLocaleLowerCase("tr-TR")).not.toContain("sınırsız ortak kasa");
+    expect(plan.premiumHooks).toContain("Ekstre analizi");
   });
 });

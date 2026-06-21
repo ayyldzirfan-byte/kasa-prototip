@@ -14,6 +14,9 @@ describe("Kasam commercial UI", () => {
   test("renders compact financial recommendations", async () => {
     render(<KasamCommercialApp />);
     expect(await screen.findByText("Kasam öneriyor")).toBeInTheDocument();
+    expect(await screen.findByText("Akıllı yönlendirme")).toBeInTheDocument();
+    expect(screen.getByText("Fişten yemek fikri")).toBeInTheDocument();
+    expect(screen.getByText("İzin olmadan kapalı")).toBeInTheDocument();
     expect(screen.getByText("Tatil hedefi 14 gün ileri gider")).toBeInTheDocument();
     expect(screen.queryByText("Allah verdi")).not.toBeInTheDocument();
   });

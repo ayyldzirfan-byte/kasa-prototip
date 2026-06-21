@@ -21,13 +21,15 @@ Free tier:
 - PWA install.
 
 Premium tier:
-- Unlimited shared vaults.
 - Advanced reports and receipts.
 - Guess game.
 - Goals and savings plans.
 - Installments and FX.
 - Statement analysis.
 - Advanced notifications.
+- Smart guidance engine.
+- Receipt-to-meal ideas.
+- Consent-based partner offers.
 
 ## Core Product Loop
 1. User adds a movement.
@@ -44,6 +46,13 @@ Premium tier:
 - Daily, weekly, monthly reports.
 - Shareable Kasam receipt.
 - PWA-ready shell.
+
+## Commercial Differentiators
+- Goal guidance: show how a movement delays a goal and what can bring it forward.
+- Receipt intelligence: extract basket-level context and suggest useful next actions, such as simple meal ideas from grocery receipts.
+- Statement intelligence: compare bank or card statements with Kasam movements and surface missing items.
+- Consent-based commerce: produce only aggregate/category-level partner signals after explicit user consent. Raw receipt rows and personal movement history are not sold or exported.
+- Premium output quality: receipts and reports should feel shareable, polished, and visually stronger than a plain ledger.
 
 ## Design Direction
 UltraHuman-strong but financially readable.

@@ -332,3 +332,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Ortak kasa, bildirim oyunu, kisisel kasa etkisi ve doviz hesaplari tek kolon eksikliginde localde calisir gorunup gercek cloud'da bozulur.
 - Kontrol: `commercial/src/__tests__/cloud-schema.test.ts` production kolonlarini, `test-commercial-cloud-adapter.cjs` mapper/build payload fonksiyonlarini ve kritik kolon adlarini kontrol eder. Cloud client entry/notification payloadlarini `buildEntryInsertPayload()` ve `buildNotificationInsertPayload()` disinda kuramaz.
 - Eklendi: 2026-06-21 - commercial Supabase tablo eslemesi
+
+## KURAL-057: Ticari Sinyaller Izinli ve Agrege Olur
+- Kural: Reklam, partner teklifi veya ticari yonlendirme icin acik kullanici izni gerekir. Kasam ham fis satiri, kisisel hareket listesi veya kullaniciya ait finans gecmisini ucuncu tarafa satmaz ya da aktarmaz. Sinyal uretilirse yalnizca kategori/segment seviyesinde uretilir.
+- Sebep: Finans uygulamasinda guven ve KVKK ticari buyumeden once gelir. Ticari model, kullanicinin parasal mahremiyetini zedelememelidir.
+- Kontrol: `generateCommerceSignals(..., false)` her zaman `allowed:false` doner. `commercial/src/__tests__/insights.test.ts` izin kapaliyken ticari sinyalin kapali kaldigini ve izin acikken segment bazli kaldigini test eder.
+- Eklendi: 2026-06-21 - ticari zeka ve partner sinyali
