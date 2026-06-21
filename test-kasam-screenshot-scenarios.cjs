@@ -1,10 +1,24 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
+const os = require("node:os");
 const path = require("node:path");
 const { runCdpTest } = require("./scripts/cdp-test-harness.cjs");
 
 const root = process.cwd();
-const outDir = path.join(root, "screenshots", "kasam-senaryo-testleri");
+const stamp = new Date().toISOString().replace(/[-:T]/g, "").slice(0, 12);
+function resolveOutDir() {
+  const preferred = path.join(os.homedir(), "Desktop", "kasam-test", `scenario-screenshots-${stamp}`);
+  const fallback = path.join(root, "screenshots", `scenario-screenshots-${stamp}`);
+  try {
+    fs.mkdirSync(preferred, { recursive: true });
+    return preferred;
+  } catch (_error) {
+    fs.mkdirSync(fallback, { recursive: true });
+    return fallback;
+  }
+}
+
+const outDir = resolveOutDir();
 const shots = [];
 const checks = [];
 
@@ -31,7 +45,7 @@ function writeReport() {
     ...checks.map((item) => `- PASS: ${item.name}${item.detail ? ` - ${item.detail}` : ""}`),
     "",
     "## Ekran goruntuleri",
-    ...shots.map((shot) => `- ${shot.name}: ${path.relative(root, shot.file).replace(/\\/g, "/")} - ${shot.detail}`),
+    ...shots.map((shot) => `- ${shot.name}: ${shot.file} - ${shot.detail}`),
     "",
   ];
   fs.writeFileSync(path.join(outDir, "kasam-screenshot-test-raporu.md"), lines.join("\n"), "utf8");

@@ -113,6 +113,13 @@ Tarih: 2026-06-21
 - Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210257` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
 - Readiness raporu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\readiness-202606210257` (cloud live env eksigi raporda FAIL olarak yazilir).
 
+## Son Guncelleme: Gorsel Kanit Ciktilari Repo Disina Alindi - 2026-06-21
+- `test-kasam-screenshot-scenarios.cjs` artik her kosumda takip edilen `screenshots/kasam-senaryo-testleri` dosyalarini degistirmez.
+- Senaryo ekran goruntuleri KURAL-027 ile uyumlu olarak `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\scenario-screenshots-[tarih]` klasorune yazilir.
+- LOCAL SIMULASYON: `kasam-lint.cjs` gecti; `test-kasam-screenshot-scenarios.cjs` 7/7 gecti; `scripts/run-all-tests.cjs` 29/29 test dosyasini gecirdi; `build-public.cjs` 41 dosya uretti.
+- GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 kontrolu gecti.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\scenario-screenshots-202606210308` ve `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210308`.
+
 ## Son Guncelleme: Realtime Refresh Eksiklerinin Kapatilmasi
 - Eksik istek listesi icinde kalan ortak kasa senkronu yeniden denetlendi.
 - `app-critical-fixes.js` icinde realtime kanali aktif kullaniciya baglandi; kullanici degisince eski kanal kapatilir.
