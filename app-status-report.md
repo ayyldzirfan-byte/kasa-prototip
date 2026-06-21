@@ -161,6 +161,18 @@ Tarih: 2026-06-21
 2. Supabase Auth mail teslimi icin SMTP/rate limit ayarlari kontrol edilmeli.
 3. iPhone uzerinde medya secici ve bildirim oyunu UX'i tekrar gozle incelenmeli.
 
+## Son Guncelleme: Commercial Supabase Auth/Cloud Baglantisi - 2026-06-21
+- Commercial Next.js uygulamasi artik `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_ANON_KEY` varsa auth ekranindan gercek Supabase oturumu acar; env yoksa demo moduna duser.
+- Giris, kayit, sifremi unuttum, `/auth/callback` ve yeni sifre olusturma ekrani commercial app icinde kurgulandi.
+- Commercial cloud acilisinda kullanicinin `kasa_profiles` kaydi ve hic uyeligi yoksa kisisel kasa starter kaydi olusturulur.
+- Commercial hareket ekleme akisi gercek `kasa_entries` tablosuna yazar; surpriz modunda production semasinin zorunlu `actual_type`, `title`, `amount`, `success_reaction`, `fail_reaction`, `guesses` alanlari doldurulur.
+- `supabase-commercial-complete-guess.sql` eklendi. Tahmin oyunu tamamlaninca bildirimi ve bagli hareketi tek RPC ile acar; RLS nedeniyle production icin Supabase SQL Editor'da calistirilmesi gerekir.
+- Commercial Vercel project env'leri eklendi: `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_ANON_KEY` Production/Preview/Development ortamlarinda mevcut.
+- Commercial production yeniden deploy edildi ve `https://commercial-smoky.vercel.app` alias'i yeni deploy'a baglandi.
+- LOCAL SIMULASYON: Commercial Jest 14/14 gecti; TypeScript typecheck gecti; Next build gecti; `test-commercial-vercel-config.cjs` 4/4 gecti; `test-commercial-cloud-adapter.cjs` 7/7 gecti; `kasam-lint.cjs` 14/14 gecti.
+- GORSEL DOGRULAMA: Commercial Playwright 5/5 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual-20260621-connect`. Canli commercial auth/env ekrani da Playwright ile goruldu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-live-20260621-connect`.
+- CLOUD TEST: Commercial cloud adapter statik testi gecti. Commercial canli URL env ile auth ekranina dusuyor ve demo moda dusmuyor. Gercek Supabase live multi-user smoke bu turda secret kullanmadan tekrar calistirilmadi; once `supabase-commercial-complete-guess.sql` calistirilmali, sonra `npm.cmd run commercial:cloud-smoke:prompt` ile tekrar PASS alinmali.
+
 ## Son Guncelleme: Sifre Sifirlama Canli API Kapisi - 2026-06-21
 - `scripts/auth-settings-live-smoke.cjs` eklendi. Bu script Supabase `/auth/v1/settings` ve `/auth/v1/health` endpointleriyle email provider, signup ve GoTrue health durumunu kontrol eder.
 - `scripts/password-reset-live-smoke.cjs` eklendi. Bu script `KASAM_RESET_TEST_EMAIL` ile Supabase `/auth/v1/recover` isteginin canonical Vercel reset redirect'iyle kabul edilip edilmedigini kontrol eder.

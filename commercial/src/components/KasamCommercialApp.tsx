@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import {
   BarChart2,
   Bell,
@@ -10,12 +11,14 @@ import {
   Home,
   Layers,
   List,
+  LogOut,
   Plus,
-  ReceiptText,
+  RefreshCw,
   Sparkles,
   Users,
   type LucideIcon
 } from "lucide-react";
+import { createKasamSupabaseClient } from "@/lib/supabase";
 import { demoState } from "@/lib/seed";
 import {
   monthSummary,
@@ -28,9 +31,12 @@ import {
   weekSummary
 } from "@/lib/domain";
 import { money, signedMoney } from "@/lib/money";
-import type { AppState, Entry, EntryType, Project } from "@/lib/types";
+import { createCommercialCloudEntry, ensureCommercialStarterData, loadCommercialCloudState } from "@/lib/cloud-client";
+import type { AppState, Entry, EntryType, Profile, Project } from "@/lib/types";
 
 type Tab = "home" | "entries" | "projects" | "calendar" | "reports";
+type AppMode = "booting" | "auth" | "reset" | "cloud" | "demo";
+type AuthMode = "sign-in" | "sign-up";
 
 type AddForm = {
   projectId: string;
@@ -50,7 +56,11 @@ const tabItems: Array<{ id: Tab; label: string; icon: LucideIcon }> = [
   { id: "reports", label: "Rapor", icon: BarChart2 }
 ];
 
-const now = new Date("2026-06-21T12:00:00.000Z");
+const demoNow = new Date("2026-06-21T12:00:00.000Z");
+
+function todayInputValue() {
+  return new Date().toISOString().slice(0, 10);
+}
 
 function initials(name: string) {
   return name
@@ -71,22 +81,22 @@ function splitEqually(userIds: string[]) {
 function projectMembers(project: Project, state: AppState) {
   return project.members
     .map((member) => state.profiles.find((profile) => profile.id === member.userId))
-    .filter(Boolean);
+    .filter((profile): profile is Profile => Boolean(profile));
 }
 
-function createEntryId() {
+function createLocalEntryId() {
   return `e-${Date.now()}-${Math.round(Math.random() * 10000)}`;
 }
 
 function defaultForm(state: AppState): AddForm {
   const project = state.projects.find((item) => item.type === "personal") ?? state.projects[0];
   return {
-    projectId: project.id,
+    projectId: project?.id ?? "",
     type: "expense",
     title: "",
     amount: "",
-    date: "2026-06-21",
-    splitWith: project.members.map((member) => member.userId),
+    date: todayInputValue(),
+    splitWith: project?.members.map((member) => member.userId) ?? [],
     surprise: false
   };
 }
@@ -97,110 +107,343 @@ function signedClass(value: number) {
   return "muted";
 }
 
+function messageFromError(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return "Bir şeyler ters gitti. Tekrar dene.";
+}
+
+function userLabel(user: Profile) {
+  return user.displayName || user.email || "Kullanıcı";
+}
+
+async function completeNotificationLocally(client: SupabaseClient, notificationId: string, entryId?: string) {
+  const revealedAt = new Date().toISOString();
+  const rpcResult = await client.rpc("complete_kasam_guess", { notification_uuid: notificationId });
+  if (!rpcResult.error) return;
+
+  const noteResult = await client.from("kasa_notifications").update({ is_completed: true, revealed_at: revealedAt }).eq("id", notificationId);
+  if (noteResult.error) throw new Error(`kasa_notifications: ${noteResult.error.message}`);
+
+  if (entryId) {
+    await client.from("kasa_entries").update({ locked_notification_id: null, updated_at: revealedAt }).eq("id", entryId);
+  }
+}
+
 export function KasamCommercialApp() {
+  const [client] = useState(() => createKasamSupabaseClient());
   const [state, setState] = useState<AppState>(demoState);
+  const [mode, setMode] = useState<AppMode>("booting");
+  const [authMode, setAuthMode] = useState<AuthMode>("sign-in");
+  const [session, setSession] = useState<Session | null>(null);
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authName, setAuthName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+  const [cloudBusy, setCloudBusy] = useState(false);
   const [tab, setTab] = useState<Tab>("home");
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<AddForm>(() => defaultForm(demoState));
-  const [selectedDate, setSelectedDate] = useState("2026-06-21");
+  const [selectedDate, setSelectedDate] = useState(todayInputValue());
+
+  const refreshCloudState = useCallback(
+    async (activeSession: Session) => {
+      if (!client) return;
+      setCloudBusy(true);
+      try {
+        await ensureCommercialStarterData(client, activeSession.user);
+        const nextState = await loadCommercialCloudState(client, activeSession.user.id);
+        setState(nextState);
+        setForm(defaultForm(nextState));
+        setSession(activeSession);
+        setMode("cloud");
+        setStatusMessage("Cloud bağlantısı hazır.");
+      } catch (error) {
+        setMode("auth");
+        setStatusMessage(messageFromError(error));
+      } finally {
+        setCloudBusy(false);
+      }
+    },
+    [client]
+  );
+
+  useEffect(() => {
+    if (!client) {
+      setMode("demo");
+      setStatusMessage("Demo mod. Supabase env yok.");
+      return;
+    }
+
+    let mounted = true;
+    client.auth.getSession().then(({ data, error }) => {
+      if (!mounted) return;
+      if (error) {
+        setMode("auth");
+        setStatusMessage(error.message);
+        return;
+      }
+      if (data.session) {
+        const resetMode = typeof window !== "undefined" && window.location.search.includes("resetPassword=1");
+        if (resetMode) {
+          setSession(data.session);
+          setMode("reset");
+        } else {
+          void refreshCloudState(data.session);
+        }
+      } else {
+        setMode("auth");
+      }
+    });
+
+    const { data } = client.auth.onAuthStateChange((event, nextSession) => {
+      if (!mounted) return;
+      if (event === "PASSWORD_RECOVERY" && nextSession) {
+        setSession(nextSession);
+        setMode("reset");
+        return;
+      }
+      if (nextSession && event !== "INITIAL_SESSION") void refreshCloudState(nextSession);
+      if (!nextSession && event === "SIGNED_OUT") {
+        setSession(null);
+        setState(demoState);
+        setMode("auth");
+      }
+    });
+
+    return () => {
+      mounted = false;
+      data.subscription.unsubscribe();
+    };
+  }, [client, refreshCloudState]);
 
   const user = state.profiles.find((profile) => profile.id === state.activeUserId) ?? state.profiles[0];
   const personalProject = state.projects.find((project) => project.type === "personal");
   const currentProject = state.projects.find((project) => project.id === form.projectId) ?? state.projects[0];
-  const pendingCount = pendingSurpriseCountForUser(state, user.id);
-  const today = todaySummary(state, user.id, now);
-  const week = weekSummary(state, user.id, now);
-  const month = monthSummary(state, user.id, now);
+  const now = mode === "demo" ? demoNow : new Date();
+  const pendingCount = user ? pendingSurpriseCountForUser(state, user.id) : 0;
+  const today = user ? todaySummary(state, user.id, now) : { income: 0, expense: 0, net: 0, pendingIncome: 0, upcomingPayment: 0 };
+  const week = user ? weekSummary(state, user.id, now) : today;
+  const month = user ? monthSummary(state, user.id, now) : today;
   const rhythm = rhythmScore(month);
-  const recentEntries = [...state.entries]
-    .filter((entry) => personalEntryImpact(state, entry, user.id, now) !== 0 || entry.userId === user.id)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 5);
+  const recentEntries = user
+    ? [...state.entries]
+        .filter((entry) => personalEntryImpact(state, entry, user.id, now) !== 0 || entry.userId === user.id)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 5)
+    : [];
 
-  const selectedProjectMembers = useMemo(() => projectMembers(currentProject, state), [currentProject, state]);
+  const selectedProjectMembers = useMemo(() => (currentProject ? projectMembers(currentProject, state) : []), [currentProject, state]);
 
   function openAdd(projectId?: string, date?: string) {
     const project = state.projects.find((item) => item.id === projectId) ?? personalProject ?? state.projects[0];
     setForm({
-      projectId: project.id,
+      projectId: project?.id ?? "",
       type: "expense",
       title: "",
       amount: "",
-      date: date ?? "2026-06-21",
-      splitWith: project.members.map((member) => member.userId),
+      date: date ?? todayInputValue(),
+      splitWith: project?.members.map((member) => member.userId) ?? [],
       surprise: false
     });
     setShowAdd(true);
   }
 
-  function saveEntry() {
-    if (saving) return;
-    const amount = Number(form.amount.replace(",", "."));
-    if (!Number.isFinite(amount) || amount <= 0) return;
-    if (!form.title.trim()) return;
-
-    const project = state.projects.find((item) => item.id === form.projectId);
-    if (!project) return;
-    const splitWith = form.splitWith.length ? form.splitWith : project.members.map((member) => member.userId);
-    const splitRatio = splitEqually(splitWith);
-    if (!validateSplitRatio(splitRatio)) return;
-
-    setSaving(true);
-    const entryId = createEntryId();
-    const notificationId = form.surprise ? `n-${entryId}` : null;
-    const entry: Entry = {
-      id: entryId,
-      projectId: project.id,
-      userId: user.id,
-      paidById: user.id,
-      type: form.type,
-      title: form.title.trim().slice(0, 200),
-      amount,
-      currency: "TL",
-      exchangeRate: 1,
-      rateLockedAt: `${form.date}T12:00:00.000Z`,
-      date: `${form.date}T12:00:00.000Z`,
-      status: "done",
-      splitWith,
-      splitRatio,
-      lockedNotificationId: notificationId,
-      revealedAt: form.surprise ? null : `${form.date}T12:00:00.000Z`,
-      autoRevealAt: form.surprise ? "2026-06-23T12:00:00.000Z" : null,
-      media: form.surprise ? { type: "sticker", value: "gift" } : undefined,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    setState((current) => ({
-      ...current,
-      entries: [entry, ...current.entries],
-      notifications: notificationId
-        ? [
-            {
-              id: notificationId,
-              projectId: project.id,
-              entryId,
-              actorId: user.id,
-              recipients: project.members.map((member) => member.userId).filter((id) => id !== user.id),
-              type: "guess",
-              gamePhase: 1,
-              isCompleted: false,
-              revealedAt: null
-            },
-            ...current.notifications
-          ]
-        : current.notifications
-    }));
-
-    window.setTimeout(() => {
-      setSaving(false);
-      setShowAdd(false);
-      setTab("entries");
-    }, 350);
+  async function submitAuth() {
+    if (!client) return;
+    if (!authEmail.trim() || !authPassword.trim()) {
+      setStatusMessage("E-posta ve şifre gir.");
+      return;
+    }
+    setCloudBusy(true);
+    setStatusMessage("");
+    try {
+      if (authMode === "sign-in") {
+        const { data, error } = await client.auth.signInWithPassword({ email: authEmail.trim(), password: authPassword });
+        if (error) throw error;
+        if (data.session) await refreshCloudState(data.session);
+      } else {
+        const { data, error } = await client.auth.signUp({
+          email: authEmail.trim(),
+          password: authPassword,
+          options: {
+            data: { name: authName.trim() || authEmail.split("@")[0] },
+            emailRedirectTo: typeof window !== "undefined" ? `${window.location.origin}/auth/callback` : undefined
+          }
+        });
+        if (error) throw error;
+        if (data.session) {
+          await refreshCloudState(data.session);
+        } else {
+          setStatusMessage("Kayıt alındı. Mailini kontrol et.");
+        }
+      }
+    } catch (error) {
+      setStatusMessage(messageFromError(error));
+    } finally {
+      setCloudBusy(false);
+    }
   }
 
-  function revealNotification(notificationId: string) {
+  async function sendPasswordReset() {
+    if (!client) return;
+    if (!authEmail.trim()) {
+      setStatusMessage("Önce e-posta gir.");
+      return;
+    }
+    const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/auth/callback` : undefined;
+    const { error } = await client.auth.resetPasswordForEmail(authEmail.trim(), { redirectTo });
+    setStatusMessage(error ? error.message : "Şifre yenileme maili gönderildi.");
+  }
+
+  async function updatePassword() {
+    if (!client || !newPassword.trim()) {
+      setStatusMessage("Yeni şifre gir.");
+      return;
+    }
+    setCloudBusy(true);
+    const { data, error } = await client.auth.updateUser({ password: newPassword });
+    if (error) {
+      setStatusMessage(error.message);
+      setCloudBusy(false);
+      return;
+    }
+    if (data.user) {
+      const { data: sessionData } = await client.auth.getSession();
+      if (sessionData.session) await refreshCloudState(sessionData.session);
+    }
+    setStatusMessage("Şifre güncellendi.");
+    setCloudBusy(false);
+  }
+
+  async function signOut() {
+    if (!client) {
+      setMode("auth");
+      return;
+    }
+    await client.auth.signOut();
+  }
+
+  async function saveEntry() {
+    if (saving || !user) return;
+    const amount = Number(form.amount.replace(",", "."));
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setStatusMessage("Tutar gir.");
+      return;
+    }
+    if (!form.title.trim()) {
+      setStatusMessage("Başlık gir.");
+      return;
+    }
+
+    const project = state.projects.find((item) => item.id === form.projectId);
+    if (!project) {
+      setStatusMessage("Kasa seç.");
+      return;
+    }
+    const splitWith = form.splitWith.length ? form.splitWith : project.members.map((member) => member.userId);
+    const splitRatio = splitEqually(splitWith);
+    if (!validateSplitRatio(splitRatio)) {
+      setStatusMessage("Paylaşım oranı hatalı.");
+      return;
+    }
+
+    setSaving(true);
+    setStatusMessage("");
+    try {
+      if (mode === "cloud" && client && session) {
+        await createCommercialCloudEntry(client, {
+          projectId: project.id,
+          userId: user.id,
+          paidById: user.id,
+          type: form.type,
+          title: form.title.trim().slice(0, 200),
+          amount,
+          currency: "TL",
+          exchangeRate: 1,
+          entryDate: form.date,
+          splitWith,
+          splitRatio,
+          surprise: form.surprise
+        });
+        const nextState = await loadCommercialCloudState(client, session.user.id);
+        setState(nextState);
+        setForm(defaultForm(nextState));
+      } else {
+        const entryId = createLocalEntryId();
+        const notificationId = form.surprise ? `n-${entryId}` : null;
+        const isoDate = `${form.date}T12:00:00.000Z`;
+        const entry: Entry = {
+          id: entryId,
+          projectId: project.id,
+          userId: user.id,
+          paidById: user.id,
+          type: form.type,
+          title: form.title.trim().slice(0, 200),
+          amount,
+          currency: "TL",
+          exchangeRate: 1,
+          rateLockedAt: isoDate,
+          date: isoDate,
+          status: "done",
+          splitWith,
+          splitRatio,
+          lockedNotificationId: notificationId,
+          revealedAt: form.surprise ? null : isoDate,
+          autoRevealAt: form.surprise ? new Date(new Date(isoDate).getTime() + 48 * 60 * 60 * 1000).toISOString() : null,
+          media: form.surprise ? { type: "sticker", value: "gift" } : undefined,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        setState((current) => ({
+          ...current,
+          entries: [entry, ...current.entries],
+          notifications: notificationId
+            ? [
+                {
+                  id: notificationId,
+                  projectId: project.id,
+                  entryId,
+                  actorId: user.id,
+                  recipients: project.members.map((member) => member.userId).filter((id) => id !== user.id),
+                  type: "guess",
+                  gamePhase: 1,
+                  isCompleted: false,
+                  revealedAt: null
+                },
+                ...current.notifications
+              ]
+            : current.notifications
+        }));
+      }
+      setShowAdd(false);
+      setTab("entries");
+      setStatusMessage("Kaydedildi.");
+    } catch (error) {
+      setStatusMessage(messageFromError(error));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function revealNotification(notificationId: string) {
+    const notification = state.notifications.find((item) => item.id === notificationId);
+    if (mode === "cloud" && client && session && notification) {
+      setCloudBusy(true);
+      try {
+        await completeNotificationLocally(client, notificationId, notification.entryId);
+        const nextState = await loadCommercialCloudState(client, session.user.id);
+        setState(nextState);
+        setStatusMessage("Oyun tamamlandı.");
+      } catch (error) {
+        setStatusMessage(messageFromError(error));
+      } finally {
+        setCloudBusy(false);
+      }
+      return;
+    }
+
     setState((current) => ({
       ...current,
       entries: current.entries.map((entry) =>
@@ -208,17 +451,15 @@ export function KasamCommercialApp() {
           ? { ...entry, lockedNotificationId: null, revealedAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
           : entry
       ),
-      notifications: current.notifications.map((notification) =>
-        notification.id === notificationId
-          ? { ...notification, gamePhase: "done", isCompleted: true, revealedAt: new Date().toISOString() }
-          : notification
+      notifications: current.notifications.map((item) =>
+        item.id === notificationId ? { ...item, gamePhase: "done", isCompleted: true, revealedAt: new Date().toISOString() } : item
       )
     }));
   }
 
   function renderEntry(entry: Entry, compact = false) {
     const project = state.projects.find((item) => item.id === entry.projectId);
-    const impact = personalEntryImpact(state, entry, user.id, now);
+    const impact = user ? personalEntryImpact(state, entry, user.id, now) : 0;
     const hidden = Boolean(entry.lockedNotificationId && !entry.revealedAt);
     return (
       <article className="entry-row" key={entry.id}>
@@ -237,7 +478,73 @@ export function KasamCommercialApp() {
     );
   }
 
+  function AuthScreen() {
+    return (
+      <main className="screen-stack auth-screen">
+        <section className="card auth-card">
+          <p className="eyebrow">Paranın nereye gittiğini bil.</p>
+          <h1 className="title-xl">Kasam</h1>
+          <p className="muted">Kendi paranı ve ortak harcamaların sana etkisini tek ekranda gör.</p>
+          <div className="segmented">
+            <button className={authMode === "sign-in" ? "segment active" : "segment"} type="button" onClick={() => setAuthMode("sign-in")}>
+              Giriş
+            </button>
+            <button className={authMode === "sign-up" ? "segment active" : "segment"} type="button" onClick={() => setAuthMode("sign-up")}>
+              Kayıt
+            </button>
+          </div>
+          <div className="form-grid">
+            {authMode === "sign-up" ? (
+              <div className="field">
+                <label>Ad</label>
+                <input value={authName} onChange={(event) => setAuthName(event.target.value)} placeholder="Adın" />
+              </div>
+            ) : null}
+            <div className="field">
+              <label>E-posta</label>
+              <input value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="mail@adres.com" type="email" />
+            </div>
+            <div className="field">
+              <label>Şifre</label>
+              <input value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="Şifre" type="password" />
+            </div>
+            <button className="pill full" type="button" onClick={submitAuth} disabled={cloudBusy}>
+              {cloudBusy ? "Bekle..." : authMode === "sign-in" ? "Giriş yap" : "Kayıt ol"}
+            </button>
+            <button className="ghost-button full" type="button" onClick={sendPasswordReset}>
+              Şifremi unuttum
+            </button>
+            <button className="ghost-button full" type="button" onClick={() => setMode("demo")}>
+              Demoyu aç
+            </button>
+          </div>
+          {statusMessage ? <p className="status-line">{statusMessage}</p> : null}
+        </section>
+      </main>
+    );
+  }
+
+  function ResetScreen() {
+    return (
+      <main className="screen-stack auth-screen">
+        <section className="card auth-card">
+          <p className="eyebrow">Şifre yenileme</p>
+          <h1 className="title-xl">Yeni şifre oluştur</h1>
+          <div className="field">
+            <label>Yeni şifre</label>
+            <input value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Yeni şifre" type="password" />
+          </div>
+          <button className="pill full" type="button" onClick={updatePassword} disabled={cloudBusy}>
+            {cloudBusy ? "Güncelleniyor..." : "Şifreyi güncelle"}
+          </button>
+          {statusMessage ? <p className="status-line">{statusMessage}</p> : null}
+        </section>
+      </main>
+    );
+  }
+
   function HomeScreen() {
+    if (!user) return null;
     const sharedProjects = state.projects.filter((project) => project.type === "shared");
     return (
       <main className="screen-stack">
@@ -246,14 +553,19 @@ export function KasamCommercialApp() {
             <p className="eyebrow">Paranın nereye gittiğini bil.</p>
             <h1 className="title-xl">Kasam</h1>
           </div>
-          <button className="ghost-button" type="button">
-            Sıfırla
-          </button>
+          <div className="header-actions">
+            <span className="cloud-pill">{mode === "cloud" ? "Cloud" : "Demo"}</span>
+            {mode === "cloud" ? (
+              <button className="ghost-icon" type="button" onClick={signOut} aria-label="Çıkış">
+                <LogOut size={18} />
+              </button>
+            ) : null}
+          </div>
         </header>
 
         <section className="card row-between">
           <div className="profile-left">
-            <div className="avatar">{initials(user.displayName)}</div>
+            <div className="avatar">{initials(userLabel(user))}</div>
             <div>
               <h2>{user.displayName}</h2>
               <p className="muted tiny">Kendi kasan ve bağlı bütçelerin.</p>
@@ -305,32 +617,36 @@ export function KasamCommercialApp() {
               <ChevronRight size={16} />
             </button>
           </div>
-          <div className="list">{recentEntries.slice(0, 3).map((entry) => renderEntry(entry, true))}</div>
+          <div className="list">{recentEntries.length ? recentEntries.slice(0, 3).map((entry) => renderEntry(entry, true)) : <p className="empty">Henüz hareket yok. İlk hareketi sen ekle.</p>}</div>
         </section>
 
         <section className="card">
           <h2>Ortak kasalardan gelen etkiler</h2>
           <div className="list">
-            {sharedProjects.map((project) => {
-              const summary = projectSummary(state, project.id, now);
-              const myImpact = state.entries
-                .filter((entry) => entry.projectId === project.id)
-                .reduce((sum, entry) => sum + personalEntryImpact(state, entry, user.id, now), 0);
-              return (
-                <article className="entry-row" key={project.id}>
-                  <div className="icon-box">
-                    <Users size={18} />
-                  </div>
-                  <div>
-                    <p className="entry-title">{project.name}</p>
-                    <p className="entry-subtitle">
-                      Ortak net {signedMoney(summary.net)} · Bana etkisi {signedMoney(myImpact)}
-                    </p>
-                  </div>
-                  <strong className={signedClass(myImpact)}>{signedMoney(myImpact)}</strong>
-                </article>
-              );
-            })}
+            {sharedProjects.length ? (
+              sharedProjects.map((project) => {
+                const summary = projectSummary(state, project.id, now);
+                const myImpact = state.entries
+                  .filter((entry) => entry.projectId === project.id)
+                  .reduce((sum, entry) => sum + personalEntryImpact(state, entry, user.id, now), 0);
+                return (
+                  <article className="entry-row" key={project.id}>
+                    <div className="icon-box">
+                      <Users size={18} />
+                    </div>
+                    <div>
+                      <p className="entry-title">{project.name}</p>
+                      <p className="entry-subtitle">
+                        Ortak net {signedMoney(summary.net)} · Bana etkisi {signedMoney(myImpact)}
+                      </p>
+                    </div>
+                    <strong className={signedClass(myImpact)}>{signedMoney(myImpact)}</strong>
+                  </article>
+                );
+              })
+            ) : (
+              <p className="empty">Bütçe yok. Kendi kasanı oluştur veya birine katıl.</p>
+            )}
           </div>
         </section>
 
@@ -343,6 +659,7 @@ export function KasamCommercialApp() {
   }
 
   function EntriesScreen() {
+    if (!user) return null;
     const visibleNotifications = state.notifications.filter((notification) => notification.recipients.includes(user.id));
     return (
       <main className="screen-stack">
@@ -360,7 +677,7 @@ export function KasamCommercialApp() {
                     <p className="muted tiny">{notification.isCompleted ? entry?.title : "Detaylar oyun bitene kadar kapalı."}</p>
                   </div>
                   {!notification.isCompleted ? (
-                    <button className="pill" type="button" onClick={() => revealNotification(notification.id)}>
+                    <button className="pill" type="button" onClick={() => revealNotification(notification.id)} disabled={cloudBusy}>
                       Tahmin et
                     </button>
                   ) : (
@@ -379,13 +696,14 @@ export function KasamCommercialApp() {
               Ekle
             </button>
           </div>
-          <div className="list">{state.entries.map((entry) => renderEntry(entry))}</div>
+          <div className="list">{state.entries.length ? state.entries.map((entry) => renderEntry(entry)) : <p className="empty">Henüz hareket yok. İlk hareketi sen ekle.</p>}</div>
         </section>
       </main>
     );
   }
 
   function ProjectsScreen() {
+    if (!user) return null;
     return (
       <main className="screen-stack">
         <section className="card row-between">
@@ -401,12 +719,10 @@ export function KasamCommercialApp() {
               <article className="card project-card" key={project.id}>
                 <div className="row-between">
                   <div className="profile-left">
-                    <div className="avatar">{project.type === "personal" ? initials(user.displayName) : initials(project.name)}</div>
+                    <div className="avatar">{project.type === "personal" ? initials(userLabel(user)) : initials(project.name)}</div>
                     <div>
                       <h2>{project.type === "personal" ? `${user.displayName} kasası` : project.name}</h2>
-                      <p className="muted tiny">
-                        {project.type === "personal" ? "Kişisel kasa" : `${project.members.length} üye · ortak kasa`}
-                      </p>
+                      <p className="muted tiny">{project.type === "personal" ? "Kişisel kasa" : `${project.members.length} üye · ortak kasa`}</p>
                     </div>
                   </div>
                   <strong className={signedClass(summary.net)}>{signedMoney(summary.net)}</strong>
@@ -481,20 +797,22 @@ export function KasamCommercialApp() {
             <span>Gider</span>
             <strong>{money(month.expense)}</strong>
           </div>
-          {state.projects
-            .filter((project) => project.type === "shared")
-            .map((project) => (
-              <div className="receipt-line" key={project.id}>
-                <span>{project.name}</span>
-                <strong>
-                  {signedMoney(
-                    state.entries
-                      .filter((entry) => entry.projectId === project.id)
-                      .reduce((sum, entry) => sum + personalEntryImpact(state, entry, user.id, now), 0)
-                  )}
-                </strong>
-              </div>
-            ))}
+          {user
+            ? state.projects
+                .filter((project) => project.type === "shared")
+                .map((project) => (
+                  <div className="receipt-line" key={project.id}>
+                    <span>{project.name}</span>
+                    <strong>
+                      {signedMoney(
+                        state.entries
+                          .filter((entry) => entry.projectId === project.id)
+                          .reduce((sum, entry) => sum + personalEntryImpact(state, entry, user.id, now), 0)
+                      )}
+                    </strong>
+                  </div>
+                ))
+            : null}
           <p className="receipt-watermark">kasam.app</p>
         </section>
       </main>
@@ -530,7 +848,7 @@ export function KasamCommercialApp() {
             >
               {state.projects.map((project) => (
                 <option value={project.id} key={project.id}>
-                  {project.type === "personal" ? `${user.displayName} kasası` : project.name}
+                  {project.type === "personal" && user ? `${user.displayName} kasası` : project.name}
                 </option>
               ))}
             </select>
@@ -550,22 +868,20 @@ export function KasamCommercialApp() {
           <div className="field">
             <label>Paylaşılacak kişiler</label>
             <div className="member-grid">
-              {members.map((member) =>
-                member ? (
-                  <button
-                    className={form.splitWith.includes(member.id) ? "member-chip active" : "member-chip"}
-                    type="button"
-                    key={member.id}
-                    onClick={() => {
-                      const next = form.splitWith.includes(member.id) ? form.splitWith.filter((id) => id !== member.id) : [...form.splitWith, member.id];
-                      setForm({ ...form, splitWith: next.length ? next : [member.id] });
-                    }}
-                  >
-                    <span>{member.displayName}</span>
-                    {form.splitWith.includes(member.id) ? <Check size={16} /> : null}
-                  </button>
-                ) : null
-              )}
+              {members.map((member) => (
+                <button
+                  className={form.splitWith.includes(member.id) ? "member-chip active" : "member-chip"}
+                  type="button"
+                  key={member.id}
+                  onClick={() => {
+                    const next = form.splitWith.includes(member.id) ? form.splitWith.filter((id) => id !== member.id) : [...form.splitWith, member.id];
+                    setForm({ ...form, splitWith: next.length ? next : [member.id] });
+                  }}
+                >
+                  <span>{member.displayName}</span>
+                  {form.splitWith.includes(member.id) ? <Check size={16} /> : null}
+                </button>
+              ))}
             </div>
           </div>
           <button className={form.surprise ? "segment active" : "segment"} type="button" onClick={() => setForm({ ...form, surprise: !form.surprise })}>
@@ -579,9 +895,43 @@ export function KasamCommercialApp() {
     );
   }
 
+  if (mode === "booting") {
+    return (
+      <div className="app-shell">
+        <div className="phone-frame">
+          <section className="card auth-card">
+            <RefreshCw className="spin" size={22} />
+            <p>Kasam açılıyor...</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === "auth") {
+    return (
+      <div className="app-shell">
+        <div className="phone-frame">
+          <AuthScreen />
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === "reset") {
+    return (
+      <div className="app-shell">
+        <div className="phone-frame">
+          <ResetScreen />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-shell">
       <div className="phone-frame">
+        {statusMessage ? <p className="status-line floating">{statusMessage}</p> : null}
         {tab === "home" ? <HomeScreen /> : null}
         {tab === "entries" ? <EntriesScreen /> : null}
         {tab === "projects" ? <ProjectsScreen /> : null}

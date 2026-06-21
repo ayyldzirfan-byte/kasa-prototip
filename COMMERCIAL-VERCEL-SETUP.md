@@ -72,6 +72,24 @@ https://[commercial-vercel-domain]/auth/callback
 
 Mevcut `kasa-prototip.vercel.app` redirect kayıtlarını silme.
 
+## Supabase Game Completion RPC
+
+Commercial uygulamada tahmin oyunu tamamlanınca hareketin herkese açılması için şu SQL dosyası çalıştırılmalı:
+
+```text
+supabase-commercial-complete-guess.sql
+```
+
+Adımlar:
+
+1. Supabase Dashboard > SQL Editor'a gir.
+2. `supabase-commercial-complete-guess.sql` dosyasını aç.
+3. Tüm içeriği SQL Editor'a yapıştır.
+4. `Run` butonuna bas.
+5. Yeşil `Success` mesajını gör.
+
+Bu migration çalışmadan bildirim tamamlanabilir, ama bağlı hareketin RLS üzerinden herkese güvenilir şekilde açılması garanti edilmez.
+
 ## Lokal Kontrol Komutları
 
 Proje kökünden:

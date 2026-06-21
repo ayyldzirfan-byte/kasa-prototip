@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { buildCommercialStateFromCloud, type EntryRow, type NotificationRow, type ProfileRow, type ProjectMemberRow, type ProjectRow } from "./cloud-schema";
 import type { AppState, Entry, EntryType } from "./types";
 
@@ -21,10 +21,65 @@ function uniqueIds(values: string[]) {
   return Array.from(new Set(values.filter(Boolean)));
 }
 
+function displayNameFromUser(user: Pick<User, "email" | "user_metadata">) {
+  const metadataName = typeof user.user_metadata?.name === "string" ? user.user_metadata.name.trim() : "";
+  const emailName = user.email?.split("@")[0]?.trim() || "Kullanıcı";
+  return metadataName || emailName;
+}
+
+function personalProjectCode(userId: string) {
+  return `KASAM-${userId.replace(/-/g, "").slice(0, 10).toUpperCase()}`;
+}
+
 async function selectRows<T>(query: PromiseLike<{ data: T[] | null; error: { message: string } | null }>, label: string) {
   const { data, error } = await query;
   if (error) throw new Error(`${label}: ${error.message}`);
   return data || [];
+}
+
+export async function ensureCommercialStarterData(client: SupabaseClient, user: Pick<User, "id" | "email" | "user_metadata">) {
+  const now = new Date().toISOString();
+  const displayName = displayNameFromUser(user);
+  const email = user.email || "";
+
+  const profileResult = await client.from("kasa_profiles").upsert(
+    {
+      id: user.id,
+      email,
+      name: displayName,
+      nickname: displayName,
+      updated_at: now
+    },
+    { onConflict: "id" }
+  );
+  if (profileResult.error) throw new Error(`kasa_profiles: ${profileResult.error.message}`);
+
+  const currentMemberships = await selectRows<ProjectMemberRow>(
+    client.from("kasa_project_members").select("*").eq("user_id", user.id),
+    "kasa_project_members"
+  );
+  if (currentMemberships.length) return;
+
+  const projectId = crypto.randomUUID();
+  const projectResult = await client.from("kasa_projects").insert({
+    id: projectId,
+    name: `${displayName} kasası`,
+    purpose: "personal",
+    code: personalProjectCode(user.id),
+    created_by: user.id,
+    created_at: now,
+    updated_at: now
+  });
+  if (projectResult.error) throw new Error(`kasa_projects: ${projectResult.error.message}`);
+
+  const memberResult = await client.from("kasa_project_members").insert({
+    project_id: projectId,
+    user_id: user.id,
+    role: "owner",
+    member_since: now.slice(0, 10),
+    created_at: now
+  });
+  if (memberResult.error) throw new Error(`kasa_project_members: ${memberResult.error.message}`);
 }
 
 export async function loadCommercialCloudState(client: SupabaseClient, activeUserId: string): Promise<AppState> {
@@ -61,10 +116,12 @@ export async function loadCommercialCloudState(client: SupabaseClient, activeUse
 
 export async function createCommercialCloudEntry(client: SupabaseClient, draft: CommercialEntryDraft) {
   const now = new Date().toISOString();
+  const entryId = crypto.randomUUID();
   const notificationId = draft.surprise ? crypto.randomUUID() : null;
   const status = "done";
 
   const entryPayload = {
+    id: entryId,
     project_id: draft.projectId,
     user_id: draft.userId,
     paid_by_id: draft.paidById,
@@ -96,7 +153,13 @@ export async function createCommercialCloudEntry(client: SupabaseClient, draft: 
       actor_id: draft.userId,
       recipients,
       mode: "surprise",
-      type: "guess",
+      actual_type: draft.type,
+      title: draft.title,
+      amount: draft.amount * draft.exchangeRate,
+      emoji: "",
+      success_reaction: "OK",
+      fail_reaction: "NO",
+      guesses: [],
       game_phase: 1,
       is_completed: false,
       created_at: now

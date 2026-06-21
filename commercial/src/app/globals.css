@@ -90,6 +90,12 @@ button {
   gap: 16px;
 }
 
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .eyebrow {
   color: var(--color-text-soft);
   font-size: 11px;
@@ -182,7 +188,8 @@ button {
 }
 
 .pill,
-.ghost-button {
+.ghost-button,
+.ghost-icon {
   border: 1px solid var(--color-border);
   border-radius: 999px;
   padding: 10px 16px;
@@ -201,6 +208,53 @@ button {
 .ghost-button {
   background: rgba(255, 255, 255, 0.04);
   color: var(--color-text);
+}
+
+.ghost-icon {
+  width: 44px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text);
+}
+
+.cloud-pill,
+.status-line {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  color: var(--color-text-soft);
+  font-size: 12px;
+  font-weight: 850;
+  padding: 8px 12px;
+}
+
+.status-line {
+  border-radius: 16px;
+  display: block;
+}
+
+.status-line.floating {
+  margin-bottom: 12px;
+}
+
+.auth-screen {
+  min-height: calc(100vh - 140px);
+  align-content: center;
+}
+
+.auth-card {
+  display: grid;
+  gap: 16px;
+}
+
+.spin {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
 }
 
 .full {

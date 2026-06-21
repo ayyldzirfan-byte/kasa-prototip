@@ -34,6 +34,13 @@ const tests = [
       assert.ok(source.includes(table), `${table} eksik`);
     });
   }],
+  ["commercial notification payload production semasina uyumlu", () => {
+    const source = read(files[1]);
+    ["actual_type", "title", "amount", "success_reaction", "fail_reaction", "guesses"].forEach((field) => {
+      assert.ok(source.includes(field), `${field} notification payload icinde eksik`);
+    });
+    assert.ok(!source.includes('type: "guess"'), 'kasa_notifications tablosunda type kolonu yok; payload type: "guess" icermemeli');
+  }],
   ["commercial kaynak frontend secret icermiyor", () => {
     const source = [files[0], files[1], files[2]].map(read).join("\n");
     assert.ok(!/service[_-]?role/i.test(source), "service role ifadesi commercial kaynakta olmamali");
