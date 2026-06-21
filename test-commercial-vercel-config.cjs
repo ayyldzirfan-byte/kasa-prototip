@@ -20,7 +20,7 @@ const tests = [
     assert.equal(config.framework, "nextjs");
     assert.equal(config.buildCommand, "npm run build");
     assert.equal(config.installCommand, "npm install");
-    assert.ok(!("outputDirectory" in config), "Next.js commercial project icin outputDirectory tanimlanmamali");
+    assert.equal(config.outputDirectory, ".next");
   }],
   ["root Vercel production PWA build ayari korunuyor", () => {
     const config = readJson(path.join(root, "vercel.json"));

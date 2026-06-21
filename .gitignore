@@ -1,6 +1,7 @@
 public/
 kasam-local-server.*
 node_modules/
+commercial/.vercel/
 commercial/node_modules/
 commercial/.next/
 commercial/out/

@@ -25,7 +25,9 @@ Bu kurulum mevcut `kasa-prototip.vercel.app` PWA yayınına dokunmaz. Commercial
    `npm run build`
 9. Install Command:
    `npm install`
-10. Output Directory boş kalsın. Next.js için `public` yazma.
+10. Output Directory:
+   `.next`
+   Vercel `public` output'a takılırsa deploy boş klasör hatası verir.
 
 ## Environment Variables
 
