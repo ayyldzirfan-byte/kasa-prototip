@@ -16,6 +16,7 @@ Tarih: 2026-06-20
 | `app-test-scenarios.js` | Test senaryosu ve auth bypass | Calisiyor |
 | `kasam-simulator.html` | Cok kullanici iframe simulasyonu | Calisiyor, PASS/FAIL kontrolleri var |
 | `kasam-lint.cjs` | Proje kurallari lint denetimi | Calisiyor |
+| `scripts/run-all-tests.cjs` | Tum `test-*.cjs` dosyalarini tek komutla sirali calistirir | Calisiyor |
 | `scripts/cdp-test-harness.cjs` | Playwright bagimliligi olmadan gercek Chrome/CDP browser testleri | Calisiyor |
 | `vercel.json` | Vercel build/output ve header ayarlari | `npm run build` + `public` output ayarli |
 | `api/tcmb-rate.js` | Doviz hareketleri icin TCMB kur proxy endpoint'i | Syntax kontrolu gecti |
@@ -83,6 +84,7 @@ Tarih: 2026-06-20
 | `test-cloud-persistence-and-guess-flow.cjs` | PASS |
 | `test-entry-open-flow.cjs` | PASS: Chrome/CDP ile tek kayit, tek bildirim, ortak pay ve GIF overlay dogrulandi |
 | `test-shared-ledger.cjs` | PASS: Chrome/CDP ile ortak gider/gelir split, kisisel pay ve bildirim dogrulandi |
+| `scripts/run-all-tests.cjs` | PASS: 27 test dosyasi, 27 gecti, 0 basarisiz |
 | `build-public.cjs` | PASS: public klasoru hazir |
 | `api/tcmb-rate.js` | PASS: syntax kontrolu |
 
@@ -124,6 +126,15 @@ Tarih: 2026-06-20
 1. Gercek Supabase tablolarinda `kasa_entries` ve `kasa_notifications` insert kayitlari iki farkli kullaniciyla dogrulanmali.
 2. Supabase Auth mail teslimi icin SMTP/rate limit ayarlari kontrol edilmeli.
 3. iPhone uzerinde medya secici ve bildirim oyunu UX'i tekrar gozle incelenmeli.
+
+## Son Guncelleme: Kalite Kapilarinin Tek Komuta Baglanmasi - 2026-06-21
+- `scripts/run-all-tests.cjs` eklendi; artik `npm test` ve `npm run test:all` tum `test-*.cjs` dosyalarini calistirir.
+- `npm run test:visual` Playwright CLI yerine mevcut Chrome/CDP tabanli `scripts/visual-audit.cjs` auditini calistirir; Playwright ayrica `npm run test:playwright` olarak korunur.
+- `scripts/cdp-test-harness.cjs` ve `scripts/visual-audit.cjs` tarayici exception mesajlarini artik gercek hata aciklamasiyla raporlar.
+- LOCAL SIMULASYON: `kasam-lint.cjs` 12/12 gecti; `scripts/run-all-tests.cjs` 27/27 test dosyasini gecirdi; `build-public.cjs` 41 dosyalik public klasorunu uretti.
+- GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 kontrolu gecti.
+- CLOUD TEST: canli Vercel HTML icinde `Guncellendi 14.06.2026 23:05` ve `app-critical-fixes.js?v=20260614-2305` dogrulandi.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210141` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
 
 ## Son Guncelleme: Eksik Istek Testlerinin Stabilize Edilmesi - 2026-06-21
 - Eksik istek listesinden kalan test borclari yeniden denetlendi.

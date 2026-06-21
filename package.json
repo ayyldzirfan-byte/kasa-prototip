@@ -5,11 +5,13 @@
   "scripts": {
     "lint:rules": "node kasam-lint.cjs",
     "pretest": "node kasam-lint.cjs",
-    "test": "node test-kasa-e2e.cjs && node test-game-v2.cjs && node test-ui-fixes.cjs && node test-simulator.cjs && node test-password-reset.cjs",
+    "test": "node scripts/run-all-tests.cjs",
+    "test:all": "node scripts/run-all-tests.cjs",
     "test:browser": "node test-testscenario-auth-bypass.cjs",
-    "test:visual": "playwright test",
+    "test:visual": "node scripts/visual-audit.cjs",
+    "test:playwright": "playwright test",
     "prebuild": "node kasam-lint.cjs",
-    "build": "node test-kasa-e2e.cjs && node build-public.cjs"
+    "build": "node scripts/run-all-tests.cjs && node build-public.cjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0",
