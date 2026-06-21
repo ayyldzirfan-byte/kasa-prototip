@@ -106,9 +106,10 @@ const tests = [
   }],
   ["commercial cloud prompt runner secret yazmadan calisiyor", () => {
     const source = read(files[4]);
-    assert.ok(source.includes("Read-Host") && source.includes("-AsSecureString"), "service role key guvenli prompt ile alinmali");
-    assert.ok(source.includes("KASAM_SUPABASE_SERVICE_ROLE_KEY"), "service role env gecici set edilmeli");
-    assert.ok(source.includes("Remove-Item Env:\\KASAM_SUPABASE_SERVICE_ROLE_KEY"), "service role env test sonunda temizlenmeli");
+    assert.ok(source.includes("Read-Host") && source.includes("-AsSecureString"), "Supabase admin key guvenli prompt ile alinmali");
+    assert.ok(source.includes("legacy service_role JWT or sb_secret"), "prompt legacy JWT ve yeni sb_secret formatlarini anlatmali");
+    assert.ok(source.includes("KASAM_SUPABASE_SERVICE_ROLE_KEY"), "Supabase admin env gecici set edilmeli");
+    assert.ok(source.includes("Remove-Item Env:\\KASAM_SUPABASE_SERVICE_ROLE_KEY"), "Supabase admin env test sonunda temizlenmeli");
     assert.ok(source.includes("scripts/commercial-cloud-smoke.cjs"), "commercial cloud smoke runner cagrilmali");
   }]
 ];

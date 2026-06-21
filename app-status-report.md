@@ -319,3 +319,12 @@ Tarih: 2026-06-21
 - LOCAL SIMULASYON: Commercial Jest 4 suite / 24 test gecti; TypeScript typecheck gecti; Commercial Next build gecti; commercial Vercel config 4/4 gecti; commercial cloud adapter 9/9 gecti; `kasam-lint.cjs` 14/14 gecti.
 - GORSEL DOGRULAMA: Commercial Playwright 6/6 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
 - CLOUD TEST: Kullanici tarafinda `commercial:cloud-smoke:prompt` service role ile calistirildi ve PASS verdi; ortak proje, ortak hareket, split, paid_by ve bildirim gercek Supabase uzerinde dogrulandi.
+
+## Son Guncelleme: Commercial Admin Key ve Windows Runner - 2026-06-21
+- `scripts/cloud-live-smoke.cjs` non-JWT Supabase admin keylerini daha denemeden reddetmez. Prompt artik legacy `service_role` JWT veya yeni `sb_secret` admin key ile denenebilir.
+- `scripts/commercial-cloud-smoke.ps1` prompt etiketi `Supabase admin key (legacy service_role JWT or sb_secret)` olarak guncellendi.
+- `scripts/commercial-deploy-ready.cjs` ve `scripts/commercial-deploy-ready.ps1` eklendi. Windows PowerShell'de `node` PATH'i Codex paketindeki erisilemeyen node'a dusse bile gercek Node.js yolu ile deploy-ready kapisi calisir.
+- `commercial:deploy-ready` npm script'i PowerShell wrapper uzerinden calisir.
+- LOCAL SIMULASYON: `npm.cmd run commercial:deploy-ready` gecti; commercial Vercel config 4/4, commercial cloud adapter 9/9, Commercial Jest 4 suite / 24 test, TypeScript typecheck ve Next build PASS.
+- GORSEL DOGRULAMA: Bu degisiklik UI degisikligi icermedi; mevcut Commercial Playwright 6/6 kaniti korunuyor.
+- CLOUD TEST: Kullanici tarafinda yeni Supabase admin key ile `npm.cmd run commercial:cloud-smoke:prompt` kosuldu ve PASS verdi. Iki gecici Supabase auth kullanicisi olusturuldu; ortak proje, ortak hareket, `paid_by_id`, `split_with`, `split_ratio` ve bildirim akisi gercek cloud uzerinde dogrulandi; gecici proje ve auth kullanicilari temizlendi. Legacy `eyJ...` key bu konusmada gorundugu icin Supabase tarafinda rotate/iptal edilmeli.

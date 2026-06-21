@@ -35,26 +35,15 @@ function explainMissingEnv() {
   console.error("Cloud live smoke test needs one of these inputs:");
   console.error("1) Four real test account env vars:");
   console.error(`   missing: ${missing.join(", ") || "none"}`);
-  console.error("2) Or a local-only service role key env:");
+  console.error("2) Or a local-only Supabase admin key env:");
   console.error("   KASAM_SUPABASE_SERVICE_ROLE_KEY");
-  console.error("The service role key must never be committed or added to frontend/Vercel client code.");
+  console.error("Accepted admin key formats: legacy service_role JWT or new sb_secret key.");
+  console.error("The admin key must never be committed or added to frontend/Vercel client code.");
   console.error("Run with prompted real accounts: npm run test:cloud-live:prompt");
 }
 
 if (missingAccountEnv().length && !serviceRoleKey) {
   explainMissingEnv();
-  process.exit(2);
-}
-
-function isLegacyJwtKey(value) {
-  return /^eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(String(value || "").trim());
-}
-
-if (serviceRoleKey && missingAccountEnv().length && !isLegacyJwtKey(serviceRoleKey)) {
-  console.error("Cloud live smoke test received a non-JWT Supabase secret key.");
-  console.error("For temporary Auth user creation this test needs the Legacy API Keys > service_role JWT key.");
-  console.error("The correct legacy service_role key usually starts with: eyJ...");
-  console.error("If you only want to use the new sb_secret_... key, create two real test users and run the prompted account flow instead.");
   process.exit(2);
 }
 

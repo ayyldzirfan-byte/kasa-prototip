@@ -24,7 +24,7 @@
     "commercial:visual": "npm --prefix commercial run test:visual",
     "commercial:cloud-smoke": "node scripts/commercial-cloud-smoke.cjs",
     "commercial:cloud-smoke:prompt": "powershell -ExecutionPolicy Bypass -File scripts/commercial-cloud-smoke.ps1",
-    "commercial:deploy-ready": "node test-commercial-vercel-config.cjs && node test-commercial-cloud-adapter.cjs && npm --prefix commercial test && npm --prefix commercial run typecheck && npm --prefix commercial run build",
+    "commercial:deploy-ready": "powershell -ExecutionPolicy Bypass -File scripts/commercial-deploy-ready.ps1",
     "check:ready": "node scripts/readiness-check.cjs",
     "prebuild": "node kasam-lint.cjs",
     "build": "node scripts/run-all-tests.cjs && node build-public.cjs",

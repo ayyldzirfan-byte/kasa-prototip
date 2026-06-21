@@ -31,7 +31,7 @@ if (-not $resolvedNode) {
   }
 }
 
-$key = Read-OptionalSecret "Supabase service_role key" $ServiceRoleKey
+$key = Read-OptionalSecret "Supabase admin key (legacy service_role JWT or sb_secret)" $ServiceRoleKey
 if ($key) {
   $env:KASAM_SUPABASE_SERVICE_ROLE_KEY = $key
 }
