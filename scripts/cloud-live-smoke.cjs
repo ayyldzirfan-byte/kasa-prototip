@@ -46,6 +46,18 @@ if (missingAccountEnv().length && !serviceRoleKey) {
   process.exit(2);
 }
 
+function isLegacyJwtKey(value) {
+  return /^eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(String(value || "").trim());
+}
+
+if (serviceRoleKey && missingAccountEnv().length && !isLegacyJwtKey(serviceRoleKey)) {
+  console.error("Cloud live smoke test received a non-JWT Supabase secret key.");
+  console.error("For temporary Auth user creation this test needs the Legacy API Keys > service_role JWT key.");
+  console.error("The correct legacy service_role key usually starts with: eyJ...");
+  console.error("If you only want to use the new sb_secret_... key, create two real test users and run the prompted account flow instead.");
+  process.exit(2);
+}
+
 function logCheck(ok, message, detail = "") {
   const marker = ok ? "PASS" : "FAIL";
   console.log(`${marker} ${message}${detail ? ` - ${detail}` : ""}`);
@@ -55,7 +67,7 @@ function logCheck(ok, message, detail = "") {
 async function requestJson(url, options = {}) {
   const token = options.token || anonKey;
   const headers = {
-    apikey: options.apikey || token,
+    apikey: options.apikey || anonKey,
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
     ...(options.headers || {}),

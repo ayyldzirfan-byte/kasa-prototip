@@ -20,6 +20,8 @@ assert.ok(source.includes("split_ratio"), "script verifies split_ratio cloud fie
 assert.ok(source.includes("deleteRows(\"kasa_projects\""), "script cleans up the smoke project");
 assert.ok(source.includes("deleteAuthUser"), "script cleans up temporary auth users when self-provisioned");
 assert.ok(source.includes("process.exit(2)"), "missing env fails instead of producing a fake PASS");
+assert.ok(source.includes("apikey: options.apikey || anonKey"), "REST calls must keep anon key in apikey header");
+assert.ok(source.includes("Authorization: `Bearer ${token}`"), "REST calls must use user access token only in Authorization header");
 assert.ok(!source.includes("KASAM_CLOUD_PASSWORD_A='"), "script does not hardcode real passwords");
 assert.ok(psSource.includes("Read-Host") && psSource.includes("-AsSecureString"), "PowerShell runner asks passwords securely");
 assert.ok(psSource.includes("KASAM_SUPABASE_SERVICE_ROLE_KEY"), "PowerShell runner can pass service role key securely");
