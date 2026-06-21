@@ -16,6 +16,7 @@ assert.ok(source.includes("expectedStamp"), "readiness checks current live stamp
 assert.ok(source.includes("scripts/cloud-live-smoke.cjs"), "readiness runs real cloud smoke when env exists");
 assert.ok(source.includes("KASAM_CLOUD_EMAIL_A"), "readiness requires cloud owner email env");
 assert.ok(source.includes("KASAM_CLOUD_PASSWORD_B"), "readiness requires cloud member password env");
+assert.ok(source.includes("KASAM_SUPABASE_SERVICE_ROLE_KEY"), "readiness also accepts local service role self-provisioning");
 assert.ok(source.includes("process.exitCode = 2"), "readiness exits distinctly when only cloud live proof is missing");
 assert.ok(source.includes("readiness-report.md"), "readiness writes a report");
 

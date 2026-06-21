@@ -3,6 +3,7 @@ param(
   [string]$PasswordA = "",
   [string]$EmailB = "",
   [string]$PasswordB = "",
+  [string]$ServiceRoleKey = "",
   [string]$NodePath = ""
 )
 
@@ -29,6 +30,19 @@ function Read-RequiredSecret {
   }
 }
 
+function Read-OptionalSecret {
+  param([string]$Label, [string]$Value)
+  if ($Value) { return $Value }
+  $secure = Read-Host $Label -AsSecureString
+  if (-not $secure -or $secure.Length -eq 0) { return "" }
+  $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+  try {
+    return [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
+  } finally {
+    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+  }
+}
+
 $repoRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $repoRoot
 
@@ -42,10 +56,22 @@ if (-not $resolvedNode) {
   }
 }
 
-$env:KASAM_CLOUD_EMAIL_A = Read-RequiredText "Test hesabi A e-posta" $EmailA
-$env:KASAM_CLOUD_PASSWORD_A = Read-RequiredSecret "Test hesabi A sifre" $PasswordA
-$env:KASAM_CLOUD_EMAIL_B = Read-RequiredText "Test hesabi B e-posta" $EmailB
-$env:KASAM_CLOUD_PASSWORD_B = Read-RequiredSecret "Test hesabi B sifre" $PasswordB
+$allAccountInputs = $EmailA -and $PasswordA -and $EmailB -and $PasswordB
+if ($ServiceRoleKey) {
+  $env:KASAM_SUPABASE_SERVICE_ROLE_KEY = $ServiceRoleKey
+} elseif (-not $allAccountInputs) {
+  $optionalServiceRole = Read-OptionalSecret "Supabase service_role key varsa yapistir, yoksa Enter" ""
+  if ($optionalServiceRole) {
+    $env:KASAM_SUPABASE_SERVICE_ROLE_KEY = $optionalServiceRole
+  }
+}
+
+if (-not $env:KASAM_SUPABASE_SERVICE_ROLE_KEY) {
+  $env:KASAM_CLOUD_EMAIL_A = Read-RequiredText "Test hesabi A e-posta" $EmailA
+  $env:KASAM_CLOUD_PASSWORD_A = Read-RequiredSecret "Test hesabi A sifre" $PasswordA
+  $env:KASAM_CLOUD_EMAIL_B = Read-RequiredText "Test hesabi B e-posta" $EmailB
+  $env:KASAM_CLOUD_PASSWORD_B = Read-RequiredSecret "Test hesabi B sifre" $PasswordB
+}
 
 Write-Host "Cloud live smoke testi basliyor..."
 & $resolvedNode "scripts/cloud-live-smoke.cjs"

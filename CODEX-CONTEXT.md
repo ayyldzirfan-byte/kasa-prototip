@@ -120,8 +120,9 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
   - Local/gorsel/canli stamp gecip cloud live env eksikse exit code 2 verir ve rapora `CLOUD LIVE MULTI-USER: ENV MISSING / FAIL` yazar.
 - Gerçek cloud çok kullanıcı testi: `npm run test:cloud-live` veya doğrudan `node scripts/cloud-live-smoke.cjs`.
   - Gerekli env: `KASAM_CLOUD_EMAIL_A`, `KASAM_CLOUD_PASSWORD_A`, `KASAM_CLOUD_EMAIL_B`, `KASAM_CLOUD_PASSWORD_B`.
+  - Alternatif local-only env: `KASAM_SUPABASE_SERVICE_ROLE_KEY`. Bu key verilirse script iki geçici test kullanıcısı oluşturur, testi çalıştırır ve auth kullanıcılarını temizler.
   - Bu env yoksa cloud test başarısız/atlanmış olarak raporlanır; local simülasyon gerçek cloud PASS yerine geçmez.
-  - Windows için güvenli prompt runner: `npm run test:cloud-live:prompt`. Bu komut şifreleri dosyaya yazmaz, sadece geçici env olarak kullanır.
+  - Windows için güvenli prompt runner: `npm run test:cloud-live:prompt`. Bu komut şifreleri veya service role key'i dosyaya yazmaz, sadece geçici env olarak kullanır.
 - Canlı kontrol: `https://kasa-prototip.vercel.app/index.html` içinde `Güncellendi 14.06.2026 23:05` ve kritik dosya sürümleri aranır.
 
 ## Canonical Uygulama Adresi

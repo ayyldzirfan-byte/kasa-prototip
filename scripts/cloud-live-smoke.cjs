@@ -13,25 +13,36 @@ function extractConfig(name) {
 
 const supabaseUrl = extractConfig("supabaseUrl").replace(/\/$/, "");
 const anonKey = extractConfig("supabaseAnonKey");
-
-const requiredEnv = [
+const serviceRoleKey = process.env.KASAM_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const accountEnv = [
   "KASAM_CLOUD_EMAIL_A",
   "KASAM_CLOUD_PASSWORD_A",
   "KASAM_CLOUD_EMAIL_B",
   "KASAM_CLOUD_PASSWORD_B",
 ];
 
-const missing = requiredEnv.filter((key) => !process.env[key]);
-if (missing.length) {
-  console.error("Cloud live smoke test requires real test account credentials.");
-  console.error(`Missing env: ${missing.join(", ")}`);
-  console.error("Set the four env vars in your shell, then run:");
-  console.error("node scripts/cloud-live-smoke.cjs");
+if (!supabaseUrl || !anonKey) {
+  console.error("cloud-config.js does not contain Supabase URL and publishable key.");
   process.exit(2);
 }
 
-if (!supabaseUrl || !anonKey) {
-  console.error("cloud-config.js does not contain Supabase URL and publishable key.");
+function missingAccountEnv() {
+  return accountEnv.filter((key) => !process.env[key]);
+}
+
+function explainMissingEnv() {
+  const missing = missingAccountEnv();
+  console.error("Cloud live smoke test needs one of these inputs:");
+  console.error("1) Four real test account env vars:");
+  console.error(`   missing: ${missing.join(", ") || "none"}`);
+  console.error("2) Or a local-only service role key env:");
+  console.error("   KASAM_SUPABASE_SERVICE_ROLE_KEY");
+  console.error("The service role key must never be committed or added to frontend/Vercel client code.");
+  console.error("Run with prompted real accounts: npm run test:cloud-live:prompt");
+}
+
+if (missingAccountEnv().length && !serviceRoleKey) {
+  explainMissingEnv();
   process.exit(2);
 }
 
@@ -42,9 +53,10 @@ function logCheck(ok, message, detail = "") {
 }
 
 async function requestJson(url, options = {}) {
+  const token = options.token || anonKey;
   const headers = {
-    apikey: anonKey,
-    Authorization: `Bearer ${options.token || anonKey}`,
+    apikey: options.apikey || token,
+    Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
     ...(options.headers || {}),
   };
@@ -60,6 +72,60 @@ async function requestJson(url, options = {}) {
     throw new Error(`${response.status} ${message}`);
   }
   return payload;
+}
+
+async function adminJson(pathname, options = {}) {
+  if (!serviceRoleKey) throw new Error("service role key is not configured");
+  return requestJson(`${supabaseUrl}${pathname}`, {
+    ...options,
+    token: serviceRoleKey,
+    apikey: serviceRoleKey,
+  });
+}
+
+async function createAuthUser(label) {
+  const suffix = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`;
+  const domain = String(process.env.KASAM_CLOUD_TEST_EMAIL_DOMAIN || "gmail.com").replace(/^@/, "");
+  const email = `kasam.cloud.${label}.${suffix}@${domain}`.toLowerCase();
+  const password = `KasamCloud!${crypto.randomUUID().replace(/-/g, "").slice(0, 18)}`;
+  const payload = await adminJson("/auth/v1/admin/users", {
+    method: "POST",
+    body: {
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { name: `Cloud ${label}`, nickname: label },
+    },
+  });
+  const user = payload?.user || payload;
+  if (!user?.id) throw new Error(`admin user create failed for ${label}`);
+  return { email, password, userId: user.id, createdByScript: true };
+}
+
+async function deleteAuthUser(userId) {
+  if (!serviceRoleKey || !userId) return;
+  await adminJson(`/auth/v1/admin/users/${encodeURIComponent(userId)}`, { method: "DELETE" });
+}
+
+async function getCredentials() {
+  if (!missingAccountEnv().length) {
+    return {
+      owner: {
+        email: process.env.KASAM_CLOUD_EMAIL_A.trim().toLowerCase(),
+        password: process.env.KASAM_CLOUD_PASSWORD_A,
+        createdByScript: false,
+      },
+      member: {
+        email: process.env.KASAM_CLOUD_EMAIL_B.trim().toLowerCase(),
+        password: process.env.KASAM_CLOUD_PASSWORD_B,
+        createdByScript: false,
+      },
+    };
+  }
+  const owner = await createAuthUser("owner");
+  const member = await createAuthUser("member");
+  console.log("INFO temporary Supabase auth users created with service role");
+  return { owner, member };
 }
 
 async function signIn(email, password) {
@@ -107,10 +173,9 @@ async function deleteRows(table, query, token) {
 }
 
 (async () => {
-  const ownerEmail = process.env.KASAM_CLOUD_EMAIL_A.trim().toLowerCase();
-  const memberEmail = process.env.KASAM_CLOUD_EMAIL_B.trim().toLowerCase();
-  const owner = await signIn(ownerEmail, process.env.KASAM_CLOUD_PASSWORD_A);
-  const member = await signIn(memberEmail, process.env.KASAM_CLOUD_PASSWORD_B);
+  const credentials = await getCredentials();
+  const owner = await signIn(credentials.owner.email, credentials.owner.password);
+  const member = await signIn(credentials.member.email, credentials.member.password);
 
   logCheck(owner.user.id !== member.user.id, "iki ayri auth kullanicisi ile giris yapildi");
 
@@ -124,11 +189,14 @@ async function deleteRows(table, query, token) {
   try {
     await upsert(
       "kasa_profiles",
-      [
-        { id: owner.user.id, email: ownerEmail, name: "Cloud Owner", nickname: "Owner", updated_at: now },
-        { id: member.user.id, email: memberEmail, name: "Cloud Member", nickname: "Member", updated_at: now },
-      ],
+      [{ id: owner.user.id, email: credentials.owner.email, name: "Cloud Owner", nickname: "Owner", updated_at: now }],
       owner.token,
+      "id",
+    );
+    await upsert(
+      "kasa_profiles",
+      [{ id: member.user.id, email: credentials.member.email, name: "Cloud Member", nickname: "Member", updated_at: now }],
+      member.token,
       "id",
     );
 
@@ -234,6 +302,17 @@ async function deleteRows(table, query, token) {
     } catch (error) {
       console.error(`CLEANUP WARNING ${error.message}`);
       process.exitCode = 1;
+    }
+    for (const item of [credentials.member, credentials.owner]) {
+      if (!item.createdByScript) continue;
+      try {
+        const userId = item.userId || (item.email === credentials.owner.email ? owner.user.id : member.user.id);
+        await deleteAuthUser(userId);
+        console.log(`CLEANUP auth user deleted ${item.email}`);
+      } catch (error) {
+        console.error(`CLEANUP AUTH WARNING ${error.message}`);
+        process.exitCode = 1;
+      }
     }
   }
 })().catch((error) => {

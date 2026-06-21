@@ -18,8 +18,8 @@ Tarih: 2026-06-21
 | `kasam-lint.cjs` | Proje kurallari lint denetimi | Calisiyor |
 | `scripts/run-all-tests.cjs` | Tum `test-*.cjs` dosyalarini tek komutla sirali calistirir | Calisiyor |
 | `scripts/readiness-check.cjs` | Local test, build, gorsel audit, canli stamp ve cloud live durumunu tek raporda toplar | Hazir |
-| `scripts/cloud-live-smoke.cjs` | Iki gercek Supabase kullanicisiyle ortak proje, hareket ve bildirim cloud smoke testi | Env gerektirir |
-| `scripts/cloud-live-smoke.ps1` | Windows'ta iki test hesabi bilgisini guvenli prompt ile alip cloud live smoke testini calistirir | Hazir |
+| `scripts/cloud-live-smoke.cjs` | Iki gercek Supabase kullanicisiyle ortak proje, hareket ve bildirim cloud smoke testi; service role varsa gecici test hesabi uretir | Env/secret gerektirir |
+| `scripts/cloud-live-smoke.ps1` | Windows'ta iki test hesabi veya service role key bilgisini guvenli prompt ile alip cloud live smoke testini calistirir | Hazir |
 | `scripts/cdp-test-harness.cjs` | Playwright bagimliligi olmadan gercek Chrome/CDP browser testleri | Calisiyor |
 | `vercel.json` | Vercel build/output ve header ayarlari | `npm run build` + `public` output ayarli |
 | `api/tcmb-rate.js` | Doviz hareketleri icin TCMB kur proxy endpoint'i | Syntax kontrolu gecti |
@@ -90,7 +90,7 @@ Tarih: 2026-06-21
 | `test-readiness-check-script.cjs` | PASS: readiness komutu, canli stamp ve cloud live env kapisi statik olarak dogrulandi |
 | `scripts/run-all-tests.cjs` | PASS: 29 test dosyasi, 29 gecti, 0 basarisiz |
 | `scripts/readiness-check.cjs` | LOCAL/GORSEL/CLOUD STAMP gecitlerini tek raporda toplar; cloud env yoksa CLOUD LIVE MULTI-USER icin PASS yazmaz |
-| `scripts/cloud-live-smoke.cjs` | Hazir: gercek iki test hesabi env olarak verilince Supabase Auth + REST + RLS akisini dogrular |
+| `scripts/cloud-live-smoke.cjs` | Hazir: gercek iki test hesabi veya local-only service role env verilince Supabase Auth + REST + RLS akisini dogrular |
 | `build-public.cjs` | PASS: public klasoru hazir |
 | `api/tcmb-rate.js` | PASS: syntax kontrolu |
 
@@ -102,6 +102,16 @@ Tarih: 2026-06-21
 - CLOUD TEST: Canli Vercel stamp dogrulandi: `Guncellendi 14.06.2026 23:05`. Gercek iki hesapli cloud smoke test env olmadigi icin bilincli olarak PASS uretmedi.
 - Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210237` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
 - Readiness raporu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\readiness-202606210236` (cloud live env eksigi raporda FAIL olarak yazilir).
+
+## Son Guncelleme: Cloud Live Self-Provision Modu - 2026-06-21
+- `scripts/cloud-live-smoke.cjs` artik iki modla calisir: mevcut iki gercek test hesabi env'i veya local-only `KASAM_SUPABASE_SERVICE_ROLE_KEY`.
+- Service role modu iki gecici Supabase Auth kullanicisi olusturur, email_confirm ile login edilebilir hale getirir, ortak proje/hareket/bildirim testini calistirir, test projesini ve gecici auth kullanicilarini temizler.
+- `scripts/cloud-live-smoke.ps1` service role key'i guvenli prompt ile alabilir; key dosyaya, repoya veya frontend'e yazilmaz.
+- LOCAL SIMULASYON: `kasam-lint.cjs`, `test-cloud-live-smoke-script.cjs`, `test-readiness-check-script.cjs`, `scripts/run-all-tests.cjs` gecti. Son kosum: 29 test dosyasi, 29 gecti, 0 basarisiz; `build-public.cjs` 41 dosya uretti.
+- GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 kontrolu gecti.
+- CLOUD TEST: Canli Vercel stamp dogrulandi: `Guncellendi 14.06.2026 23:05`. Secret/env verilmediginde cloud live multi-user script exit code 2 ile durdu ve PASS uretmedi. Gercek cloud PASS icin iki test hesabi veya local service role key ile kosum gerekir.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210257` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
+- Readiness raporu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\readiness-202606210257` (cloud live env eksigi raporda FAIL olarak yazilir).
 
 ## Son Guncelleme: Realtime Refresh Eksiklerinin Kapatilmasi
 - Eksik istek listesi icinde kalan ortak kasa senkronu yeniden denetlendi.

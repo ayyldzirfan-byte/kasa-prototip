@@ -13,6 +13,7 @@ const requiredCloudEnv = [
   "KASAM_CLOUD_EMAIL_B",
   "KASAM_CLOUD_PASSWORD_B",
 ];
+const serviceRoleEnv = ["KASAM_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"];
 
 function outputDir() {
   const preferred = path.join(os.homedir(), "Desktop", "kasam-test", `readiness-${stamp}`);
@@ -84,13 +85,15 @@ function summaryLine(item) {
   results.push(live);
 
   const missingCloudEnv = requiredCloudEnv.filter((key) => !process.env[key]);
+  const hasAccountEnv = missingCloudEnv.length === 0;
+  const hasServiceRoleEnv = serviceRoleEnv.some((key) => Boolean(process.env[key]));
   let cloudResult;
-  if (missingCloudEnv.length) {
+  if (!hasAccountEnv && !hasServiceRoleEnv) {
     cloudResult = {
       name: "CLOUD live multi-user",
       ok: false,
       status: 2,
-      detail: `missing env: ${missingCloudEnv.join(", ")}`,
+      detail: `missing env: ${missingCloudEnv.join(", ")} or ${serviceRoleEnv.join("/")}`,
     };
     console.log(`SKIP ${cloudResult.name} - ${cloudResult.detail}`);
   } else {
