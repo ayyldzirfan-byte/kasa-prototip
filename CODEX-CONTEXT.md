@@ -116,6 +116,8 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 - `node scripts/run-all-tests.cjs`
 - `node build-public.cjs`
 - `node scripts/visual-audit.cjs`
+- Tek komut readiness raporu: `npm run check:ready` veya `node scripts/readiness-check.cjs`.
+  - Local/gorsel/canli stamp gecip cloud live env eksikse exit code 2 verir ve rapora `CLOUD LIVE MULTI-USER: ENV MISSING / FAIL` yazar.
 - Gerçek cloud çok kullanıcı testi: `npm run test:cloud-live` veya doğrudan `node scripts/cloud-live-smoke.cjs`.
   - Gerekli env: `KASAM_CLOUD_EMAIL_A`, `KASAM_CLOUD_PASSWORD_A`, `KASAM_CLOUD_EMAIL_B`, `KASAM_CLOUD_PASSWORD_B`.
   - Bu env yoksa cloud test başarısız/atlanmış olarak raporlanır; local simülasyon gerçek cloud PASS yerine geçmez.
