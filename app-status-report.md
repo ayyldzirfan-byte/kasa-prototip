@@ -291,3 +291,24 @@ Tarih: 2026-06-21
 - LOCAL SIMULASYON: `test-commercial-vercel-config.cjs` 4/4 gecti; `test-commercial-cloud-adapter.cjs` 6/6 gecti; Commercial Jest 14/14 gecti; TypeScript typecheck gecti; Next build gecti; `kasam-lint.cjs` 14/14 gecti.
 - GORSEL DOGRULAMA: Commercial Playwright 5/5 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
 - CLOUD TEST: Bir onceki commercial cloud smoke PASS sonucu korunuyor. Bu turda cloud verisine yeni yazim yapilmadi; deploy config ayrimi cloud semasini degistirmez.
+## Son Guncelleme: Ticari Zeka Motoru V1 - 2026-06-21
+- `commercial/src/lib/insights.ts` eklendi. Kullaniciyi yonlendiren oneriler deterministik ve test edilebilir saf fonksiyonlarla uretilir.
+- Oneri tipleri: hedef gecikmesi, hedefi one alma, nakit akisi uyarisi, ortak kasanin kisisel kasaya etkisi ve kategori kisma onerisi.
+- Ana ekrana kompakt `Kasam oneriyor` karti eklendi. Kart ilk oneriyi one cikarir, ek onerileri kalabalik yapmadan listeler.
+- Demo state'e `Tatil hedefi` eklendi; hedef ve harcama etkisi test edilebilir hale geldi.
+- `commercial/docs/INTELLIGENCE-ENGINE.md` eklendi. AI siniri belgelendi: AI finansal hesap yapmaz, sadece hesaplanmis sonucu anlatabilir.
+- `KURAL-055` eklendi: Zeka motoru hesaplari deterministik yapar.
+- LOCAL SIMULASYON: Commercial Jest 20/20 gecti; TypeScript typecheck gecti; Next build gecti; root toplu test kapisi 35/35 test dosyasi gecti.
+- GORSEL DOGRULAMA: Commercial Playwright 5/5 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
+- CLOUD TEST: Bu degisiklik cloud semasina yazim yapmadi; mevcut commercial cloud adapter ve onceki multi-user smoke sonucu korunuyor.
+
+## Son Guncelleme: Commercial Supabase Tablo Eslemesi - 2026-06-21
+- `commercial/src/lib/types.ts` commercial domain modeline production tablo alanlari eklendi: profil skor alanlari, project member alias/familiarity, project default currency/template, entry OCR/taksit/settlement, notification game v2, reaction, settlement, reconciliation ve insight tipleri.
+- `commercial/src/lib/cloud-schema.ts` kolon-tam mapper katmanina cevrildi. `kasa_profiles`, `kasa_projects`, `kasa_project_members`, `kasa_entries`, `kasa_notifications`, `kasa_goals`, `kasa_reactions`, `kasa_settlements`, `kasa_reconciliations`, `kasa_insights` commercial state'e okunur.
+- `commercial/src/lib/cloud-client.ts` opsiyonel tablolar icin guvenli okuma ekledi; eksik tablo cloud akisini dusurmez. Entry ve notification insert payload'lari tek builder uzerinden production kolon adlariyla uretilir.
+- `commercial/docs/SUPABASE-MAPPING.md` eklendi. Supabase tablo -> commercial state eslemesi, doviz/TL kuralı, ortak kasa split kuralı ve surpriz gizliligi belgelendi.
+- `KURAL-056` eklendi: Commercial Supabase eslemesi cift yonlu ve kolon-tam olur.
+- Playwright local dev takilmasi icin yalnizca `?visualTest=1` ile calisan demo bypass eklendi; normal auth/cloud kullanimi etkilenmez.
+- LOCAL SIMULASYON: `test-commercial-cloud-adapter.cjs` 9/9 gecti; `test-commercial-rebuild.cjs` 18/18 gecti; `kasam-lint.cjs` 14/14 gecti; Commercial Jest 4 suite / 24 test gecti; TypeScript typecheck gecti; Commercial Next build gecti; `test-commercial-vercel-config.cjs` 4/4 gecti.
+- GORSEL DOGRULAMA: Commercial Playwright 5/5 gecti. Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
+- CLOUD TEST: Bu Codex shell'inde `KASAM_SUPABASE_SERVICE_ROLE_KEY` yoktu, bu nedenle gercek Supabase live smoke tekrar kosulmadi. Static commercial adapter testi PASS. Gercek cloud multi-user testi icin kullanici tarafinda `npm run commercial:cloud-smoke:prompt` kosulacak.

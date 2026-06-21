@@ -35,11 +35,15 @@ const tests = [
     });
   }],
   ["commercial notification payload production semasina uyumlu", () => {
-    const source = read(files[1]);
+    const source = `${read(files[0])}\n${read(files[1])}`;
     ["actual_type", "title", "amount", "success_reaction", "fail_reaction", "guesses"].forEach((field) => {
       assert.ok(source.includes(field), `${field} notification payload icinde eksik`);
     });
-    assert.ok(!source.includes('type: "guess"'), 'kasa_notifications tablosunda type kolonu yok; payload type: "guess" icermemeli');
+    const builderStart = source.indexOf("export function buildNotificationInsertPayload");
+    const builderEnd = source.indexOf("export function buildCommercialStateFromCloud", builderStart);
+    const notificationBuilder = source.slice(builderStart, builderEnd > builderStart ? builderEnd : undefined);
+    assert.ok(notificationBuilder.includes('notification_type: "guess"'), "notification_type payload builder icinde eksik");
+    assert.ok(!/^\s+type:\s*"guess"/m.test(notificationBuilder), 'kasa_notifications tablosunda type kolonu yok; payload type: "guess" icermemeli');
   }],
   ["commercial kaynak frontend secret icermiyor", () => {
     const source = [files[0], files[1], files[2]].map(read).join("\n");
@@ -58,6 +62,47 @@ const tests = [
     assert.ok(source.includes("cloud-live-smoke.cjs"), "gercek cloud live smoke cagrisi yok");
     assert.ok(source.includes("test-commercial-cloud-adapter.cjs"), "commercial adapter smoke cagrisi yok");
     assert.ok(!source.includes("PASS uretilir"), "sahte pass metni olmamali");
+  }],
+  ["commercial tablo eslemesi kolon-tam mapper kullaniyor", () => {
+    const schema = read(files[0]);
+    [
+      "mapCloudProfile",
+      "mapCloudProject",
+      "mapCloudEntry",
+      "mapCloudNotification",
+      "mapCloudGoal",
+      "mapCloudReaction",
+      "mapCloudSettlement",
+      "mapCloudReconciliation",
+      "mapCloudInsight",
+      "buildEntryInsertPayload",
+      "buildNotificationInsertPayload"
+    ].forEach((name) => {
+      assert.ok(schema.includes(`function ${name}`) || schema.includes(`function ${name}`), `${name} eksik`);
+    });
+    [
+      "paid_by_id",
+      "split_with",
+      "split_ratio",
+      "rate_locked_at",
+      "auto_reveal_at",
+      "revealed_at",
+      "guess_deadline",
+      "phase3_options",
+      "familiarity_scores",
+      "matched_entry_ids"
+    ].forEach((column) => {
+      assert.ok(schema.includes(column), `${column} mapper icinde eksik`);
+    });
+  }],
+  ["commercial cloud client opsiyonel kasa tablolarini guvenli okuyor", () => {
+    const source = read(files[1]);
+    ["kasa_goals", "kasa_reactions", "kasa_settlements", "kasa_reconciliations", "kasa_insights"].forEach((table) => {
+      assert.ok(source.includes(table), `${table} okunmuyor`);
+    });
+    assert.ok(source.includes("selectOptionalRows"), "opsiyonel tablo okuma korumasi yok");
+    assert.ok(source.includes("buildEntryInsertPayload"), "entry insert payload builder kullanilmiyor");
+    assert.ok(source.includes("buildNotificationInsertPayload"), "notification insert payload builder kullanilmiyor");
   }],
   ["commercial cloud prompt runner secret yazmadan calisiyor", () => {
     const source = read(files[4]);

@@ -168,6 +168,69 @@ button {
   font-size: 18px;
 }
 
+.insight-card {
+  display: grid;
+  gap: 12px;
+}
+
+.insight-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.insight-tag {
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.insight-tag.positive,
+.insight-dot.positive,
+.positive {
+  color: var(--color-income);
+}
+
+.insight-tag.warning,
+.insight-dot.warning,
+.insight-tag.urgent,
+.insight-dot.urgent,
+.warning,
+.urgent {
+  color: var(--color-pending);
+}
+
+.insight-tag.info,
+.insight-dot.info,
+.info {
+  color: var(--color-text-soft);
+}
+
+.insight-list {
+  display: grid;
+  gap: 8px;
+}
+
+.insight-item {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+}
+
+.insight-dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
 .score-ring {
   width: 108px;
   aspect-ratio: 1;

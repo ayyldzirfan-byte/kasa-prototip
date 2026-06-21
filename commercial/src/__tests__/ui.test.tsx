@@ -11,6 +11,12 @@ describe("Kasam commercial UI", () => {
     expect(screen.getByText("Rapor")).toBeInTheDocument();
   });
 
+  test("renders compact financial recommendations", async () => {
+    render(<KasamCommercialApp />);
+    expect(await screen.findByText("Kasam öneriyor")).toBeInTheDocument();
+    expect(screen.getByText("Tatil hedefi 14 gün ileri gider")).toBeInTheDocument();
+  });
+
   test("add movement flow stays compact", () => {
     render(<KasamCommercialApp />);
     fireEvent.click(screen.getByText("Hareket ekle"));

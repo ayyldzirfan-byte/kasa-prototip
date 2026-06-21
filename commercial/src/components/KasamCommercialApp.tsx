@@ -31,6 +31,7 @@ import {
   weekSummary
 } from "@/lib/domain";
 import { money, signedMoney } from "@/lib/money";
+import { generateInsightDeck, type Insight } from "@/lib/insights";
 import { createCommercialCloudEntry, ensureCommercialStarterData, loadCommercialCloudState } from "@/lib/cloud-client";
 import type { AppState, Entry, EntryType, Profile, Project } from "@/lib/types";
 
@@ -116,6 +117,13 @@ function userLabel(user: Profile) {
   return user.displayName || user.email || "Kullanıcı";
 }
 
+function insightSeverityLabel(severity: Insight["severity"]) {
+  if (severity === "positive") return "Fırsat";
+  if (severity === "urgent") return "Acil";
+  if (severity === "warning") return "Dikkat";
+  return "Bilgi";
+}
+
 async function completeNotificationLocally(client: SupabaseClient, notificationId: string, entryId?: string) {
   const revealedAt = new Date().toISOString();
   const rpcResult = await client.rpc("complete_kasam_guess", { notification_uuid: notificationId });
@@ -170,6 +178,15 @@ export function KasamCommercialApp() {
   );
 
   useEffect(() => {
+    const visualTestMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("visualTest");
+    if (visualTestMode) {
+      setState(demoState);
+      setForm(defaultForm(demoState));
+      setMode("demo");
+      setStatusMessage("Demo mod.");
+      return;
+    }
+
     if (!client) {
       setMode("demo");
       setStatusMessage("Demo mod. Supabase env yok.");
@@ -227,6 +244,7 @@ export function KasamCommercialApp() {
   const week = user ? weekSummary(state, user.id, now) : today;
   const month = user ? monthSummary(state, user.id, now) : today;
   const rhythm = rhythmScore(month);
+  const insightDeck = user ? generateInsightDeck(state, user.id, now) : [];
   const recentEntries = user
     ? [...state.entries]
         .filter((entry) => personalEntryImpact(state, entry, user.id, now) !== 0 || entry.userId === user.id)
@@ -605,6 +623,36 @@ export function KasamCommercialApp() {
             </article>
           ))}
         </section>
+
+        {insightDeck.length ? (
+          <section className="card insight-card">
+            <div className="row-between">
+              <div>
+                <p className="eyebrow">Kasam öneriyor</p>
+                <h2>{insightDeck[0].title}</h2>
+              </div>
+              <Sparkles className={insightDeck[0].severity} size={22} />
+            </div>
+            <p className="muted">{insightDeck[0].message}</p>
+            <div className="insight-meta">
+              <span className={`insight-tag ${insightDeck[0].severity}`}>{insightSeverityLabel(insightDeck[0].severity)}</span>
+              {insightDeck[0].actionLabel ? <span className="tiny muted">{insightDeck[0].actionLabel}</span> : null}
+            </div>
+            {insightDeck.length > 1 ? (
+              <div className="insight-list">
+                {insightDeck.slice(1, 3).map((insight) => (
+                  <article className="insight-item" key={insight.id}>
+                    <span className={`insight-dot ${insight.severity}`} />
+                    <div>
+                      <strong>{insight.title}</strong>
+                      <p className="muted tiny">{insight.message}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : null}
+          </section>
+        ) : null}
 
         <section className="card">
           <div className="row-between">

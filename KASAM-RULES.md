@@ -320,3 +320,15 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Mevcut ortak kasa ve cloud senkronu calisirken, tam yeniden yapim ayni anda production akisini riske atmamalidir.
 - Kontrol: `commercial/package.json`, `commercial/src/app`, `commercial/src/lib` ve `test-commercial-rebuild.cjs` bulunur. Kok `vercel-build` komutu ticari app buildine cevrilmez; ticari build `npm --prefix commercial run build` ile ayridir.
 - Eklendi: 2026-06-21 - ticari urun rebuild
+
+## KURAL-055: Zeka Motoru Hesaplari Deterministik Yapar
+- Kural: Kasam'in finansal onerileri once test edilebilir kural motoru ile hesaplanir. LLM veya harici AI modeli bakiye, hedef gunu, split, kur, nakit akisi ya da ortak kasa payi hesaplamaz. AI ileride sadece hesaplanmis sonucu daha dogal anlatmak icin kullanilabilir.
+- Sebep: Finans uygulamasinda hesap hatasi urun guvenini kirar. Model cevabi degisken oldugu icin kritik para hesaplarinda kaynak olamaz.
+- Kontrol: Ticari app icindeki oneriler `commercial/src/lib/insights.ts` gibi saf fonksiyonlardan uretilir ve Jest testleriyle dogrulanir. AI entegrasyonu gelirse hesap girdileri ve sonuc JSON'u testlenir, frontend secret icermez.
+- Eklendi: 2026-06-21 - ticari zeka modeli
+
+## KURAL-056: Commercial Supabase Eslemesi Cift Yonlu ve Kolon-Tam Olur
+- Kural: Commercial app mevcut `kasa_` tablolarini okurken ve yazarken alanlari elle parca parca kurmaz. Tum row-to-state ve state-to-insert donusumleri `commercial/src/lib/cloud-schema.ts` uzerinden gecer. `paid_by_id`, `split_with`, `split_ratio`, `entered_amount`, `amount`, `exchange_rate`, `rate_locked_at`, `locked_notification_id`, `revealed_at`, `auto_reveal_at`, oyun fazlari ve opsiyonel ticari tablolar map edilmeden commercial cloud degisikligi tamamlanmis sayilmaz.
+- Sebep: Ortak kasa, bildirim oyunu, kisisel kasa etkisi ve doviz hesaplari tek kolon eksikliginde localde calisir gorunup gercek cloud'da bozulur.
+- Kontrol: `commercial/src/__tests__/cloud-schema.test.ts` production kolonlarini, `test-commercial-cloud-adapter.cjs` mapper/build payload fonksiyonlarini ve kritik kolon adlarini kontrol eder. Cloud client entry/notification payloadlarini `buildEntryInsertPayload()` ve `buildNotificationInsertPayload()` disinda kuramaz.
+- Eklendi: 2026-06-21 - commercial Supabase tablo eslemesi

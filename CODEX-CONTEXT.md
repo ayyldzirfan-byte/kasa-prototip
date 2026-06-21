@@ -148,6 +148,8 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 - KURAL-051: Nihai canli dogrulama auth settings, cloud cok kullanici ve reset API sonucunu tek raporda toplar.
 - KURAL-052: Tek canonical uygulama paketi korunur; eski Netlify/prototip kopyasi ve yuklenmeyen `app.js` bundle repoda/deployda tutulmaz.
 - KURAL-053: Vercel build sadece public paketini uretir; local test/lint/cloud kapilari production deploy build'e baglanmaz.
+- KURAL-055: Zeka motoru finansal hesaplari deterministik kural motoru ile yapar; AI hesap kaynagi olamaz.
+- KURAL-056: Commercial Supabase tablo eslemesi cift yonlu ve kolon-tam olur; cloud row ve insert payloadlari `commercial/src/lib/cloud-schema.ts` disinda daginik kurulmaz.
 
 ## Vercel Build Protokolu
 - `vercel.json` buildCommand: `npm run vercel-build`.
@@ -166,6 +168,8 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 - Next.js 15 + TypeScript + Tailwind v4 tabanli yeni app `commercial/` altindadir.
 - `commercial/` mevcut production PWA icin kaynak degildir; ticari surum kanitlari tamamlaninca Vercel root/output stratejisi ayrica degistirilir.
 - KURAL-054: Ticari Next.js rebuild izole gelistirilir; mevcut production PWA kanali ticari app kanitlari tamamlanmadan bozulmaz.
+- KURAL-055: Ticari zeka motoru `commercial/src/lib/insights.ts` icindeki test edilebilir saf fonksiyonlarla calisir. LLM varsa sadece hesaplanmis sonucu anlatir, finansal sonucu hesaplamaz.
+- KURAL-056: Ticari app production `kasa_` tablolarini `commercial/src/lib/cloud-schema.ts` uzerinden map eder. Ortak kasa payi, doviz, oyun gizliligi ve opsiyonel ticari tablolar icin yeni kolon eklendiyse mapper, test ve `commercial/docs/SUPABASE-MAPPING.md` birlikte guncellenir.
 - Komutlar:
   - `npm --prefix commercial run dev`
   - `npm --prefix commercial test`

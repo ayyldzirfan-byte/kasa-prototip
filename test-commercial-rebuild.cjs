@@ -31,10 +31,14 @@ const cases = [
   ["domain model covers surprise privacy", () => includes("commercial/src/lib/domain.ts", "pendingSurpriseCountForUser")],
   ["domain model covers personal impact", () => includes("commercial/src/lib/domain.ts", "personalEntryImpact")],
   ["domain model covers settlement transfers", () => includes("commercial/src/lib/domain.ts", "minimumTransfers")],
+  ["insight engine exists", () => includes("commercial/src/lib/insights.ts", "generateInsightDeck")],
+  ["insight engine keeps finance deterministic", () => includes("commercial/src/lib/insights.ts", "calculateGoalDelayDays")],
   ["UI has five tabs", () => ["Ana ekran", "Hareketler", "Bütçeler", "Takvim", "Rapor"].forEach((label) => includes("commercial/src/components/KasamCommercialApp.tsx", label))],
   ["UI keeps add flow compact", () => notIncludes("commercial/src/components/KasamCommercialApp.tsx", "Aşama 1")],
+  ["UI shows compact recommendations", () => includes("commercial/src/components/KasamCommercialApp.tsx", "insightDeck")],
   ["commercial jest tests exist", () => exists("commercial/src/__tests__/domain.test.ts")],
-  ["commercial visual tests exist", () => exists("commercial/tests/visual-rules.spec.ts")]
+  ["commercial visual tests exist", () => exists("commercial/tests/visual-rules.spec.ts")],
+  ["intelligence engine documentation exists", () => includes("commercial/docs/INTELLIGENCE-ENGINE.md", "LLM yapmaz")]
 ];
 
 let passed = 0;

@@ -1,21 +1,21 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { buildCommercialStateFromCloud, type EntryRow, type NotificationRow, type ProfileRow, type ProjectMemberRow, type ProjectRow } from "./cloud-schema";
-import type { AppState, Entry, EntryType } from "./types";
-
-type CommercialEntryDraft = {
-  projectId: string;
-  userId: string;
-  paidById: string;
-  type: EntryType;
-  title: string;
-  amount: number;
-  currency: string;
-  exchangeRate: number;
-  entryDate: string;
-  splitWith: string[];
-  splitRatio: number[];
-  surprise?: boolean;
-};
+import {
+  buildCommercialStateFromCloud,
+  buildEntryInsertPayload,
+  buildNotificationInsertPayload,
+  type CommercialEntryDraft,
+  type EntryRow,
+  type GoalRow,
+  type InsightRow,
+  type NotificationRow,
+  type ProfileRow,
+  type ProjectMemberRow,
+  type ProjectRow,
+  type ReactionRow,
+  type ReconciliationRow,
+  type SettlementRow
+} from "./cloud-schema";
+import type { AppState } from "./types";
 
 function uniqueIds(values: string[]) {
   return Array.from(new Set(values.filter(Boolean)));
@@ -34,6 +34,12 @@ function personalProjectCode(userId: string) {
 async function selectRows<T>(query: PromiseLike<{ data: T[] | null; error: { message: string } | null }>, label: string) {
   const { data, error } = await query;
   if (error) throw new Error(`${label}: ${error.message}`);
+  return data || [];
+}
+
+async function selectOptionalRows<T>(query: PromiseLike<{ data: T[] | null; error: { message: string } | null }>) {
+  const { data, error } = await query;
+  if (error) return [];
   return data || [];
 }
 
@@ -94,11 +100,16 @@ export async function loadCommercialCloudState(client: SupabaseClient, activeUse
     return buildCommercialStateFromCloud({ activeUserId, profiles, projects: [], members: [], entries: [], notifications: [] });
   }
 
-  const [projects, allMembers, entries, notifications] = await Promise.all([
+  const [projects, allMembers, entries, notifications, goals, reactions, settlements, reconciliations, insights] = await Promise.all([
     selectRows<ProjectRow>(client.from("kasa_projects").select("*").in("id", projectIds), "kasa_projects"),
     selectRows<ProjectMemberRow>(client.from("kasa_project_members").select("*").in("project_id", projectIds), "kasa_project_members"),
     selectRows<EntryRow>(client.from("kasa_entries").select("*").in("project_id", projectIds).order("entry_date", { ascending: false }), "kasa_entries"),
-    selectRows<NotificationRow>(client.from("kasa_notifications").select("*").in("project_id", projectIds).order("created_at", { ascending: false }), "kasa_notifications")
+    selectRows<NotificationRow>(client.from("kasa_notifications").select("*").in("project_id", projectIds).order("created_at", { ascending: false }), "kasa_notifications"),
+    selectOptionalRows<GoalRow>(client.from("kasa_goals").select("*").in("project_id", projectIds)),
+    selectOptionalRows<ReactionRow>(client.from("kasa_reactions").select("*").in("project_id", projectIds)),
+    selectOptionalRows<SettlementRow>(client.from("kasa_settlements").select("*").in("project_id", projectIds)),
+    selectOptionalRows<ReconciliationRow>(client.from("kasa_reconciliations").select("*").or(`project_id.in.(${projectIds.join(",")}),user_id.eq.${activeUserId}`)),
+    selectOptionalRows<InsightRow>(client.from("kasa_insights").select("*").eq("user_id", activeUserId))
   ]);
 
   const profileIds = uniqueIds([...allMembers.map((member) => member.user_id), activeUserId]);
@@ -110,7 +121,12 @@ export async function loadCommercialCloudState(client: SupabaseClient, activeUse
     projects,
     members: allMembers,
     entries,
-    notifications
+    notifications,
+    goals,
+    reactions,
+    settlements,
+    reconciliations,
+    insights
   });
 }
 
@@ -118,52 +134,13 @@ export async function createCommercialCloudEntry(client: SupabaseClient, draft: 
   const now = new Date().toISOString();
   const entryId = crypto.randomUUID();
   const notificationId = draft.surprise ? crypto.randomUUID() : null;
-  const status = "done";
+  const entryPayload = buildEntryInsertPayload(draft, entryId, notificationId, now);
 
-  const entryPayload = {
-    id: entryId,
-    project_id: draft.projectId,
-    user_id: draft.userId,
-    paid_by_id: draft.paidById,
-    type: draft.type,
-    amount: draft.amount * draft.exchangeRate,
-    entered_amount: draft.amount,
-    currency: draft.currency,
-    exchange_rate: draft.exchangeRate,
-    rate_locked_at: now,
-    short_name: draft.title,
-    entry_date: draft.entryDate,
-    split_with: draft.splitWith,
-    split_ratio: draft.splitRatio,
-    status,
-    locked_notification_id: notificationId,
-    created_at: now,
-    updated_at: now
-  };
-
-  const { data: entry, error: entryError } = await client.from("kasa_entries").insert(entryPayload).select("*").single<Entry>();
+  const { data: entry, error: entryError } = await client.from("kasa_entries").insert(entryPayload).select("*").single<EntryRow>();
   if (entryError) throw new Error(`kasa_entries: ${entryError.message}`);
 
   if (notificationId) {
-    const recipients = draft.splitWith.filter((userId) => userId !== draft.userId);
-    const notificationPayload = {
-      id: notificationId,
-      project_id: draft.projectId,
-      entry_id: entry?.id,
-      actor_id: draft.userId,
-      recipients,
-      mode: "surprise",
-      actual_type: draft.type,
-      title: draft.title,
-      amount: draft.amount * draft.exchangeRate,
-      emoji: "",
-      success_reaction: "OK",
-      fail_reaction: "NO",
-      guesses: [],
-      game_phase: 1,
-      is_completed: false,
-      created_at: now
-    };
+    const notificationPayload = buildNotificationInsertPayload(draft, entry?.id || entryId, notificationId, now);
     const { error: notificationError } = await client.from("kasa_notifications").insert(notificationPayload);
     if (notificationError) throw new Error(`kasa_notifications: ${notificationError.message}`);
   }

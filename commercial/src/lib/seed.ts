@@ -42,6 +42,19 @@ export const demoState: AppState = {
       ]
     }
   ],
+  goals: [
+    {
+      id: "g-vacation",
+      ownerId: "u-irfan",
+      projectId: "p-personal",
+      title: "Tatil hedefi",
+      targetAmount: 100000,
+      currentAmount: 42000,
+      deadline: "2026-09-01T00:00:00.000Z",
+      monthlyTarget: 15000,
+      status: "active"
+    }
+  ],
   entries: [
     entry({
       id: "e-salary",

@@ -129,6 +129,13 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Kontrol yontemi: ekran goruntusu birincil, test ciktisi ikincildir.
 - Yeterli kriteri: gozle gorulunce yeterli; sadece test gecince yeterli sayilmaz.
 
+## Ek Urun Tercihi: Yonlendiren Zeka Motoru
+- Kullanici, uygulamanin en guclu ticari degerinin yonlendirme ve bilgilendirme oldugunu belirtti.
+- Oncelik: "Bu harcama hedefini X gun ileri goturdu" ve "Hedefi X gun one almak icin sunu kis" gibi net, sayisal ve uygulanabilir oneriler.
+- Finansal hesaplar AI modeline birakilmayacak; once deterministik kural motoru hesaplayacak, gerekirse AI sadece metni daha dogal anlatacak.
+- Oneriler ekran kalabaligi yapmayacak; ana ekranda kompakt kart, detayda rapor/fiş mantigi ile acilacak.
+- Ekstre, market fisi, hedef/kumbara ve ortak kasa etkileri bu zeka motorunun veri kaynaklari olarak dusunulecek.
+
 ## Ek Kontrol Kurali: Sifre Sifirlama
 - "Sifre sifirlama calisiyor" ifadesi tek sonuc olarak kullanilmayacak.
 - Supabase API kabul etti mi ve mail gelen kutusuna dustu mu ayri raporlanacak.
@@ -144,3 +151,8 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Freemium model tercih edildi.
 - Gorsel yon UltraHuman guclu olacak ama finans uygulamasi kadar okunabilir kalacak.
 - Tam yeniden yapim istenirken mevcut calisan production PWA bozulmayacak; yeni Next app once izole gelistirilecek.
+
+## Ek Kontrol Kurali: Commercial Cloud Eslemesi
+- Ticari rebuild'de UI aciliyor olmasi yeterli degil; Supabase'deki production kolonlari commercial state'e eksiksiz tasinmali.
+- Oncelikli risk alanlari: `paid_by_id`, `split_with`, `split_ratio`, doviz kur alanlari, `locked_notification_id`, oyun fazlari, hedef/reaksiyon/settlement/ekstre tablolaridir.
+- Yeni commercial cloud degisikligi yapilinca hem mapper hem insert payload hem cloud adapter testi birlikte guncellenecek.
