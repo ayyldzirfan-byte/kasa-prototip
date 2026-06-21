@@ -17,7 +17,22 @@ test.describe("Kasam commercial visual rules", () => {
     await expect(page.getByText("Finansal ritim")).toBeVisible();
     await expect(page.getByText("Kasam öneriyor")).toBeVisible();
     await expect(page.getByText("Ana ekran")).toBeVisible();
+    await expect(page.getByText("Allah verdi")).toHaveCount(0);
+    await expect(page.locator(".entry-title", { hasText: "Ev Ortak Kasası" })).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-home.png"), fullPage: true });
+  });
+
+  test("tab bar does not cover the last content block", async ({ page }) => {
+    await page.goto(visualUrl);
+    await expect(page.getByText("Finansal ritim")).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(250);
+    const tabBox = await page.locator(".tabbar").boundingBox();
+    const lastBlockBox = await page.locator(".screen-stack > :last-child").boundingBox();
+    expect(tabBox).not.toBeNull();
+    expect(lastBlockBox).not.toBeNull();
+    expect(lastBlockBox!.y + lastBlockBox!.height).toBeLessThanOrEqual(tabBox!.y - 8);
+    await page.screenshot({ path: path.join(visualDir, "commercial-bottom-spacing.png"), fullPage: true });
   });
 
   test("movement add flow", async ({ page }) => {
@@ -31,7 +46,7 @@ test.describe("Kasam commercial visual rules", () => {
   test("shared budgets", async ({ page }) => {
     await page.goto(visualUrl);
     await page.getByRole("button", { name: "Bütçeler" }).click();
-    await expect(page.getByText("Ayyıldız Home")).toBeVisible();
+    await expect(page.getByText("Ev Ortak Kasası")).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-projects.png"), fullPage: true });
   });
 

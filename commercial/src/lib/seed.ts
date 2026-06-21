@@ -17,21 +17,21 @@ function entry(data: Omit<Entry, "id" | "currency" | "exchangeRate" | "rateLocke
 export const demoState: AppState = {
   activeUserId: "u-irfan",
   profiles: [
-    { id: "u-irfan", displayName: "İrfan", email: "irfan@kasam.app", plan: "premium" },
-    { id: "u-havva", displayName: "Havva", email: "havva@kasam.app", plan: "free" },
-    { id: "u-derya", displayName: "Derya", email: "derya@kasam.app", plan: "free" }
+    { id: "u-irfan", displayName: "Deniz Karaca", email: "deniz@kasam.app", plan: "premium" },
+    { id: "u-havva", displayName: "Ece Yalın", email: "ece@kasam.app", plan: "free" },
+    { id: "u-derya", displayName: "Mert Uzun", email: "mert@kasam.app", plan: "free" }
   ],
   projects: [
     {
       id: "p-personal",
-      name: "İrfan kasası",
+      name: "Deniz kasası",
       type: "personal",
       createdBy: "u-irfan",
       members: [{ userId: "u-irfan", memberSince: "2026-01-01T00:00:00.000Z", role: "owner" }]
     },
     {
       id: "p-home",
-      name: "Ayyıldız Home",
+      name: "Ev Ortak Kasası",
       type: "shared",
       createdBy: "u-irfan",
       joinCode: "KASAM-AYY",

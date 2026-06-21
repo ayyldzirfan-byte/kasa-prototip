@@ -61,17 +61,19 @@ button {
 
 .app-shell {
   min-height: 100vh;
-  padding: 24px 16px 104px;
+  padding: max(32px, env(safe-area-inset-top)) 16px calc(132px + env(safe-area-inset-bottom));
 }
 
 .phone-frame {
   width: min(100%, 430px);
   margin: 0 auto;
+  padding-bottom: 104px;
 }
 
 .screen-stack {
   display: grid;
   gap: 16px;
+  padding-bottom: 112px;
   animation: screen-in var(--duration-normal) var(--ease-out);
 }
 
@@ -432,7 +434,7 @@ button {
 .tabbar {
   position: fixed;
   left: 50%;
-  bottom: 18px;
+  bottom: max(18px, env(safe-area-inset-bottom));
   transform: translateX(-50%);
   width: min(calc(100% - 28px), 430px);
   height: 72px;
@@ -569,9 +571,14 @@ button {
 @media (max-width: 390px) {
   .app-shell {
     padding-inline: 12px;
+    padding-bottom: calc(136px + env(safe-area-inset-bottom));
   }
 
   .title-xl {
     font-size: 28px;
+  }
+
+  .tabbar {
+    width: min(calc(100% - 20px), 430px);
   }
 }

@@ -15,6 +15,7 @@ describe("Kasam commercial UI", () => {
     render(<KasamCommercialApp />);
     expect(await screen.findByText("Kasam öneriyor")).toBeInTheDocument();
     expect(screen.getByText("Tatil hedefi 14 gün ileri gider")).toBeInTheDocument();
+    expect(screen.queryByText("Allah verdi")).not.toBeInTheDocument();
   });
 
   test("add movement flow stays compact", () => {

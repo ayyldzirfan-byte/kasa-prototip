@@ -312,3 +312,10 @@ Tarih: 2026-06-21
 - LOCAL SIMULASYON: `test-commercial-cloud-adapter.cjs` 9/9 gecti; `test-commercial-rebuild.cjs` 18/18 gecti; `kasam-lint.cjs` 14/14 gecti; Commercial Jest 4 suite / 24 test gecti; TypeScript typecheck gecti; Commercial Next build gecti; `test-commercial-vercel-config.cjs` 4/4 gecti.
 - GORSEL DOGRULAMA: Commercial Playwright 5/5 gecti. Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
 - CLOUD TEST: Bu Codex shell'inde `KASAM_SUPABASE_SERVICE_ROLE_KEY` yoktu, bu nedenle gercek Supabase live smoke tekrar kosulmadi. Static commercial adapter testi PASS. Gercek cloud multi-user testi icin kullanici tarafinda `npm run commercial:cloud-smoke:prompt` kosulacak.
+## Son Guncelleme: Commercial Visual Polish - 2026-06-21
+- Commercial demo verisi eski/prototip hissi veren kisi ve kasa adlarindan arindirildi; demo ortak kasa adi `Ev Ortak Kasasi` oldu.
+- Mobil layoutta alt tab bar'in son kartlari kapatmamasi icin phone frame ve screen stack bottom spacing artirildi.
+- Visual testlere eski demo hareket adi sizmasi ve tab bar overlap kontrolu eklendi.
+- LOCAL SIMULASYON: Commercial Jest 4 suite / 24 test gecti; TypeScript typecheck gecti; Commercial Next build gecti; commercial Vercel config 4/4 gecti; commercial cloud adapter 9/9 gecti; `kasam-lint.cjs` 14/14 gecti.
+- GORSEL DOGRULAMA: Commercial Playwright 6/6 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
+- CLOUD TEST: Kullanici tarafinda `commercial:cloud-smoke:prompt` service role ile calistirildi ve PASS verdi; ortak proje, ortak hareket, split, paid_by ve bildirim gercek Supabase uzerinde dogrulandi.
