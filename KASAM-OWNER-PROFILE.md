@@ -117,6 +117,8 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Sadece unit test gecti diye "tamamlandi" denmeyecek.
 - Playwright calistirilmadan UI gorevi kapatilmayacak.
 - PASS yazip ekran goruntusu almadan bitirilmeyecek.
+- Ortak kasa ve bildirim icin simulator PASS'i gercek cloud PASS yerine yazilmayacak.
+- Gercek cloud testi icin iki ayri test hesabi/env gerekiyorsa bu kullanici aksiyonu olarak ayrica istenecek.
 - Tekrarlayan hata: "Yaptim/PASS dedi ama gercekte olmamis" birden fazla kez yasandi; cozum KURAL-025 ve KURAL-028.
 - Kontrol yontemi: ekran goruntusu birincil, test ciktisi ikincildir.
 - Yeterli kriteri: gozle gorulunce yeterli; sadece test gecince yeterli sayilmaz.

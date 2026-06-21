@@ -17,6 +17,7 @@ Tarih: 2026-06-20
 | `kasam-simulator.html` | Cok kullanici iframe simulasyonu | Calisiyor, PASS/FAIL kontrolleri var |
 | `kasam-lint.cjs` | Proje kurallari lint denetimi | Calisiyor |
 | `scripts/run-all-tests.cjs` | Tum `test-*.cjs` dosyalarini tek komutla sirali calistirir | Calisiyor |
+| `scripts/cloud-live-smoke.cjs` | Iki gercek Supabase kullanicisiyle ortak proje, hareket ve bildirim cloud smoke testi | Env gerektirir |
 | `scripts/cdp-test-harness.cjs` | Playwright bagimliligi olmadan gercek Chrome/CDP browser testleri | Calisiyor |
 | `vercel.json` | Vercel build/output ve header ayarlari | `npm run build` + `public` output ayarli |
 | `api/tcmb-rate.js` | Doviz hareketleri icin TCMB kur proxy endpoint'i | Syntax kontrolu gecti |
@@ -84,7 +85,8 @@ Tarih: 2026-06-20
 | `test-cloud-persistence-and-guess-flow.cjs` | PASS |
 | `test-entry-open-flow.cjs` | PASS: Chrome/CDP ile tek kayit, tek bildirim, ortak pay ve GIF overlay dogrulandi |
 | `test-shared-ledger.cjs` | PASS: Chrome/CDP ile ortak gider/gelir split, kisisel pay ve bildirim dogrulandi |
-| `scripts/run-all-tests.cjs` | PASS: 27 test dosyasi, 27 gecti, 0 basarisiz |
+| `scripts/run-all-tests.cjs` | PASS: 28 test dosyasi, 28 gecti, 0 basarisiz |
+| `scripts/cloud-live-smoke.cjs` | Hazir: gercek iki test hesabi env olarak verilince Supabase Auth + REST + RLS akisini dogrular |
 | `build-public.cjs` | PASS: public klasoru hazir |
 | `api/tcmb-rate.js` | PASS: syntax kontrolu |
 
@@ -131,10 +133,25 @@ Tarih: 2026-06-20
 - `scripts/run-all-tests.cjs` eklendi; artik `npm test` ve `npm run test:all` tum `test-*.cjs` dosyalarini calistirir.
 - `npm run test:visual` Playwright CLI yerine mevcut Chrome/CDP tabanli `scripts/visual-audit.cjs` auditini calistirir; Playwright ayrica `npm run test:playwright` olarak korunur.
 - `scripts/cdp-test-harness.cjs` ve `scripts/visual-audit.cjs` tarayici exception mesajlarini artik gercek hata aciklamasiyla raporlar.
-- LOCAL SIMULASYON: `kasam-lint.cjs` 12/12 gecti; `scripts/run-all-tests.cjs` 27/27 test dosyasini gecirdi; `build-public.cjs` 41 dosyalik public klasorunu uretti.
+- LOCAL SIMULASYON: `kasam-lint.cjs` 12/12 gecti; `scripts/run-all-tests.cjs` 28/28 test dosyasini gecirdi; `build-public.cjs` 41 dosyalik public klasorunu uretti.
 - GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 kontrolu gecti.
 - CLOUD TEST: canli Vercel HTML icinde `Guncellendi 14.06.2026 23:05` ve `app-critical-fixes.js?v=20260614-2305` dogrulandi.
 - Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210141` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
+
+## Son Guncelleme: Gercek Cloud Smoke Kapisi - 2026-06-21
+- `scripts/cloud-live-smoke.cjs` eklendi. Bu script iki ayri gercek Supabase kullanicisiyla giris yapar, test ortak kasa olusturur, uyelik/hareket/bildirim yazar, ikinci kullanicidan okur ve test projesini silerek temizler.
+- `npm run test:cloud-live` komutu eklendi. Sifreler koda yazilmaz; `KASAM_CLOUD_EMAIL_A`, `KASAM_CLOUD_PASSWORD_A`, `KASAM_CLOUD_EMAIL_B`, `KASAM_CLOUD_PASSWORD_B` env degiskenleri gerekir.
+- Eksik env varsa script exit code 2 ile durur ve PASS uretmez. Bu, KURAL-046 icin local simulator ile gercek cloud kanitini ayirir.
+- LOCAL SIMULASYON: Statik script testi `test-cloud-live-smoke-script.cjs` ile cloud live scriptin Auth/REST/env/cleanup davranisi denetlenir.
+- CLOUD TEST: Bu turda kullanici test hesap sifreleri verilmedigi icin gercek iki hesapli cloud run henuz calistirilmadi.
+
+## Son Guncelleme: Cloud Test Kapisi ve CDP Stabilizasyonu - 2026-06-21
+- `scripts/cdp-test-harness.cjs` artik sayfa acildiktan sonra `normalizeState`, `makeDraft` ve `render` fonksiyonlari hazir olana kadar bekler. Bu, browser testlerinin uygulama yuklenmeden baslamasini engeller.
+- `scripts/cloud-live-smoke.cjs` env degiskenleri yokken bilincli olarak durur; gercek iki test hesabi olmadan cloud PASS yazmaz.
+- LOCAL SIMULASYON: `kasam-lint.cjs` 12/12 gecti; `scripts/run-all-tests.cjs` 28/28 test dosyasini gecirdi; `build-public.cjs` 41 dosyalik public klasorunu uretti.
+- GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 kontrolu gecti.
+- CLOUD TEST: Canli Vercel stamp dogrulandi: `Guncellendi 14.06.2026 23:05`. Gercek iki hesapli Supabase yaz/oku testi env hesaplari verilmedigi icin henuz calistirilmadi.
+- Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210206` (Windows kullanici klasoru ekranda Turkce karakterli gorunebilir).
 
 ## Son Guncelleme: Eksik Istek Testlerinin Stabilize Edilmesi - 2026-06-21
 - Eksik istek listesinden kalan test borclari yeniden denetlendi.
@@ -142,7 +159,7 @@ Tarih: 2026-06-20
 - `scripts/cdp-test-harness.cjs` Chrome/CDP testleri icin stabil `--single-process --no-sandbox` profile guncellendi; port doluysa sonraki bos porta dusuyor.
 - `test-scenarios.cjs` ve `scripts/visual-audit.cjs` Desktop klasorune yazamadiginda workspace icindeki `screenshots/` altina guvenli fallback kullaniyor.
 - Browser tabanli testler Playwright paketine bagimli olmadan CDP ile calisacak hale getirildi.
-- LOCAL SIMULASYON: Tum `test-*.cjs` dosyalari calistirildi: 27 test dosyasi, 27 gecti, 0 basarisiz.
+- LOCAL SIMULASYON: Tum `test-*.cjs` dosyalari calistirildi: 28 test dosyasi, 28 gecti, 0 basarisiz.
 - LOCAL SIMULASYON EK: `kasam-lint.cjs` 12/12 gecti; `build-public.cjs` 41 dosyalik `public` klasorunu uretmeyi basardi.
 - GORSEL DOGRULAMA: `scripts/visual-audit.cjs` yerel 13 UI kontrolunu gecti ve ekran goruntulerini olusturdu.
 - CLOUD TEST: Canli Vercel stamp kontrolu bu turda basarisiz; beklenen `Guncellendi 14.06.2026 23:05` canli sayfada gorunmedi. Bu commit push edilip Vercel deploy tamamlandiktan sonra tekrar dogrulanacak.

@@ -147,7 +147,11 @@ class CdpPage {
 
   async goto(url) {
     await this.send("Page.navigate", { url });
-    await sleep(2500);
+    await this.waitFor(`document.readyState === "interactive" || document.readyState === "complete"`, 10000);
+    await this.waitFor(
+      `typeof normalizeState === "function" && typeof makeDraft === "function" && typeof render === "function"`,
+      15000
+    );
   }
 
   async eval(expression, args = undefined) {
@@ -172,11 +176,16 @@ class CdpPage {
 
   async waitFor(expression, timeout = 10000) {
     const started = Date.now();
+    let lastError = "";
     while (Date.now() - started < timeout) {
-      if (await this.eval(expression)) return true;
+      try {
+        if (await this.eval(expression)) return true;
+      } catch (error) {
+        lastError = error.message || String(error);
+      }
       await sleep(150);
     }
-    throw new Error(`Timeout waiting for ${expression}`);
+    throw new Error(`Timeout waiting for ${expression}${lastError ? `; last error: ${lastError}` : ""}`);
   }
 
   async waitForSelector(selector, timeout = 10000) {

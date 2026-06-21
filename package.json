@@ -10,6 +10,7 @@
     "test:browser": "node test-testscenario-auth-bypass.cjs",
     "test:visual": "node scripts/visual-audit.cjs",
     "test:playwright": "playwright test",
+    "test:cloud-live": "node scripts/cloud-live-smoke.cjs",
     "prebuild": "node kasam-lint.cjs",
     "build": "node scripts/run-all-tests.cjs && node build-public.cjs"
   },
