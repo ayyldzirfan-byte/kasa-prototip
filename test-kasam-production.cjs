@@ -9,7 +9,7 @@ const exists = (file) => fs.existsSync(path.join(root, file));
 const index = read("index.html");
 const manifest = JSON.parse(read("manifest.webmanifest"));
 const appProduction = read("app-production.js");
-const appBundle = read("app.js");
+const appBundle = ["app-state.js", "app-core.js", "app-views.js", "app-bind.js", "app-model.js", "app-cloud.js", "app-blocks.js", "app-product-pass.js", "app-production.js", "app-game-v2.js", "app-ui-fixes.js", "app-critical-fixes.js"].map(read).join("\n");
 const sql = read("supabase-production-kasam.sql");
 const sw = read("sw.js");
 const vision = read("netlify/functions/kasam-vision.js");

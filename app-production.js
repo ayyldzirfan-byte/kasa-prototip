@@ -18,7 +18,7 @@ var KASAM_TOASTS = {
 var KASAM_EMPTY = {
   movements: "Henüz bir hareket yok. İlk hareketi sen ekle.",
   budgets: "Henüz bütçe yok. Kendi kasanı oluştur veya birine katıl.",
-  notifications: "Sessizlik... Henüz sürpriz yok.",
+  notifications: "Sessizlik...",
   calendarDay: "Bu gün temiz. Harcama yok.",
 };
 

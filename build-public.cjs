@@ -21,7 +21,6 @@ const files = [
   "app-test-scenarios.js",
   "app-ui-fixes.js",
   "app-views.js",
-  "app.js",
   "apple-touch-icon.png",
   "cloud-config.js",
   "gizlilik.html",

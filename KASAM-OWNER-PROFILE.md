@@ -52,6 +52,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Ekranı kalabalıklaştıran tekrar alanları.
 - App içinde sabit örnek senaryo isimleri.
 - Profil sayfasında tahmin cevabı tarzı gibi ana değişkenler.
+- Eski prototip kopyaları ve iki farklı uygulama var hissi veren deploy kalıntıları.
 
 ## Çalışma Tarzı
 - Komut boyutu tercihi: Kapsam kullanıcı tarafından parça parça verilir; `haydee` denene kadar işlem başlatılmaz.

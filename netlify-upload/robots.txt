@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://radiant-squirrel-c2e0cb.netlify.app/sitemap.xml

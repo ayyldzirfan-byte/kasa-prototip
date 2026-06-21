@@ -190,6 +190,15 @@ Tarih: 2026-06-21
 - Eksik test hesabi/service role veya reset e-posta varsa final rapor `NEEDS_INPUT` yazar ve PASS saymaz.
 - LOCAL SIMULASYON: `test-final-live-validation-script.cjs` final gate'in script baglantilarini, NEEDS_INPUT davranisini ve secure prompt kullanimini statik olarak dogrular.
 
+## Son Guncelleme: Tek Canonical Uygulama Paketi - 2026-06-21
+- Eski Netlify upload kopyasi repodan kaldirildi; bu klasor build'e girmiyordu ama iki prototip algisi ve eski URL riski olusturuyordu.
+- `index.html` tarafindan yuklenmeyen eski monolit `app.js` kaldirildi. Canonical uygulama artik sadece `index.html` icindeki moduler dosya sirasi ve `app-critical-fixes.js` production katmanidir.
+- `build-public.cjs`, `sw.js`, `test-offline.cjs` ve `test-kasam-production.cjs` aktif moduler paketle uyumlu hale getirildi.
+- `KURAL-052` eklendi: eski prototip kopyasi, `netlify-upload`, eski Netlify hostlari veya `app.js` bundle referansi geri gelirse lint FAIL verir.
+- LOCAL SIMULASYON: `kasam-lint.cjs` 13/13 gecti; `scripts/run-all-tests.cjs` 32/32 test dosyasini gecirdi; `build-public.cjs` 40 dosyalik canonical public paketini uretti.
+- GORSEL DOGRULAMA: `scripts/visual-audit.cjs` 14/14 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210436`.
+- CLOUD TEST: Auth settings ve canli stamp PASS (`Guncellendi 14.06.2026 23:05`). Gercek cloud multi-user ve password reset API, test girdileri olmadigi icin `NEEDS_INPUT` durumunda. Readiness raporu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\readiness-202606210437`; final rapor: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\final-live-validation-202606210438`.
+
 ## Son Guncelleme: Kalite Kapilarinin Tek Komuta Baglanmasi - 2026-06-21
 - `scripts/run-all-tests.cjs` eklendi; artik `npm test` ve `npm run test:all` tum `test-*.cjs` dosyalarini calistirir.
 - `npm run test:visual` Playwright CLI yerine mevcut Chrome/CDP tabanli `scripts/visual-audit.cjs` auditini calistirir; Playwright ayrica `npm run test:playwright` olarak korunur.

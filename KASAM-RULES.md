@@ -302,3 +302,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Local test, gorsel test ve canli Vercel acilisi tek basina ortak kasa/bildirim/sifre reset davranisini kanitlamaz.
 - Kontrol: `scripts/final-live-validation.cjs` `CLOUD AUTH SETTINGS`, `CLOUD MULTI-USER`, `CLOUD PASSWORD RESET API` basliklarini raporlar. Gerekli test hesabi, service role key veya reset e-postasi eksikse `NEEDS_INPUT` yazar ve exit code 2 verir; PASS yazmaz.
 - Eklendi: 2026-06-21 - Final canli dogrulama kapisi
+
+## KURAL-052: Tek Canonical Uygulama Paketi
+- Kural: Repoda ve deploy paketinde eski prototip kopyasi, eski Netlify upload klasoru veya yuklenmeyen monolit `app.js` bundle tutulmaz. Canonical uygulama `index.html` icindeki moduler dosya sirasidir ve Vercel build sadece bu dosyalari paketler.
+- Sebep: Eski prototip kopyalari sifre sifirlama, cache, PWA ve kullanici algisinda iki farkli uygulama varmis gibi davranis uretir.
+- Kontrol: `kasam-lint.cjs` `netlify-upload`, `app.js`, `radiant-squirrel`, `kasa-prototip.netlify` ve build/cache icindeki `app.js` referanslarini FAIL yapar.
+- Eklendi: 2026-06-21 - eski prototip temizligi

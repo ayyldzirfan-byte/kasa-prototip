@@ -125,7 +125,7 @@ function checkRule008() {
 }
 
 function checkRule011() {
-  const banned = ["Giren", "Çıkan", "Bulut senkron"];
+  const banned = ["Giren", "Çıkan", "Bulut senkron", "Henüz sürpriz yok"];
   const failures = [];
   appFiles.forEach((file) => {
     lines(file).forEach((line, index) => {
@@ -205,6 +205,23 @@ function checkRule039() {
   return failures;
 }
 
+function checkRule052() {
+  const failures = [];
+  if (fs.existsSync(path.join(root, "netlify-upload"))) {
+    failures.push(fail("netlify-upload", 1, "Eski Netlify/prototip kopyasi repoda tutulamaz; tek canonical Vercel uygulamasi kalmali."));
+  }
+  if (fs.existsSync(path.join(root, "app.js"))) {
+    failures.push(fail("app.js", 1, "Yuklenmeyen eski monolit bundle repoda tutulamaz; aktif moduler dosyalar canonical kaynaktir."));
+  }
+  ["build-public.cjs", "sw.js", "index.html"].filter((file) => fs.existsSync(path.join(root, file))).forEach((file) => {
+    lines(file).forEach((line, index) => {
+      if (/app\.js/.test(line)) failures.push(fail(file, index + 1, "Eski app.js bundle referansi canonical build/cache icinde kalamaz."));
+      if (/netlify-upload|radiant-squirrel|kasa-prototip\.netlify/.test(line)) failures.push(fail(file, index + 1, "Eski prototip/Netlify referansi canonical uygulamada kalamaz."));
+    });
+  });
+  return failures;
+}
+
 function listFilesRecursive(dir, predicate) {
   if (!fs.existsSync(dir)) return [];
   const result = [];
@@ -260,6 +277,7 @@ const checks = [
   ["KURAL-018", checkRule018],
   ["KURAL-019", checkRule019],
   ["KURAL-039", checkRule039],
+  ["KURAL-052", checkRule052],
 ];
 
 const warnChecks = [

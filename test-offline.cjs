@@ -22,7 +22,7 @@ assert(appProduction.includes("Kaydedildi (senkronize edilecek)"));
 assert(appProduction.includes("updated_at: entry.updatedAt"));
 assert(appProduction.includes("loadCloudDataKasam"));
 
-["./index.html", "./styles.css", "./app.js", "./app-production.js", "./manifest.webmanifest"].forEach((asset) => {
+["./index.html", "./styles.css", "./app-production.js", "./app-critical-fixes.js", "./manifest.webmanifest"].forEach((asset) => {
   assert(sw.includes(asset), asset);
 });
 assert(sw.includes("caches.open"));

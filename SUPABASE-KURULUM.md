@@ -89,9 +89,7 @@ Migration sonrası şunu kontrol et:
 5. Redirect URLs alan?nda ?u adresler kals?n:
    - https://kasa-prototip.vercel.app/*
    - https://kasa-prototip.vercel.app/index.html
-6. Eski Netlify veya eski prototip URL'leri varsa kald?r:
-   - radiant-squirrel...netlify.app
-   - kasa-prototip.netlify.app
+6. Eski Netlify veya eski prototip URL'leri varsa kald?r.
 7. Save changes butonuna bas.
 
 ### Beklenen ?ifre Ak???

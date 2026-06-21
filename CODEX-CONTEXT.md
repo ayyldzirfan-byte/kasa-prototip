@@ -146,6 +146,7 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 - KURAL-049: Sifre sifirlama API kabulu ve mail teslimi ayri raporlanir. `npm run test:password-reset-live` sadece Supabase recover API kabulunu kanitlar; inbox/spam teslimi manuel kontrol edilir.
 - KURAL-050: Supabase email auth provider, signup ve auth health canli readiness kapisinda kontrol edilir.
 - KURAL-051: Nihai canli dogrulama auth settings, cloud cok kullanici ve reset API sonucunu tek raporda toplar.
+- KURAL-052: Tek canonical uygulama paketi korunur; eski Netlify/prototip kopyasi ve yuklenmeyen `app.js` bundle repoda/deployda tutulmaz.
 
 ## Sifre Sifirlama Canli Kontrolu
 - Auth ayar kontrolu: `npm run test:auth-settings-live`.
