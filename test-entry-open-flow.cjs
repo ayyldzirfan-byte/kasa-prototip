@@ -47,28 +47,28 @@ runCdpTest({ root: __dirname, port: 4191, cdpPort: 9391 }, async ({ page, localB
   await page.goto(localBase + "/index.html");
   await page.eval(`(seedState) => {
     window.isCloudReady = () => false;
-    state = normalizeState(seedState);
-    draft = makeDraft();
-    saveState();
-    render();
+    window.__kasamTestAccess.setState(seedState, { render: true });
   }`, [seed]);
 
   await page.eval(`() => {
-    state.activeView = "add";
-    state.activeProjectId = "p_shared";
-    state.addProjectId = "p_shared";
-    state.addReturnView = "home";
-    state.addReturnProjectId = "p_shared";
-    draft = makeDraft();
-    draft.type = "expense";
-    draft.projectId = "p_shared";
-    draft.userId = "u_1";
-    draft.date = "2026-06-14";
+    const appState = window.__kasamTestAccess.getState();
+    appState.activeView = "add";
+    appState.activeProjectId = "p_shared";
+    appState.addProjectId = "p_shared";
+    appState.addReturnView = "home";
+    appState.addReturnProjectId = "p_shared";
+    window.__kasamTestAccess.setState(appState, { render: false });
+    window.__kasamTestAccess.resetDraft({
+      type: "expense",
+      projectId: "p_shared",
+      userId: "u_1",
+      date: "2026-06-14",
+    });
     render();
   }`);
   const formState = await page.eval(`() => ({
     bodyView: document.body.dataset.view || "",
-    activeView: state.activeView,
+    activeView: window.__kasamTestAccess.getState().activeView,
     currentUserId: currentUser()?.id || "",
     activeProjectId: activeProject()?.id || "",
     hasEntryForm: Boolean(document.querySelector("#entryForm")),
@@ -90,10 +90,10 @@ runCdpTest({ root: __dirname, port: 4191, cdpPort: 9391 }, async ({ page, localB
   await page.waitFor(`document.body.dataset.view === "home"`, 10000);
 
   const afterSave = await page.eval(`() => ({
-    entries: state.entries.map((entry) => ({ id: entry.id, title: entryTitle(entry), amount: entry.amount, projectId: entry.projectId })),
-    notifications: state.notifications.map((notification) => ({ id: notification.id, entryId: notification.entryId, title: notification.title, gif: notification.gif, mode: notification.mode })),
-    user1Ledger: personalLedgerEntries(state.users.find((user) => user.id === "u_1")).map((entry) => ({ title: entryTitle(entry), amount: entry.amount })),
-    user2Ledger: personalLedgerEntries(state.users.find((user) => user.id === "u_2")).map((entry) => ({ title: entryTitle(entry), amount: entry.amount })),
+    entries: window.__kasamTestAccess.getState().entries.map((entry) => ({ id: entry.id, title: entryTitle(entry), amount: entry.amount, projectId: entry.projectId })),
+    notifications: window.__kasamTestAccess.getState().notifications.map((notification) => ({ id: notification.id, entryId: notification.entryId, title: notification.title, gif: notification.gif, mode: notification.mode })),
+    user1Ledger: personalLedgerEntries(window.__kasamTestAccess.getState().users.find((user) => user.id === "u_1")).map((entry) => ({ title: entryTitle(entry), amount: entry.amount })),
+    user2Ledger: personalLedgerEntries(window.__kasamTestAccess.getState().users.find((user) => user.id === "u_2")).map((entry) => ({ title: entryTitle(entry), amount: entry.amount })),
   })`);
   assert.equal(afterSave.entries.length, 1, "Ayni hareket iki kez kaydedilmemeli");
   assert.equal(afterSave.notifications.length, 1, "Ayni hareket icin tek bildirim olusmali");
@@ -107,9 +107,11 @@ runCdpTest({ root: __dirname, port: 4191, cdpPort: 9391 }, async ({ page, localB
   assert.equal(overlaySrc.includes("giphy.gif"), true, "Hareket kartina tiklayinca GIF buyuk overlay'de acilmali");
 
   await page.eval(`() => {
-    state.activeUserId = "u_2";
-    state.activeView = "notifications";
-    saveState();
+    const appState = window.__kasamTestAccess.getState();
+    appState.activeUserId = "u_2";
+    appState.signedInUserId = "u_2";
+    appState.activeView = "notifications";
+    window.__kasamTestAccess.setState(appState, { resetDraft: false, render: false });
     render();
   }`);
   await page.waitForSelector(".notification-card");

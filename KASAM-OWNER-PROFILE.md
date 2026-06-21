@@ -83,6 +83,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Örnek içerikleri uygulama sabitlerinden çıkar.
 - Test modunda auth bypass bozulursa düzelt.
 - Ortak kasa değişikliklerinde simülasyon veya çok kullanıcı testi ekle.
+- Gercek cloud cok kullanici veya sifre reset kaniti eksikse final sonucu PASS gibi anlatma; eksik kullanici aksiyonunu ayri yaz.
 
 ## Emin Değilsen Şunu Sor
 - Yeni bir ana ekran yerleşimi finansal akışı değiştirecekse.
@@ -127,3 +128,8 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - "Sifre sifirlama calisiyor" ifadesi tek sonuc olarak kullanilmayacak.
 - Supabase API kabul etti mi ve mail gelen kutusuna dustu mu ayri raporlanacak.
 - API testi otomatik yapilir; inbox/spam teslimi kullanici aksiyonu olarak ayrica istenir.
+
+## Ek Kontrol Kurali: Final Canli Dogrulama
+- Nihai basari iddiasi icin `npm run test:final-live` veya `npm run test:final-live:prompt` raporu aranacak.
+- `NEEDS_INPUT` olan cloud veya reset maddeleri kullanici aksiyonu olarak net yazilacak.
+- Local/gorsel testler gecse bile cloud cok kullanici veya reset API eksikse "tam basarili" denmeyecek.

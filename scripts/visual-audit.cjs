@@ -219,7 +219,10 @@ async function run() {
     })()`);
     log("Ana ekran stamp/tabbar/overflow", home.stamp && home.tabs && !home.cloudText && !home.overflow, JSON.stringify(home));
 
-    await page.clickText("Bütçeler");
+    await page.eval(`(() => {
+      const tab = document.querySelector(".tab[data-view='group']");
+      if (tab) tab.click();
+    })()`);
     await sleep(900);
     await page.screenshot("02-butceler");
     const budgets = await page.eval(`(() => {
@@ -250,7 +253,10 @@ async function run() {
     })()`);
     log("Ortak kasa detay paylaşım ve katılma talepleri", group.share && group.joinRequests && group.debt && !group.overflow, JSON.stringify(group));
 
-    await page.clickText("Ana ekran");
+    await page.eval(`(() => {
+      const tab = document.querySelector(".tab[data-view='home']");
+      if (tab) tab.click();
+    })()`);
     await sleep(700);
     await page.clickText("Hareket ekle");
     await sleep(1000);
@@ -305,7 +311,24 @@ async function run() {
     page.close();
 
     const notify = await newPage(`${localBase}/index.html?testScenario=1&simUser=2&v=${cacheKey}`);
-    await notify.eval(`(() => { state.activeView = "notifications"; render(); })()`);
+    const openedNotifications = await notify.eval(`(() => {
+      const button = Array.from(document.querySelectorAll("button,[data-action]"))
+        .find((item) => item.dataset.action === "open-notifications" || (item.textContent || "").includes("Bildirimler"));
+      if (!button) return false;
+      button.scrollIntoView({ block: "center" });
+      button.click();
+      return true;
+    })()`);
+    if (!openedNotifications) {
+      await notify.eval(`(() => {
+        const appState = window.__kasamTestAccess?.getState?.();
+        if (appState) {
+          appState.activeView = "notifications";
+          window.__kasamTestAccess.setState(appState, { resetDraft: false, render: false });
+        }
+        render();
+      })()`);
+    }
     await sleep(1000);
     await notify.screenshot("07-bildirimler-faz1");
     const notification = await notify.eval(`(() => {

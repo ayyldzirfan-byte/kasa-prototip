@@ -296,3 +296,9 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Sifre sifirlama ve yeni kullanici akisi, frontend kodundan once Supabase Auth ayarlarina baglidir.
 - Kontrol: `npm run test:auth-settings-live` email provider enabled, signup not disabled ve auth health version alanlarini dogrular. Bu kontrol SMTP inbox teslimini kanitlamaz.
 - Eklendi: 2026-06-21 - Supabase auth settings cloud kapisi
+
+## KURAL-051: Nihai Canli Dogrulama Tek Raporda Toplanir
+- Kural: Uygulamanin gercek kullanima hazir oldugu soylenmeden once `npm run test:final-live` veya Windows prompt akisi `npm run test:final-live:prompt` calistirilir. Bu rapor auth settings, gercek cloud cok kullanici ve sifre reset API sonucunu birlikte yazar.
+- Sebep: Local test, gorsel test ve canli Vercel acilisi tek basina ortak kasa/bildirim/sifre reset davranisini kanitlamaz.
+- Kontrol: `scripts/final-live-validation.cjs` `CLOUD AUTH SETTINGS`, `CLOUD MULTI-USER`, `CLOUD PASSWORD RESET API` basliklarini raporlar. Gerekli test hesabi, service role key veya reset e-postasi eksikse `NEEDS_INPUT` yazar ve exit code 2 verir; PASS yazmaz.
+- Eklendi: 2026-06-21 - Final canli dogrulama kapisi

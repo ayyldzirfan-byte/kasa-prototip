@@ -192,6 +192,32 @@ const seedState = {
 let state;
 let draft;
 
+if (typeof window !== "undefined" && !window.__kasamTestAccess) {
+  window.__kasamTestAccess = {
+    getState() {
+      return state;
+    },
+    setState(nextState, options = {}) {
+      state = typeof normalizeState === "function" ? normalizeState(nextState) : nextState;
+      if (options.resetDraft !== false && typeof makeDraft === "function") draft = makeDraft();
+      if (options.save !== false && typeof saveState === "function") saveState();
+      if (options.render && typeof render === "function") render();
+      return state;
+    },
+    getDraft() {
+      return draft;
+    },
+    setDraft(nextDraft) {
+      draft = nextDraft;
+      return draft;
+    },
+    resetDraft(overrides = {}) {
+      draft = { ...(typeof makeDraft === "function" ? makeDraft() : {}), ...overrides };
+      return draft;
+    },
+  };
+}
+
 const app = document.querySelector("#app");
 const tabs = [...document.querySelectorAll(".tab")];
 

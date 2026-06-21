@@ -18,6 +18,8 @@ Tarih: 2026-06-21
 | `kasam-lint.cjs` | Proje kurallari lint denetimi | Calisiyor |
 | `scripts/run-all-tests.cjs` | Tum `test-*.cjs` dosyalarini tek komutla sirali calistirir | Calisiyor |
 | `scripts/readiness-check.cjs` | Local test, build, gorsel audit, canli stamp ve cloud live durumunu tek raporda toplar | Hazir |
+| `scripts/final-live-validation.cjs` | Auth settings, gercek cloud cok kullanici ve sifre reset API sonucunu tek final raporda toplar | Env/secret gerektirir |
+| `scripts/final-live-validation.ps1` | Windows'ta reset e-posta, iki test hesabi veya service role key bilgisini guvenli prompt ile alip final canli dogrulamayi calistirir | Hazir |
 | `scripts/cloud-live-smoke.cjs` | Iki gercek Supabase kullanicisiyle ortak proje, hareket ve bildirim cloud smoke testi; service role varsa gecici test hesabi uretir | Env/secret gerektirir |
 | `scripts/cloud-live-smoke.ps1` | Windows'ta iki test hesabi veya service role key bilgisini guvenli prompt ile alip cloud live smoke testini calistirir | Hazir |
 | `scripts/cdp-test-harness.cjs` | Playwright bagimliligi olmadan gercek Chrome/CDP browser testleri | Calisiyor |
@@ -180,6 +182,13 @@ Tarih: 2026-06-21
 - CLOUD TEST: Supabase auth settings PASS (`email provider: enabled`, `signup disabled: no`, GoTrue health OK). Canli Vercel stamp PASS. `CLOUD LIVE MULTI-USER` ve `CLOUD PASSWORD RESET API` hala ilgili env/test girdileri olmadan PASS uretemez.
 - Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\visual-test-202606210335`.
 - Readiness raporu: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\readiness-202606210336`.
+
+## Son Guncelleme: Final Canli Dogrulama Kapisi - 2026-06-21
+- `scripts/final-live-validation.cjs` eklendi. Tek kosumda `CLOUD AUTH SETTINGS`, `CLOUD MULTI-USER` ve `CLOUD PASSWORD RESET API` sonucunu raporlar.
+- `scripts/final-live-validation.ps1` eklendi. Windows'ta reset e-postasi, iki gercek test hesabi veya service role key bilgisini prompt ile alir; secret degerleri dosyaya yazmaz.
+- `npm run test:final-live` ve `npm run test:final-live:prompt` eklendi.
+- Eksik test hesabi/service role veya reset e-posta varsa final rapor `NEEDS_INPUT` yazar ve PASS saymaz.
+- LOCAL SIMULASYON: `test-final-live-validation-script.cjs` final gate'in script baglantilarini, NEEDS_INPUT davranisini ve secure prompt kullanimini statik olarak dogrular.
 
 ## Son Guncelleme: Kalite Kapilarinin Tek Komuta Baglanmasi - 2026-06-21
 - `scripts/run-all-tests.cjs` eklendi; artik `npm test` ve `npm run test:all` tum `test-*.cjs` dosyalarini calistirir.
