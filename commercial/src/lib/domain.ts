@@ -51,7 +51,8 @@ export function personalEntryImpact(state: AppState, entry: Entry, userId: strin
   const paid = entry.paidById === userId ? tlAmount : 0;
 
   if (entry.type === "income") return share || paid;
-  return paid - share;
+  if (share > 0) return -share;
+  return paid > 0 ? -paid : 0;
 }
 
 export function projectEntryImpact(entry: Entry, now = new Date()) {

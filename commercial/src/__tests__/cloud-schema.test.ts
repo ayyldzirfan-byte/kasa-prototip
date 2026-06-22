@@ -191,7 +191,7 @@ describe("commercial cloud schema adapter", () => {
   });
 
   test("shared expense affects payer and recipient with their own share", () => {
-    expect(personalEntryImpact(state, state.entries[0], "u-owner", now)).toBe(500);
+    expect(personalEntryImpact(state, state.entries[0], "u-owner", now)).toBe(-500);
     expect(personalEntryImpact(state, state.entries[0], "u-partner", now)).toBe(-500);
   });
 

@@ -338,3 +338,12 @@ Tarih: 2026-06-21
 - LOCAL SIMULASYON: `npm.cmd run commercial:deploy-ready` gecti; commercial Vercel config 4/4, commercial cloud adapter 9/9, Commercial Jest 4 suite / 28 test, TypeScript typecheck ve Next build PASS.
 - GORSEL DOGRULAMA: Commercial Playwright 6/6 gecti. Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
 - CLOUD TEST: Bu turda cloud yazma/okuma katmani degismedi; kullanici tarafinda ayni commercial cloud smoke komutu daha once PASS verdi ve ortak proje, ortak hareket, split, paid_by ve bildirim akisi gercek Supabase uzerinde dogrulandi.
+
+## Son Guncelleme: Commercial Senaryo Baglama ve Kisisel Etki Semantigi - 2026-06-21
+- `commercial/src/lib/commercial-scenarios.ts` uzerinden 3 yeni ticari test senaryosu uygulamaya baglandi: paylasimli ev, ogrenci hedefi ve tatil birikimi.
+- Commercial demo state artik senaryo secimine gore yuklenir. `?visualTest=1&scenario=student-goal` ve `?visualTest=1&scenario=travel-pair` gorsel test senaryolari eklendi.
+- Ortak giderlerde kisisel kasa etkisi netlestirildi: kullanici harcamayi odemis olsa bile kisisel etki kendi payi kadar negatif yazilir; odeme yapan kisi bilgisi hesaplasma icin korunur.
+- Ana ekrandaki akilli yonlendirme karti senaryonun fis kalemleri, hedefi ve ticari izin durumuna gore uretilir.
+- LOCAL SIMULASYON: `npm.cmd run commercial:deploy-ready` gecti; commercial Vercel config 4/4, commercial cloud adapter 9/9, Commercial Jest 5 suite / 33 test, TypeScript typecheck ve Next build PASS. `kasam-lint.cjs` 14/14 PASS.
+- GORSEL DOGRULAMA: Commercial Playwright 8/8 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
+- CLOUD TEST: Bu Codex turunda local secret veya iki gercek test hesabi env olarak yoktu; bu nedenle cloud smoke tekrar kosulmadi. Onceki kullanici terminal ciktisinda commercial cloud smoke PASS gorunmustu; tekrar dogrulama icin `npm.cmd run commercial:cloud-smoke:prompt` terminalde calistirilacak.

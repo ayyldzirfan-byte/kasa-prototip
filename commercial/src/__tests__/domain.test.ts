@@ -15,7 +15,7 @@ describe("Kasam commercial domain", () => {
   test("personal cash impact includes shared project personal share", () => {
     const market = demoState.entries.find((entry) => entry.id === "e-market");
     expect(market).toBeDefined();
-    expect(personalEntryImpact(demoState, market!, "u-irfan", now)).toBe(2160);
+    expect(personalEntryImpact(demoState, market!, "u-deniz", now)).toBe(-1440);
   });
 
   test("locked surprise is not confirmed before reveal", () => {
@@ -25,15 +25,15 @@ describe("Kasam commercial domain", () => {
   });
 
   test("pending surprise count is visible to recipients but not actor", () => {
-    expect(pendingSurpriseCountForUser(demoState, "u-irfan")).toBe(0);
-    expect(pendingSurpriseCountForUser(demoState, "u-havva")).toBe(1);
+    expect(pendingSurpriseCountForUser(demoState, "u-deniz")).toBe(0);
+    expect(pendingSurpriseCountForUser(demoState, "u-ece")).toBe(1);
   });
 
   test("monthly summary keeps hidden game out of balance", () => {
-    const summary = monthSummary(demoState, "u-irfan", now);
-    expect(summary.income).toBe(51160);
-    expect(summary.expense).toBe(7200);
-    expect(summary.net).toBe(43960);
+    const summary = monthSummary(demoState, "u-deniz", now);
+    expect(summary.income).toBe(49000);
+    expect(summary.expense).toBe(8640);
+    expect(summary.net).toBe(40360);
   });
 
   test("project summary shows cumulative shared project effect", () => {

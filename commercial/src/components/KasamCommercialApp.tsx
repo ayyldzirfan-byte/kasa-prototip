@@ -19,7 +19,7 @@ import {
   type LucideIcon
 } from "lucide-react";
 import { createKasamSupabaseClient } from "@/lib/supabase";
-import { demoState } from "@/lib/seed";
+import { defaultCommercialScenario, getCommercialScenario, type CommercialScenario } from "@/lib/commercial-scenarios";
 import {
   monthSummary,
   pendingSurpriseCountForUser,
@@ -31,7 +31,7 @@ import {
   weekSummary
 } from "@/lib/domain";
 import { money, signedMoney } from "@/lib/money";
-import { generateGuidancePlan, generateInsightDeck, type Insight } from "@/lib/insights";
+import { generateGuidancePlan as generateGuidancePlanBase, generateInsightDeck, type Insight } from "@/lib/insights";
 import { createCommercialCloudEntry, ensureCommercialStarterData, loadCommercialCloudState } from "@/lib/cloud-client";
 import type { AppState, Entry, EntryType, Profile, Project } from "@/lib/types";
 
@@ -139,7 +139,8 @@ async function completeNotificationLocally(client: SupabaseClient, notificationI
 
 export function KasamCommercialApp() {
   const [client] = useState(() => createKasamSupabaseClient());
-  const [state, setState] = useState<AppState>(demoState);
+  const [scenario, setScenario] = useState<CommercialScenario>(defaultCommercialScenario);
+  const [state, setState] = useState<AppState>(defaultCommercialScenario.state);
   const [mode, setMode] = useState<AppMode>("booting");
   const [authMode, setAuthMode] = useState<AuthMode>("sign-in");
   const [session, setSession] = useState<Session | null>(null);
@@ -152,7 +153,7 @@ export function KasamCommercialApp() {
   const [tab, setTab] = useState<Tab>("home");
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<AddForm>(() => defaultForm(demoState));
+  const [form, setForm] = useState<AddForm>(() => defaultForm(defaultCommercialScenario.state));
   const [selectedDate, setSelectedDate] = useState(todayInputValue());
 
   const refreshCloudState = useCallback(
@@ -178,16 +179,20 @@ export function KasamCommercialApp() {
   );
 
   useEffect(() => {
-    const visualTestMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("visualTest");
+    const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    const visualTestMode = params.has("visualTest");
     if (visualTestMode) {
-      setState(demoState);
-      setForm(defaultForm(demoState));
+      const selectedScenario = getCommercialScenario(params.get("scenario"));
+      setScenario(selectedScenario);
+      setState(selectedScenario.state);
+      setForm(defaultForm(selectedScenario.state));
       setMode("demo");
       setStatusMessage("Demo mod.");
       return;
     }
 
     if (!client) {
+      setScenario(defaultCommercialScenario);
       setMode("demo");
       setStatusMessage("Demo mod. Supabase env yok.");
       return;
@@ -224,7 +229,8 @@ export function KasamCommercialApp() {
       if (nextSession && event !== "INITIAL_SESSION") void refreshCloudState(nextSession);
       if (!nextSession && event === "SIGNED_OUT") {
         setSession(null);
-        setState(demoState);
+        setScenario(defaultCommercialScenario);
+        setState(defaultCommercialScenario.state);
         setMode("auth");
       }
     });
@@ -245,6 +251,11 @@ export function KasamCommercialApp() {
   const month = user ? monthSummary(state, user.id, now) : today;
   const rhythm = rhythmScore(month);
   const insightDeck = user ? generateInsightDeck(state, user.id, now) : [];
+  const generateGuidancePlan = useCallback(
+    (currentState: AppState, userId: string, currentNow: Date, ..._ignored: unknown[]) =>
+      generateGuidancePlanBase(currentState, userId, currentNow, scenario.receiptItems, scenario.commerceConsent),
+    [scenario.commerceConsent, scenario.receiptItems]
+  );
   const guidancePlan = user
     ? generateGuidancePlan(
         state,

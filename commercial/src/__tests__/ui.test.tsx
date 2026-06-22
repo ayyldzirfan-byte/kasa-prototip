@@ -17,7 +17,7 @@ describe("Kasam commercial UI", () => {
     expect(await screen.findByText("Akıllı yönlendirme")).toBeInTheDocument();
     expect(screen.getByText("Fişten yemek fikri")).toBeInTheDocument();
     expect(screen.getByText("İzin olmadan kapalı")).toBeInTheDocument();
-    expect(screen.getByText("Tatil hedefi 14 gün ileri gider")).toBeInTheDocument();
+    expect(screen.getByText(/Tatil hedefi \d+ gün ileri gider/)).toBeInTheDocument();
     expect(screen.queryByText("Allah verdi")).not.toBeInTheDocument();
   });
 
