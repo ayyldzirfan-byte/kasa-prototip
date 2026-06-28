@@ -63,6 +63,7 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Deploy kontrol yöntemi: Vercel build Ready olmadan canlı sürüm doğrulanmış sayılmaz; build Error ise önce deploy logu ve build komutu kontrol edilir.
 
 ## Tekrarlayan Hatalar
+- Commercial UI metinlerinde mojibake/Turkce karakter bozulmasi goruldu — tahmin oyunu gibi odak ekranlarda otomatik lint ve Playwright kaniti zorunlu.
 - Ortak kasa hareketleri diğer kullanıcılara gitmedi — birden fazla görevde tekrarlandı.
 - Bildirimler diğer kullanıcılara düşmedi — birden fazla görevde tekrarlandı.
 - Hareket kaydı görsel kilit olmadan birden fazla kez oluşturuldu — kritik kayıt akışı hatası.
@@ -158,3 +159,13 @@ Son güncelleme: 2026-06-14 — Kural sistemi ve simülasyon hazırlığı
 - Ticari rebuild'de UI aciliyor olmasi yeterli degil; Supabase'deki production kolonlari commercial state'e eksiksiz tasinmali.
 - Oncelikli risk alanlari: `paid_by_id`, `split_with`, `split_ratio`, doviz kur alanlari, `locked_notification_id`, oyun fazlari, hedef/reaksiyon/settlement/ekstre tablolaridir.
 - Yeni commercial cloud degisikligi yapilinca hem mapper hem insert payload hem cloud adapter testi birlikte guncellenecek.
+
+## Ek Kontrol Kurali: Form Yazim Performansi
+- Kullanici mail, sifre, tutar, arama veya aciklama yazarken her karakterde ekranin tamamini yeniden render eden cozum kabul edilmez.
+- Input yogun alanlar local state tutan kucuk bilesenlere ayrilacak; ana uygulama state'i sadece submit/kaydet/reset gibi kesin aksiyonlarda degisecek.
+- Yeterli kriteri: mobil gorunumde hizli yazarken input degeri takilmadan kalir ve Playwright gorsel testiyle dogrulanir.
+
+## Ek Tasarim Tercihi: Tahmin Oyunu Tepkisi
+- Tahmin oyunu tepkileri listede kucuk kalmamali; emoji, GIF, sticker veya fotograf oyun sonucu gibi buyuk, odakli ve animasyonlu gorunmeli.
+- Tepki gorseli hareket acilmadan once net gorulmeli; kullanici once oyun sonucunu, sonra hareketin kasaya yansimasini algilamali.
+- Bu davranis Duolingo benzeri oyun hissi verebilir ama Kasam'in finansal premium dilini bozmayacak kadar sade kalmali.

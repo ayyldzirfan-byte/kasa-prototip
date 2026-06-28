@@ -329,6 +329,15 @@ Tarih: 2026-06-21
 - GORSEL DOGRULAMA: Bu degisiklik UI degisikligi icermedi; mevcut Commercial Playwright 6/6 kaniti korunuyor.
 - CLOUD TEST: Kullanici tarafinda yeni Supabase admin key ile `npm.cmd run commercial:cloud-smoke:prompt` kosuldu ve PASS verdi. Iki gecici Supabase auth kullanicisi olusturuldu; ortak proje, ortak hareket, `paid_by_id`, `split_with`, `split_ratio` ve bildirim akisi gercek cloud uzerinde dogrulandi; gecici proje ve auth kullanicilari temizlendi. Legacy `eyJ...` key bu konusmada gorundugu icin Supabase tarafinda rotate/iptal edilmeli.
 
+## Commercial Auth Input Performansi
+- Commercial giris/kayit ve yeni sifre ekranlarinda karakter bazli input state ana `KasamCommercialApp` bileseninden ayrildi.
+- `AuthPanel` ve `ResetPasswordPanel` local state tutar; ana uygulama state'i sadece giris, kayit, sifre sifirlama, yeni sifre kaydi ve demo acma gibi kesin aksiyonlarda degisir.
+- KURAL-058 eklendi: Form inputlari ana uygulamayi yeniden render etmez.
+- LOCAL SIMULASYON: `commercial/src/__tests__/ui.test.tsx` icinde auth yazim testi eklendi; email/sifre yazimi submit edilene kadar parent callback cagirmiyor.
+- GORSEL DOGRULAMA: `commercial/tests/visual-rules.spec.ts` icinde `auth typing stays stable` testi eklendi; ekran goruntusu `commercial-auth-typing.png` olarak kaydedilir.
+- CLOUD TEST: Bu degisiklik Supabase tablo yazma/okuma akisini degistirmez; cloud ortak kasa smoke testi tekrar gerektiren bir veri degisikligi yoktur.
+- Dogrulama sonucu: `kasam-lint.cjs` 15/15 PASS; Commercial Jest 5 suite / 34 test PASS; TypeScript PASS; Next build PASS; Commercial Playwright 9/9 PASS. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
+
 ## Son Guncelleme: Commercial Guidance ve Ticari Sinyal V1 - 2026-06-21
 - `commercial/src/lib/insights.ts` genisletildi. Hedefi geciktirme yaninda hedefi one alma onerileri, fis sepetinden yemek fikri ve izinli ticari segment sinyalleri eklendi.
 - Premium deger onerisi guncellendi: sinirsiz ortak kasa premium hook olarak cikarildi; gelismis rapor/fis, tahmin oyunu, hedef/kumbara, doviz/taksit ve ekstre analizi one alindi.
@@ -347,3 +356,20 @@ Tarih: 2026-06-21
 - LOCAL SIMULASYON: `npm.cmd run commercial:deploy-ready` gecti; commercial Vercel config 4/4, commercial cloud adapter 9/9, Commercial Jest 5 suite / 33 test, TypeScript typecheck ve Next build PASS. `kasam-lint.cjs` 14/14 PASS.
 - GORSEL DOGRULAMA: Commercial Playwright 8/8 gecti. Gorseller: `C:\Users\IRFAN AYYILDIZ\Desktop\kasam-test\commercial-visual`.
 - CLOUD TEST: Bu Codex turunda local secret veya iki gercek test hesabi env olarak yoktu; bu nedenle cloud smoke tekrar kosulmadi. Onceki kullanici terminal ciktisinda commercial cloud smoke PASS gorunmustu; tekrar dogrulama icin `npm.cmd run commercial:cloud-smoke:prompt` terminalde calistirilacak.
+
+## Son Guncelleme: Commercial Tahmin Oyunu Animasyon Katmani - 2026-06-28
+- Commercial tahmin bildiriminde `Tahmin et` hareketi dogrudan acmaz; once secilen emoji, GIF, sticker veya fotografi buyuk ve animasyonlu feedback katmaninda gosterir.
+- Feedback katmani Kasam stilinde odakli oyun sonucu verir: sonuc isareti, buyuk tepki medyasi, ilerleme cubugu ve `Devam` aksiyonu.
+- `visualUser` test parametresi eklendi; recipient kullanici ile tahmin feedback akisi unit ve Playwright tarafinda dogrulanir.
+- `KURAL-059` eklendi: Tahmin tepkisi buyuk ve animasyonlu gosterilir.
+- LOCAL SIMULASYON: `kasam-lint.cjs` 16/16 PASS; Commercial Jest 5 suite / 35 test PASS; TypeScript typecheck PASS; Commercial Next build PASS.
+- GORSEL DOGRULAMA: Commercial Playwright 10/10 PASS. Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-2026-06-28-1312`. Tahmin animasyonu kaniti: `commercial-guess-feedback.png`.
+- CLOUD TEST: Veri semasi veya Supabase yazma/okuma davranisi degismedi; mevcut commercial cloud smoke sonucu korunur.
+
+## Son Guncelleme: Commercial Tahmin Metni Encoding Duzeltmesi - 2026-06-28
+- Tahmin sonucu ekraninda gorunen bozuk Turkce karakterler unicode-safe metinlere cevrildi.
+- Tahmin feedback kartinda `Surpriz` etiketi kaldirildi; kullaniciya gorunen sticker etiketi `Gizli hamle` olarak sadelestirildi.
+- `KURAL-060` eklendi: Commercial UI kaynaklarinda mojibake karakterleri yasak.
+- LOCAL SIMULASYON: `kasam-lint.cjs` 17/17 PASS; Commercial Jest 5 suite / 35 test PASS; TypeScript typecheck PASS; Commercial Next build PASS.
+- GORSEL DOGRULAMA: Commercial Playwright 10/10 PASS. Gorseller: `C:\Users\İRFAN AYYILDIZ\Desktop\kasam-test\visual-test-2026-06-28-1348`. Tahmin feedback kaniti: `commercial-guess-feedback.png`.
+- CLOUD TEST: UI metni/CSS degisikligi; Supabase semasi etkilenmedi.

@@ -172,6 +172,9 @@ Tarayıcı tabanlı Playwright testleri mevcut local runtime’da `npm`, `npx` v
 - KURAL-055: Ticari zeka motoru `commercial/src/lib/insights.ts` icindeki test edilebilir saf fonksiyonlarla calisir. LLM varsa sadece hesaplanmis sonucu anlatir, finansal sonucu hesaplamaz.
 - KURAL-056: Ticari app production `kasa_` tablolarini `commercial/src/lib/cloud-schema.ts` uzerinden map eder. Ortak kasa payi, doviz, oyun gizliligi ve opsiyonel ticari tablolar icin yeni kolon eklendiyse mapper, test ve `commercial/docs/SUPABASE-MAPPING.md` birlikte guncellenir.
 - KURAL-057: Ticari partner/reklam sinyali sadece acik izinle ve kategori/segment seviyesinde uretilir. Fis ve hareket verisi ham haliyle ticari paylasim konusu yapilmaz.
+- KURAL-058: Form inputlari ana uygulama state'ine baglanmaz. Auth, tutar, arama, medya ve uzun metin alanlari kendi kucuk bileseninde local state tutar; ana state sadece submit/kaydet gibi kesin aksiyonda degisir.
+- KURAL-059: Tahmin oyunu sonucunda secilen emoji, GIF, sticker veya fotograf buyuk ve animasyonlu feedback katmaninda gorunur. Bu davranis unit test ve Playwright ekran goruntusuyle dogrulanir.
+- KURAL-060: Commercial UI metinlerinde `Ã`, `Ä`, `Å`, `Â`, `�` gibi mojibake karakterleri kalamaz; Turkce metinler UTF-8 veya JS unicode escape ile yazilir.
 - Komutlar:
   - `npm --prefix commercial run dev`
   - `npm --prefix commercial test`

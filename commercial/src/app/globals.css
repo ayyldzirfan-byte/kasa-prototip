@@ -607,6 +607,197 @@ button {
   text-align: center;
 }
 
+.guess-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 20%, color-mix(in srgb, var(--color-accent) 24%, transparent), transparent 22rem),
+    color-mix(in srgb, var(--color-bg) 84%, transparent);
+  backdrop-filter: blur(18px);
+  animation: guess-overlay-in var(--duration-normal) var(--ease-out);
+}
+
+.guess-overlay.wrong {
+  background:
+    radial-gradient(circle at 50% 20%, color-mix(in srgb, var(--color-expense) 24%, transparent), transparent 22rem),
+    color-mix(in srgb, var(--color-bg) 84%, transparent);
+}
+
+.guess-feedback-card {
+  width: min(100%, 360px);
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  border-radius: 30px;
+  background: linear-gradient(180deg, var(--color-surface), var(--color-surface-2));
+  box-shadow: var(--shadow-soft);
+  padding: 24px;
+  animation: guess-card-pop var(--duration-slow) var(--ease-spring);
+}
+
+.guess-result-mark {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-dark-text);
+  font-size: 38px;
+  font-weight: 900;
+  animation: guess-mark-bounce 720ms var(--ease-spring);
+}
+
+.guess-feedback-card .eyebrow,
+.guess-feedback-card h1,
+.guess-feedback-card .muted {
+  margin: 0;
+}
+
+.guess-feedback-card .eyebrow {
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+}
+
+.guess-feedback-card h1 {
+  font-size: 28px;
+  line-height: 1.08;
+  font-weight: 900;
+}
+
+.guess-feedback-card .muted {
+  max-width: 280px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.guess-reaction-media {
+  width: min(100%, 232px);
+  min-height: 154px;
+  border: 1px solid var(--color-border);
+  border-radius: 30px;
+  background: var(--color-surface-2);
+  box-shadow: var(--shadow-soft);
+  animation: guess-media-dance 1200ms var(--ease-spring) both;
+}
+
+.guess-reaction-media.image {
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+}
+
+.guess-reaction-media.emoji {
+  display: grid;
+  place-items: center;
+  font-size: 84px;
+  line-height: 1;
+}
+
+.guess-reaction-media.sticker {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  color: var(--color-text);
+}
+
+.guess-reaction-media.sticker strong {
+  max-width: 180px;
+  font-size: 20px;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.guess-progress {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.guess-progress span {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  transform-origin: left;
+  animation: guess-progress-fill 900ms var(--ease-out) both;
+}
+
+.guess-progress span:nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.guess-progress span:nth-child(3) {
+  animation-delay: 180ms;
+}
+
+@keyframes guess-overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes guess-card-pop {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.94);
+  }
+}
+
+@keyframes guess-mark-bounce {
+  0% {
+    transform: scale(0.42) rotate(-10deg);
+  }
+  62% {
+    transform: scale(1.12) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes guess-media-dance {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.82) rotate(-4deg);
+  }
+  48% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.06) rotate(3deg);
+  }
+  74% {
+    transform: translateY(2px) scale(0.98) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes guess-progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guess-overlay,
+  .guess-feedback-card,
+  .guess-result-mark,
+  .guess-reaction-media,
+  .guess-progress span {
+    animation: none;
+  }
+}
+
 @media (max-width: 390px) {
   .app-shell {
     padding-inline: 12px;

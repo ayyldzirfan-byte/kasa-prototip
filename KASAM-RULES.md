@@ -338,3 +338,21 @@ Her görev sonunda şu kontrol yapılır:
 - Sebep: Finans uygulamasinda guven ve KVKK ticari buyumeden once gelir. Ticari model, kullanicinin parasal mahremiyetini zedelememelidir.
 - Kontrol: `generateCommerceSignals(..., false)` her zaman `allowed:false` doner. `commercial/src/__tests__/insights.test.ts` izin kapaliyken ticari sinyalin kapali kaldigini ve izin acikken segment bazli kaldigini test eder.
 - Eklendi: 2026-06-21 - ticari zeka ve partner sinyali
+
+## KURAL-058: Form Inputlari Ana Uygulamayi Yeniden Render Etmez
+- Kural: Auth, arama, tutar, medya, aciklama ve uzun metin inputlari ana uygulama state'inde tutulmaz. Input state ilgili kucuk form/component icinde izole olur; ana state sadece submit, reset, kaydet veya kesin aksiyonda degisir.
+- Sebep: Mobilde her karakterde ekranin tamami yeniden render olursa yazim gecikir, klavye akisi bozulur ve kullanici ayni islemi tekrar tekrar yapar.
+- Kontrol: `AuthPanel` gibi input yogun bilesenlerde local state testi bulunur. `KasamCommercialApp` icinde `authEmail`, `authPassword`, `authName`, `newPassword` gibi karakter bazli input state'i bulunamaz. UI gorevlerinde Playwright ile hizli yazma gorsel testi alinir.
+- Eklendi: 2026-06-28 - auth input yazim performansi
+
+## KURAL-059: Tahmin Tepkisi Buyuk ve Animasyonlu Gosterilir
+- Kural: Tahmin oyununda dogru/yanlis cevap sonrasi secilen emoji, GIF, sticker veya fotograf tam ekran/odakli feedback katmaninda buyuk ve animasyonlu gosterilir. Hareket acilmadan once kullanici sonucu ve secilen tepkiyi net gormelidir.
+- Sebep: Tahmin oyunu finans akisini bozmadan etkilesim katar. Tepki kucuk listede kalirsa oyun hissi ve kullanici motivasyonu kaybolur.
+- Kontrol: `commercial/src/__tests__/ui.test.tsx` tahmin feedback dialogunu ve `guess-reaction-media` alanini test eder. `commercial/tests/visual-rules.spec.ts` `commercial-guess-feedback.png` ekran goruntusunu uretir. `kasam-lint.cjs` ilgili siniflari ve testleri kontrol eder.
+- Eklendi: 2026-06-28 - tahmin oyunu animasyonu
+
+## KURAL-060: Commercial UI Metinlerinde Mojibake Yasak
+- Kural: Kullaniciya gorunen commercial UI metinlerinde `Ã`, `Ä`, `Å`, `Â`, `�` gibi bozuk encoding/mojibake karakterleri bulunamaz. Turkce metinler dogrudan UTF-8 veya JS unicode escape ile yazilir.
+- Sebep: `Dogru bildin` metninin bozuk encoding ile gorunmesi urunun guvenilir ve premium hissini bozar; ozellikle tahmin oyunu gibi odak ekranlarda kabul edilemez.
+- Kontrol: `kasam-lint.cjs` `commercial/src` ve `commercial/tests` altindaki TS/TSX/JS/CSS kaynaklarda mojibake karakterlerini tarar.
+- Eklendi: 2026-06-28 - tahmin sonucu Turkce karakter duzeltmesi

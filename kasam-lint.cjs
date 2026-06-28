@@ -249,6 +249,86 @@ function checkRule053() {
   return failures;
 }
 
+function checkRule058() {
+  const failures = [];
+  const componentFile = "commercial/src/components/KasamCommercialApp.tsx";
+  const componentPath = path.join(root, componentFile);
+  if (!fs.existsSync(componentPath)) return failures;
+  const text = fs.readFileSync(componentPath, "utf8");
+  const bannedState = [
+    "authEmail",
+    "authPassword",
+    "authName",
+    "newPassword",
+    "setAuthEmail",
+    "setAuthPassword",
+    "setAuthName",
+    "setNewPassword",
+  ];
+  bannedState.forEach((word) => {
+    if (text.includes(word)) {
+      failures.push(fail(componentFile, 1, `Karakter bazli auth input state ana uygulamada tutuluyor: ${word}`));
+    }
+  });
+  if (!/export\s+const\s+AuthPanel\s*=\s*memo/.test(text)) {
+    failures.push(fail(componentFile, 1, "AuthPanel memo/local state bileseni olarak ayrilmali."));
+  }
+  return failures;
+}
+
+function checkRule059() {
+  const failures = [];
+  const componentFile = "commercial/src/components/KasamCommercialApp.tsx";
+  const cssFile = "commercial/src/app/globals.css";
+  const unitFile = "commercial/src/__tests__/ui.test.tsx";
+  const visualFile = "commercial/tests/visual-rules.spec.ts";
+  const requiredFiles = [componentFile, cssFile, unitFile, visualFile];
+  requiredFiles.forEach((file) => {
+    if (!fs.existsSync(path.join(root, file))) {
+      failures.push(fail(file, 1, "KURAL-059 dosya eksik."));
+    }
+  });
+  if (failures.length) return failures;
+  const component = fs.readFileSync(path.join(root, componentFile), "utf8");
+  const css = fs.readFileSync(path.join(root, cssFile), "utf8");
+  const unit = fs.readFileSync(path.join(root, unitFile), "utf8");
+  const visual = fs.readFileSync(path.join(root, visualFile), "utf8");
+  if (!/GuessFeedbackOverlay/.test(component) || !/guess-reaction-media/.test(component)) {
+    failures.push(fail(componentFile, 1, "Tahmin sonucu buyuk medya overlay bileseni bulunamadi."));
+  }
+  if (!/\.guess-overlay/.test(css) || !/guess-media-dance/.test(css)) {
+    failures.push(fail(cssFile, 1, "Tahmin sonucu overlay animasyon CSS'i bulunamadi."));
+  }
+  if (!/prediction feedback animates selected media before reveal/.test(unit)) {
+    failures.push(fail(unitFile, 1, "Tahmin feedback unit testi bulunamadi."));
+  }
+  if (!/commercial-guess-feedback\.png/.test(visual)) {
+    failures.push(fail(visualFile, 1, "Tahmin feedback Playwright ekran goruntusu testi bulunamadi."));
+  }
+  return failures;
+}
+
+function checkRule060() {
+  const failures = [];
+  const scanDirs = [
+    path.join(root, "commercial", "src"),
+    path.join(root, "commercial", "tests"),
+  ];
+  const files = scanDirs.flatMap((dir) =>
+    listFilesRecursive(dir, (file) => /\.(ts|tsx|js|jsx|css)$/i.test(file))
+  );
+  const mojibake = /Ã|Ä|Å|Â|�/;
+  files.forEach((fullPath) => {
+    const relative = path.relative(root, fullPath).replace(/\\/g, "/");
+    fs.readFileSync(fullPath, "utf8").split(/\r?\n/).forEach((line, index) => {
+      if (mojibake.test(line)) {
+        failures.push(fail(relative, index + 1, "Commercial UI kaynaginda bozuk Turkce encoding/mojibake var."));
+      }
+    });
+  });
+  return failures;
+}
+
 function listFilesRecursive(dir, predicate) {
   if (!fs.existsSync(dir)) return [];
   const result = [];
@@ -306,6 +386,9 @@ const checks = [
   ["KURAL-039", checkRule039],
   ["KURAL-052", checkRule052],
   ["KURAL-053", checkRule053],
+  ["KURAL-058", checkRule058],
+  ["KURAL-059", checkRule059],
+  ["KURAL-060", checkRule060],
 ];
 
 const warnChecks = [

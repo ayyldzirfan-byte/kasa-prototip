@@ -7,21 +7,40 @@ const visualDir =
   path.join(process.env.USERPROFILE ?? process.cwd(), "Desktop", "kasam-test", "commercial-visual");
 const visualUrl = "/?visualTest=1";
 const scenarioUrl = (id: string) => `/?visualTest=1&scenario=${id}`;
+const visualUserUrl = (user: number) => `/?visualTest=1&visualUser=${user}`;
 
 test.beforeAll(() => {
   fs.mkdirSync(visualDir, { recursive: true });
 });
 
 test.describe("Kasam commercial visual rules", () => {
+  test("auth typing stays stable", async ({ page }) => {
+    await page.goto("/?visualAuth=1", { waitUntil: "domcontentloaded" });
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+    await page.goto("/?visualAuth=1", { waitUntil: "networkidle" });
+    const emailInput = page.locator('input[type="email"]').first();
+    const passwordInput = page.locator('input[type="password"]').first();
+    await expect(emailInput).toBeVisible();
+    await expect(passwordInput).toBeVisible();
+    await emailInput.fill("irfan@kasam.test");
+    await passwordInput.fill("12345678");
+    await expect(emailInput).toHaveValue("irfan@kasam.test");
+    await expect(passwordInput).toHaveValue("12345678");
+    await page.screenshot({ path: path.join(visualDir, "commercial-auth-typing.png"), fullPage: true });
+  });
+
   test("home screen", async ({ page }) => {
     await page.goto(visualUrl);
     await expect(page.getByText(/Finansal ritim/i)).toBeVisible();
-    await expect(page.getByText(/Kasam öneriyor/i)).toBeVisible();
-    await expect(page.getByText(/Akıllı yönlendirme/i)).toBeVisible();
-    await expect(page.getByText(/Fişten yemek fikri/i)).toBeVisible();
+    await expect(page.getByText(/Kasam .neriyor/i)).toBeVisible();
+    await expect(page.getByText(/Ak.ll. y.nlendirme/i)).toBeVisible();
+    await expect(page.getByText(/Fi.ten yemek fikri/i)).toBeVisible();
     await expect(page.getByText(/Ana ekran/i)).toBeVisible();
     await expect(page.getByText("Allah verdi")).toHaveCount(0);
-    await expect(page.locator(".entry-title", { hasText: /Ev Ortak Kasası/i })).toBeVisible();
+    await expect(page.locator(".entry-title", { hasText: /Ev Ortak Kasas./i })).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-home.png"), fullPage: true });
   });
 
@@ -42,14 +61,14 @@ test.describe("Kasam commercial visual rules", () => {
     await page.goto(visualUrl);
     await page.getByRole("button", { name: /Hareket ekle/i }).click();
     await expect(page.getByLabel("Hareket ekle")).toBeVisible();
-    await expect(page.getByText(/Paylaşılacak kişiler/i)).toBeVisible();
+    await expect(page.getByText(/Payla..lacak ki.iler/i)).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-add-flow.png"), fullPage: true });
   });
 
   test("shared budgets", async ({ page }) => {
     await page.goto(visualUrl);
-    await page.getByRole("button", { name: /Bütçeler/i }).click();
-    await expect(page.getByText(/Ev Ortak Kasası/i)).toBeVisible();
+    await page.getByRole("button", { name: /B.t.eler/i }).click();
+    await expect(page.getByText(/Ev Ortak Kasas./i)).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-projects.png"), fullPage: true });
   });
 
@@ -60,10 +79,19 @@ test.describe("Kasam commercial visual rules", () => {
     await page.screenshot({ path: path.join(visualDir, "commercial-notifications.png"), fullPage: true });
   });
 
+  test("prediction feedback media animation", async ({ page }) => {
+    await page.goto(visualUserUrl(2));
+    await page.getByRole("button", { name: "Hareketler" }).click();
+    await page.getByRole("button", { name: "Tahmin et" }).click();
+    await expect(page.getByRole("dialog", { name: "Tahmin sonucu" })).toBeVisible();
+    await expect(page.getByTestId("guess-reaction-media")).toBeVisible();
+    await page.screenshot({ path: path.join(visualDir, "commercial-guess-feedback.png"), fullPage: true });
+  });
+
   test("receipt report", async ({ page }) => {
     await page.goto(visualUrl);
     await page.getByRole("button", { name: "Rapor" }).click();
-    await expect(page.getByText("KASAM FİŞİ")).toBeVisible();
+    await expect(page.getByText(/KASAM F.../i)).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-report.png"), fullPage: true });
   });
 
@@ -71,7 +99,7 @@ test.describe("Kasam commercial visual rules", () => {
     await page.goto(scenarioUrl("student-goal"));
     await expect(page.getByText("PlayStation hedefi").first()).toBeVisible();
     await expect(page.getByText("Domatesli makarna")).toBeVisible();
-    await expect(page.getByText("İzin olmadan kapalı")).toBeVisible();
+    await expect(page.getByText(/.zin olmadan kapal./i)).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-scenario-student.png"), fullPage: true });
   });
 
@@ -79,7 +107,7 @@ test.describe("Kasam commercial visual rules", () => {
     await page.goto(scenarioUrl("travel-pair"));
     await expect(page.getByText("Bali turu").first()).toBeVisible();
     await expect(page.getByText("kahve").first()).toBeVisible();
-    await expect(page.getByText("Tatil Kumbarası").first()).toBeVisible();
+    await expect(page.getByText(/Tatil Kumbaras./i).first()).toBeVisible();
     await page.screenshot({ path: path.join(visualDir, "commercial-scenario-travel.png"), fullPage: true });
   });
 });

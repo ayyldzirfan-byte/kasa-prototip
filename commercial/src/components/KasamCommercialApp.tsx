@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
+import { memo, useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import {
   BarChart2,
@@ -33,11 +33,18 @@ import {
 import { money, signedMoney } from "@/lib/money";
 import { generateGuidancePlan as generateGuidancePlanBase, generateInsightDeck, type Insight } from "@/lib/insights";
 import { createCommercialCloudEntry, ensureCommercialStarterData, loadCommercialCloudState } from "@/lib/cloud-client";
-import type { AppState, Entry, EntryType, Profile, Project } from "@/lib/types";
+import type { AppState, Entry, EntryMedia, EntryType, Notification, Profile, Project } from "@/lib/types";
 
 type Tab = "home" | "entries" | "projects" | "calendar" | "reports";
 type AppMode = "booting" | "auth" | "reset" | "cloud" | "demo";
 type AuthMode = "sign-in" | "sign-up";
+
+type AuthSubmitPayload = {
+  authMode: AuthMode;
+  email: string;
+  password: string;
+  name: string;
+};
 
 type AddForm = {
   projectId: string;
@@ -47,6 +54,15 @@ type AddForm = {
   date: string;
   splitWith: string[];
   surprise: boolean;
+};
+
+type GuessFeedback = {
+  notificationId: string;
+  correct: boolean;
+  phaseLabel: string;
+  title: string;
+  subtitle: string;
+  reaction?: EntryMedia;
 };
 
 const tabItems: Array<{ id: Tab; label: string; icon: LucideIcon }> = [
@@ -124,6 +140,104 @@ function insightSeverityLabel(severity: Insight["severity"]) {
   return "Bilgi";
 }
 
+function scenarioWithVisualUser(scenario: CommercialScenario, visualUser: string | null): AppState {
+  if (!visualUser) return scenario.state;
+  const index = Number.parseInt(visualUser, 10);
+  const profileByIndex = Number.isFinite(index) ? scenario.state.profiles[index - 1] : undefined;
+  const profile =
+    profileByIndex ??
+    scenario.state.profiles.find((item) => item.id === visualUser || item.email === visualUser || item.displayName === visualUser);
+  return profile ? { ...scenario.state, activeUserId: profile.id } : scenario.state;
+}
+
+function normalizeReaction(value: unknown): EntryMedia | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const record = value as Record<string, unknown>;
+  const type = record.type;
+  const mediaValue = record.value ?? record.data;
+  if (type !== "emoji" && type !== "gif" && type !== "photo" && type !== "sticker") return undefined;
+  if (typeof mediaValue !== "string" || !mediaValue.trim()) return undefined;
+  return { type, value: mediaValue };
+}
+
+function reactionForNotification(notification: Notification, entry?: Entry): EntryMedia {
+  const reactions = notification.game?.reactions as Record<string, unknown> | undefined;
+  return (
+    normalizeReaction(reactions?.categoryCorrect) ??
+    normalizeReaction(reactions?.typeCorrect) ??
+    normalizeReaction(reactions?.actorCorrect) ??
+    entry?.media ?? { type: "sticker", value: "kasam" }
+  );
+}
+
+function isRemoteOrInlineImage(value: string) {
+  return /^(https?:\/\/|data:image\/|blob:)/i.test(value);
+}
+
+function stickerLabel(value: string) {
+  const labels: Record<string, string> = {
+    gift: "Gizli hamle",
+    receipt: "Fi\u015f",
+    kasam: "Kasam",
+    win: "Bildin",
+    coffee: "Kahve",
+    market: "Market"
+  };
+  return labels[value] ?? value;
+}
+
+function ReactionMedia({ media }: { media?: EntryMedia }) {
+  if (!media) {
+    return (
+      <div className="guess-reaction-media sticker" data-testid="guess-reaction-media">
+        <Sparkles size={54} />
+        <strong>Kasam</strong>
+      </div>
+    );
+  }
+
+  if (media.type === "emoji") {
+    return (
+      <div className="guess-reaction-media emoji" data-testid="guess-reaction-media" aria-label="Tahmin tepkisi">
+        {media.value}
+      </div>
+    );
+  }
+
+  if (media.type === "gif" || media.type === "photo" || isRemoteOrInlineImage(media.value)) {
+    return <img className="guess-reaction-media image" data-testid="guess-reaction-media" src={media.value} alt="Tahmin tepkisi" />;
+  }
+
+  return (
+    <div className="guess-reaction-media sticker" data-testid="guess-reaction-media">
+      <Sparkles size={54} />
+      <strong>{stickerLabel(media.value)}</strong>
+    </div>
+  );
+}
+
+function GuessFeedbackOverlay({ feedback, onContinue }: { feedback: GuessFeedback; onContinue: () => void }) {
+  return (
+    <div className={feedback.correct ? "guess-overlay correct" : "guess-overlay wrong"} role="dialog" aria-label="Tahmin sonucu">
+      <section className="guess-feedback-card">
+        <p className="eyebrow">{feedback.phaseLabel}</p>
+        <div className="guess-result-mark">{feedback.correct ? <Check size={38} /> : "!"}</div>
+        <h1>{feedback.title}</h1>
+        <p className="muted">{feedback.subtitle}</p>
+        <ReactionMedia media={feedback.reaction} />
+        <div className="guess-progress" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <button className="pill full" type="button" onClick={onContinue}>
+          Devam
+        </button>
+      </section>
+    </div>
+  );
+}
+
 async function completeNotificationLocally(client: SupabaseClient, notificationId: string, entryId?: string) {
   const revealedAt = new Date().toISOString();
   const rpcResult = await client.rpc("complete_kasam_guess", { notification_uuid: notificationId });
@@ -137,6 +251,110 @@ async function completeNotificationLocally(client: SupabaseClient, notificationI
   }
 }
 
+type AuthPanelProps = {
+  authMode: AuthMode;
+  cloudBusy: boolean;
+  statusMessage: string;
+  onAuthModeChange: (mode: AuthMode) => void;
+  onSubmit: (payload: AuthSubmitPayload) => void;
+  onPasswordReset: (email: string) => void;
+  onOpenDemo: () => void;
+};
+
+export const AuthPanel = memo(function AuthPanel({
+  authMode,
+  cloudBusy,
+  statusMessage,
+  onAuthModeChange,
+  onSubmit,
+  onPasswordReset,
+  onOpenDemo
+}: AuthPanelProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  return (
+    <main className="screen-stack auth-screen">
+      <section className="card auth-card">
+        <p className="eyebrow">Paranın nereye gittiğini bil.</p>
+        <h1 className="title-xl">Kasam</h1>
+        <p className="muted">Kendi paranı ve ortak harcamaların sana etkisini tek ekranda gör.</p>
+        <div className="segmented">
+          <button className={authMode === "sign-in" ? "segment active" : "segment"} type="button" onClick={() => onAuthModeChange("sign-in")}>
+            Giriş
+          </button>
+          <button className={authMode === "sign-up" ? "segment active" : "segment"} type="button" onClick={() => onAuthModeChange("sign-up")}>
+            Kayıt
+          </button>
+        </div>
+        <div className="form-grid">
+          {authMode === "sign-up" ? (
+            <div className="field">
+              <label>Ad</label>
+              <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Adın" autoComplete="name" />
+            </div>
+          ) : null}
+          <div className="field">
+            <label>E-posta</label>
+            <input
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="mail@adres.com"
+              type="email"
+              inputMode="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              autoComplete="email"
+            />
+          </div>
+          <div className="field">
+            <label>Şifre</label>
+            <input value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Şifre" type="password" autoComplete="current-password" />
+          </div>
+          <button className="pill full" type="button" onClick={() => onSubmit({ authMode, email, password, name })} disabled={cloudBusy}>
+            {cloudBusy ? "Bekle..." : authMode === "sign-in" ? "Giriş yap" : "Kayıt ol"}
+          </button>
+          <button className="ghost-button full" type="button" onClick={() => onPasswordReset(email)}>
+            Şifremi unuttum
+          </button>
+          <button className="ghost-button full" type="button" onClick={onOpenDemo}>
+            Demoyu aç
+          </button>
+        </div>
+        {statusMessage ? <p className="status-line">{statusMessage}</p> : null}
+      </section>
+    </main>
+  );
+});
+
+type ResetPasswordPanelProps = {
+  cloudBusy: boolean;
+  statusMessage: string;
+  onSubmit: (password: string) => void;
+};
+
+export const ResetPasswordPanel = memo(function ResetPasswordPanel({ cloudBusy, statusMessage, onSubmit }: ResetPasswordPanelProps) {
+  const [password, setPassword] = useState("");
+
+  return (
+    <main className="screen-stack auth-screen">
+      <section className="card auth-card">
+        <p className="eyebrow">Şifre yenileme</p>
+        <h1 className="title-xl">Yeni şifre oluştur</h1>
+        <div className="field">
+          <label>Yeni şifre</label>
+          <input value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Yeni şifre" type="password" autoComplete="new-password" />
+        </div>
+        <button className="pill full" type="button" onClick={() => onSubmit(password)} disabled={cloudBusy}>
+          {cloudBusy ? "Güncelleniyor..." : "Şifreyi güncelle"}
+        </button>
+        {statusMessage ? <p className="status-line">{statusMessage}</p> : null}
+      </section>
+    </main>
+  );
+});
+
 export function KasamCommercialApp() {
   const [client] = useState(() => createKasamSupabaseClient());
   const [scenario, setScenario] = useState<CommercialScenario>(defaultCommercialScenario);
@@ -144,10 +362,6 @@ export function KasamCommercialApp() {
   const [mode, setMode] = useState<AppMode>("booting");
   const [authMode, setAuthMode] = useState<AuthMode>("sign-in");
   const [session, setSession] = useState<Session | null>(null);
-  const [authEmail, setAuthEmail] = useState("");
-  const [authPassword, setAuthPassword] = useState("");
-  const [authName, setAuthName] = useState("");
-  const [newPassword, setNewPassword] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const [cloudBusy, setCloudBusy] = useState(false);
   const [tab, setTab] = useState<Tab>("home");
@@ -155,6 +369,7 @@ export function KasamCommercialApp() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<AddForm>(() => defaultForm(defaultCommercialScenario.state));
   const [selectedDate, setSelectedDate] = useState(todayInputValue());
+  const [guessFeedback, setGuessFeedback] = useState<GuessFeedback | null>(null);
 
   const refreshCloudState = useCallback(
     async (activeSession: Session) => {
@@ -180,12 +395,18 @@ export function KasamCommercialApp() {
 
   useEffect(() => {
     const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+    if (params.has("visualAuth")) {
+      setMode("auth");
+      setStatusMessage("");
+      return;
+    }
     const visualTestMode = params.has("visualTest");
     if (visualTestMode) {
       const selectedScenario = getCommercialScenario(params.get("scenario"));
+      const visualState = scenarioWithVisualUser(selectedScenario, params.get("visualUser"));
       setScenario(selectedScenario);
-      setState(selectedScenario.state);
-      setForm(defaultForm(selectedScenario.state));
+      setState(visualState);
+      setForm(defaultForm(visualState));
       setMode("demo");
       setStatusMessage("Demo mod.");
       return;
@@ -292,25 +513,37 @@ export function KasamCommercialApp() {
     setShowAdd(true);
   }
 
-  async function submitAuth() {
+  const handleAuthModeChange = useCallback((nextMode: AuthMode) => {
+    setAuthMode(nextMode);
+    setStatusMessage("");
+  }, []);
+
+  const openDemoMode = useCallback(() => {
+    setStatusMessage("");
+    setMode("demo");
+  }, []);
+
+  async function submitAuth({ authMode: requestedAuthMode, email, password, name }: AuthSubmitPayload) {
     if (!client) return;
-    if (!authEmail.trim() || !authPassword.trim()) {
+    const cleanEmail = email.trim();
+    const cleanPassword = password.trim();
+    if (!cleanEmail || !cleanPassword) {
       setStatusMessage("E-posta ve şifre gir.");
       return;
     }
     setCloudBusy(true);
     setStatusMessage("");
     try {
-      if (authMode === "sign-in") {
-        const { data, error } = await client.auth.signInWithPassword({ email: authEmail.trim(), password: authPassword });
+      if (requestedAuthMode === "sign-in") {
+        const { data, error } = await client.auth.signInWithPassword({ email: cleanEmail, password });
         if (error) throw error;
         if (data.session) await refreshCloudState(data.session);
       } else {
         const { data, error } = await client.auth.signUp({
-          email: authEmail.trim(),
-          password: authPassword,
+          email: cleanEmail,
+          password,
           options: {
-            data: { name: authName.trim() || authEmail.split("@")[0] },
+            data: { name: name.trim() || cleanEmail.split("@")[0] },
             emailRedirectTo: typeof window !== "undefined" ? `${window.location.origin}/auth/callback` : undefined
           }
         });
@@ -328,24 +561,26 @@ export function KasamCommercialApp() {
     }
   }
 
-  async function sendPasswordReset() {
+  async function sendPasswordReset(email: string) {
     if (!client) return;
-    if (!authEmail.trim()) {
+    const cleanEmail = email.trim();
+    if (!cleanEmail) {
       setStatusMessage("Önce e-posta gir.");
       return;
     }
     const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/auth/callback` : undefined;
-    const { error } = await client.auth.resetPasswordForEmail(authEmail.trim(), { redirectTo });
+    const { error } = await client.auth.resetPasswordForEmail(cleanEmail, { redirectTo });
     setStatusMessage(error ? error.message : "Şifre yenileme maili gönderildi.");
   }
 
-  async function updatePassword() {
-    if (!client || !newPassword.trim()) {
+  async function updatePassword(password: string) {
+    const cleanPassword = password.trim();
+    if (!client || !cleanPassword) {
       setStatusMessage("Yeni şifre gir.");
       return;
     }
     setCloudBusy(true);
-    const { data, error } = await client.auth.updateUser({ password: newPassword });
+    const { data, error } = await client.auth.updateUser({ password: cleanPassword });
     if (error) {
       setStatusMessage(error.message);
       setCloudBusy(false);
@@ -469,6 +704,27 @@ export function KasamCommercialApp() {
     }
   }
 
+  function openGuessFeedback(notificationId: string) {
+    const notification = state.notifications.find((item) => item.id === notificationId);
+    if (!notification) return;
+    const entry = state.entries.find((item) => item.id === notification.entryId);
+    setGuessFeedback({
+      notificationId,
+      correct: true,
+      phaseLabel: "Tahmin sonucu",
+      title: "Do\u011fru bildin",
+      subtitle: "Tepkin a\u00e7\u0131ld\u0131. Devam et, hareket kasaya yans\u0131s\u0131n.",
+      reaction: reactionForNotification(notification, entry)
+    });
+  }
+
+  async function finishGuessFeedback() {
+    const current = guessFeedback;
+    if (!current) return;
+    setGuessFeedback(null);
+    await revealNotification(current.notificationId);
+  }
+
   async function revealNotification(notificationId: string) {
     const notification = state.notifications.find((item) => item.id === notificationId);
     if (mode === "cloud" && client && session && notification) {
@@ -522,66 +778,21 @@ export function KasamCommercialApp() {
 
   function AuthScreen() {
     return (
-      <main className="screen-stack auth-screen">
-        <section className="card auth-card">
-          <p className="eyebrow">Paranın nereye gittiğini bil.</p>
-          <h1 className="title-xl">Kasam</h1>
-          <p className="muted">Kendi paranı ve ortak harcamaların sana etkisini tek ekranda gör.</p>
-          <div className="segmented">
-            <button className={authMode === "sign-in" ? "segment active" : "segment"} type="button" onClick={() => setAuthMode("sign-in")}>
-              Giriş
-            </button>
-            <button className={authMode === "sign-up" ? "segment active" : "segment"} type="button" onClick={() => setAuthMode("sign-up")}>
-              Kayıt
-            </button>
-          </div>
-          <div className="form-grid">
-            {authMode === "sign-up" ? (
-              <div className="field">
-                <label>Ad</label>
-                <input value={authName} onChange={(event) => setAuthName(event.target.value)} placeholder="Adın" />
-              </div>
-            ) : null}
-            <div className="field">
-              <label>E-posta</label>
-              <input value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="mail@adres.com" type="email" />
-            </div>
-            <div className="field">
-              <label>Şifre</label>
-              <input value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="Şifre" type="password" />
-            </div>
-            <button className="pill full" type="button" onClick={submitAuth} disabled={cloudBusy}>
-              {cloudBusy ? "Bekle..." : authMode === "sign-in" ? "Giriş yap" : "Kayıt ol"}
-            </button>
-            <button className="ghost-button full" type="button" onClick={sendPasswordReset}>
-              Şifremi unuttum
-            </button>
-            <button className="ghost-button full" type="button" onClick={() => setMode("demo")}>
-              Demoyu aç
-            </button>
-          </div>
-          {statusMessage ? <p className="status-line">{statusMessage}</p> : null}
-        </section>
-      </main>
+      <AuthPanel
+        authMode={authMode}
+        cloudBusy={cloudBusy}
+        statusMessage={statusMessage}
+        onAuthModeChange={handleAuthModeChange}
+        onSubmit={submitAuth}
+        onPasswordReset={sendPasswordReset}
+        onOpenDemo={openDemoMode}
+      />
     );
   }
 
   function ResetScreen() {
     return (
-      <main className="screen-stack auth-screen">
-        <section className="card auth-card">
-          <p className="eyebrow">Şifre yenileme</p>
-          <h1 className="title-xl">Yeni şifre oluştur</h1>
-          <div className="field">
-            <label>Yeni şifre</label>
-            <input value={newPassword} onChange={(event) => setNewPassword(event.target.value)} placeholder="Yeni şifre" type="password" />
-          </div>
-          <button className="pill full" type="button" onClick={updatePassword} disabled={cloudBusy}>
-            {cloudBusy ? "Güncelleniyor..." : "Şifreyi güncelle"}
-          </button>
-          {statusMessage ? <p className="status-line">{statusMessage}</p> : null}
-        </section>
-      </main>
+      <ResetPasswordPanel cloudBusy={cloudBusy} statusMessage={statusMessage} onSubmit={updatePassword} />
     );
   }
 
@@ -787,7 +998,7 @@ export function KasamCommercialApp() {
                     <p className="muted tiny">{notification.isCompleted ? entry?.title : "Detaylar oyun bitene kadar kapalı."}</p>
                   </div>
                   {!notification.isCompleted ? (
-                    <button className="pill" type="button" onClick={() => revealNotification(notification.id)} disabled={cloudBusy}>
+                    <button className="pill" type="button" onClick={() => openGuessFeedback(notification.id)} disabled={cloudBusy}>
                       Tahmin et
                     </button>
                   ) : (
@@ -1060,6 +1271,7 @@ export function KasamCommercialApp() {
         })}
       </nav>
       {showAdd ? <AddSheet /> : null}
+      {guessFeedback ? <GuessFeedbackOverlay feedback={guessFeedback} onContinue={finishGuessFeedback} /> : null}
     </div>
   );
 }
